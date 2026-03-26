@@ -188,7 +188,7 @@
             ]
         },
         "import-profile": {
-            "href": "https://registry.oscal.io/api/v1/pirooz-javan/profiles/fbaf8f1f-716c-4e74-af6f-37cd8703d843",
+            "href": "https://raw.githubusercontent.com/OSCAL-Foundation/Pattern-Library/main/summit/profile/oscalate_systems_moderate_profile.json",
             "remarks": "Summit System implements controls from the NIST SP 800-53 Rev 5 catalog with a FISMA Moderate profile."
         },
         "system-characteristics": {
@@ -229,7 +229,7 @@
             "system-ids": [
                 {
                     "id": "KAL-APPX-001",
-                    "identifier-type": "http://kalvico.com/ns/oscal"
+                    "identifier-type": "http://oscalfoundation.com/ns/oscal"
                 }
             ],
             "description": "Summit System is a cloud-native web application operated by Oscalate Systems, delivered as a Software-as-a-Service (SaaS) offering hosted on Amazon Web Services (AWS). The system provides secure business application services to authorized users through a browser-based single-page application built with HTML, JavaScript, and React.\n\nThe system uses a serverless architecture within a single AWS Account authorization boundary: AWS Lambda (Python) for API compute, Amazon RDS PostgreSQL for persistent data storage, Amazon API Gateway for API management, Amazon CloudFront for content delivery and TLS termination, AWS WAF for web application firewall protection, and Amazon S3 for static front-end content hosting. The VPC provides network segmentation across two Availability Zones with Public Subnets (NAT Gateways), APP Private Subnets (Lambda functions), and DB Private Subnets (RDS PostgreSQL).\n\nSummit System leverages two external identity services under separate authorizations:\n\n1. Auth0 is leveraged as the External Customer Identity and Access Management (CIAM) service, providing authentication, multi-factor authentication, anomaly detection, and OAuth 2.0/OIDC token management for non-privileged external users.\n\n2. Microsoft Entra ID is leveraged as the privileged identity and access management service, providing federated enterprise authentication, conditional access policies, and MFA for Oscalate Systems administrative and privileged users.",
