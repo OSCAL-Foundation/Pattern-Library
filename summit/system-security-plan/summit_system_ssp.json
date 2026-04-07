@@ -1,0 +1,2413 @@
+{
+    "system-security-plan": {
+        "uuid": "c7a5daaf-af1f-475d-9349-f77b1547c93c",
+        "metadata": {
+            "roles": [
+                {
+                    "id": "system-owner",
+                    "title": "Information System Owner"
+                },
+                {
+                    "id": "isso",
+                    "title": "Information System Security Officer"
+                },
+                {
+                    "id": "authorizing-official",
+                    "title": "Authorizing Official"
+                },
+                {
+                    "id": "system-admin",
+                    "title": "System Administrator"
+                },
+                {
+                    "id": "devops-engineer",
+                    "title": "DevOps Engineer"
+                },
+                {
+                    "id": "cloud-service-provider",
+                    "title": "Cloud Service Provider"
+                },
+                {
+                    "id": "prepared-by",
+                    "title": "Prepared By"
+                },
+                {
+                    "id": "prepared-for",
+                    "title": "Prepared For"
+                },
+                {
+                    "id": "security-operations",
+                    "title": "Security Operations Analyst"
+                },
+                {
+                    "id": "app-developer",
+                    "title": "Application Developer"
+                },
+                {
+                    "id": "end-user",
+                    "title": "End User"
+                }
+            ],
+            "title": "Summit System System Security Plan (SSP)",
+            "parties": [
+                {
+                    "name": "Oscalate Systems",
+                    "type": "organization",
+                    "uuid": "192e71a2-3c4a-44c8-b4a6-508cb4638a27",
+                    "remarks": "Oscalate Systems is the system owner and operator of the Summit System.",
+                    "short-name": "OS",
+                    "location-uuids": [
+                        "6e62ca1c-ee61-4481-a1bd-79172faa356c"
+                    ]
+                },
+                {
+                    "name": "Oscalate Systems Information System Owner",
+                    "type": "person",
+                    "uuid": "0cd7bdb9-ef55-46c7-b8ab-29f8efce3617",
+                    "remarks": "Designated system owner responsible for Summit System operations and security posture."
+                },
+                {
+                    "name": "Oscalate Systems ISSO",
+                    "type": "person",
+                    "uuid": "3a491fe9-e141-4833-b7fb-be33c7538616",
+                    "remarks": "Information System Security Officer responsible for daily security oversight of Summit System."
+                },
+                {
+                    "name": "Oscalate Systems Authorizing Official",
+                    "type": "person",
+                    "uuid": "92fa7ef1-08dc-4e49-9dba-72d2d34ae8d0",
+                    "remarks": "Authorizing Official responsible for accepting risk and granting authorization to operate."
+                },
+                {
+                    "name": "Oscalate Systems System Administrator",
+                    "type": "person",
+                    "uuid": "edd7b467-a294-404b-a1a5-096521ef664e",
+                    "remarks": "System administrator responsible for AWS infrastructure operations."
+                },
+                {
+                    "name": "Oscalate Systems DevOps Engineer",
+                    "type": "person",
+                    "uuid": "50894eda-82b6-4917-b55b-3b377a08391a",
+                    "remarks": "DevOps engineer responsible for CI/CD pipeline and infrastructure-as-code management."
+                },
+                {
+                    "name": "Amazon Web Services, Inc.",
+                    "type": "organization",
+                    "uuid": "1932cfaf-fed6-4c90-804a-d99ae37f627d",
+                    "remarks": "Cloud infrastructure provider for Summit System. AWS maintains cloud infrastructure authorization.",
+                    "short-name": "AWS"
+                },
+                {
+                    "name": "Auth0 (Okta, Inc.)",
+                    "type": "organization",
+                    "uuid": "284507a0-0d1d-4cdd-ba74-acef816fc705",
+                    "remarks": "External Customer Identity and Access Management (CIAM) provider for Summit System.",
+                    "short-name": "Auth0"
+                },
+                {
+                    "name": "Microsoft Corporation",
+                    "type": "organization",
+                    "uuid": "93767fce-178a-4b48-b051-4f448d5fcea2",
+                    "remarks": "Provider of Microsoft Entra ID, leveraged for privileged identity and access management.",
+                    "short-name": "Microsoft"
+                }
+            ],
+            "remarks": "This SSP describes the security controls implemented for Summit System operated by Oscalate Systems. It addresses all 42 NIST SP 800-53 Rev 5 controls identified in the CISA SCuBA Assessment Plan for secure cloud business applications.",
+            "version": "1.0.0",
+            "locations": [
+                {
+                    "uuid": "6e62ca1c-ee61-4481-a1bd-79172faa356c",
+                    "title": "Oscalate Systems Headquarters",
+                    "address": {
+                        "city": "Arlington",
+                        "type": "work",
+                        "state": "VA",
+                        "country": "US",
+                        "addr-lines": [
+                            "Oscalate Systems Corporate Office"
+                        ],
+                        "postal-code": "22201"
+                    }
+                },
+                {
+                    "uuid": "d4ac88bc-d4d6-4e10-b53e-7eba207ca81f",
+                    "title": "AWS US East Region",
+                    "remarks": "Primary AWS deployment region for Summit System infrastructure.",
+                    "address": {
+                        "type": "work",
+                        "addr-lines": [
+                            "AWS US East (N. Virginia)"
+                        ],
+                        "city": "Ashburn",
+                        "state": "VA",
+                        "postal-code": "20147",
+                        "country": "US"
+                    }
+                }
+            ],
+            "published": "2026-03-11T23:54:25Z",
+            "document-ids": [
+                {
+                    "scheme": "http://oscal.io/oscal/identifier/content-uuid",
+                    "identifier": "17eb373b-6c3a-4ef9-a021-0f8995cb4ce2"
+                }
+            ],
+            "last-modified": "2026-03-26T13:33:50Z",
+            "oscal-version": "1.2.1",
+            "responsible-parties": [
+                {
+                    "role-id": "system-owner",
+                    "party-uuids": [
+                        "0cd7bdb9-ef55-46c7-b8ab-29f8efce3617"
+                    ]
+                },
+                {
+                    "role-id": "isso",
+                    "party-uuids": [
+                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                    ]
+                },
+                {
+                    "role-id": "authorizing-official",
+                    "party-uuids": [
+                        "92fa7ef1-08dc-4e49-9dba-72d2d34ae8d0"
+                    ]
+                },
+                {
+                    "role-id": "cloud-service-provider",
+                    "party-uuids": [
+                        "192e71a2-3c4a-44c8-b4a6-508cb4638a27"
+                    ]
+                },
+                {
+                    "role-id": "prepared-by",
+                    "party-uuids": [
+                        "192e71a2-3c4a-44c8-b4a6-508cb4638a27"
+                    ]
+                }
+            ]
+        },
+        "import-profile": {
+            "href": "https://raw.githubusercontent.com/OSCAL-Foundation/Pattern-Library/main/summit/profile/oscalate_systems_moderate_profile.json",
+            "remarks": "Summit System implements controls from the NIST SP 800-53 Rev 5 catalog with a FISMA Moderate profile."
+        },
+        "system-characteristics": {
+            "props": [
+                {
+                    "name": "identity-assurance-level",
+                    "value": "2"
+                },
+                {
+                    "name": "authenticator-assurance-level",
+                    "value": "2"
+                },
+                {
+                    "name": "federation-assurance-level",
+                    "value": "2"
+                }
+            ],
+            "status": {
+                "state": "under-development",
+                "remarks": "Summit System is currently under development with security controls being implemented in alignment with the CISA SCuBA Assessment Plan requirements."
+            },
+            "data-flow": {
+                "diagrams": [
+                    {
+                        "uuid": "9e4c2966-feb1-488b-88ed-53037edeed87",
+                        "links": [
+                            {
+                                "rel": "diagram",
+                                "href": "#21c16bc5-f848-4ddf-ad3a-1f768217cb90"
+                            }
+                        ],
+                        "caption": "Summit System Data Flow Diagram",
+                        "description": "Data flow diagram illustrating request paths, authentication flows, and audit data generation."
+                    }
+                ],
+                "description": "Data flows through Summit System follow these paths as defined in the logical architecture:\n\n1. Browser Request Flow: Browser clients send HTTPS requests (TLS 1.3, port 443) to CloudFront. For static content, CloudFront serves the Front-end Code (HTML/JavaScript/React) from S3. For API calls, CloudFront forwards requests to API Gateway (API Management Services).\n\n2. API Processing Flow: API Gateway validates JWT tokens via Lambda authorizers, then invokes Lambda functions (API Server, Python Code). Lambda functions process business logic and issue SQL queries to RDS PostgreSQL, receiving SQL result sets in response. Communication between API Management Services and API Server uses internal AWS service invocation.\n\n3. External Authentication Flow (Non-Privileged): The Front-end Code redirects users to Auth0 (leveraged CIAM service) for login. Auth0 performs authentication (including MFA), issues JWT tokens, and returns permit/deny/policy decisions. API Gateway and Lambda authorizers validate these JWTs on every API call.\n\n4. Privileged Authentication Flow: API Server and PostgreSQL authenticate privileged operations through Microsoft Entra ID (leveraged privileged access service). Entra ID returns permit/deny or policy decisions for privileged identity validation.\n\n5. Audit Data Flow: All API calls, Lambda executions, network traffic, and authentication events generate audit records captured in CloudTrail (API activity), CloudWatch (application and VPC Flow Logs), and forwarded to S3 for long-term retention.\n\n6. Secrets and Encryption Flow: Lambda functions retrieve application secrets from AWS Secrets Manager and use AWS KMS for encryption and decryption operations, all via VPC Endpoints."
+            },
+            "system-ids": [
+                {
+                    "id": "KAL-APPX-001",
+                    "identifier-type": "http://oscalfoundation.com/ns/oscal"
+                }
+            ],
+            "description": "Summit System is a cloud-native web application operated by Oscalate Systems, delivered as a Software-as-a-Service (SaaS) offering hosted on Amazon Web Services (AWS). The system provides secure business application services to authorized users through a browser-based single-page application built with HTML, JavaScript, and React.\n\nThe system uses a serverless architecture within a single AWS Account authorization boundary: AWS Lambda (Python) for API compute, Amazon RDS PostgreSQL for persistent data storage, Amazon API Gateway for API management, Amazon CloudFront for content delivery and TLS termination, AWS WAF for web application firewall protection, and Amazon S3 for static front-end content hosting. The VPC provides network segmentation across two Availability Zones with Public Subnets (NAT Gateways), APP Private Subnets (Lambda functions), and DB Private Subnets (RDS PostgreSQL).\n\nSummit System leverages two external identity services under separate authorizations:\n\n1. Auth0 is leveraged as the External Customer Identity and Access Management (CIAM) service, providing authentication, multi-factor authentication, anomaly detection, and OAuth 2.0/OIDC token management for non-privileged external users.\n\n2. Microsoft Entra ID is leveraged as the privileged identity and access management service, providing federated enterprise authentication, conditional access policies, and MFA for Oscalate Systems administrative and privileged users.",
+            "system-name": "Summit System",
+            "system-name-short": "AppX",
+            "system-information": {
+                "information-types": [
+                    {
+                        "uuid": "80a93134-d0e7-4915-b74d-589eb56696e2",
+                        "title": "Business Application Data",
+                        "description": "Summit System processes and stores business application data submitted by authorized users through the web interface.",
+                        "categorizations": [
+                            {
+                                "system": "https://doi.org/10.6028/NIST.SP.800-60v2r1",
+                                "information-type-ids": [
+                                    "C.3.5.1"
+                                ]
+                            }
+                        ],
+                        "integrity-impact": {
+                            "base": "fips-199-moderate"
+                        },
+                        "availability-impact": {
+                            "base": "fips-199-moderate"
+                        },
+                        "confidentiality-impact": {
+                            "base": "fips-199-moderate"
+                        }
+                    },
+                    {
+                        "uuid": "b67b0165-0568-4abf-bb15-cbaab33fe383",
+                        "title": "Authentication and Identity Data",
+                        "description": "User identity information, authentication credentials, and access tokens managed through Auth0 and Microsoft Entra ID.",
+                        "categorizations": [
+                            {
+                                "system": "https://doi.org/10.6028/NIST.SP.800-60v2r1",
+                                "information-type-ids": [
+                                    "C.3.5.2"
+                                ]
+                            }
+                        ],
+                        "integrity-impact": {
+                            "base": "fips-199-moderate"
+                        },
+                        "availability-impact": {
+                            "base": "fips-199-low"
+                        },
+                        "confidentiality-impact": {
+                            "base": "fips-199-moderate"
+                        }
+                    },
+                    {
+                        "uuid": "8cca65e3-2bbb-41e7-bcd5-df2d986408e6",
+                        "title": "Audit and Accountability Records",
+                        "description": "System audit logs, security event records, and operational monitoring data generated by Summit System components including CloudTrail, CloudWatch, VPC Flow Logs, and Auth0 tenant logs.",
+                        "categorizations": [
+                            {
+                                "system": "https://doi.org/10.6028/NIST.SP.800-60v2r1",
+                                "information-type-ids": [
+                                    "C.3.5.3"
+                                ]
+                            }
+                        ],
+                        "integrity-impact": {
+                            "base": "fips-199-moderate"
+                        },
+                        "availability-impact": {
+                            "base": "fips-199-low"
+                        },
+                        "confidentiality-impact": {
+                            "base": "fips-199-moderate"
+                        }
+                    }
+                ]
+            },
+            "network-architecture": {
+                "diagrams": [
+                    {
+                        "uuid": "3078b9c2-7ded-4ba1-8d16-0677b09f8761",
+                        "links": [
+                            {
+                                "rel": "diagram",
+                                "href": "#21c16bc5-f848-4ddf-ad3a-1f768217cb90"
+                            }
+                        ],
+                        "caption": "Summit System Network Architecture Diagram",
+                        "description": "Network architecture diagram showing VPC layout, subnet tiers, NAT gateways, security groups, and AWS service endpoints."
+                    }
+                ],
+                "description": "Summit System is deployed within an AWS Account in the US East region. The network architecture consists of three tiers:\n\nEdge Tier: Browser clients connect through the public internet to Amazon CloudFront (CDN), protected by AWS WAF, with DNS resolution via Amazon Route 53. CloudFront serves static front-end code (HTML/JavaScript/React) from an S3 bucket using Origin Access Control (direct public access is blocked; CloudFront OAC only) and routes API requests to Amazon API Gateway.\n\nApplication Tier: API Gateway invokes AWS Lambda functions using native AWS service-to-service integration (no network connectivity into the VPC is required for invocation). Lambda functions execute Python API code within APP Private Subnets inside Security Groups across two Availability Zones. Functions connect to the database through Lambda RDS Proxy with IAM authentication. Lambda functions requiring outbound HTTPS communication to external identity providers (Auth0 for CIAM and Microsoft Entra ID for privileged access) route through NAT Gateways in the Public Subnets and the Internet Gateway (outbound only via NAT).\n\nData Tier: Amazon RDS PostgreSQL instances are deployed in DB Private Subnets within Security Groups across two Availability Zones for high availability. RDS instances authenticate to Entra ID for privileged database operations.\n\nSupporting Services: AWS VPC Endpoints provide private connectivity to AWS services (S3, STS, Secrets Manager, KMS, CloudWatch, CloudTrail) without traversing the internet. Endpoint policies restrict service access to approved resources only. VPC Flow Logs capture all network traffic metadata and deliver to CloudWatch log groups. Egress is restricted to approved destinations and monitored via VPC Flow Logs.\n\nVPC Enforced Data Flow Rules (from logical architecture):\n- Default Deny\n- Allow any -> S3:443\n- Allow any -> API Management Service:443\n- Allow API Management Service -> API Server\n- Allow API Server -> PostgreSQL\n- Allow API Management Service -> Auth0\n- Allow API Server -> Entra ID\n- Allow PostgreSQL -> Entra ID"
+            },
+            "security-impact-level": {
+                "security-objective-integrity": "fips-199-moderate",
+                "security-objective-availability": "fips-199-moderate",
+                "security-objective-confidentiality": "fips-199-moderate"
+            },
+            "authorization-boundary": {
+                "diagrams": [
+                    {
+                        "uuid": "ac0a626b-5a80-44aa-bb55-1adcdb9cb19c",
+                        "links": [
+                            {
+                                "rel": "diagram",
+                                "href": "#21c16bc5-f848-4ddf-ad3a-1f768217cb90"
+                            }
+                        ],
+                        "caption": "Summit System Authorization Boundary Diagram",
+                        "description": "The authorization boundary diagram depicts the Model Office architecture including all AWS components, network segmentation, and external identity provider integrations."
+                    }
+                ],
+                "description": "The Summit System authorization boundary encompasses all resources within the Oscalate Systems AWS Account deployed in the US East region. This includes all components within the AWS Account: Amazon CloudFront, AWS WAF, Amazon Route 53 (edge services); Amazon API Gateway, Internet Gateway (regional services); the Virtual Private Cloud (VPC) with Public Subnets (NAT Gateways), APP Private Subnets (Lambda Function Python API with Security Groups), and DB Private Subnets (Amazon RDS PostgreSQL with Security Groups) across two Availability Zones; Lambda RDS Proxy; AWS S3 Bucket for static content (Front-end Code: HTML/JavaScript/React); VPC Flow Logs; AWS VPC Endpoints; and supporting AWS services accessed via endpoints (AWS STS, AWS Secrets Manager, AWS Key Management Service, Amazon CloudWatch, AWS CloudTrail).\n\nTwo systems are leveraged outside the authorization boundary:\n\n1. Auth0 (Leveraged Authorization) serves as the External Customer Identity and Access Management (CIAM) service, providing authentication, MFA, and token issuance for external non-privileged users.\n\n2. Microsoft Entra ID (Leveraged Authorization) serves as the privileged identity and access management service, providing federated enterprise authentication, conditional access, and MFA for Oscalate Systems administrative and privileged users.\n\nBoth leveraged systems operate outside the authorization boundary under their own separate authorizations. Summit System inherits identity and authentication controls from these leveraged services."
+            },
+            "security-sensitivity-level": "fips-199-moderate"
+        },
+        "system-implementation": {
+            "users": [
+                {
+                    "uuid": "fd2df2bd-71e5-4e0f-9112-bb4286b3d94f",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "internal"
+                        },
+                        {
+                            "name": "privilege-level",
+                            "value": "privileged"
+                        }
+                    ],
+                    "title": "System Administrator",
+                    "role-ids": [
+                        "system-admin"
+                    ],
+                    "description": "Oscalate Systems staff responsible for AWS infrastructure management, configuration, and operational support of Summit System."
+                },
+                {
+                    "uuid": "d7ad431f-d324-4cd9-9ce7-c467d7407921",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "internal"
+                        },
+                        {
+                            "name": "privilege-level",
+                            "value": "privileged"
+                        }
+                    ],
+                    "title": "Application Developer",
+                    "role-ids": [
+                        "app-developer"
+                    ],
+                    "description": "Oscalate Systems developers responsible for Summit System code development, testing, and deployment through CI/CD pipelines."
+                },
+                {
+                    "uuid": "ce9795c9-6967-417a-a5cb-b7ef8aacdd4f",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "internal"
+                        },
+                        {
+                            "name": "privilege-level",
+                            "value": "privileged"
+                        }
+                    ],
+                    "title": "Security Operations Analyst",
+                    "role-ids": [
+                        "security-operations"
+                    ],
+                    "description": "Oscalate Systems security staff responsible for monitoring, incident response, and security configuration of Summit System."
+                },
+                {
+                    "uuid": "3b981e3e-7636-4eb0-908e-e82c383e3a57",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "external"
+                        },
+                        {
+                            "name": "privilege-level",
+                            "value": "non-privileged"
+                        }
+                    ],
+                    "title": "End User",
+                    "role-ids": [
+                        "end-user"
+                    ],
+                    "description": "External authenticated users accessing Summit System through the web interface for standard business functionality."
+                },
+                {
+                    "uuid": "850bd6d9-cbfe-42ad-a69b-1c6d07eb8c30",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "internal"
+                        },
+                        {
+                            "name": "privilege-level",
+                            "value": "privileged"
+                        }
+                    ],
+                    "title": "ISSO",
+                    "role-ids": [
+                        "isso"
+                    ],
+                    "description": "Information System Security Officer overseeing the security posture and compliance of Summit System."
+                }
+            ],
+            "components": [
+                {
+                    "uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                    "type": "this-system",
+                    "title": "Summit System",
+                    "description": "The Summit System is a cloud-native web application operated by Oscalate Systems, delivered as a Software-as-a-Service (SaaS) offering hosted on Amazon Web Services (AWS). It provides secure business application services to government customers.",
+                    "status": {
+                        "state": "under-development"
+                    }
+                },
+                {
+                    "uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                    "type": "service",
+                    "title": "Amazon VPC",
+                    "description": "Amazon Virtual Private Cloud (VPC) provides the isolated network environment for the Summit System. All system components are deployed within the VPC, which enforces network segmentation, security group policies, flow logging, and private endpoint connectivity.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "043d01da-6a44-40d0-b360-7a3172c071e1"
+                        },
+                        {
+                            "name": "vendor-name",
+                            "value": "Amazon Web Services"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                    "type": "service",
+                    "title": "Amazon EKS",
+                    "description": "Amazon Elastic Kubernetes Service (EKS) provides the managed container orchestration platform for the Summit System. Application workloads run as containerized services on EKS worker nodes, which execute Ubuntu-based container images. EKS manages scheduling, scaling, and availability of application pods.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "043d01da-6a44-40d0-b360-7a3172c071e1"
+                        },
+                        {
+                            "name": "vendor-name",
+                            "value": "Amazon Web Services"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "9c81a55b-0a25-4c25-b1a9-9c350fe9e6ad",
+                    "type": "service",
+                    "title": "NAT Gateway",
+                    "description": "AWS NAT Gateway enables outbound internet connectivity for resources in private subnets within the Summit System VPC while preventing unsolicited inbound connections. It supports patching, external API calls, and other outbound traffic requirements.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "043d01da-6a44-40d0-b360-7a3172c071e1"
+                        },
+                        {
+                            "name": "vendor-name",
+                            "value": "Amazon Web Services"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "b38b43a0-1b9d-4f18-8931-4edf03891552",
+                    "type": "service",
+                    "title": "S3 Bucket",
+                    "description": "Amazon S3 provides scalable object storage for the Summit System. S3 buckets store static content, application artifacts, logs, and backups with server-side encryption, versioning, and access policies enforced.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "043d01da-6a44-40d0-b360-7a3172c071e1"
+                        },
+                        {
+                            "name": "vendor-name",
+                            "value": "Amazon Web Services"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "0498b8e3-1a26-4d67-99a5-06431c89b37b",
+                    "type": "service",
+                    "title": "Amazon RDS PostgreSQL",
+                    "description": "Amazon Relational Database Service (RDS) for PostgreSQL provides the managed relational database for the Summit System. It stores application data with encryption at rest via AWS KMS, automated backups, Multi-AZ deployment for high availability, and enforced TLS connections.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "043d01da-6a44-40d0-b360-7a3172c071e1"
+                        },
+                        {
+                            "name": "vendor-name",
+                            "value": "Amazon Web Services"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "d6445227-ddee-4dd5-a407-91c3e423e16f",
+                    "type": "software",
+                    "title": "Ubuntu Operating System",
+                    "description": "Ubuntu Linux is the base operating system for the Amazon EKS container worker nodes and container images in the Summit System. It provides the runtime environment for all containerized application workloads and is maintained with automated patching and CIS benchmark hardening.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "internal"
+                        },
+                        {
+                            "name": "vendor-name",
+                            "value": "Canonical"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                    "type": "system",
+                    "title": "Auth0 (Leveraged External CIAM Service)",
+                    "description": "Auth0 provides external customer identity and access management (CIAM) for the Summit System. It handles customer authentication, multi-factor authentication, and session management for external end users.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "52cbfa3a-7030-480a-845f-c2f00196c2d0"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "58e65041-0d92-40e3-9684-3bf14c4380fa",
+                    "type": "system",
+                    "title": "Microsoft Entra ID (Leveraged Privileged Access Service)",
+                    "description": "Microsoft Entra ID provides privileged identity and access management for the Summit System. It enforces multi-factor authentication, conditional access policies, and role-based access control for administrative and privileged users.",
+                    "status": {
+                        "state": "operational"
+                    },
+                    "props": [
+                        {
+                            "name": "implementation-point",
+                            "value": "external"
+                        },
+                        {
+                            "name": "leveraged-authorization-uuid",
+                            "value": "fae8e1c0-9528-4e23-bb58-3ee0b5a2a41e"
+                        }
+                    ]
+                }
+            ],
+            "inventory-items": [
+                {
+                    "uuid": "de69497d-b3c6-44b6-9da1-0bdd5003bc1d",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "web-server"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "web",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Amazon CloudFront distribution serving Summit System web content and API proxy.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "d6adfd46-e666-480a-b74a-14a411b7e173"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "c6796a55-1238-4658-81ec-06ea3fadd8e0",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "firewall"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        }
+                    ],
+                    "description": "AWS WAF WebACL attached to CloudFront distribution.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "58de1ebb-e60c-47b4-8306-ce189c83357b"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "2bdc0719-004e-4114-9586-69b7082e2f4b",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "web-server"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "web",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Amazon API Gateway REST API for Summit System.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "90e71a35-c0ac-40ef-b097-fec56c2da9f7"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "6235163b-a978-49af-9a62-73ca76010aea",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "network"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        }
+                    ],
+                    "description": "Summit System VPC spanning two Availability Zones.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "4ab08036-da91-4c78-9fbe-1baefd6b1c34"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "460a0c36-9303-4867-a589-8ff2cd051f77",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "compute"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "infrastructure",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Lambda Python API functions (AZ-1).",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "22feb8d0-6f7b-4da2-92c4-57cc270cfe8e"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "46aeb798-e310-4aaf-95a4-f313e7b3228a",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "compute"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "infrastructure",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Lambda Python API functions (AZ-2).",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "22feb8d0-6f7b-4da2-92c4-57cc270cfe8e"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "41d6fd45-040a-4516-9f06-0ddb0db52b99",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "database"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "database",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Amazon RDS PostgreSQL primary instance (AZ-1).",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "5771abec-d2c1-43dc-b85e-4a901b6ed614"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "0086ad1c-41fb-40d9-8e44-9d12facfc1cf",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "database"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "database",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Amazon RDS PostgreSQL replica instance (AZ-2).",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "5771abec-d2c1-43dc-b85e-4a901b6ed614"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "83411a3e-e955-4e60-b848-c2a248810b5a",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "storage"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        }
+                    ],
+                    "description": "S3 bucket for static web content.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "948caa65-2291-46e2-be7f-cb2fffd09c73"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "1a0f74eb-1fd9-4257-9ca6-8de272fa25a4",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "service"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        }
+                    ],
+                    "description": "Auth0 tenant for Summit System CIAM.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "9699cf37-0f1d-4863-bb08-8c7df2c27ae3",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "network"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        }
+                    ],
+                    "description": "VPC Internet Gateway for outbound NAT connectivity.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "fced7afd-c2bd-4adb-a1a0-66dd84ce073d"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "6ab3dcf5-6212-4b2b-bd01-a249e2fb86a7",
+                    "props": [
+                        {
+                            "name": "asset-type",
+                            "value": "software"
+                        },
+                        {
+                            "name": "virtual",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "scan-type",
+                            "value": "web",
+                            "ns": "http://csrc.nist.gov/ns/rmf"
+                        }
+                    ],
+                    "description": "Front-end React SPA application code deployed to S3.",
+                    "implemented-components": [
+                        {
+                            "component-uuid": "7509b22f-bf43-4e4d-b38d-64375fcb7ee7"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "description": "Configured M365 Instance",
+                    "props": [
+                        {
+                            "name": "machine-context",
+                            "ns": "http://comply0.com/ns/oscal",
+                            "value": "{\"TenantId\":\"d932f00c-7213-49f2-b10d-73bf7d4619\"}"
+                        },
+                        {
+                            "name": "allows-authenticated-scan",
+                            "ns": "http://csrc.nist.gov/ns/oscal",
+                            "value": "yes"
+                        }
+                    ]
+                }
+            ],
+            "leveraged-authorizations": [
+                {
+                    "uuid": "043d01da-6a44-40d0-b360-7a3172c071e1",
+                    "title": "Amazon Web Services (AWS)",
+                    "remarks": "Summit System leverages the AWS cloud infrastructure. AWS maintains cloud infrastructure authorization for IaaS/PaaS services. Physical security, hypervisor security, and foundational cloud service controls are inherited from the AWS authorization.",
+                    "party-uuid": "1932cfaf-fed6-4c90-804a-d99ae37f627d",
+                    "date-authorized": "2024-01-01"
+                },
+                {
+                    "uuid": "52cbfa3a-7030-480a-845f-c2f00196c2d0",
+                    "title": "Auth0 (External Customer Identity and Access Management)",
+                    "remarks": "Auth0 is leveraged as the External Customer Identity and Access Management (CIAM) service for Summit System. Auth0 provides user authentication, multi-factor authentication, anomaly detection, and OAuth 2.0/OIDC token issuance for external (non-privileged) user access. Auth0 operates outside the Summit System authorization boundary as a separately authorized cloud identity service.",
+                    "party-uuid": "284507a0-0d1d-4cdd-ba74-acef816fc705",
+                    "date-authorized": "2024-06-01"
+                },
+                {
+                    "uuid": "fae8e1c0-9528-4e23-bb58-3ee0b5a2a41e",
+                    "title": "Microsoft Entra ID (Privileged Identity and Access Management)",
+                    "remarks": "Microsoft Entra ID is leveraged as the identity provider for privileged access to Summit System. Entra ID provides federated enterprise authentication, conditional access policies, device compliance enforcement, and multi-factor authentication for Oscalate Systems administrative and privileged users. Entra ID operates outside the Summit System authorization boundary as a separately authorized cloud identity service.",
+                    "party-uuid": "93767fce-178a-4b48-b051-4f448d5fcea2",
+                    "date-authorized": "2024-01-01"
+                }
+            ]
+        },
+        "control-implementation": {
+            "description": "This section describes how Summit System implements the 42 NIST SP 800-53 Rev 5 controls identified in the CISA SCuBA Assessment Plan, addressing 128 individual policy checks. Each control implementation maps to specific components within the Summit System authorization boundary (the AWS Account and all contained resources) as well as controls inherited from two leveraged external systems: Auth0 (CIAM for non-privileged user authentication) and Microsoft Entra ID (privileged identity and access management). Implementation narratives describe the technical and procedural measures satisfying each control requirement.",
+            "implemented-requirements": [
+                {
+                    "uuid": "fbbe1107-cd9b-4945-aaf0-13e6ed11ca87",
+                    "control-id": "ac-17",
+                    "by-components": [
+                        {
+                            "uuid": "213b1a2c-896d-4326-b010-75eb6e7f5223",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-17.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "408319a2-9e96-493a-b3f3-08761d268668",
+                            "description": "Amazon API Gateway contributes to the implementation of AC-17 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "e976823c-f6de-4ac1-9118-3942ece757cf",
+                    "control-id": "ac-19",
+                    "by-components": [
+                        {
+                            "uuid": "a8766c0d-bd2c-4dc8-aaaf-97d375d05cfa",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-19.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "69e42dfc-e158-41a4-aed0-776142e670e7",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-19 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "1e35d3fd-593f-48ac-a976-86dc687d2c4b",
+                    "control-id": "ac-2",
+                    "by-components": [
+                        {
+                            "uuid": "7414bf78-7a10-4392-8c0c-adbd0c9e9c0b",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-2.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "2225ac8e-bbbc-4d03-8a0e-c7cf4443396a",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-2 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "dd2a1095-6a9d-472a-814f-e1df500f99fa",
+                            "description": "Microsoft Entra ID (Leveraged Boundary) (leveraged privileged access service) contributes to the implementation of AC-2 as described in the system-level implementation narrative.",
+                            "component-uuid": "58e65041-0d92-40e3-9684-3bf14c4380fa",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "851deab8-05fb-42bb-ba71-730fb1574c42",
+                    "control-id": "ac-2.1",
+                    "by-components": [
+                        {
+                            "uuid": "fbbe5945-da2a-4206-bd48-770d1dfb27ef",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-2.1.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "059a1240-f07e-4694-94d5-9c799453f5fc",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-2.1 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "f8422049-cc32-4ad2-9b89-1fc8b6c81081",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of AC-2.1 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "e654bc55-1491-4293-9088-8fdd3c36a59a",
+                    "control-id": "ac-2.12",
+                    "by-components": [
+                        {
+                            "uuid": "e4895dc8-f2fb-4fc2-9d2d-102516ac8972",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-2.12.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "4462834e-975c-442e-91bc-aee506eaf17a",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-2.12 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "73f4560e-de46-42b1-b8b8-9731153c0319",
+                    "control-id": "ac-2.13",
+                    "by-components": [
+                        {
+                            "uuid": "d287a07c-5d6d-4370-bb55-2e8613464c7f",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-2.13.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "21670c4a-da42-4b3c-a55d-6a3e3d22b9f9",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-2.13 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "28c26dde-ca86-4767-91e5-ae47a187867b",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of AC-2.13 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "04e93fac-bbcc-45d4-9318-0c4e2dcb03ff",
+                    "control-id": "ac-20",
+                    "by-components": [
+                        {
+                            "uuid": "1d09f970-dfda-4961-97ee-857cf5eee039",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-20.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "b62616fd-efe1-48ab-a4e3-97bace7d642a",
+                            "description": "Microsoft Entra ID (Leveraged Boundary) (leveraged privileged access service) contributes to the implementation of AC-20 as described in the system-level implementation narrative.",
+                            "component-uuid": "58e65041-0d92-40e3-9684-3bf14c4380fa",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "20fd2fb7-bfa5-4fdf-b521-47fd8a6c93fa",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-20 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "8017e1f9-d343-4b2c-bbaf-60e1d4d68758",
+                    "control-id": "ac-21",
+                    "by-components": [
+                        {
+                            "uuid": "71d54ab0-378d-42f5-b69a-e8f82f3f34cd",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-21.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "9e0047bf-9922-4dba-891b-e54df9fd7c24",
+                            "description": "Amazon API Gateway contributes to the implementation of AC-21 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "766d411e-9933-4e4a-9d2b-46508ca929ea",
+                    "control-id": "ac-3",
+                    "by-components": [
+                        {
+                            "uuid": "826744a3-201d-4366-8a3e-c55bfdcd3610",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-3.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "39b0fce3-b706-46cb-87ec-312e9d70c817",
+                            "description": "Amazon API Gateway contributes to the implementation of AC-3 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "85569237-b5f1-454d-a301-22d7530b78fc",
+                            "description": "VPC Security Groups contributes to the implementation of AC-3 as described in the system-level implementation narrative.",
+                            "component-uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "5ea2c651-68c4-4956-bae2-91df690ebc3c",
+                    "control-id": "ac-4",
+                    "by-components": [
+                        {
+                            "uuid": "d4d69002-49c8-4251-b9a7-61ca0703cf69",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-4.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "563418c2-f69f-412e-9bb0-6606e68cefbe",
+                            "description": "Summit System Virtual Private Cloud (VPC) contributes to the implementation of AC-4 as described in the system-level implementation narrative.",
+                            "component-uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "90fb5ffa-9248-40c2-bebb-7ab8303727cc",
+                            "description": "NAT Gateways contributes to the implementation of AC-4 as described in the system-level implementation narrative.",
+                            "component-uuid": "9c81a55b-0a25-4c25-b1a9-9c350fe9e6ad",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "841f9722-0826-4912-8753-f869377506bf",
+                    "control-id": "ac-5",
+                    "by-components": [
+                        {
+                            "uuid": "366bf16a-06d4-4d92-9409-345185de23cc",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-5.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "9944f321-6270-49c4-8372-d2b627c5070c",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-5 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "1595fec8-acf1-49a3-a236-1f88e95fc05a",
+                    "control-id": "ac-6",
+                    "by-components": [
+                        {
+                            "uuid": "4fdb2fd5-6fc9-47dc-87c8-dee8c3db7ad5",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-6.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "5f557e39-b611-4af2-8449-b7e103067f8a",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-6 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "e5ed4f2f-72ed-46d0-b714-7787c4b4d1bb",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of AC-6 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "c39ce425-07c0-433d-bf2c-967605b8457d",
+                    "control-id": "ac-6.1",
+                    "by-components": [
+                        {
+                            "uuid": "b04ba1ed-3482-4f6e-ab25-48841bd15e3e",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-6.1.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "f97f5472-cc99-482b-8a6d-b9c574442f51",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-6.1 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "9b86f41b-d491-4a3b-8a6f-cb50eb8dbfdd",
+                    "control-id": "ac-6.10",
+                    "by-components": [
+                        {
+                            "uuid": "7b326d32-fa84-4d50-ac90-5f11c43f8fe0",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-6.10.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "e2b1ce58-3c4a-46ea-997a-9dc47a9afe9c",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-6.10 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "63309bbd-6859-496c-a7bb-0ba4554879eb",
+                    "control-id": "ac-6.5",
+                    "by-components": [
+                        {
+                            "uuid": "d94a4903-f2e7-4adf-bdae-116eb617e41e",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-6.5.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "7fb1516c-8d57-4f0b-b240-6d72cecdbc70",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of AC-6.5 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "7bde608f-1f58-45a7-900e-fe102bee00f4",
+                    "control-id": "ac-6.9",
+                    "by-components": [
+                        {
+                            "uuid": "460bb74d-7273-4435-816f-ef167b45296b",
+                            "description": "The Oscalate Systems Access Control Policy establishes the organizational requirements and procedures that govern the implementation of AC-6.9.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "81f49857-6190-4aaf-8714-14e77ad20253",
+                    "control-id": "at-2",
+                    "by-components": [
+                        {
+                            "uuid": "29260a46-8866-46c1-b3e2-8873f48e9b2e",
+                            "description": "The Oscalate Systems Awareness and Training Policy establishes the organizational requirements and procedures that govern the implementation of AT-2.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "9f688c2c-edac-4164-8846-ee3d02dd0327",
+                    "control-id": "au-11",
+                    "by-components": [
+                        {
+                            "uuid": "7c585137-599f-4bbb-b0b2-d918bf120313",
+                            "description": "The Oscalate Systems Audit and Accountability Policy establishes the organizational requirements and procedures that govern the implementation of AU-11.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "4c8052a3-f6b1-4f45-a7e7-ad63f464b908",
+                            "description": "AWS S3 Bucket (Static Content) contributes to the implementation of AU-11 as described in the system-level implementation narrative.",
+                            "component-uuid": "b38b43a0-1b9d-4f18-8931-4edf03891552",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "20aa2ee5-c507-4084-89bc-e9cb40787298",
+                    "control-id": "au-12",
+                    "by-components": [
+                        {
+                            "uuid": "98a7b2e0-057a-4ddd-b4c8-f0bd51727ebf",
+                            "description": "The Oscalate Systems Audit and Accountability Policy establishes the organizational requirements and procedures that govern the implementation of AU-12.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "6d0dacd0-735e-4ca1-9e4c-8afde229d7ca",
+                            "description": "VPC Flow Logs contributes to the implementation of AU-12 as described in the system-level implementation narrative.",
+                            "component-uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "646676ef-b9a0-434c-812e-a75fcb1eebf9",
+                    "control-id": "au-4",
+                    "by-components": [
+                        {
+                            "uuid": "7ac1f895-c8a5-4912-b584-52763b9d13cf",
+                            "description": "The Oscalate Systems Audit and Accountability Policy establishes the organizational requirements and procedures that govern the implementation of AU-4.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "2e4cd156-5829-4750-9d83-7b1c9940fa91",
+                            "description": "AWS S3 Bucket (Static Content) contributes to the implementation of AU-4 as described in the system-level implementation narrative.",
+                            "component-uuid": "b38b43a0-1b9d-4f18-8931-4edf03891552",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "39749bd6-274c-4f06-aa2a-edd18e15e7f2",
+                    "control-id": "cm-11",
+                    "by-components": [
+                        {
+                            "uuid": "c8d20c1b-39b2-4ffe-a196-825b5d5a4718",
+                            "description": "The Oscalate Systems Configuration Management Policy establishes the organizational requirements and procedures that govern the implementation of CM-11.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "d6b45d45-b992-45e0-bc6d-6527303f2245",
+                    "control-id": "cm-4",
+                    "by-components": [
+                        {
+                            "uuid": "124ccd08-e4f3-4b3c-a7f9-08983214552a",
+                            "description": "The Oscalate Systems Configuration Management Policy establishes the organizational requirements and procedures that govern the implementation of CM-4.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "fb6778bd-e200-43cd-81ed-6606a3a4a004",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of CM-4 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "0513b3ba-9923-4091-85d9-bbc38385edc6",
+                    "control-id": "cm-5",
+                    "by-components": [
+                        {
+                            "uuid": "eaba7ac5-b16e-4b12-b03a-371f82dc158f",
+                            "description": "The Oscalate Systems Configuration Management Policy establishes the organizational requirements and procedures that govern the implementation of CM-5.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "4bc84120-aacc-4b91-acdc-c1f4e6670a55",
+                    "control-id": "cm-6",
+                    "by-components": [
+                        {
+                            "uuid": "042196ca-a030-457b-9b63-04c390240235",
+                            "description": "The Oscalate Systems Configuration Management Policy establishes the organizational requirements and procedures that govern the implementation of CM-6.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "6cd459d1-d547-480c-9746-086d1cdf6066",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of CM-6 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "4c333ff5-e7b9-44c1-870f-0d58c13c3ab7",
+                            "description": "VPC Security Groups contributes to the implementation of CM-6 as described in the system-level implementation narrative.",
+                            "component-uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "abeea3d3-87ae-43aa-9202-93b6fe036cf1",
+                    "control-id": "cm-7",
+                    "by-components": [
+                        {
+                            "uuid": "8730ca8e-ccae-47eb-91f8-33dfda486430",
+                            "description": "The Oscalate Systems Configuration Management Policy establishes the organizational requirements and procedures that govern the implementation of CM-7.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "24057053-9af8-4302-8fb2-a6c213929c4a",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of CM-7 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "16c54aa7-1602-4412-8e40-d994fe4e8241",
+                            "description": "VPC Security Groups contributes to the implementation of CM-7 as described in the system-level implementation narrative.",
+                            "component-uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "279e5b22-90f6-48ca-8d36-d242a3378c80",
+                    "control-id": "ia-11",
+                    "by-components": [
+                        {
+                            "uuid": "3f4f6a53-d9b0-4bff-9ba9-3b7dbf6760c5",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-11.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "37dd4534-0440-4e4e-a87c-d636bf6ba373",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-11 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "8cb2fbd3-9274-4efc-8929-6d051a12ff1b",
+                            "description": "Amazon API Gateway contributes to the implementation of IA-11 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "9615cce1-3d58-425c-8f78-d38aa1bb6455",
+                    "control-id": "ia-2.1",
+                    "by-components": [
+                        {
+                            "uuid": "fdc6a650-c6aa-459c-9188-9dbfe3495990",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-2.1.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "3cfa6c36-8f29-46d7-a0d7-cf743084ff58",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-2.1 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "ba602424-179b-435d-8e7e-e854dcf0d285",
+                            "description": "Microsoft Entra ID (Leveraged Boundary) (leveraged privileged access service) contributes to the implementation of IA-2.1 as described in the system-level implementation narrative.",
+                            "component-uuid": "58e65041-0d92-40e3-9684-3bf14c4380fa",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "e9f2c7fa-aa6e-4aa7-ae41-822b36e406bf",
+                    "control-id": "ia-2.13",
+                    "by-components": [
+                        {
+                            "uuid": "b3eddd13-5837-4d51-a958-7f3f769f0c8e",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-2.13.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "ef072fd4-7889-4075-809f-e69df740df05",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-2.13 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "ac5a2295-2c66-433e-b0e2-58c4781fd760",
+                    "control-id": "ia-2.2",
+                    "by-components": [
+                        {
+                            "uuid": "4e283ff1-5d3a-44a5-8b19-40e6483b17e2",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-2.2.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "67dc4a66-b003-40ec-bed3-f16783ab3f00",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-2.2 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "061c4767-1fed-4e93-a8d0-92cc25223f04",
+                            "description": "Microsoft Entra ID (Leveraged Boundary) (leveraged privileged access service) contributes to the implementation of IA-2.2 as described in the system-level implementation narrative.",
+                            "component-uuid": "58e65041-0d92-40e3-9684-3bf14c4380fa",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "481c2b8d-b947-431c-a5c4-f80bc54287fe",
+                    "control-id": "ia-2.8",
+                    "by-components": [
+                        {
+                            "uuid": "ecba24a8-f005-4c2e-a05e-d177ad23e6ff",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-2.8.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "b30a99dc-c78c-43e9-adfa-57e1b49dcc1e",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-2.8 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "eb3d52ae-3699-4841-b015-48ae815fb71f",
+                    "control-id": "ia-3",
+                    "by-components": [
+                        {
+                            "uuid": "7a761e85-d5d4-49d1-b718-0295440ebd36",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-3.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "85e76e5b-b760-40dc-acea-60e79f7dfb0b",
+                            "description": "Amazon API Gateway contributes to the implementation of IA-3 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "68f2dfcd-04aa-4d4b-b8cb-62a9ab86846a",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-3 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "ddf00130-1847-4add-886c-b2a8b5d7407b",
+                    "control-id": "ia-5",
+                    "by-components": [
+                        {
+                            "uuid": "d54269c1-e9fc-4cc0-934f-6b9a4feb2135",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-5.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "e91d41f6-95b3-46ea-9238-c0dcb7b2cb02",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-5 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "9d0848cb-ce86-4a6f-a64e-9fe4b69046fa",
+                    "control-id": "ia-5.1",
+                    "by-components": [
+                        {
+                            "uuid": "22161106-e164-4325-a3af-da0e9a3ba410",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-5.1.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "cc75191e-7955-45aa-b8ae-421968b8601c",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-5.1 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "23ed7e18-392f-4d1b-9763-de0a85445fb3",
+                    "control-id": "ia-8",
+                    "by-components": [
+                        {
+                            "uuid": "f421040c-cc74-4f46-b71d-c52a3b2c1bb1",
+                            "description": "The Oscalate Systems Identification and Authentication Policy establishes the organizational requirements and procedures that govern the implementation of IA-8.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "8dd1ae23-45ad-4fe6-b3b1-b851ebea0550",
+                            "description": "Auth0 - External Customer Identity and Access Management (CIAM) Service (leveraged external CIAM service) contributes to the implementation of IA-8 as described in the system-level implementation narrative.",
+                            "component-uuid": "f0a21ebb-f20d-4e15-ba9e-3a5685b98c7e",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "fe39bf88-a564-462d-bebd-a0ad9472066c",
+                            "description": "Microsoft Entra ID (Leveraged Boundary) (leveraged privileged access service) contributes to the implementation of IA-8 as described in the system-level implementation narrative.",
+                            "component-uuid": "58e65041-0d92-40e3-9684-3bf14c4380fa",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "d83c5710-9cd3-4148-9d18-f5fd40e6b99a",
+                    "control-id": "sc-15",
+                    "by-components": [
+                        {
+                            "uuid": "191df0a0-8e15-4295-86fd-19a9024fca15",
+                            "description": "The Oscalate Systems System and Communications Protection Policy establishes the organizational requirements and procedures that govern the implementation of SC-15.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "950949f7-9bdd-416a-b1a3-aaef81fb05a4",
+                    "control-id": "sc-7.10",
+                    "by-components": [
+                        {
+                            "uuid": "70c10eb1-bf25-4d03-8f7f-89a3f2aae571",
+                            "description": "The Oscalate Systems System and Communications Protection Policy establishes the organizational requirements and procedures that govern the implementation of SC-7.10.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "086c78c5-f457-469f-88a9-e3a7a9f30021",
+                            "description": "Amazon API Gateway contributes to the implementation of SC-7.10 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "8e82c8ff-5107-47f4-b69b-742ff6daabc1",
+                    "control-id": "sc-7.5",
+                    "by-components": [
+                        {
+                            "uuid": "10e66f4b-4f32-4363-b354-ba10ed378e90",
+                            "description": "The Oscalate Systems System and Communications Protection Policy establishes the organizational requirements and procedures that govern the implementation of SC-7.5.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "1166c048-7c91-4c28-94e9-11ccdf5b3eeb",
+                            "description": "Summit System Virtual Private Cloud (VPC) contributes to the implementation of SC-7.5 as described in the system-level implementation narrative.",
+                            "component-uuid": "b5b1574a-8c84-45ba-b43e-c57ed24ec4f9",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        },
+                        {
+                            "uuid": "e1e44f98-920b-4a78-90c1-735b48d9ae2f",
+                            "description": "NAT Gateways contributes to the implementation of SC-7.5 as described in the system-level implementation narrative.",
+                            "component-uuid": "9c81a55b-0a25-4c25-b1a9-9c350fe9e6ad",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "209475f9-a88f-4099-a157-01bb886dd28e",
+                    "control-id": "sc-8",
+                    "by-components": [
+                        {
+                            "uuid": "be589d71-b665-47de-bf62-df856a5fc7da",
+                            "description": "The Oscalate Systems System and Communications Protection Policy establishes the organizational requirements and procedures that govern the implementation of SC-8.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "edfb1430-5a0f-4a2b-8a16-3ac56fc82a8b",
+                            "description": "Amazon API Gateway contributes to the implementation of SC-8 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "d8985ce1-c6e5-4d0d-8af2-ab82046d7ced",
+                    "control-id": "si-3",
+                    "by-components": [
+                        {
+                            "uuid": "c16df207-d439-4a0e-8a5e-806f5a08bda5",
+                            "description": "The Oscalate Systems System and Information Integrity Policy establishes the organizational requirements and procedures that govern the implementation of SI-3.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        },
+                        {
+                            "uuid": "b8023731-f587-46b8-930e-b2b57376651c",
+                            "description": "AWS Lambda (Python API Functions) contributes to the implementation of SI-3 as described in the system-level implementation narrative.",
+                            "component-uuid": "283730fc-0f30-4666-b1e9-58202eeeaf1b",
+                            "implementation-status": {
+                                "state": "planned"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "57dc8139-4fb5-401e-bde6-4dbcf9c9743c",
+                    "control-id": "si-4.12",
+                    "by-components": [
+                        {
+                            "uuid": "8e90676a-9a5a-435b-9fa7-09150c776134",
+                            "description": "The Oscalate Systems System and Information Integrity Policy establishes the organizational requirements and procedures that govern the implementation of SI-4.12.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "8316ff60-8a91-47de-a8c7-a9d5ef531cca",
+                    "control-id": "si-4.5",
+                    "by-components": [
+                        {
+                            "uuid": "4eeb1ea4-24b4-427b-b102-079fde8eb150",
+                            "description": "The Oscalate Systems System and Information Integrity Policy establishes the organizational requirements and procedures that govern the implementation of SI-4.5.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "uuid": "64692ed0-c624-422b-b809-5c581c1062e7",
+                    "control-id": "si-8",
+                    "by-components": [
+                        {
+                            "uuid": "c0b2e1c6-8a81-4ba5-ba24-6268c21f9022",
+                            "description": "The Oscalate Systems System and Information Integrity Policy establishes the organizational requirements and procedures that govern the implementation of SI-8.",
+                            "component-uuid": "c8a3be36-55c4-4a85-a2ed-cdecf605a100",
+                            "responsible-roles": [
+                                {
+                                    "role-id": "isso",
+                                    "party-uuids": [
+                                        "3a491fe9-e141-4833-b7fb-be33c7538616"
+                                    ]
+                                }
+                            ],
+                            "implementation-status": {
+                                "state": "implemented"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "back-matter": {
+            "resources": [
+                {
+                    "uuid": "21c16bc5-f848-4ddf-ad3a-1f768217cb90",
+                    "title": "Summit System Architecture Diagram (Model Office)",
+                    "remarks": "Model Office DRAFT 2026-01-20. Shows browser clients, CloudFront, WAF, Route 53, API Gateway, VPC with multi-AZ subnets, Lambda functions, RDS PostgreSQL, and all supporting AWS services. Auth0 and Entra ID are shown as external and leveraged boundary services respectively.",
+                    "description": "AWS architecture diagram depicting the Summit System authorization boundary, network topology, and component relationships.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/21c16bc5-f848-4ddf-ad3a-1f768217cb90"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "b6b08069-de39-4dd2-9a7f-3437989054d2",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems Access Control and Identity Management Policy",
+                    "description": "Organizational policy document governing access control for all Oscalate Systems information systems.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/b6b08069-de39-4dd2-9a7f-3437989054d2"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "a7945a54-bd40-431c-951f-f8f7c6b9ef6c",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems Identification and Authentication Policy",
+                    "description": "Organizational policy document governing identification and authentication requirements.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/a7945a54-bd40-431c-951f-f8f7c6b9ef6c"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "5cbbf634-a99b-4dee-9429-6f01f0834226",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems Configuration Management Policy",
+                    "description": "Organizational policy document governing configuration management and change control.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/5cbbf634-a99b-4dee-9429-6f01f0834226"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "f2c26cda-f359-4509-b6cc-aeb8340dca6b",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems System and Communications Protection Policy",
+                    "description": "Organizational policy document governing communications protection and cryptographic standards.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/f2c26cda-f359-4509-b6cc-aeb8340dca6b"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "90439a75-36fb-47f7-aa53-ac789adec8f4",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems System and Information Integrity Policy",
+                    "description": "Organizational policy document governing system integrity, malicious code protection, and monitoring.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/90439a75-36fb-47f7-aa53-ac789adec8f4"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "67ad4cae-298a-42c5-bde3-b6e9edfbda95",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems Audit and Accountability Policy",
+                    "description": "Organizational policy document governing audit record generation, retention, and review.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/67ad4cae-298a-42c5-bde3-b6e9edfbda95"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "6b78455a-c9ec-4cf4-8ec6-45f68cbde434",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "policy"
+                        }
+                    ],
+                    "title": "Oscalate Systems Awareness and Training Policy",
+                    "description": "Organizational policy document governing security awareness and role-based training.",
+                    "rlinks": [
+                        {
+                            "href": "./resources/6b78455a-c9ec-4cf4-8ec6-45f68cbde434"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "d5d79082-bbaa-4ac9-ac2e-0f16e93b6c85",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "image"
+                        }
+                    ],
+                    "title": "Summit System Physical Architecture Diagram (Model Office)",
+                    "rlinks": [
+                        {
+                            "href": "2026-01_Model_Office.svg",
+                            "media-type": "image/svg+xml"
+                        }
+                    ],
+                    "remarks": "Model Office DRAFT 2026-01-20. Physical view showing the complete AWS deployment architecture.",
+                    "description": "Detailed AWS architecture diagram showing all physical components within the authorization boundary including VPC subnets, Security Groups, Lambda functions, RDS instances, NAT Gateways, and all supporting AWS services. Shows Auth0 and Entra ID as external leveraged services."
+                },
+                {
+                    "uuid": "3145b917-ba5b-46df-b568-52301262a16d",
+                    "props": [
+                        {
+                            "name": "type",
+                            "value": "image"
+                        }
+                    ],
+                    "title": "Summit System Logical Architecture Diagram (Model Office)",
+                    "rlinks": [
+                        {
+                            "href": "2026-01_Model_Office-logical.svg",
+                            "media-type": "image/svg+xml"
+                        }
+                    ],
+                    "remarks": "Model Office DRAFT 2026-01-20. Logical view showing service tiers, data flows, and boundary relationships.",
+                    "description": "High-level logical boundary diagram showing the authorization boundary with Public-Facing Services (Front-end Code, S3, API Management Services) and Internal Services (API Server Python Code, PostgreSQL). Shows Auth0 as leveraged CIAM and Entra ID as leveraged privileged access boundary. Includes VPC Enforced Data Flow Rules."
+                }
+            ]
+        }
+    }
+}
