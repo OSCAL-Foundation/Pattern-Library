@@ -1,0 +1,178 @@
+@startuml
+
+' Summit System
+' Draft (2026-04-03)
+
+' uncomment the line below for "dark mode" styling
+' !$AWS_DARK = true
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v23.0/dist
+
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/AWSSimplified.puml
+
+!include AWSPuml/General/Client.puml
+!include AWSPuml/General/Internet.puml
+!include AWSPuml/General/SSLpadlock.puml
+!include AWSPuml/General/SAMLtoken.puml
+
+!include AWSPuml/Groups/AWSCloud.puml
+!include AWSPuml/Groups/Region.puml
+!include AWSPuml/Groups/VPC.puml
+!include AWSPuml/Groups/AvailabilityZone.puml
+!include AWSPuml/Groups/PublicSubnet.puml
+!include AWSPuml/Groups/PrivateSubnet.puml
+!include AWSPuml/Groups/GenericGreen.puml
+!include AWSPuml/Groups/SecurityGroup.puml
+
+!include AWSPuml/NetworkingContentDelivery/Route53.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/NetworkingContentDelivery/APIGateway.puml
+!include AWSPuml/NetworkingContentDelivery/VPCInternetGateway.puml
+!include AWSPuml/NetworkingContentDelivery/VPCNATGateway.puml
+!include AWSPuml/NetworkingContentDelivery/VPCEndpoints.puml
+
+
+!include AWSPuml/Containers/EKSAnywhere.puml
+!include AWSPuml/Containers/ElasticContainerService.puml
+!include AWSPuml/Containers/ElasticContainerRegistry.puml
+
+!include AWSPuml/Storage/SimpleStorageServiceBucketWithObjects.puml
+!include AWSPuml/Database/AuroraPostgreSQLInstance.puml
+
+!include AWSPuml/SecurityIdentityCompliance/WAF.puml
+!include AWSPuml/SecurityIdentityCompliance/IdentityAccessManagementAWSSTSAlternate.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/SecurityIdentityCompliance/KeyManagementService.puml
+
+!include AWSPuml/ManagementGovernance/CloudWatch.puml
+!include AWSPuml/ManagementGovernance/CloudTrail.puml
+
+hide stereotype
+skinparam linetype ortho
+top to bottom direction
+
+Client(client, "Browser Client", "")
+Internet(internet, "Public Internet", "")
+
+client -d-> internet
+
+AWSCloudGroup(cloud, "AWS Cloud") {
+
+    CloudFront(cloudfront, "Amazon CloudFront", "")
+    WAF(waf, "AWS WAF", "")
+    Route53(route53, "Amazon Route 53", "")
+
+    RegionGroup(region) {
+
+        APIGateway(api_gateway, "Amazon API Gateway", "")
+
+        together {
+            GenericGreenGroup(green, "VPC Services") {
+                SimpleStorageServiceBucketWithObjects(s3_bucket, "Amazon S3 Static Content", "")
+                ElasticContainerRegistry(ecr, "Amazon Elastic Container Registry", "")
+                EKSAnywhere(eks, "Amazon EKS", "")
+                IdentityAccessManagementAWSSTSAlternate(iam_sts, "AWS STS", "")
+                SecretsManager(secrets_manager, "AWS Secrets Manager", "")
+                KeyManagementService(kms, "AWS KMS", "")
+                CloudWatch(cloudwatch, "Amazon CloudWatch", "")
+                CloudTrail(cloudtrail, "AWS CloudTrail", "")
+                ecr <-d-> eks
+                s3_bucket .[hidden]d. ecr
+                s3_bucket .[hidden]r. secrets_manager
+                ecr .[hidden]d. eks
+                eks .[hidden]d. iam_sts
+                secrets_manager .[hidden]d. kms
+                kms .[hidden]d. cloudwatch
+                cloudwatch .[hidden]d. cloudtrail
+            }
+
+            VPCGroup(vpc) {
+                together {
+                    VPCEndpoints(vpc_endpoint, "VPC endpoints", "")
+                }
+
+                together {
+                    VPCInternetGateway(internet_gateway, "Internet gateway", "")
+                }
+
+                rectangle az_container {
+                    AvailabilityZoneGroup(az_1, "Availability Zone 1") {
+                        PublicSubnetGroup(az_1_public, "Public subnet") {
+                            VPCNATGateway(az_1_nat_gateway, "NAT gateway", "")
+                        }
+                        PrivateSubnetGroup(az_1_private, "Presentation subnet") {
+                            SecurityGroupGroup(az_1_sg_1, "Security group") {
+                                ElasticContainerService(az_1_ec2_1, "Ubuntu Container", "")
+                            }
+                        }
+                        PrivateSubnetGroup(az_1_rds_private, "Persistence subnet") {
+                            SecurityGroupGroup(az_1_sg_2, "Security group") {
+                                AuroraPostgreSQLInstance(az_1_rds_pg, "Amazon RDS PostgreSQL", "")
+                            }
+                        }
+
+                        az_1_nat_gateway -d-> az_1_ec2_1
+                        az_1_ec2_1 <-d-> az_1_rds_pg
+                    }
+
+                    AvailabilityZoneGroup(az_2, "Availability Zone 2") {
+                        PublicSubnetGroup(az_2_public, "Public subnet") {
+                            VPCNATGateway(az_2_nat_gateway, "NAT gateway", "")
+                        }
+                        PrivateSubnetGroup(az_2_private, "Presentation subnet") {
+                            SecurityGroupGroup(az_2_sg_1, "Security group") {
+                                ElasticContainerService(az_2_ec2_1, "Ubuntu Container", "")
+                            }
+                        }
+                        PrivateSubnetGroup(az_2_rds_private, "Persistence subnet") {
+                            SecurityGroupGroup(az_2_sg_2, "Security group") {
+                                AuroraPostgreSQLInstance(az_2_rds_pg, "Amazon RDS PostgreSQL", "")
+                            }
+                        }
+
+                        az_2_nat_gateway -d-> az_2_ec2_1
+                        az_2_ec2_1 <-d-> az_2_rds_pg
+                    }
+                }
+
+                green <-r-> vpc_endpoint
+                internet_gateway .[hidden]d. az_container
+
+                internet_gateway -d-> az_2_nat_gateway
+                internet_gateway -d-> az_1_nat_gateway
+            }
+
+        green .[hidden]r. vpc
+    
+
+        api_gateway -d-> internet_gateway
+        }
+    }
+    
+    cloudfront -d-> s3_bucket
+    cloudfront <-r- waf
+    waf <-r- route53
+    route53 -d-> api_gateway
+}
+
+together {
+    together {
+        SSLpadlock(auth0, "Auth0", "")
+        api_gateway -r-> auth0
+        client -r-> auth0
+    }
+
+    together {
+        SAMLtoken(entraid, "Entra ID", "")
+        api_gateway -r-> entraid
+    }
+}
+
+cloud .[hidden]r. auth0
+cloud .[hidden]r. entraid
+auth0 .[hidden]d. entraid
+
+internet <-d-> route53
+
+@enduml
