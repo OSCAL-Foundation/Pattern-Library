@@ -1,0 +1,17 @@
+[
+  {
+    "id": "2026-08-automating-technical-hardening-guidance",
+    "title": "Automating Technical Hardening Guidance with OSCAL",
+    "question": "Where does technical hardening guidance live in OSCAL, and how does an automated check attach to it?",
+    "status": "active",
+    "opened": "2026-08-12",
+    "concluded": null,
+    "forum": "OSCAL Foundation Technical Focus Group on Automated Assessments",
+    "approaches": [
+      { "id": "a", "name": "Catalog-first" },
+      { "id": "b", "name": "Component-first" },
+      { "id": "c", "name": "Assessment-first" }
+    ],
+    "recommendation": null
+  }
+]

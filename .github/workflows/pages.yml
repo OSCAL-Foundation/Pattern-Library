@@ -1,0 +1,104 @@
+name: pages
+
+# Assembles the published site and deploys it. There is no build step and no
+# generator: docs/ is the site, and the only thing this adds is the pattern
+# artifacts, which live at summit/ because they are the repository's product
+# rather than part of its website.
+#
+#   docs/      ->  _site/
+#   summit/    ->  _site/patterns/summit/
+#
+# The copy is what makes the artifacts same-origin with the pages that link
+# them. Linking a raw.githubusercontent URL instead would work today and pin
+# the site to a branch, which is a worse thing to have to unpick later.
+#
+# To preview the assembled site locally, run the same two copies:
+#
+#   rm -rf _site && mkdir -p _site/patterns
+#   cp -r docs/. _site/ && cp -r summit _site/patterns/summit
+#   python3 -m http.server -d _site 8000
+
+"on":
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "summit/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and a queued run is not cancelled: cancelling a
+# deploy half way leaves the published site in whichever state it reached.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble the site
+        run: |
+          set -e
+          mkdir -p _site/patterns
+          cp -r docs/. _site/
+          cp -r summit _site/patterns/summit
+
+      - name: The publication requirements that are not checks
+        run: |
+          set -e
+          # Without this Pages runs the site through Jekyll, which drops every
+          # directory whose name begins with an underscore and does not serve
+          # the analysis site's assets as written.
+          test -f _site/.nojekyll || { echo "::error::.nojekyll is missing from docs/"; exit 1; }
+          # A project site is served under /Pattern-Library/, so an absolute
+          # path resolves against the wrong root. Every path has to be relative.
+          if grep -rn 'href="/\|src="/' --include='*.html' _site; then
+            echo "::error::an absolute path was found. Every path must be relative."
+            exit 1
+          fi
+          # A registry that does not parse takes its index down silently: the
+          # page renders, the fetch resolves, and the list is empty.
+          python3 -c "
+          import json, sys
+          for p in ('_site/analysis/analyses.json', '_site/recommendations/recommendations.json'):
+              d = json.load(open(p))
+              assert isinstance(d, list), p + ' is not an array'
+              print(f'{p}: {len(d)} entries')
+          "
+          # Every analysis the registry names has to be there, with the
+          # metadata file that describes it.
+          python3 -c "
+          import json, os, sys
+          bad = []
+          for e in json.load(open('_site/analysis/analyses.json')):
+              for f in ('index.html', 'analysis.json'):
+                  p = os.path.join('_site/analysis', e['id'], f)
+                  if not os.path.isfile(p):
+                      bad.append(p)
+          if bad:
+              sys.exit('::error::registry names an area that is not published: ' + ', '.join(bad))
+          print('every registered analysis is published')
+          "
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

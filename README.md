@@ -12,13 +12,33 @@ The **OSCAL Foundation** is dedicated to furthering the development and adoption
 
 ## Purpose
 
-There are few high-quality, representative examples of what an actual compliance package in OSCAL looks like. This Pattern Library fills that gap by providing complete, realistic model office examples that demonstrate proper use of all seven OSCAL models working together.
+There are few high-quality, representative examples of what an actual compliance package in OSCAL looks like, and few places where the arguments about how to build one are written down and kept. This repository holds both.
+
+It is published as a website: **<https://oscal-foundation.github.io/Pattern-Library/>**
+
+Three areas, each with its own lifecycle.
+
+| Area | What it holds |
+|---|---|
+| [**Patterns**](summit/) | Model office examples covering the seven OSCAL models, published as files a tool can read |
+| [**Analyses**](docs/analysis/) | Efforts that debate a question about OSCAL, one area per effort, retained after the effort ends |
+| [**Recommendations**](docs/recommendations/) | What the Foundation recommends, each one citing the analysis it came from |
 
 ## Examples
 
 | System | Organization | Description |
 |--------|-------------|-------------|
 | [**Summit**](summit/) | Oscalate Systems | A complete model office example covering all 7 OSCAL models |
+
+## Analyses
+
+Each effort gets its own dated area and keeps it. An area is never renamed, never moved and never deleted, and a concluded one is not edited into agreement with a later view: when an effort is superseded the new one gets its own area and the old one is marked, so the record shows the change rather than replacing it.
+
+| Opened | Analysis | Status |
+|---|---|---|
+| 2026-08 | [Automating Technical Hardening Guidance with OSCAL](docs/analysis/2026-08-automating-technical-hardening-guidance/) | active |
+
+An analysis carries an `analysis.json` beside its `index.html`, and an entry in [docs/analysis/analyses.json](docs/analysis/analyses.json) that the index page renders from. Adding an effort means adding an area and appending to that file; no page is edited.
 
 ## OSCAL Models Covered
 
@@ -37,16 +57,38 @@ Each example in this library aims to include artifacts for all seven OSCAL model
 ```
 Pattern-Library/
 ├── README.md
-└── summit/                          # Model Office: Summit by Oscalate Systems
-    ├── README.md
-    ├── diagrams/                    # Architecture and system diagrams
-    ├── catalog/                     # OSCAL Catalog artifacts
-    ├── profile/                     # OSCAL Profile (Baseline) artifacts
-    ├── component-definition/        # OSCAL Component Definition artifacts
-    ├── system-security-plan/        # OSCAL SSP artifacts
-    ├── assessment-plan/             # OSCAL SAP artifacts
-    ├── assessment-results/          # OSCAL SAR artifacts
-    └── poam/                        # OSCAL POA&M artifacts
+├── .github/workflows/
+│   ├── pages.yml                    # assembles and deploys the site
+│   └── verify-2026-08-*.yml         # one analysis's own verification harness
+├── summit/                          # Model Office: Summit by Oscalate Systems
+│   ├── README.md
+│   ├── diagrams/                    # Architecture and system diagrams
+│   ├── catalog/                     # OSCAL Catalog artifacts
+│   ├── profile/                     # OSCAL Profile (Baseline) artifacts
+│   ├── component-definition/        # OSCAL Component Definition artifacts
+│   ├── system-security-plan/        # OSCAL SSP artifacts
+│   ├── assessment-plan/             # OSCAL SAP artifacts
+│   ├── assessment-results/          # OSCAL SAR artifacts
+│   └── poam/                        # OSCAL POA&M artifacts
+└── docs/                            # the published site
+    ├── index.html
+    ├── assets/
+    ├── patterns/
+    ├── analysis/
+    │   ├── analyses.json            # the registry the index renders from
+    │   └── 2026-08-…/               # one self-contained analysis
+    └── recommendations/
+        └── recommendations.json
+```
+
+The pattern artifacts live at `summit/` because they are the repository's product rather than part of its website. The deploy workflow copies them to `patterns/summit/` on the published site so the pages that link them are same-origin.
+
+To preview the assembled site:
+
+```
+rm -rf _site && mkdir -p _site/patterns
+cp -r docs/. _site/ && cp -r summit _site/patterns/summit
+python3 -m http.server -d _site 8000
 ```
 
 ## Contributing

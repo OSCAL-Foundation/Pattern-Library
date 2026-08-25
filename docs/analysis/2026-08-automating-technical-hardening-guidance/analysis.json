@@ -1,0 +1,38 @@
+{
+  "id": "2026-08-automating-technical-hardening-guidance",
+  "title": "Automating Technical Hardening Guidance with OSCAL",
+  "question": "Where does technical hardening guidance live in OSCAL, and how does an automated check attach to it?",
+  "status": "active",
+  "opened": "2026-08-12",
+  "concluded": null,
+  "forum": "OSCAL Foundation Technical Focus Group on Automated Assessments",
+  "summary": "Three organizations have published working OSCAL content that answers the same question three different ways. This site puts the three side by side against the same six questions, writes the same two rules out in all three shapes so that the only thing differing between the columns is the modelling, and names the join key that makes each one work.",
+  "approaches": [
+    { "id": "a", "name": "Catalog-first",    "path": "catalog-first.html" },
+    { "id": "b", "name": "Component-first",  "path": "component-first.html" },
+    { "id": "c", "name": "Assessment-first", "path": "assessment-first.html" }
+  ],
+
+  "recommendation": null,
+
+  "makesRecommendation": false,
+  "makesRecommendationNote": "By design, not because the effort is unfinished. The site states three approaches in the terms their proponents use, prices what each one costs, and stops. A reader looking for a verdict should not infer that one is pending.",
+
+  "supersedes": null,
+  "supersededBy": null,
+
+  "openItems": [
+    "Proponent review has not happened. No request for corrections has been sent to the publishers of the three bodies of content, so none has been received and nobody has declined."
+  ],
+
+  "corpora": {
+    "repository": "OSCAL-Foundation/tfg-automated-assessments",
+    "note": "Read by the build through TFG_CORPORA. Not vendored here: every extract on the site is re-derived from it and diffed on each run."
+  },
+
+  "verification": {
+    "workflow": ".github/workflows/verify-2026-08-hardening-guidance.yml",
+    "command": "python tools/verify.py --all",
+    "note": "Every figure and extract on the site is recomputed from a published file. A skipped check is reported separately and never counted as a pass."
+  }
+}
