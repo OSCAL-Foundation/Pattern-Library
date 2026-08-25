@@ -37,9 +37,24 @@
   --text-faint:     #6B7684;
   --border:         #D5DAE1;   /* hairline separators, decorative           */
   --border-strong:  #848C99;   /* meaningful outlines, 3.39:1 on --bg       */
-  --accent:         #0B5FA5;
-  --accent-fg:      #FFFFFF;
-  --focus:          #0B5FA5;
+
+  /* --- accent -------------------------------------------------------------
+     The OSCAL Foundation's primary is #4E79D8, hue 221, saturation 0.64. It is
+     4.16:1 on --bg and 4.36:1 on the dark --bg, so it clears neither theme's
+     4.5 for a link and cannot be the accent itself. Adopting it as one would
+     have traded this file's whole argument for a colour match.
+
+     So the hue and the saturation are adopted and only the lightness moves,
+     to wherever the contrast the site already had comes back. 45% here, 6.53:1
+     against the 6.57:1 of the #0B5FA5 it replaces; 75% in dark, 8.36:1 against
+     8.29:1. Every accent pair on the site is within 0.07 of where it was, and
+     the hue is the Foundation's rather than the cyan-leaning 205 it was.
+
+     The brand blue is drawn at full strength where it is identity rather than
+     text, which is the one place 4.16:1 is the right number. */
+  --accent:         #2958BC;   /* 6.53:1 on --bg, 6.09:1 on --bg-subtle */
+  --accent-fg:      #FFFFFF;   /* 6.53:1 on --accent */
+  --focus:          #2958BC;
   --shadow:         0 1px 2px rgb(18 22 28 / 8%), 0 4px 12px rgb(18 22 28 / 6%);
 
   /* --- media-type icon ----------------------------------------------------
@@ -225,9 +240,11 @@
   --text-faint:     #8592A2;
   --border:         #2E3742;
   --border-strong:  #606D7C;   /* 3.44:1 on --bg */
-  --accent:         #6EB5F5;
-  --accent-fg:      #0B1017;
-  --focus:          #6EB5F5;
+  /* The same brand hue as the light block, lightened rather than darkened to
+     reach the contrast that block explains. */
+  --accent:         #96B0E8;   /* 8.36:1 on --bg, 7.62:1 on --bg-subtle */
+  --accent-fg:      #0B1017;   /* 8.79:1 on --accent */
+  --focus:          #96B0E8;
   --micon-pdf:      #EE8A80;   /* 7.42:1 on --bg */
 
   /* Strength and risk, matched to within a hundredth here too. See the note in
