@@ -2,56 +2,42 @@
   "version": "2.0.0",
   "tasks": [
     {
+      // docs/ is static, so this is a stock server rather than anything the
+      // repository maintains. Installing the recommended Live Preview
+      // extension replaces it; its preview button needs no task at all.
       "label": "site: serve",
-      "detail": "docs/ with summit/ overlaid at /patterns/summit/, the way Pages serves it",
+      "detail": "Serve docs/ on 4173, the way Pages will serve it",
       "type": "shell",
-      "command": "python3 tools/serve.py --port 8100 --exact-port --no-open",
+      "command": "echo 'site: starting' && python3 -u -m http.server --directory docs --bind 127.0.0.1 4173",
       "options": { "cwd": "${workspaceFolder}" },
       "isBackground": true,
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true
-      },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
       "problemMatcher": {
         "owner": "site-serve",
-        "fileLocation": ["relative", "${workspaceFolder}"],
-        // A server produces no diagnostics, but a background task needs a
-        // pattern for VS Code to accept the matcher at all, and without an
-        // accepted matcher every launch stops to ask whether to continue.
-        // This one is deliberately unmatchable; beginsPattern and endsPattern
-        // are what actually do the work.
-        "pattern": {
-          "regexp": "^$",
-          "file": 1,
-          "location": 2,
-          "message": 3
-        },
+        "fileLocation": ["relative", "${workspaceFolder}/docs"],
+        // A server reports no diagnostics, but a background matcher is not
+        // accepted without a pattern, and without an accepted matcher every
+        // launch stops to ask whether to continue. This one cannot match;
+        // beginsPattern and endsPattern do the work.
+        "pattern": { "regexp": "^$", "file": 1, "location": 2, "message": 3 },
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "^Serving ",
-          "endsPattern": "Ctrl-C to stop"
+          "beginsPattern": "^site: starting",
+          "endsPattern": "^Serving HTTP on"
         }
       }
     },
     {
       "label": "site: stop",
-      "detail": "Terminates the serve task, so the next launch gets port 8000 back.",
+      "detail": "Terminates the serve task and frees the port.",
       "type": "shell",
       "command": "echo ${input:terminateServe}",
       "presentation": { "reveal": "never", "panel": "dedicated" },
       "problemMatcher": []
     },
     {
-      "label": "site: assemble _site",
-      "detail": "The exact tree the deploy workflow uploads. Use to check the real artifact.",
-      "type": "shell",
-      "command": "rm -rf _site && mkdir -p _site/patterns && cp -r docs/. _site/ && cp -r summit _site/patterns/summit && echo \"assembled $(du -sh _site | cut -f1) at _site/\"",      "options": { "cwd": "${workspaceFolder}" },
-      "problemMatcher": []
-    },
-    {
       "label": "analysis 2026-08: verify",
-      "detail": "The analysis harness. Needs TFG_CORPORA pointing at the corpora checkout.",
+      "detail": "Recompute every figure and extract from its published source.",
       "type": "shell",
       "command": "python3 tools/verify.py --all",
       "options": {
@@ -61,13 +47,7 @@
       "problemMatcher": {
         "owner": "verify",
         "fileLocation": "autoDetect",
-        "pattern": [
-          {
-            "regexp": "^\\s+FAIL\\s+(.*)$",
-            "severity": 1,
-            "message": 1
-          }
-        ]
+        "pattern": { "regexp": "^\\s+FAIL\\s+(.*)$", "message": 1 }
       }
     },
     {

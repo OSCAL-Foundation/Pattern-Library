@@ -2,54 +2,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch site (Chrome)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://127.0.0.1:8100/index.html",
-      "webRoot": "${workspaceFolder}/docs",
-      "preLaunchTask": "site: serve",
-      "postDebugTask": "site: stop",
-      // The site is plain files, so a breakpoint in docs/assets/site.js or in
-      // an analysis's assets/*.js binds straight to the served file.
-      "pathMapping": {
-        "/": "${workspaceFolder}/docs/",
-        "/patterns/summit/": "${workspaceFolder}/summit/"
-      }
-    },
-    {
-      "name": "Launch site (Edge)",
+      // Edge first because it is the browser this machine has. Chrome is not
+      // installed and its configuration below fails to launch without one.
+      //
+      // preLaunchTask starts the server, so this works from a cold editor. The
+      // task frees the port when you run "site: stop" or end the session.
+      "name": "Pattern Library",
       "type": "msedge",
       "request": "launch",
-      "url": "http://127.0.0.1:8100/index.html",
-      "webRoot": "${workspaceFolder}/docs",
-      "preLaunchTask": "site: serve",
-      "postDebugTask": "site: stop",
-      "pathMapping": {
-        "/": "${workspaceFolder}/docs/",
-        "/patterns/summit/": "${workspaceFolder}/summit/"
-      }
-    },
-    {
-      "name": "Launch the 2026-08 analysis (Chrome)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://127.0.0.1:8100/analysis/2026-08-automating-technical-hardening-guidance/index.html",
+      "url": "http://127.0.0.1:4173/index.html",
       "webRoot": "${workspaceFolder}/docs",
       "preLaunchTask": "site: serve",
       "postDebugTask": "site: stop"
     },
     {
-      "name": "Debug the server",
-      "type": "debugpy",
+      "name": "Pattern Library (Chrome)",
+      "type": "chrome",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/serve.py",
-      "args": ["--port", "8100", "--no-open"],
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "justMyCode": true
+      "url": "http://127.0.0.1:4173/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "site: serve",
+      "postDebugTask": "site: stop"
     },
     {
-      "name": "Debug the analysis harness",
+      // The analysis harness is the one thing here that is not a static site.
+      "name": "Debug the 2026-08 analysis harness",
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance/tools/verify.py",

@@ -78,28 +78,26 @@ review gate.
 
 ## Viewing the site
 
-**Double-click `serve.cmd`.** It starts a local server in this folder, opens the
-site, and prints the address. Ctrl-C in that window stops it.
+This analysis is one area of the Pattern Library site and is served with it
+rather than on its own. It carried its own `serve.cmd` and `tools/serve.py`
+when it was a standalone repository; both are gone, because a second server
+rooted here would serve this folder as if it were the whole site and hide the
+thing a reader arrives through.
 
-From a terminal, the same thing:
-
-```
-python tools/serve.py                    # then open the address it prints
-python tools/serve.py --port 8080        # if 8000 is taken
-python tools/serve.py --page scenario.html
-python tools/serve.py --no-open          # do not launch a browser
-```
-
-It needs nothing installed beyond Python, writes nothing, picks the next free
-port if yours is busy, and sends `Cache-Control: no-store` so that regenerating
-data between refreshes shows the new data. Only 4xx and 5xx responses are logged,
-so a missing file is visible and nothing else is noise.
-
-Any other static server works too, run from this folder:
+From the repository root, serve `docs/` and open this area from the analysis
+index. Pressing F5 in VS Code does both:
 
 ```
-python -m http.server 8000               # Python, no extras
-npx serve .                              # Node
+python3 -m http.server --directory docs 4173
+npx serve docs
+```
+
+Or install the recommended Live Preview extension and click the preview button
+on any page; `.vscode/settings.json` already points its server root at `docs/`.
+Either way this analysis is at:
+
+```
+/analysis/2026-08-automating-technical-hardening-guidance/
 ```
 
 ### Why a server, and what happens without one
@@ -278,8 +276,6 @@ tools/
   verify.py          the check harness
   pagecheck.js       runs a page's renderers and asserts on the result
   axe_run.mjs        serves the site and runs axe-core over every page
-  serve.py           a local static server
-serve.cmd            double-click to serve the site on Windows
 ```
 
 Eight of those are generators and the files they produce must not be edited by

@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    // Serves docs/ as a static site, which is all this repository needs. The
+    // preview button on an HTML file starts it; "Live Preview: Show Debug
+    // Preview" starts it with the JavaScript debugger attached.
+    "ms-vscode.live-server"
+  ]
+}

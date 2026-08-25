@@ -20,7 +20,7 @@ Three areas, each with its own lifecycle.
 
 | Area | What it holds |
 |---|---|
-| [**Patterns**](summit/) | Model office examples covering the seven OSCAL models, published as files a tool can read |
+| [**Patterns**](docs/patterns/summit/) | Model office examples covering the seven OSCAL models, published as files a tool can read |
 | [**Analyses**](docs/analysis/) | Efforts that debate a question about OSCAL, one area per effort, retained after the effort ends |
 | [**Recommendations**](docs/recommendations/) | What the Foundation recommends, each one citing the analysis it came from |
 
@@ -28,7 +28,7 @@ Three areas, each with its own lifecycle.
 
 | System | Organization | Description |
 |--------|-------------|-------------|
-| [**Summit**](summit/) | Oscalate Systems | A complete model office example covering all 7 OSCAL models |
+| [**Summit**](docs/patterns/summit/) | Oscalate Systems | A complete model office example covering all 7 OSCAL models |
 
 ## Analyses
 
@@ -54,63 +54,61 @@ Each example in this library aims to include artifacts for all seven OSCAL model
 
 ## Repository Structure
 
+`docs/` is the site, verbatim. There is no build step and nothing is generated at deploy time: what is in the folder is what is published.
+
 ```
 Pattern-Library/
 ├── README.md
 ├── .github/workflows/
-│   ├── pages.yml                    # assembles and deploys the site
-│   └── verify-2026-08-*.yml         # one analysis's own verification harness
-├── summit/                          # Model Office: Summit by Oscalate Systems
-│   ├── README.md
-│   ├── diagrams/                    # Architecture and system diagrams
-│   ├── catalog/                     # OSCAL Catalog artifacts
-│   ├── profile/                     # OSCAL Profile (Baseline) artifacts
-│   ├── component-definition/        # OSCAL Component Definition artifacts
-│   ├── system-security-plan/        # OSCAL SSP artifacts
-│   ├── assessment-plan/             # OSCAL SAP artifacts
-│   ├── assessment-results/          # OSCAL SAR artifacts
-│   └── poam/                        # OSCAL POA&M artifacts
-└── docs/                            # the published site
-    ├── index.html
+│   ├── pages.yml                     # publishes docs/
+│   └── verify-2026-08-*.yml          # one analysis's own harness
+└── docs/
+    ├── index.html                    # landing: the three areas
     ├── assets/
     ├── patterns/
+    │   ├── index.html
+    │   └── summit/                   # Model Office: Summit by Oscalate Systems
+    │       ├── diagrams/                 # Architecture and system diagrams
+    │       ├── catalog/                  # OSCAL Catalog artifacts
+    │       ├── profile/                  # OSCAL Profile (Baseline) artifacts
+    │       ├── component-definition/     # OSCAL Component Definition artifacts
+    │       ├── system-security-plan/     # OSCAL SSP artifacts
+    │       ├── assessment-plan/          # OSCAL SAP artifacts
+    │       ├── assessment-results/       # OSCAL SAR artifacts
+    │       └── poam/                     # OSCAL POA&M artifacts
     ├── analysis/
-    │   ├── analyses.json            # the registry the index renders from
-    │   └── 2026-08-…/               # one self-contained analysis
+    │   ├── index.html
+    │   ├── analyses.json             # the registry the index renders from
+    │   └── 2026-08-…/                # one self-contained analysis
     └── recommendations/
+        ├── index.html
         └── recommendations.json
 ```
 
-The pattern artifacts live at `summit/` because they are the repository's product rather than part of its website. The deploy workflow copies them to `patterns/summit/` on the published site so the pages that link them are same-origin.
+The artifacts sit inside `patterns/` rather than at the repository root so that the pages linking them resolve the same way locally and published. Nothing has to be copied or rewritten between the two.
 
 ## Running the site
 
+Press **F5**. The `Pattern Library` configuration starts a static server on 4173 and opens the landing page with the debugger attached, so breakpoints in `docs/assets/site.js` bind to the served file. Edge is the default because Chrome is not installed everywhere; the Chrome configuration is there if you have it.
+
+Nothing is installed and nothing in this repository serves the site — the task is a stock `python3 -m http.server` over `docs/`. Any equivalent works:
+
 ```
-python3 tools/serve.py
+python3 -m http.server --directory docs 4173
+npx serve docs
 ```
 
-Nothing to install. It serves `docs/` as the site root and answers anything under `/patterns/summit/` from `summit/` where it actually sits, which is the shape the deploy produces without the copy — so an edit shows up on refresh.
+If you install the recommended [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) extension you can skip all of that: click the preview button on any page under `docs/`, or run **Live Preview: Show Debug Preview** for breakpoints. `.vscode/settings.json` already points its server root at `docs/`.
 
-It listens on **8100**, not 8000. Each analysis ships its own server defaulting to 8000, and on WSL a Windows-side listener answers `127.0.0.1` without appearing in `ss`, so a collision there is silent and serves the wrong site. The VS Code task passes `--exact-port` so that fails loudly instead.
+**Run Task** carries the rest:
 
-In VS Code, **Run and Debug** carries the same thing with a debugger attached:
-
-| Configuration | What it does |
+| Task | What it does |
 |---|---|
-| Launch site (Chrome / Edge) | Starts the server and opens the landing page. Breakpoints in `docs/assets/site.js` bind to the served file. |
-| Launch the 2026-08 analysis | Same, opening that analysis directly |
-| Debug the server | Steps through `tools/serve.py` itself |
-| Debug the analysis harness | Steps through that analysis's `tools/verify.py` |
+| `site: serve` / `site: stop` | The server F5 uses, on its own |
+| `analysis 2026-08: verify` | Recompute every figure and extract from its published source |
+| `analysis 2026-08: regenerate` | Run every generator; a file that differs afterwards was hand-edited |
 
-Tasks (**Run Task**) cover the rest: `site: serve`, `site: stop`, `site: assemble _site`, and the 2026-08 analysis's `verify` and `regenerate`.
-
-To check the artifact the workflow actually uploads rather than the overlay, run the `site: assemble _site` task, or:
-
-```
-rm -rf _site && mkdir -p _site/patterns
-cp -r docs/. _site/ && cp -r summit _site/patterns/summit
-python3 -m http.server -d _site 8000
-```
+Opening a page from the filesystem does not work: every index renders its list from a JSON registry, and a browser blocks `fetch` on a `file://` origin. The pages say so when it happens rather than appearing empty.
 
 ## Contributing
 

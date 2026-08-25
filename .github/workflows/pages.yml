@@ -1,29 +1,17 @@
 name: pages
 
-# Assembles the published site and deploys it. There is no build step and no
-# generator: docs/ is the site, and the only thing this adds is the pattern
-# artifacts, which live at summit/ because they are the repository's product
-# rather than part of its website.
+# docs/ is the site, verbatim. There is no build step, no generator and no
+# assembly: what is in the folder is what is published.
 #
-#   docs/      ->  _site/
-#   summit/    ->  _site/patterns/summit/
-#
-# The copy is what makes the artifacts same-origin with the pages that link
-# them. Linking a raw.githubusercontent URL instead would work today and pin
-# the site to a branch, which is a worse thing to have to unpick later.
-#
-# To preview the assembled site locally, run the same two copies:
-#
-#   rm -rf _site && mkdir -p _site/patterns
-#   cp -r docs/. _site/ && cp -r summit _site/patterns/summit
-#   python3 -m http.server -d _site 8000
+# This workflow exists for the guards below rather than for the deploy. A
+# branch-source deploy (Settings > Pages > Deploy from a branch > /docs) would
+# publish the same bytes without them.
 
-"on":
+on:
   push:
     branches: [main]
     paths:
       - "docs/**"
-      - "summit/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -44,54 +32,51 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Assemble the site
-        run: |
-          set -e
-          mkdir -p _site/patterns
-          cp -r docs/. _site/
-          cp -r summit _site/patterns/summit
-
       - name: The publication requirements that are not checks
         run: |
           set -e
           # Without this Pages runs the site through Jekyll, which drops every
           # directory whose name begins with an underscore and does not serve
-          # the analysis site's assets as written.
-          test -f _site/.nojekyll || { echo "::error::.nojekyll is missing from docs/"; exit 1; }
+          # the analysis sites' assets as written.
+          test -f docs/.nojekyll || { echo "::error::.nojekyll is missing from docs/"; exit 1; }
           # A project site is served under /Pattern-Library/, so an absolute
           # path resolves against the wrong root. Every path has to be relative.
-          if grep -rn 'href="/\|src="/' --include='*.html' _site; then
+          if grep -rn 'href="/\|src="/' --include='*.html' docs; then
             echo "::error::an absolute path was found. Every path must be relative."
             exit 1
           fi
-          # A registry that does not parse takes its index down silently: the
-          # page renders, the fetch resolves, and the list is empty.
-          python3 -c "
-          import json, sys
-          for p in ('_site/analysis/analyses.json', '_site/recommendations/recommendations.json'):
-              d = json.load(open(p))
-              assert isinstance(d, list), p + ' is not an array'
-              print(f'{p}: {len(d)} entries')
-          "
-          # Every analysis the registry names has to be there, with the
-          # metadata file that describes it.
-          python3 -c "
+
+      - name: The registries resolve to something published
+        run: |
+          python3 - <<'PY'
           import json, os, sys
-          bad = []
-          for e in json.load(open('_site/analysis/analyses.json')):
-              for f in ('index.html', 'analysis.json'):
-                  p = os.path.join('_site/analysis', e['id'], f)
-                  if not os.path.isfile(p):
-                      bad.append(p)
-          if bad:
-              sys.exit('::error::registry names an area that is not published: ' + ', '.join(bad))
-          print('every registered analysis is published')
-          "
+
+          for p in ("docs/analysis/analyses.json",
+                    "docs/recommendations/recommendations.json"):
+              entries = json.load(open(p))
+              # A registry that does not parse takes its index down silently:
+              # the page renders, the fetch resolves, and the list is empty.
+              assert isinstance(entries, list), f"{p} is not an array"
+              print(f"{p}: {len(entries)} entries")
+
+          # An entry naming an area that is not published renders as an
+          # ordinary card with a dead link.
+          missing = [
+              os.path.join("docs/analysis", e["id"], f)
+              for e in json.load(open("docs/analysis/analyses.json"))
+              for f in ("index.html", "analysis.json")
+              if not os.path.isfile(os.path.join("docs/analysis", e["id"], f))
+          ]
+          if missing:
+              sys.exit("::error::registry names an area that is not published: "
+                       + ", ".join(missing))
+          print("every registered analysis is published")
+          PY
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: docs
 
   deploy:
     needs: build
