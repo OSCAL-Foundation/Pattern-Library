@@ -83,7 +83,28 @@ Pattern-Library/
 
 The pattern artifacts live at `summit/` because they are the repository's product rather than part of its website. The deploy workflow copies them to `patterns/summit/` on the published site so the pages that link them are same-origin.
 
-To preview the assembled site:
+## Running the site
+
+```
+python3 tools/serve.py
+```
+
+Nothing to install. It serves `docs/` as the site root and answers anything under `/patterns/summit/` from `summit/` where it actually sits, which is the shape the deploy produces without the copy — so an edit shows up on refresh.
+
+It listens on **8100**, not 8000. Each analysis ships its own server defaulting to 8000, and on WSL a Windows-side listener answers `127.0.0.1` without appearing in `ss`, so a collision there is silent and serves the wrong site. The VS Code task passes `--exact-port` so that fails loudly instead.
+
+In VS Code, **Run and Debug** carries the same thing with a debugger attached:
+
+| Configuration | What it does |
+|---|---|
+| Launch site (Chrome / Edge) | Starts the server and opens the landing page. Breakpoints in `docs/assets/site.js` bind to the served file. |
+| Launch the 2026-08 analysis | Same, opening that analysis directly |
+| Debug the server | Steps through `tools/serve.py` itself |
+| Debug the analysis harness | Steps through that analysis's `tools/verify.py` |
+
+Tasks (**Run Task**) cover the rest: `site: serve`, `site: stop`, `site: assemble _site`, and the 2026-08 analysis's `verify` and `regenerate`.
+
+To check the artifact the workflow actually uploads rather than the overlay, run the `site: assemble _site` task, or:
 
 ```
 rm -rf _site && mkdir -p _site/patterns

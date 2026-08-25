@@ -1,0 +1,63 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch site (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:8100/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "site: serve",
+      "postDebugTask": "site: stop",
+      // The site is plain files, so a breakpoint in docs/assets/site.js or in
+      // an analysis's assets/*.js binds straight to the served file.
+      "pathMapping": {
+        "/": "${workspaceFolder}/docs/",
+        "/patterns/summit/": "${workspaceFolder}/summit/"
+      }
+    },
+    {
+      "name": "Launch site (Edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:8100/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "site: serve",
+      "postDebugTask": "site: stop",
+      "pathMapping": {
+        "/": "${workspaceFolder}/docs/",
+        "/patterns/summit/": "${workspaceFolder}/summit/"
+      }
+    },
+    {
+      "name": "Launch the 2026-08 analysis (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:8100/analysis/2026-08-automating-technical-hardening-guidance/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "site: serve",
+      "postDebugTask": "site: stop"
+    },
+    {
+      "name": "Debug the server",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/serve.py",
+      "args": ["--port", "8100", "--no-open"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug the analysis harness",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance/tools/verify.py",
+      "args": ["--all"],
+      "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
+      "console": "integratedTerminal",
+      "env": { "TFG_CORPORA": "${env:HOME}/pagesource/tfg-automated-assessments" },
+      "justMyCode": false
+    }
+  ]
+}

@@ -3,3 +3,7 @@
 # analysis site. They are metadata, not content.
 *:Zone.Identifier
 *:sec.endpointdlp
+
+# The assembled preview tree, built by the "site: assemble _site" task. It is
+# a copy of docs/ and summit/, so nothing in it is a source.
+_site/
