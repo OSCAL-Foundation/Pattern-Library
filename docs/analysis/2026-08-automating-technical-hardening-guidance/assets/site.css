@@ -375,7 +375,23 @@ body {
   display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap;
 }
 .site-title { font-size: var(--fs-base); font-weight: 650; letter-spacing: -0.01em; }
-.site-title a { color: inherit; text-decoration: none; }
+.site-title a { color: inherit; text-decoration: none;
+                display: flex; align-items: center; gap: var(--s3); }
+
+/* --- the Foundation's mark -----------------------------------------------
+   Two files rather than one. The Foundation ships a reversed mark for dark
+   grounds, and the theme here is a data-theme attribute a reader sets rather
+   than a media query, so <picture> could not follow it.
+
+   The mark is the one thing on this page drawn in the brand blue at full
+   strength, 4.16:1. WCAG exempts a logotype from the contrast it holds text
+   to, which is the whole reason --accent had to move off that colour and this
+   does not. It is decorative here: the link it sits in is named by the title
+   beside it, so a second accessible name would only be announced twice. */
+.site-logo { display: block; flex: none; height: 2.25rem; width: auto; }
+.site-logo--dark { display: none; }
+[data-theme="dark"] .site-logo--light { display: none; }
+[data-theme="dark"] .site-logo--dark { display: block; }
 
 .site-nav ul { display: flex; flex-wrap: wrap; gap: var(--s1); list-style: none; margin: 0; padding: 0; }
 .site-nav a {
