@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en" data-base=".">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component-first | Automating Technical Hardening Guidance with OSCAL</title>
+<meta name="description" content="Rules sit on the component they configure, checks sit on a separate validation component, and the pair is joined by a composite key.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Component-first">
+<meta property="og:description" content="Rules sit on the component they configure, checks sit on a separate validation component, and the pair is joined by a composite key.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Automating Technical Hardening Guidance with OSCAL">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Component-first">
+<meta name="twitter:description" content="Rules sit on the component they configure, checks sit on a separate validation component, and the pair is joined by a composite key.">
+<link rel="stylesheet" href="./assets/site.css">
+<script>
+  /* Set the theme before first paint so the page never flashes the wrong one. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("tfg-theme"); } catch (e) {}
+    if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <p class="site-title"><a href="./index.html"><img class="site-logo site-logo--light" src="./assets/brand/oscal-foundation.png" alt="" width="208" height="96"><img class="site-logo site-logo--dark" src="./assets/brand/oscal-foundation-rev.png" alt="" width="208" height="96"><span>Automating Technical Hardening Guidance with OSCAL</span></a></p>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="./index.html">Start here</a></li>
+        <li><a href="./six-questions.html">The six questions</a></li>
+        <li><a href="./scenario.html">A worked scenario</a></li>
+        <li><a href="./catalog-first.html">Catalog-first</a></li>
+        <li><a href="./component-first.html">Component-first</a></li>
+        <li><a href="./assessment-first.html">Assessment-first</a></li>
+        <li><a href="./questions.html">Open questions</a></li>
+        <li><a href="./oscal-artifacts.html">OSCAL artifacts</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="theme-toggle" aria-pressed="false">Dark theme</button>
+  </div>
+</header>
+
+<main id="main">
+
+<h1>Component-first</h1>
+<p class="lede">In this approach, the rule is a rules entry on the component it configures, and the check is a checks entry on a second component of type validation. The component states what must be true and the validation component states how it is tested.</p>
+<nav class="toc" aria-label="On this page">
+  <span class="toc__label">On this page</span>
+  <ol>
+    <li><a href="#stakeholder">1. The stakeholder mapping</a></li>
+    <li><a href="#tradeoffs">2. Strengths and risks with this approach</a></li>
+    <li><a href="#joins">3. Tracing rules and checks from implementation to assessment</a></li>
+  </ol>
+</nav>
+<section id="stakeholder">
+<h2>1. The stakeholder mapping</h2>
+<div class="tier2">
+  <p>Three readings of what a hardening rule is are on the record, and this approach reads it as <strong>a capability statement</strong>, which puts it in the Implementation layer, in the <code>component-definition</code> model. That is what decides the table below.</p>
+  <p>Seven parties touch a hardening rule between a published guide and an audited system, and each works in an OSCAL model. Two sets of them are grouped: the bodies that author guidance, and the automation.</p>
+</div>
+<table class="criteria-table stakeholders">
+  <thead><tr><th scope="col">Party</th><th scope="col">OSCAL model</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Regulatory control providers<span class="stakeholders__who">NIST with SP 800-53, and bodies like it</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="13.0728 14.0728 37.8544 37.8544" aria-hidden="true" focusable="false"><path d="M18 18H30L34 22V48L27 45H18V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M46 18H34L30 22V48L37 45H46V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M22 26L28 26" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M22 32L28 32" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 26L42 26" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 32L42 32" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/></svg></span><span class="mtile__name">catalog</span></span></span></td></tr>
+    <tr><th scope="row">Mapping providers<span class="stakeholders__who">DISA's CCI list, NIST's OLIR programme, the Secure Controls Framework and bodies like them, tying a guide to a framework</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">component-definition</span><span class="mtile__kind">software or validation</span></span></span><span class="stakeholders__note">Edits a definition rather than writing one. Which of the two carries the tie, the rules or the checks, is an open question.</span></td></tr>
+    <tr class="stakeholders__group"><th scope="colgroup" colspan="2">Hardening guidance authors<span class="stakeholders__note">One role, two kinds of organisation, the same model. Nothing downstream can tell which of them wrote a rule.</span></th></tr>
+    <tr class="stakeholders__in"><th scope="row">Technical hardening guidance providers<span class="stakeholders__who">CIS, DISA and other benchmark publishers</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">component-definition</span><span class="mtile__kind">software</span></span></span></td></tr>
+    <tr class="stakeholders__in"><th scope="row">Software providers<span class="stakeholders__who">Vendors publishing secure configuration guidance for their own product, alone or with a body such as CIS</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">component-definition</span><span class="mtile__kind">software</span></span></span></td></tr>
+    <tr class="stakeholders__group"><th scope="colgroup" colspan="2">Automation tools and who runs them<span class="stakeholders__note">The policy engine and the automation tool are the same thing. A provider builds it, and whoever runs it decides what comes out.</span></th></tr>
+    <tr class="stakeholders__in"><th scope="row">Policy engine providers<span class="stakeholders__who">OPA, Kyverno, ScubaGear, OpenSCAP and the like, assessing, auditing and checking</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">component-definition</span><span class="mtile__kind">validation</span></span></span><span class="stakeholders__note">A component of type validation rather than software, holding the checks. Builds it, runs nothing.</span></td></tr>
+    <tr class="stakeholders__in"><th scope="row">System owners<span class="stakeholders__who">Implementing these concepts on a real system</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M18 20H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><path d="M18 32H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><path d="M18 44H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><circle cx="26" cy="20" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/><circle cx="38" cy="32" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/><circle cx="30" cy="44" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/></svg></span><span class="mtile__name">profile</span></span><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M20 16H36L44 24V48H20V16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M36 16V24H44" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 30V40M32 30L28 31L26 33L26 36L28 39L32 42L36 39L38 36L38 33L36 31L32 30Z" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="mtile__name">system-security-plan</span></span></span><span class="mflow"><span class="mflow__by">runs the checks, making the control-implementation responses</span><span class="mflow__run"><span class="lineage__end"><span class="lineage__box"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">component-definition</span><span class="mtile__kind">validation</span></span></span><span class="lineage__q"></span></span><span class="lineage__end lineage__end--mark"><span class="lineage__box"><svg class="mflow__runtime" viewBox="0 0 46 20" aria-hidden="true" focusable="false"><path d="M1,10 H12.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16.4,10 L10.8,7.1 v5.8 Z" fill="currentColor"/><rect x="17.6" y="1.7" width="12.2" height="16.6" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M21.5,6.1 L26.7,10 L21.5,13.9 Z" fill="currentColor"/><path d="M30.6,10 H41" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M45,10 L39.4,7.1 v5.8 Z" fill="currentColor"/></svg></span><span class="lineage__q">runtime</span><span class="visually-hidden"> is read by the policy engine, which runs and writes </span></span><span class="lineage__end"><span class="lineage__box"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M20 16H36L44 24V48H20V16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M36 16V24H44" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 30V40M32 30L28 31L26 33L26 36L28 39L32 42L36 39L38 36L38 33L36 31L32 30Z" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="mtile__name">system-security-plan</span></span></span><span class="lineage__q"></span></span></span></span></td></tr>
+    <tr class="stakeholders__in"><th scope="row">Independent auditors<span class="stakeholders__who">Running the same checks independently of the system owner, and reading the outcome</span></th><td><span class="mflow"><span class="mflow__by">runs the checks, making the observations</span><span class="mflow__run"><span class="lineage__end"><span class="lineage__box"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></span><span class="lineage__q"></span></span><span class="lineage__end lineage__end--mark"><span class="lineage__box"><svg class="mflow__runtime" viewBox="0 0 46 20" aria-hidden="true" focusable="false"><path d="M1,10 H12.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16.4,10 L10.8,7.1 v5.8 Z" fill="currentColor"/><rect x="17.6" y="1.7" width="12.2" height="16.6" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M21.5,6.1 L26.7,10 L21.5,13.9 Z" fill="currentColor"/><path d="M30.6,10 H41" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M45,10 L39.4,7.1 v5.8 Z" fill="currentColor"/></svg></span><span class="lineage__q">runtime</span><span class="visually-hidden"> is read by the policy engine, which runs and writes </span></span><span class="lineage__end"><span class="lineage__box"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><rect x="18" y="16" width="28" height="32" rx="3" stroke-width="2.21" stroke="currentColor" fill="none"/><path d="M24 24L27 27L33 21" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M24 34L27 37L33 31" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M37 24L40 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" fill="none"/><path d="M37 34L40 34" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" fill="none"/></svg></span><span class="mtile__name">assessment-results</span></span></span><span class="lineage__q"></span></span></span></span><span class="stakeholders__note">The run goes through the assessment plan, which is what lets the result name the host rather than the component.</span></td></tr>
+  </tbody>
+</table>
+<p class="stakeholders__key"><svg class="mflow__runtime" viewBox="0 0 46 20" aria-hidden="true" focusable="false"><path d="M1,10 H12.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16.4,10 L10.8,7.1 v5.8 Z" fill="currentColor"/><rect x="17.6" y="1.7" width="12.2" height="16.6" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M21.5,6.1 L26.7,10 L21.5,13.9 Z" fill="currentColor"/><path d="M30.6,10 H41" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M45,10 L39.4,7.1 v5.8 Z" fill="currentColor"/></svg><span><strong>The runtime.</strong> A tool reads OSCAL, executes, and writes OSCAL. The party in this row builds it; the party on each flow runs it.</span></p>
+</section>
+<section id="tradeoffs">
+<h2>2. Strengths and risks with this approach</h2>
+<div class="tier2">
+  <p>Considerations when introducing technical hardening rules into a component definition have been captured</p>
+</div>
+<div class="tradeoffs">
+  <div class="tradeoffs__side tradeoffs__side--pro">
+    <h3 class="tradeoffs__head"><span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>2.1 Strengths<span class="tradeoffs__count">4</span></h3>
+    <ol class="tradeoffs__list">
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">One artifact serves the reader and the tool</p>
+        <p class="tradeoff__body">A component definition says how a component can meet a control, the world of possibility for software, and rules inside it make that document drive automation.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">The rule and the check are separate things</p>
+        <p class="tradeoff__body">The rule sits on the product and the check on a second component, so a second engine is a second component.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">The claim can name the rule it rests on</p>
+        <p class="tradeoff__body">The proposed <code>implementing-rules</code> closes the distance between saying a control is implemented and saying which rule implements it.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">Vendors already have advice for this model</p>
+        <p class="tradeoff__body">Vendors are told to describe how their product can meet requirements in a component definition, so the rules land in one model.</p>
+      </li>
+    </ol>
+  </div>
+  <div class="tradeoffs__side tradeoffs__side--con">
+    <h3 class="tradeoffs__head"><span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>2.2 Risks<span class="tradeoffs__count">5</span></h3>
+    <ol class="tradeoffs__list">
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">Four models have to change</p>
+        <p class="tradeoff__body">The proposal changes the component definition, the plan of record, the assessment plan and the result, so today it is a proposal.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">Desired state enters the plan of record</p>
+        <p class="tradeoff__body">Rules describing how a component should be configured join a document whose job is to say how the system actually is today.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">The fidelity fields are proposed, not carried</p>
+        <p class="tradeoff__body">Rationale, audit procedure and remediation are most of a published guide, and the shipped rules carry none of them.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">The response is still not per instance</p>
+        <p class="tradeoff__body">An exception reaches a rule but still not an instance, because the response is a <code>by-component</code> here too.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">Inventory items may need it too</p>
+        <p class="tradeoff__body">For a claim to reach a host rather than a class, <code>implementing-rules</code> would have to be carried by inventory items as well.</p>
+      </li>
+    </ol>
+  </div>
+</div>
+</section>
+<section id="joins" class="wide">
+<h2>3. Tracing rules and checks from implementation to assessment</h2>
+<div class="tier2">
+  <p>The chain starts where the rule is introduced and runs to the claim and the result. What a step costs is how many relationships it is made of and how each one resolves.</p>
+  <ol class="joins__steps">
+    <li><strong><a href="./six-questions.html#q1-component-first">Rule</a>, as it is introduced.</strong> The rule is a first-class entry on the component it configures, so it is introduced inside the document that describes the thing being hardened. Every step below starts from that id. <code>component-definition</code>, <code>components[].rules[].id</code>.</li>
+    <li><strong><a href="./six-questions.html#q1-component-first">Rule</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q3-component-first">Check</a>.</strong> Both halves of the key sit on the check side. A rule id is unique only inside the component that declares it.</li>
+    <li><strong><a href="./six-questions.html#q1-component-first">Rule</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q2-component-first">Control</a>.</strong> Both sides in one document. The control implementation already ties component to control; naming the rule inside it is the proposal.</li>
+    <li><strong><a href="./six-questions.html#q3-component-first">Check</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q5-component-first">Runtime</a>.</strong> The checks are inside the component that runs them. A second engine is a second component.</li>
+    <li><strong><a href="./six-questions.html#q5-component-first">Runtime</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q6a-component-first">Claim</a>.</strong> The claim names the rule it rests on, so a reader gets from claim to check without leaving OSCAL.</li>
+    <li><strong><a href="./six-questions.html#q5-component-first">Runtime</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q6b-component-first">Result</a>.</strong> The observation names the check and the host, so two machines in one boundary can disagree and both be recorded.</li>
+    <li><strong><a href="./six-questions.html#q6b-component-first">Result</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q2-component-first">Control</a>.</strong> The result never states the control. It carries observations and no findings, so there is no status to hold one.</li>
+  </ol>
+</div>
+<figure>
+  <div class="diagram" data-diagram="73-join-component"></div>
+  <figcaption>The same chain with the values, which are rule 1, data at rest, exactly as the six questions page encodes it for this approach. Every step is a field a consumer has to follow, so the number of steps is the cost of the chain and the way each one resolves is how much the schema can do to help.</figcaption>
+</figure>
+</section>
+
+</main>
+
+<!-- Footer kept identical to assets/shell.html. The generator used to emit a
+     longer one carrying provenance, sources and a data-generated stamp; the
+     shell was since reduced to the one line that matters and site.js stopped
+     wiring data-generated, so regenerating these pages reintroduced a hook
+     nothing filled. One footer, one place. -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>This site makes no recommendation.</strong> It states three approaches in the
+       terms their proponents use and shows the content each one ships.</p>
+  </div>
+</footer>
+
+<!-- Read only when the page is opened from a folder rather than served.
+     Generated by tools/bundle.py from data/; a served copy ignores it. -->
+<script src="./assets/bundle.js"></script>
+<script src="./assets/highlight.js"></script>
+<script src="./assets/site.js"></script>
+
+</body>
+</html>

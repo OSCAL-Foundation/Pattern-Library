@@ -1,0 +1,645 @@
+{
+  "note": "Our own encodings. Two rules, written in all three shapes, so the only thing that changes between the columns is the modelling.",
+  "target": {
+    "title": "Ubuntu 24.04 LTS",
+    "why": "One target, so the only thing that changes between the three columns is the modelling. Ubuntu because both rules are published for it, by DISA, and a reader can check them."
+  },
+  "rules": [
+    {
+      "key": "data-at-rest",
+      "label": "Rule 1, data at rest",
+      "statement": "Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.",
+      "control": "sc-28",
+      "stig": {
+        "group": "V-270747",
+        "rule": "SV-270747r1066730_rule",
+        "id": "UBTU-24-600090",
+        "severity": "medium",
+        "category": "CAT II"
+      },
+      "check_id": "SV-270747r1066730_rule",
+      "why_chosen": "A binary condition with no value to set. It is the simple case, and it is the one all three approaches already have an analogue for."
+    },
+    {
+      "key": "password-min-length",
+      "label": "Rule 2, minimum password length",
+      "statement": "Ubuntu 24.04 LTS must enforce a minimum 15-character password length.",
+      "control": "ia-5.1",
+      "stig": {
+        "group": "V-270732",
+        "rule": "SV-270732r1066685_rule",
+        "id": "UBTU-24-400320",
+        "severity": "medium",
+        "category": "CAT II"
+      },
+      "check_id": "SV-270732r1066685_rule",
+      "why_chosen": "The same shape as the first rule but carrying a value, so it is the rule that shows where each approach puts a parameter. Publishers disagree on the number, which is why the number has to live somewhere addressable."
+    }
+  ],
+  "benchmark_id": "CAN_Ubuntu_24-04_STIG",
+  "examples": {
+    "1": {
+      "catalog-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "A control. The requirement is the control's statement, the check is named in an assessment-method part, and a value, where there is one, is a control parameter.",
+          "content": "{\n  \"catalog\": {\n    \"groups\": [\n      {\n        \"id\": \"ubuntu-24-04\",\n        \"title\": \"Ubuntu 24.04 LTS\",\n        \"controls\": [\n          {\n            \"id\": \"UBTU-24-600090\",\n            \"title\": \"Data at rest\",\n            \"parts\": [\n              {\n                \"name\": \"statement\",\n                \"prose\": \"Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\"\n              },\n              {\n                \"name\": \"assessment-method\",\n                \"title\": \"SV-270747r1066730_rule\",\n                \"props\": [\n                  {\n                    \"name\": \"TechnicalControlId\",\n                    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n                    \"value\": \"SV-270747r1066730_rule\",\n                    \"class\": \"config-rule\"\n                  }\n                ]\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "props",
+          "focus": [
+            [
+              19,
+              26
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "A control. The requirement is the control's statement, the check is named in an assessment-method part, and a value, where there is one, is a control parameter.",
+          "content": "{\n  \"catalog\": {\n    \"groups\": [\n      {\n        \"id\": \"ubuntu-24-04\",\n        \"title\": \"Ubuntu 24.04 LTS\",\n        \"controls\": [\n          {\n            \"id\": \"UBTU-24-400320\",\n            \"title\": \"Minimum password length\",\n            \"parts\": [\n              {\n                \"name\": \"overview\",\n                \"prose\": \"The required length is a parameter of the control, so tailoring it is a profile edit rather than a change to the requirement.\"\n              },\n              {\n                \"name\": \"statement\",\n                \"prose\": \"Ubuntu 24.04 LTS must enforce a minimum {{ insert: param, password_min_length }}-character password length.\"\n              },\n              {\n                \"name\": \"assessment-method\",\n                \"title\": \"SV-270732r1066685_rule\",\n                \"props\": [\n                  {\n                    \"name\": \"TechnicalControlId\",\n                    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n                    \"value\": \"SV-270732r1066685_rule\",\n                    \"class\": \"config-rule\"\n                  }\n                ]\n              }\n            ],\n            \"params\": [\n              {\n                \"id\": \"password_min_length\",\n                \"label\": \"Minimum password length\",\n                \"values\": [\n                  \"15\"\n                ]\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "props",
+          "focus": [
+            [
+              23,
+              30
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "A rules entry on the component the rule applies to. The rule is first-class rather than a prop, and a value is a rule param set by the control implementation.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"5ca997b3-bb3e-4c7a-8969-69ed44577d47\",\n        \"type\": \"operating-system\",\n        \"title\": \"Ubuntu 24.04 LTS\",\n        \"description\": \"Ubuntu 24.04 LTS as a component of the system.\",\n        \"rules\": [\n          {\n            \"id\": \"ubtu24_data_at_rest_encrypted\",\n            \"description\": \"Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "rules",
+          "focus": [
+            [
+              9,
+              14
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "A rules entry on the component the rule applies to. The rule is first-class rather than a prop, and a value is a rule param set by the control implementation.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"da810545-1635-4323-8e22-a74ddbe2c31d\",\n        \"type\": \"operating-system\",\n        \"title\": \"Ubuntu 24.04 LTS\",\n        \"description\": \"Ubuntu 24.04 LTS as a component of the system.\",\n        \"rules\": [\n          {\n            \"id\": \"ubtu24_password_min_length\",\n            \"description\": \"Passwords must be at least {param: password_min_length} characters.\",\n            \"params\": [\n              {\n                \"id\": \"password_min_length\",\n                \"label\": \"Minimum password length\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "rules",
+          "focus": [
+            [
+              9,
+              20
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "An activity. The requirement is the activity title, the work is in its steps, and the identifiers stay in the publisher's own namespace.",
+          "content": "{\n  \"assessment-plan\": {\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\",\n          \"title\": \"V-270747: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n          \"steps\": [\n            {\n              \"uuid\": \"333ddd0f-22da-4c18-8bc3-98e808746bca\",\n              \"title\": \"Check: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n              \"props\": [\n                {\n                  \"name\": \"check\",\n                  \"value\": \"SV-270747r1066730_rule\",\n                  \"ns\": \"http://comply0.com/ns/oscal\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "props",
+          "focus": [
+            [
+              12,
+              18
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "An activity. The requirement is the activity title, the work is in its steps, and the identifiers stay in the publisher's own namespace.",
+          "content": "{\n  \"assessment-plan\": {\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"0831127f-cb3c-427c-8c44-ecf893587311\",\n          \"title\": \"V-270732: Ubuntu 24.04 LTS must enforce a minimum 15-character password length.\",\n          \"steps\": [\n            {\n              \"uuid\": \"fd6c19bf-7c7f-4376-8dc0-674fd0421f64\",\n              \"title\": \"Check: Ubuntu 24.04 LTS must enforce a minimum 15-character password length.\",\n              \"props\": [\n                {\n                  \"name\": \"check\",\n                  \"value\": \"SV-270732r1066685_rule\",\n                  \"ns\": \"http://comply0.com/ns/oscal\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "props",
+          "focus": [
+            [
+              12,
+              18
+            ]
+          ]
+        }
+      ]
+    },
+    "2": {
+      "catalog-first": [
+        {
+          "rule": "both",
+          "label": "Both rules and their control ties",
+          "shows": "A whole document of its own. Metadata and a four-field provenance block come before the first map, and both ends of a map must be a control or a statement.",
+          "content": "{\n  \"mapping-collection\": {\n    \"uuid\": \"d958a01a-6d1a-46fc-8289-ab967af8b955\",\n    \"metadata\": {\n      \"title\": \"Ubuntu 24.04 LTS product catalog mapped to NIST SP 800-53 Revision 5\",\n      \"last-modified\": \"2026-08-20T12:00:00Z\",\n      \"version\": \"1.0.0\",\n      \"oscal-version\": \"1.2.2\"\n    },\n    \"provenance\": {\n      \"method\": \"human\",\n      \"matching-rationale\": \"semantic\",\n      \"status\": \"draft\",\n      \"mapping-description\": \"Each hardening control is narrower than the framework control it supports, so every map below is a subset relationship.\"\n    },\n    \"mappings\": [\n      {\n        \"uuid\": \"f60ce697-4c9d-48e2-8136-f7d3bcb895d7\",\n        \"source-resource\": {\n          \"type\": \"catalog\",\n          \"href\": \"#ubuntu-24-04-product-catalog\"\n        },\n        \"target-resource\": {\n          \"type\": \"catalog\",\n          \"href\": \"#nist-800-53-rev5\"\n        },\n        \"maps\": [\n          {\n            \"uuid\": \"74734a70-2c15-4634-8fe1-eb70dacc4b33\",\n            \"relationship\": \"subset-of\",\n            \"matching-rationale\": \"semantic\",\n            \"sources\": [\n              {\n                \"type\": \"control\",\n                \"id-ref\": \"UBTU-24-600090\"\n              }\n            ],\n            \"targets\": [\n              {\n                \"type\": \"control\",\n                \"id-ref\": \"sc-28\"\n              }\n            ]\n          },\n          {\n            \"uuid\": \"da49a963-4911-47d7-837b-da3c516a4708\",\n            \"relationship\": \"subset-of\",\n            \"matching-rationale\": \"semantic\",\n            \"sources\": [\n              {\n                \"type\": \"control\",\n                \"id-ref\": \"UBTU-24-400320\"\n              }\n            ],\n            \"targets\": [\n              {\n                \"type\": \"control\",\n                \"id-ref\": \"ia-5.1\"\n              }\n            ]\n          }\n        ]\n      }\n    ],\n    \"back-matter\": {\n      \"resources\": [\n        {\n          \"uuid\": \"13c89eb4-c309-466f-8e39-83e272663a37\",\n          \"title\": \"Ubuntu 24.04 LTS product catalog\",\n          \"rlinks\": [\n            {\n              \"href\": \"./ubuntu-24-04-catalog.json\"\n            }\n          ]\n        },\n        {\n          \"uuid\": \"6d874b7d-f632-43ee-8043-8f0d5bd5fbe2\",\n          \"title\": \"NIST SP 800-53 Revision 5\",\n          \"rlinks\": [\n            {\n              \"href\": \"./NIST_SP-800-53_rev5_catalog.json\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "maps",
+          "focus": [
+            [
+              27,
+              62
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "both",
+          "label": "Both rules and their control ties",
+          "shows": "No second document, and two ties in one place. The implemented requirement ties the component to the control, which OSCAL already does; implementing-rules ties the rule to it, which it does not.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n        \"type\": \"operating-system\",\n        \"title\": \"Ubuntu 24.04 LTS\",\n        \"control-implementations\": [\n          {\n            \"uuid\": \"1cc70653-88aa-408e-80ce-fdf004c2e3e1\",\n            \"source\": \"trestle://profiles/nist_800_53_rev5/profile.json\",\n            \"description\": \"NIST SP 800-53 Revision 5\",\n            \"set-parameters\": [\n              {\n                \"param-id\": \"password_min_length\",\n                \"values\": [\n                  \"15\"\n                ]\n              }\n            ],\n            \"implemented-requirements\": [\n              {\n                \"uuid\": \"891fbbe5-51fa-4d63-8c75-36beb7b9c70b\",\n                \"control-id\": \"sc-28\",\n                \"implementing-rules\": [\n                  {\n                    \"rule-id\": \"ubtu24_data_at_rest_encrypted\"\n                  }\n                ]\n              },\n              {\n                \"uuid\": \"53dc0fa3-7de4-4969-86d9-0dba5044e0b3\",\n                \"control-id\": \"ia-5.1\",\n                \"implementing-rules\": [\n                  {\n                    \"rule-id\": \"ubtu24_password_min_length\"\n                  }\n                ]\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "implemented-requirements",
+          "focus": [
+            [
+              21,
+              40
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "both",
+          "label": "Both rules and their control ties",
+          "shows": "Named on the activity itself. No second document and no second identifier, so nothing can fall out of step, and nothing else can reuse the tie.",
+          "content": "{\n  \"assessment-plan\": {\n    \"reviewed-controls\": {\n      \"control-selections\": [\n        {\n          \"description\": \"The controls this assessment may touch.\",\n          \"include-controls\": [\n            {\n              \"control-id\": \"sc-28\"\n            },\n            {\n              \"control-id\": \"ia-5.1\"\n            }\n          ]\n        }\n      ]\n    },\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\",\n          \"title\": \"V-270747: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n          \"related-controls\": {\n            \"control-selections\": [\n              {\n                \"description\": \"NIST SP 800-53 controls associated with this STIG rule, derived from its CCI references.\",\n                \"include-controls\": [\n                  {\n                    \"control-id\": \"sc-28\"\n                  }\n                ]\n              }\n            ]\n          }\n        },\n        {\n          \"uuid\": \"0831127f-cb3c-427c-8c44-ecf893587311\",\n          \"title\": \"V-270732: Ubuntu 24.04 LTS must enforce a minimum 15-character password length.\",\n          \"related-controls\": {\n            \"control-selections\": [\n              {\n                \"description\": \"NIST SP 800-53 controls associated with this STIG rule, derived from its CCI references.\",\n                \"include-controls\": [\n                  {\n                    \"control-id\": \"ia-5.1\"\n                  }\n                ]\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "related-controls",
+          "focus": [
+            [
+              23,
+              34
+            ],
+            [
+              39,
+              50
+            ]
+          ]
+        }
+      ]
+    },
+    "3": {
+      "catalog-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "The check is a software component whose title is the identifier the control's assessment-method part named.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"272c65cb-9a6d-4344-8938-2e6203673884\",\n        \"type\": \"software\",\n        \"title\": \"SV-270747r1066730_rule\",\n        \"description\": \"Config rule that evaluates UBTU-24-600090.\",\n        \"props\": [\n          {\n            \"name\": \"ConfigRuleId\",\n            \"ns\": \"http://aws.amazon.com/ns/oscal\",\n            \"value\": \"SV_270747R1066730_RULE\"\n          }\n        ],\n        \"control-implementations\": [\n          {\n            \"uuid\": \"9133615a-9ffc-4656-8ca7-2b249482ee22\",\n            \"source\": \"#ubuntu-24-04-product-catalog\",\n            \"description\": \"Ubuntu 24.04 LTS product catalog\",\n            \"implemented-requirements\": [\n              {\n                \"uuid\": \"b971b7c8-6b4f-4188-8ceb-968a4aacb040\",\n                \"control-id\": \"UBTU-24-600090\",\n                \"description\": \"This Config rule evaluates the control.\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "props",
+          "focus": [
+            [
+              9,
+              15
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "The check is a software component whose title is the identifier the control's assessment-method part named.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"65157847-efa3-4d97-8e62-f6148c556255\",\n        \"type\": \"software\",\n        \"title\": \"SV-270732r1066685_rule\",\n        \"description\": \"Config rule that evaluates UBTU-24-400320.\",\n        \"props\": [\n          {\n            \"name\": \"ConfigRuleId\",\n            \"ns\": \"http://aws.amazon.com/ns/oscal\",\n            \"value\": \"SV_270732R1066685_RULE\"\n          }\n        ],\n        \"control-implementations\": [\n          {\n            \"uuid\": \"2293c543-d5f7-45e3-8ef3-3917f9e5ccc1\",\n            \"source\": \"#ubuntu-24-04-product-catalog\",\n            \"description\": \"Ubuntu 24.04 LTS product catalog\",\n            \"implemented-requirements\": [\n              {\n                \"uuid\": \"3f57d132-ea15-4517-8398-778950a14382\",\n                \"control-id\": \"UBTU-24-400320\",\n                \"description\": \"This Config rule evaluates the control.\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "props",
+          "focus": [
+            [
+              9,
+              15
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "Two components, not one. The rule sits on the product; the check sits on a second component of type validation, one per engine, and reaches back by rule id and the uuid of the component the rule belongs to.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"b3c8813d-d479-450a-8178-fbbf846faccf\",\n        \"type\": \"validation\",\n        \"title\": \"Ansible check runner\",\n        \"description\": \"Runs the checks for the Ubuntu 24.04 LTS rules.\",\n        \"props\": [\n          {\n            \"name\": \"method\",\n            \"value\": \"TEST\"\n          }\n        ],\n        \"checks\": [\n          {\n            \"id\": \"SV-270747r1066730_rule\",\n            \"description\": \"Evaluates ubtu24_data_at_rest_encrypted on the target host.\",\n            \"rule-id\": \"ubtu24_data_at_rest_encrypted\",\n            \"target-component-uuid\": \"5ca997b3-bb3e-4c7a-8969-69ed44577d47\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "checks",
+          "focus": [
+            [
+              15,
+              22
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "Two components, not one. The rule sits on the product; the check sits on a second component of type validation, one per engine, and reaches back by rule id and the uuid of the component the rule belongs to.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"b3c8813d-d479-450a-8178-fbbf846faccf\",\n        \"type\": \"validation\",\n        \"title\": \"Ansible check runner\",\n        \"description\": \"Runs the checks for the Ubuntu 24.04 LTS rules.\",\n        \"props\": [\n          {\n            \"name\": \"method\",\n            \"value\": \"TEST\"\n          }\n        ],\n        \"checks\": [\n          {\n            \"id\": \"SV-270732r1066685_rule\",\n            \"description\": \"Evaluates ubtu24_password_min_length on the target host.\",\n            \"rule-id\": \"ubtu24_password_min_length\",\n            \"target-component-uuid\": \"da810545-1635-4323-8e22-a74ddbe2c31d\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "checks",
+          "focus": [
+            [
+              15,
+              22
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "The steps are the check, and a check prop names it. Put that prop on the step and the plan can ask for one item; put it on the activity and one invocation covers every step beneath. The runner decides which.",
+          "content": "{\n  \"assessment-plan\": {\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\",\n          \"title\": \"V-270747: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n          \"props\": [\n            {\n              \"name\": \"method\",\n              \"value\": \"TEST\"\n            }\n          ],\n          \"steps\": [\n            {\n              \"uuid\": \"333ddd0f-22da-4c18-8bc3-98e808746bca\",\n              \"title\": \"Check: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n              \"description\": \"Verify the block device carrying user data is encrypted. If it is not, this is a finding.\",\n              \"props\": [\n                {\n                  \"name\": \"check\",\n                  \"value\": \"SV-270747r1066730_rule\",\n                  \"ns\": \"http://comply0.com/ns/oscal\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "steps",
+          "focus": [
+            [
+              14,
+              27
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "The steps are the check, and a check prop names it. Put that prop on the step and the plan can ask for one item; put it on the activity and one invocation covers every step beneath. The runner decides which.",
+          "content": "{\n  \"assessment-plan\": {\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"0831127f-cb3c-427c-8c44-ecf893587311\",\n          \"title\": \"V-270732: Ubuntu 24.04 LTS must enforce a minimum 15-character password length.\",\n          \"props\": [\n            {\n              \"name\": \"method\",\n              \"value\": \"TEST\"\n            }\n          ],\n          \"steps\": [\n            {\n              \"uuid\": \"fd6c19bf-7c7f-4376-8dc0-674fd0421f64\",\n              \"title\": \"Check: Ubuntu 24.04 LTS must enforce a minimum 15-character password length.\",\n              \"description\": \"Verify the configured minimum password length is 15 or greater. If it is not, this is a finding.\",\n              \"props\": [\n                {\n                  \"name\": \"check\",\n                  \"value\": \"SV-270732r1066685_rule\",\n                  \"ns\": \"http://comply0.com/ns/oscal\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "steps",
+          "focus": [
+            [
+              14,
+              27
+            ]
+          ]
+        },
+        {
+          "rule": "placement",
+          "label": "Multiple tests, with the check at the activity level",
+          "shows": "The same two checks named on the activity instead, for a runner that executes in bulk. One invocation, every step beneath it.",
+          "content": "{\n  \"assessment-plan\": {\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"201588f5-0638-4c98-89d7-e4c215e62171\",\n          \"title\": \"Assess Ubuntu 24.04 LTS\",\n          \"props\": [\n            {\n              \"name\": \"method\",\n              \"value\": \"TEST\"\n            },\n            {\n              \"name\": \"check\",\n              \"value\": \"CAN_Ubuntu_24-04_STIG\",\n              \"ns\": \"http://comply0.com/ns/oscal\"\n            }\n          ],\n          \"steps\": [\n            {\n              \"uuid\": \"410c472a-0935-48ee-8543-e39e02365bfd\",\n              \"title\": \"V-270747: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\"\n            },\n            {\n              \"uuid\": \"cbcc6a87-99c5-4002-8990-cb54ee8a7377\",\n              \"title\": \"V-270732: Ubuntu 24.04 LTS must enforce a minimum 15-character password length.\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "name=check",
+          "focus": [
+            [
+              13,
+              17
+            ]
+          ]
+        }
+      ]
+    },
+    "4": {
+      "catalog-first": [
+        {
+          "rule": "both",
+          "label": "What the checks run against",
+          "shows": "Every component the catalog applies to, taken together.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"83fd01c4-5007-4281-84bc-2fa040f75e14\",\n          \"control-id\": \"UBTU-24-600090\",\n          \"by-components\": [\n            {\n              \"uuid\": \"013a942e-ff7e-466d-821e-c84498c1b9be\",\n              \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n              \"description\": \"The rule was implemented.\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "by-components",
+          "focus": [
+            [
+              8,
+              14
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "both",
+          "label": "What the checks run against",
+          "shows": "The components carrying the rules, named by uuid.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"c1ea1b60-eab2-46d3-8134-89ac8affdc8a\",\n          \"control-id\": \"UBTU-24-600090\",\n          \"by-components\": [\n            {\n              \"uuid\": \"f473f847-a826-48e5-8d9f-53ae40333b88\",\n              \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n              \"description\": \"The rule was implemented.\",\n              \"implementing-rules\": [\n                {\n                  \"rule-id\": \"ubtu24_data_at_rest_encrypted\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "by-components",
+          "focus": [
+            [
+              8,
+              19
+            ]
+          ]
+        },
+        {
+          "rule": "assessor",
+          "label": "The same component, copied into the assessor's plan",
+          "shows": "The component definition carried into an assessment plan as an asset. The checks travel with the component that runs them, and each names the component it tests.",
+          "content": "{\n  \"assessment-plan\": {\n    \"assessment-assets\": {\n      \"components\": [\n        {\n          \"uuid\": \"b3c8813d-d479-450a-8178-fbbf846faccf\",\n          \"type\": \"validation\",\n          \"title\": \"Ansible check runner\",\n          \"description\": \"Copied from the component definition the system owner used.\",\n          \"status\": {\n            \"state\": \"operational\"\n          },\n          \"checks\": [\n            {\n              \"id\": \"SV-270747r1066730_rule\",\n              \"description\": \"Evaluates ubtu24_data_at_rest_encrypted.\",\n              \"rule-id\": \"ubtu24_data_at_rest_encrypted\",\n              \"target-component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\"\n            },\n            {\n              \"id\": \"SV-270732r1066685_rule\",\n              \"description\": \"Evaluates ubtu24_password_min_length.\",\n              \"rule-id\": \"ubtu24_password_min_length\",\n              \"target-component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "checks",
+          "focus": [
+            [
+              13,
+              26
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "both",
+          "label": "What the checks run against",
+          "shows": "One host, named explicitly as an inventory item.",
+          "content": "{\n  \"assessment-plan\": {\n    \"assessment-subjects\": [\n      {\n        \"type\": \"inventory-item\",\n        \"description\": \"The instances this assessment may touch.\",\n        \"include-subjects\": [\n          {\n            \"subject-uuid\": \"06297a03-cae0-414b-8332-2fc882f81aa1\",\n            \"type\": \"inventory-item\"\n          }\n        ]\n      }\n    ],\n    \"tasks\": [\n      {\n        \"uuid\": \"068cacee-b6b7-49c7-844e-e80c42f25fb7\",\n        \"type\": \"action\",\n        \"title\": \"Assess Ubuntu 24.04 LTS\",\n        \"associated-activities\": [\n          {\n            \"activity-uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\",\n            \"subjects\": [\n              {\n                \"type\": \"inventory-item\",\n                \"include-subjects\": [\n                  {\n                    \"subject-uuid\": \"06297a03-cae0-414b-8332-2fc882f81aa1\",\n                    \"type\": \"inventory-item\"\n                  }\n                ]\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "assessment-subjects",
+          "focus": [
+            [
+              3,
+              14
+            ]
+          ]
+        }
+      ]
+    },
+    "5": {
+      "catalog-first": [
+        {
+          "rule": "implementor-in",
+          "label": "What the run reads: the check components",
+          "shows": "The check components the run is handed. What runs them is never named.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"272c65cb-9a6d-4344-8938-2e6203673884\",\n        \"type\": \"software\",\n        \"title\": \"SV-270747r1066730_rule\",\n        \"description\": \"Config rule that evaluates UBTU-24-600090.\",\n        \"props\": [\n          {\n            \"name\": \"ConfigRuleId\",\n            \"ns\": \"http://aws.amazon.com/ns/oscal\",\n            \"value\": \"SV_270747R1066730_RULE\"\n          }\n        ],\n        \"control-implementations\": [\n          {\n            \"uuid\": \"9133615a-9ffc-4656-8ca7-2b249482ee22\",\n            \"source\": \"#ubuntu-24-04-product-catalog\",\n            \"description\": \"Ubuntu 24.04 LTS product catalog\",\n            \"implemented-requirements\": [\n              {\n                \"uuid\": \"b971b7c8-6b4f-4188-8ceb-968a4aacb040\",\n                \"control-id\": \"UBTU-24-600090\",\n                \"description\": \"This Config rule evaluates the control.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"uuid\": \"65157847-efa3-4d97-8e62-f6148c556255\",\n        \"type\": \"software\",\n        \"title\": \"SV-270732r1066685_rule\",\n        \"description\": \"Config rule that evaluates UBTU-24-400320.\",\n        \"props\": [\n          {\n            \"name\": \"ConfigRuleId\",\n            \"ns\": \"http://aws.amazon.com/ns/oscal\",\n            \"value\": \"SV_270732R1066685_RULE\"\n          }\n        ],\n        \"control-implementations\": [\n          {\n            \"uuid\": \"2293c543-d5f7-45e3-8ef3-3917f9e5ccc1\",\n            \"source\": \"#ubuntu-24-04-product-catalog\",\n            \"description\": \"Ubuntu 24.04 LTS product catalog\",\n            \"implemented-requirements\": [\n              {\n                \"uuid\": \"3f57d132-ea15-4517-8398-778950a14382\",\n                \"control-id\": \"UBTU-24-400320\",\n                \"description\": \"This Config rule evaluates the control.\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "name=ConfigRuleId",
+          "focus": [
+            [
+              10,
+              14
+            ],
+            [
+              37,
+              41
+            ]
+          ]
+        },
+        {
+          "rule": "implementor-out",
+          "label": "What the run produces: the response in the plan of record",
+          "shows": "A by-component saying the control is met. Nothing on it names the check that produced it.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"ce9ecf48-a1d4-4256-8f42-f4e8e8c1039b\",\n          \"control-id\": \"UBTU-24-600090\",\n          \"statements\": [\n            {\n              \"statement-id\": \"UBTU-24-600090_smt\",\n              \"uuid\": \"88b72faf-1412-441f-8f07-6f310c4d9894\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"7fc3a542-51ab-4e00-849a-5a70b88da698\",\n                  \"description\": \"User data is held on an encrypted volume, and the key is held in the organisation's key management service.\"\n                }\n              ]\n            }\n          ]\n        },\n        {\n          \"uuid\": \"b0ad1d94-4104-40b4-8fb6-b4ac25ae3002\",\n          \"control-id\": \"UBTU-24-400320\",\n          \"statements\": [\n            {\n              \"statement-id\": \"UBTU-24-400320_smt\",\n              \"uuid\": \"c6f82298-2ee6-47d6-88ca-b4806fef5898\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"77329122-9641-434e-8640-ba2f22ac8afc\",\n                  \"description\": \"Password policy is enforced centrally and sets a minimum length of 15 characters.\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "by-components",
+          "focus": [
+            [
+              12,
+              18
+            ],
+            [
+              29,
+              35
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "implementor-in",
+          "label": "What the run reads: the checks it is handed",
+          "shows": "The checks the run is handed, each naming its rule and its subject.",
+          "content": "{\n  \"component-definition\": {\n    \"components\": [\n      {\n        \"uuid\": \"b3c8813d-d479-450a-8178-fbbf846faccf\",\n        \"type\": \"validation\",\n        \"title\": \"Ansible check runner\",\n        \"description\": \"Runs the checks for the Ubuntu 24.04 LTS rules.\",\n        \"props\": [\n          {\n            \"name\": \"method\",\n            \"value\": \"TEST\"\n          }\n        ],\n        \"checks\": [\n          {\n            \"id\": \"SV-270747r1066730_rule\",\n            \"description\": \"Evaluates ubtu24_data_at_rest_encrypted on the target host.\",\n            \"rule-id\": \"ubtu24_data_at_rest_encrypted\",\n            \"target-component-uuid\": \"5ca997b3-bb3e-4c7a-8969-69ed44577d47\"\n          },\n          {\n            \"id\": \"SV-270732r1066685_rule\",\n            \"description\": \"Evaluates ubtu24_password_min_length on the target host.\",\n            \"rule-id\": \"ubtu24_password_min_length\",\n            \"target-component-uuid\": \"da810545-1635-4323-8e22-a74ddbe2c31d\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "checks",
+          "focus": [
+            [
+              15,
+              28
+            ]
+          ]
+        },
+        {
+          "rule": "implementor-out",
+          "label": "What the run produces: the assertion in the plan of record",
+          "shows": "The response the run writes, carrying implementing-rules so the assertion and its check travel together.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"ce9ecf48-a1d4-4256-8f42-f4e8e8c1039b\",\n          \"control-id\": \"sc-28\",\n          \"statements\": [\n            {\n              \"statement-id\": \"sc-28_smt.a\",\n              \"uuid\": \"88b72faf-1412-441f-8f07-6f310c4d9894\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"7fc3a542-51ab-4e00-849a-5a70b88da698\",\n                  \"description\": \"User data is held on an encrypted volume, and the key is held in the organisation's key management service.\",\n                  \"implementing-rules\": [\n                    {\n                      \"rule-id\": \"ubtu24_data_at_rest_encrypted\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        },\n        {\n          \"uuid\": \"b0ad1d94-4104-40b4-8fb6-b4ac25ae3002\",\n          \"control-id\": \"ia-5.1\",\n          \"statements\": [\n            {\n              \"statement-id\": \"ia-5.1_smt.a\",\n              \"uuid\": \"c6f82298-2ee6-47d6-88ca-b4806fef5898\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"77329122-9641-434e-8640-ba2f22ac8afc\",\n                  \"description\": \"Password policy is enforced centrally and sets a minimum length of 15 characters.\",\n                  \"implementing-rules\": [\n                    {\n                      \"rule-id\": \"ubtu24_password_min_length\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "implementing-rules",
+          "focus": [
+            [
+              17,
+              21
+            ],
+            [
+              39,
+              43
+            ]
+          ]
+        },
+        {
+          "rule": "assessor-in",
+          "label": "What the run reads: the same checks, in the assessor's plan",
+          "shows": "The same definition, taken into a plan the assessor owns. The checks travel with it.",
+          "content": "{\n  \"assessment-plan\": {\n    \"assessment-assets\": {\n      \"components\": [\n        {\n          \"uuid\": \"b3c8813d-d479-450a-8178-fbbf846faccf\",\n          \"type\": \"validation\",\n          \"title\": \"Ansible check runner\",\n          \"description\": \"Copied from the component definition the system owner used.\",\n          \"status\": {\n            \"state\": \"operational\"\n          },\n          \"checks\": [\n            {\n              \"id\": \"SV-270747r1066730_rule\",\n              \"description\": \"Evaluates ubtu24_data_at_rest_encrypted.\",\n              \"rule-id\": \"ubtu24_data_at_rest_encrypted\",\n              \"target-component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\"\n            },\n            {\n              \"id\": \"SV-270732r1066685_rule\",\n              \"description\": \"Evaluates ubtu24_password_min_length.\",\n              \"rule-id\": \"ubtu24_password_min_length\",\n              \"target-component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "checks",
+          "focus": [
+            [
+              13,
+              26
+            ]
+          ]
+        },
+        {
+          "rule": "assessor-out",
+          "label": "What the run produces: the observation",
+          "shows": "The check identifier joins back to what ran, and the subject is a host rather than a component.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"observations\": [\n          {\n            \"uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\",\n            \"description\": \"SV-270747r1066730_rule\",\n            \"assessment-check-id\": \"SV-270747r1066730_rule\",\n            \"result\": \"pass\",\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"subject-uuid\": \"06297a03-cae0-414b-8332-2fc882f81aa1\",\n                \"type\": \"inventory-item\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          },\n          {\n            \"uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\",\n            \"description\": \"SV-270732r1066685_rule\",\n            \"assessment-check-id\": \"SV-270732r1066685_rule\",\n            \"result\": \"pass\",\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"subject-uuid\": \"06297a03-cae0-414b-8332-2fc882f81aa1\",\n                \"type\": \"inventory-item\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "assessment-check-id, result",
+          "focus": [
+            [
+              9,
+              9
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              25,
+              25
+            ],
+            [
+              26,
+              26
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "assessor-in",
+          "label": "What the run reads: the checks and the platform",
+          "shows": "The checks and what runs them, in one plan the assessor owns.",
+          "content": "{\n  \"assessment-plan\": {\n    \"local-definitions\": {\n      \"activities\": [\n        {\n          \"uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\",\n          \"title\": \"V-270747: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n          \"steps\": [\n            {\n              \"uuid\": \"333ddd0f-22da-4c18-8bc3-98e808746bca\",\n              \"title\": \"Check: Ubuntu 24.04 LTS handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.\",\n              \"props\": [\n                {\n                  \"name\": \"check\",\n                  \"value\": \"SV-270747r1066730_rule\",\n                  \"ns\": \"http://comply0.com/ns/oscal\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    },\n    \"assessment-assets\": {\n      \"components\": [\n        {\n          \"uuid\": \"56270516-2673-4d4c-8d4f-52e4107f968d\",\n          \"type\": \"validation\",\n          \"title\": \"The check runner plugin\",\n          \"description\": \"Runs the checks for the Ubuntu 24.04 LTS rules.\",\n          \"status\": {\n            \"state\": \"operational\"\n          },\n          \"props\": [\n            {\n              \"name\": \"context\",\n              \"ns\": \"http://comply0.com/ns/oscal\",\n              \"value\": \"{\\\"plugin-path\\\": \\\"runner.plugin\\\", \\\"opa-path\\\": \\\"/usr/local/bin\\\"}\"\n            }\n          ]\n        }\n      ],\n      \"assessment-platforms\": [\n        {\n          \"uuid\": \"97f00129-f4ab-424f-8cd0-5ad1fc54f667\",\n          \"title\": \"The scanning platform\",\n          \"uses-components\": [\n            {\n              \"component-uuid\": \"56270516-2673-4d4c-8d4f-52e4107f968d\"\n            }\n          ]\n        }\n      ]\n    },\n    \"tasks\": [\n      {\n        \"uuid\": \"fa3faf4f-3ac3-432c-8d2f-4401173822ea\",\n        \"type\": \"action\",\n        \"title\": \"Execute the checks\",\n        \"props\": [\n          {\n            \"name\": \"assessment-platform\",\n            \"ns\": \"http://comply0.com/ns/oscal\",\n            \"value\": \"97f00129-f4ab-424f-8cd0-5ad1fc54f667\"\n          }\n        ],\n        \"associated-activities\": [\n          {\n            \"activity-uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\",\n            \"subjects\": [\n              {\n                \"type\": \"inventory-item\",\n                \"include-all\": {}\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "name=check",
+          "focus": [
+            [
+              13,
+              17
+            ]
+          ]
+        },
+        {
+          "rule": "assessor-out",
+          "label": "What the run produces: the observation",
+          "shows": "The observation names the activity that ran. No plan of record has to exist for it to resolve.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"findings\": [\n          {\n            \"uuid\": \"e98ff33c-cc09-4d29-847c-5ab99cd2a5d6\",\n            \"title\": \"Result for UBTU-24-600090\",\n            \"target\": {\n              \"type\": \"objective-id\",\n              \"target-id\": \"sc-28_obj\",\n              \"status\": {\n                \"state\": \"satisfied\"\n              }\n            },\n            \"related-observations\": [\n              {\n                \"observation-uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\"\n              }\n            ]\n          },\n          {\n            \"uuid\": \"b875b658-e6c9-4c84-8e92-08cdec285155\",\n            \"title\": \"Result for UBTU-24-400320\",\n            \"target\": {\n              \"type\": \"objective-id\",\n              \"target-id\": \"ia-5.1_obj\",\n              \"status\": {\n                \"state\": \"satisfied\"\n              }\n            },\n            \"related-observations\": [\n              {\n                \"observation-uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\"\n              }\n            ]\n          }\n        ],\n        \"observations\": [\n          {\n            \"uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\",\n            \"title\": \"Observation: SV-270747r1066730_rule\",\n            \"types\": [\n              \"finding\"\n            ],\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"type\": \"assessment-activity\",\n                \"subject-uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          },\n          {\n            \"uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\",\n            \"title\": \"Observation: SV-270732r1066685_rule\",\n            \"types\": [\n              \"finding\"\n            ],\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"type\": \"assessment-activity\",\n                \"subject-uuid\": \"0831127f-cb3c-427c-8c44-ecf893587311\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "target-id, subject-uuid",
+          "focus": [
+            [
+              11,
+              11
+            ],
+            [
+              27,
+              27
+            ],
+            [
+              52,
+              52
+            ],
+            [
+              69,
+              69
+            ]
+          ]
+        }
+      ]
+    },
+    "6a": {
+      "catalog-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "A by-component response in the SSP, against the product control.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"ce9ecf48-a1d4-4256-8f42-f4e8e8c1039b\",\n          \"control-id\": \"UBTU-24-600090\",\n          \"statements\": [\n            {\n              \"statement-id\": \"UBTU-24-600090_smt\",\n              \"uuid\": \"88b72faf-1412-441f-8f07-6f310c4d9894\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"7fc3a542-51ab-4e00-849a-5a70b88da698\",\n                  \"description\": \"User data is held on an encrypted volume, and the key is held in the organisation's key management service.\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "by-components",
+          "focus": [
+            [
+              12,
+              18
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "A by-component response in the SSP, against the product control.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"b0ad1d94-4104-40b4-8fb6-b4ac25ae3002\",\n          \"control-id\": \"UBTU-24-400320\",\n          \"statements\": [\n            {\n              \"statement-id\": \"UBTU-24-400320_smt\",\n              \"uuid\": \"c6f82298-2ee6-47d6-88ca-b4806fef5898\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"77329122-9641-434e-8640-ba2f22ac8afc\",\n                  \"description\": \"Password policy is enforced centrally and sets a minimum length of 15 characters.\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "by-components",
+          "focus": [
+            [
+              12,
+              18
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "The same shape, against the framework control, and carrying implementing-rules so the claim names the rule it rests on.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"ce9ecf48-a1d4-4256-8f42-f4e8e8c1039b\",\n          \"control-id\": \"sc-28\",\n          \"statements\": [\n            {\n              \"statement-id\": \"sc-28_smt.a\",\n              \"uuid\": \"88b72faf-1412-441f-8f07-6f310c4d9894\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"7fc3a542-51ab-4e00-849a-5a70b88da698\",\n                  \"description\": \"User data is held on an encrypted volume, and the key is held in the organisation's key management service.\",\n                  \"implementing-rules\": [\n                    {\n                      \"rule-id\": \"ubtu24_data_at_rest_encrypted\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "implementing-rules",
+          "focus": [
+            [
+              17,
+              21
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "The same shape, against the framework control, and carrying implementing-rules so the claim names the rule it rests on.",
+          "content": "{\n  \"system-security-plan\": {\n    \"control-implementation\": {\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"b0ad1d94-4104-40b4-8fb6-b4ac25ae3002\",\n          \"control-id\": \"ia-5.1\",\n          \"statements\": [\n            {\n              \"statement-id\": \"ia-5.1_smt.a\",\n              \"uuid\": \"c6f82298-2ee6-47d6-88ca-b4806fef5898\",\n              \"by-components\": [\n                {\n                  \"component-uuid\": \"534b356b-0de1-48d4-8536-5d41ed717456\",\n                  \"uuid\": \"77329122-9641-434e-8640-ba2f22ac8afc\",\n                  \"description\": \"Password policy is enforced centrally and sets a minimum length of 15 characters.\",\n                  \"implementing-rules\": [\n                    {\n                      \"rule-id\": \"ubtu24_password_min_length\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "implementing-rules",
+          "focus": [
+            [
+              17,
+              21
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "both",
+          "label": "One pointer, covering both rules",
+          "shows": "Not the claim, but where it lives. import-ssp resolves to a back-matter resource naming the system security plan, and a second resource covers the case where no OSCAL one exists.",
+          "content": "{\n  \"assessment-plan\": {\n    \"import-ssp\": {\n      \"href\": \"#d381c885-4851-4931-828c-29bbb24fbaa3\"\n    },\n    \"back-matter\": {\n      \"resources\": [\n        {\n          \"uuid\": \"d381c885-4851-4931-828c-29bbb24fbaa3\",\n          \"title\": \"Ubuntu 24.04 LTS system security plan\",\n          \"props\": [\n            {\n              \"name\": \"type\",\n              \"value\": \"oscal-ssp\"\n            }\n          ],\n          \"rlinks\": [\n            {\n              \"href\": \"system-security-plan.json\",\n              \"media-type\": \"application/oscal.ssp+json\"\n            }\n          ],\n          \"remarks\": \"Use this to point to an OSCAL-based SSP.\"\n        },\n        {\n          \"uuid\": \"8bb824b6-255b-434c-8f68-e639deb75f89\",\n          \"title\": \"System's full name\",\n          \"description\": \"Use this resource when no OSCAL-based SSP exists. Briefly describe the system. This appears in the assessment result.\",\n          \"props\": [\n            {\n              \"name\": \"type\",\n              \"value\": \"no-oscal-ssp\"\n            }\n          ],\n          \"remarks\": \"Only include this resource if no OSCAL-based SSP is available.\"\n        }\n      ]\n    }\n  }\n}",
+          "focus_key": "import-ssp",
+          "focus": [
+            [
+              3,
+              5
+            ]
+          ]
+        }
+      ]
+    },
+    "6b": {
+      "catalog-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "A finding, targeting the product control's statement.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"findings\": [\n          {\n            \"uuid\": \"e98ff33c-cc09-4d29-847c-5ab99cd2a5d6\",\n            \"title\": \"Result for UBTU-24-600090\",\n            \"target\": {\n              \"type\": \"statement-id\",\n              \"target-id\": \"UBTU-24-600090_smt\",\n              \"status\": {\n                \"state\": \"satisfied\"\n              }\n            },\n            \"related-observations\": [\n              {\n                \"observation-uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\"\n              }\n            ]\n          }\n        ],\n        \"observations\": [\n          {\n            \"uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\",\n            \"title\": \"Observation for UBTU-24-600090\",\n            \"description\": \"The configuration rule was evaluated on the component.\",\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "findings",
+          "focus": [
+            [
+              5,
+              22
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "A finding, targeting the product control's statement.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"findings\": [\n          {\n            \"uuid\": \"b875b658-e6c9-4c84-8e92-08cdec285155\",\n            \"title\": \"Result for UBTU-24-400320\",\n            \"target\": {\n              \"type\": \"statement-id\",\n              \"target-id\": \"UBTU-24-400320_smt\",\n              \"status\": {\n                \"state\": \"satisfied\"\n              }\n            },\n            \"related-observations\": [\n              {\n                \"observation-uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\"\n              }\n            ]\n          }\n        ],\n        \"observations\": [\n          {\n            \"uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\",\n            \"title\": \"Observation for UBTU-24-400320\",\n            \"description\": \"The configuration rule was evaluated on the component.\",\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "findings",
+          "focus": [
+            [
+              5,
+              22
+            ]
+          ]
+        }
+      ],
+      "component-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "An observation carrying the check id and its result.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"observations\": [\n          {\n            \"uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\",\n            \"description\": \"SV-270747r1066730_rule\",\n            \"assessment-check-id\": \"SV-270747r1066730_rule\",\n            \"result\": \"pass\",\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"subject-uuid\": \"06297a03-cae0-414b-8332-2fc882f81aa1\",\n                \"type\": \"inventory-item\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "result",
+          "focus": [
+            [
+              10,
+              10
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "An observation carrying the check id and its result.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"observations\": [\n          {\n            \"uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\",\n            \"description\": \"SV-270732r1066685_rule\",\n            \"assessment-check-id\": \"SV-270732r1066685_rule\",\n            \"result\": \"pass\",\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"subject-uuid\": \"06297a03-cae0-414b-8332-2fc882f81aa1\",\n                \"type\": \"inventory-item\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "result",
+          "focus": [
+            [
+              10,
+              10
+            ]
+          ]
+        }
+      ],
+      "assessment-first": [
+        {
+          "rule": "data-at-rest",
+          "label": "Rule 1, data at rest",
+          "shows": "A finding, targeting the framework control's statement.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"findings\": [\n          {\n            \"uuid\": \"e98ff33c-cc09-4d29-847c-5ab99cd2a5d6\",\n            \"title\": \"Result for UBTU-24-600090\",\n            \"target\": {\n              \"type\": \"objective-id\",\n              \"target-id\": \"sc-28_obj\",\n              \"status\": {\n                \"state\": \"satisfied\"\n              }\n            },\n            \"related-observations\": [\n              {\n                \"observation-uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\"\n              }\n            ]\n          }\n        ],\n        \"observations\": [\n          {\n            \"uuid\": \"28e28d31-4428-4ff5-8c9e-ea1198dfb552\",\n            \"title\": \"Observation: SV-270747r1066730_rule\",\n            \"types\": [\n              \"finding\"\n            ],\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"type\": \"assessment-activity\",\n                \"subject-uuid\": \"61b3ec99-dfbe-4997-8a66-6f2279edb84b\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "findings",
+          "focus": [
+            [
+              5,
+              22
+            ]
+          ]
+        },
+        {
+          "rule": "password-min-length",
+          "label": "Rule 2, minimum password length",
+          "shows": "A finding, targeting the framework control's statement.",
+          "content": "{\n  \"assessment-results\": {\n    \"results\": [\n      {\n        \"findings\": [\n          {\n            \"uuid\": \"b875b658-e6c9-4c84-8e92-08cdec285155\",\n            \"title\": \"Result for UBTU-24-400320\",\n            \"target\": {\n              \"type\": \"objective-id\",\n              \"target-id\": \"ia-5.1_obj\",\n              \"status\": {\n                \"state\": \"satisfied\"\n              }\n            },\n            \"related-observations\": [\n              {\n                \"observation-uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\"\n              }\n            ]\n          }\n        ],\n        \"observations\": [\n          {\n            \"uuid\": \"c89cd6c4-2897-4f8c-8c62-c019f478eb0a\",\n            \"title\": \"Observation: SV-270732r1066685_rule\",\n            \"types\": [\n              \"finding\"\n            ],\n            \"methods\": [\n              \"TEST\"\n            ],\n            \"subjects\": [\n              {\n                \"type\": \"assessment-activity\",\n                \"subject-uuid\": \"0831127f-cb3c-427c-8c44-ecf893587311\"\n              }\n            ],\n            \"collected\": \"2026-08-20T12:00:00Z\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "focus_key": "findings",
+          "focus": [
+            [
+              5,
+              22
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

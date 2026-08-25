@@ -1,0 +1,39 @@
+{
+  "component-definition": {
+    "uuid": "bbdf7ee6-3e0a-4065-8ecf-50f4129de473",
+    "metadata": {
+      "title": "Demo validation component definition",
+      "last-modified": "2026-05-15T14:29:37+00:00",
+      "version": "1.0",
+      "oscal-version": "1.2.1"
+    },
+    "components": [
+      {
+        "uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e8",
+        "type": "validation",
+        "title": "OSCAP",
+        "description": "OSCAP",
+        "checks": [
+          {
+            "id": "check-1",
+            "description": "Check min. length of password",
+            "rule-id": "idservice_password_min_length",
+            "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f9"
+          },
+          {
+            "id": "check-2",
+            "description": "Check password is not reused below # count",
+            "rule-id": "idservice_password_not_reuse_min_count",
+            "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f9"
+          },
+          {
+            "id": "check-3",
+            "description": "Check strong password policy with mix of alphabets, digits, and special chars",
+            "rule-id": "idservice_strong_pass_enabled",
+            "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f9"
+          }
+        ]
+      }
+    ]
+  }
+}

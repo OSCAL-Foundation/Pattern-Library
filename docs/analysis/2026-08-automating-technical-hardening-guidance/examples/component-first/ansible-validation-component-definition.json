@@ -1,0 +1,33 @@
+{
+  "component-definition": {
+    "uuid": "bbdf7ee6-3e0a-4065-8ecf-50f4129de473",
+    "metadata": {
+      "title": "Demo validation component definition",
+      "last-modified": "2026-05-15T14:29:37+00:00",
+      "version": "1.0",
+      "oscal-version": "1.2.1"
+    },
+    "components": [
+      {
+        "uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f8",
+        "type": "validation",
+        "title": "ANSIBLE",
+        "description": "ANSIBLE",
+        "checks": [
+          {
+            "id": "check-1",
+            "description": "Check Cloud Object Storage is accessible only by using private endpoints",
+            "rule-id": "cos_access_endpoint_type",
+            "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a985f9"
+          },
+          {
+            "id": "check-2",
+            "description": "Check Cloud Object Storage is enabled with customer-managed encryption and Keep Your Own Key (KYOK)",
+            "rule-id": "cos_encryption_hyperprotect_key_configured",
+            "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a985f9"
+          }
+        ]
+      }
+    ]
+  }
+}

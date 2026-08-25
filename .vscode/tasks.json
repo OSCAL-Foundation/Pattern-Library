@@ -1,0 +1,79 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // docs/ is static, so this is a stock server rather than anything the
+      // repository maintains. Installing the recommended Live Preview
+      // extension replaces it; its preview button needs no task at all.
+      "label": "site: serve",
+      "detail": "Serve docs/ on 4173, the way Pages will serve it",
+      "type": "shell",
+      "command": "echo 'site: starting' && python3 -u -m http.server --directory docs --bind 127.0.0.1 4173",
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": {
+        "owner": "site-serve",
+        "fileLocation": ["relative", "${workspaceFolder}/docs"],
+        // A server reports no diagnostics, but a background matcher is not
+        // accepted without a pattern, and without an accepted matcher every
+        // launch stops to ask whether to continue. This one cannot match;
+        // beginsPattern and endsPattern do the work.
+        "pattern": { "regexp": "^$", "file": 1, "location": 2, "message": 3 },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^site: starting",
+          "endsPattern": "^Serving HTTP on"
+        }
+      }
+    },
+    {
+      "label": "site: stop",
+      "detail": "Terminates the serve task and frees the port.",
+      "type": "shell",
+      "command": "echo ${input:terminateServe}",
+      "presentation": { "reveal": "never", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "analysis 2026-08: verify",
+      "detail": "Recompute every figure and extract from its published source.",
+      "type": "shell",
+      "command": "python3 tools/verify.py --all",
+      "options": {
+        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
+        "env": { "TFG_CORPORA": "${input:corporaPath}" }
+      },
+      "problemMatcher": {
+        "owner": "verify",
+        "fileLocation": "autoDetect",
+        "pattern": { "regexp": "^\\s+FAIL\\s+(.*)$", "message": 1 }
+      }
+    },
+    {
+      "label": "analysis 2026-08: regenerate",
+      "detail": "Run every generator. A generated file that differs afterwards was hand-edited.",
+      "type": "shell",
+      "command": "for g in extract pattern_examples oscal_artifacts sources_files diagrams approach_pages scenario_page bundle; do echo \"-- $g\"; python3 tools/$g.py || exit 1; done",
+      "options": {
+        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
+        "env": { "TFG_CORPORA": "${input:corporaPath}" }
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "corporaPath",
+      "type": "promptString",
+      "description": "Path to the tfg-automated-assessments corpora checkout",
+      "default": "${env:HOME}/pagesource/tfg-automated-assessments"
+    },
+    {
+      "id": "terminateServe",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "site: serve"
+    }
+  ]
+}

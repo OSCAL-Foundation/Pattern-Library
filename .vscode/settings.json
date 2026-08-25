@@ -1,0 +1,17 @@
+{
+  // Live Preview hosts the workspace root by default. The site is docs/, so
+  // point it there: without this, a page's relative links resolve one level
+  // too high and every asset 404s.
+  "livePreview.serverRoot": "docs",
+  "livePreview.portNumber": 3000,
+  "livePreview.openPreviewTarget": "External Browser",
+
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  "search.exclude": {
+    "docs/analysis/*/sources": true,
+    "docs/analysis/*/examples": true,
+    "docs/analysis/*/assets/bundle.js": true
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ibm-ar-observation",
+  "slot": "6b",
+  "approach": "component-first",
+  "title": "AR observation, carrying a result",
+  "source": "IBM/assessment-result.json",
+  "pointer": "/assessment-results/results/0/observations/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"6c0a18ff-36b4-45b2-9e8b-6e3011bee6b1\",\n  \"description\": \"check-result\",\n  \"assessment-check-id\": \"check-1\",\n  \"assessment-asset/component-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a984e8\",\n  \"result\": \"pass\",\n  \"props\": [\n    {\n      \"name\": \"idref\",\n      \"ns\": \"https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP\",\n      \"value\": \"xccdf_org.ssgproject.content_rule_package_prelink_removed\"\n    },\n    {\n      \"name\": \"result\",\n      \"ns\": \"https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP\",\n      \"value\": \"pass\"\n    },\n    {\n      \"name\": \"time\",\n      \"ns\": \"https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP\",\n      \"value\": \"2025-02-26T03:47:26-05:00\"\n    },\n    {\n      \"name\": \"severity\",\n      \"ns\": \"https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP\",\n      \"value\": \"medium\"\n    }\n  ],\n  \"methods\": [\n    \"TEST-AUTOMATED\"\n  ],\n  \"subjects\": [\n    {\n      \"subject-uuid\": \"c8ca2d73-c917-4901-9098-71b2c601f471\",\n      \"type\": \"inventory-item\"\n    }\n  ],\n  \"collected\": \"2025-02-26T12:45:58+00:00\"\n}",
+  "sha256_of_source_file": "06a6ae6a9756dbf9aed6c5c67822e35a4ca324cb2baae47cfed32003b0c57806",
+  "extracted_at": "2026-08-22T16:15:34+00:00"
+}

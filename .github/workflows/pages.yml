@@ -1,0 +1,89 @@
+name: pages
+
+# docs/ is the site, verbatim. There is no build step, no generator and no
+# assembly: what is in the folder is what is published.
+#
+# This workflow exists for the guards below rather than for the deploy. A
+# branch-source deploy (Settings > Pages > Deploy from a branch > /docs) would
+# publish the same bytes without them.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and a queued run is not cancelled: cancelling a
+# deploy half way leaves the published site in whichever state it reached.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The publication requirements that are not checks
+        run: |
+          set -e
+          # Without this Pages runs the site through Jekyll, which drops every
+          # directory whose name begins with an underscore and does not serve
+          # the analysis sites' assets as written.
+          test -f docs/.nojekyll || { echo "::error::.nojekyll is missing from docs/"; exit 1; }
+          # A project site is served under /Pattern-Library/, so an absolute
+          # path resolves against the wrong root. Every path has to be relative.
+          if grep -rn 'href="/\|src="/' --include='*.html' docs; then
+            echo "::error::an absolute path was found. Every path must be relative."
+            exit 1
+          fi
+
+      - name: The registries resolve to something published
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+
+          for p in ("docs/analysis/analyses.json",
+                    "docs/recommendations/recommendations.json"):
+              entries = json.load(open(p))
+              # A registry that does not parse takes its index down silently:
+              # the page renders, the fetch resolves, and the list is empty.
+              assert isinstance(entries, list), f"{p} is not an array"
+              print(f"{p}: {len(entries)} entries")
+
+          # An entry naming an area that is not published renders as an
+          # ordinary card with a dead link.
+          missing = [
+              os.path.join("docs/analysis", e["id"], f)
+              for e in json.load(open("docs/analysis/analyses.json"))
+              for f in ("index.html", "analysis.json")
+              if not os.path.isfile(os.path.join("docs/analysis", e["id"], f))
+          ]
+          if missing:
+              sys.exit("::error::registry names an area that is not published: "
+                       + ", ".join(missing))
+          print("every registered analysis is published")
+          PY
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

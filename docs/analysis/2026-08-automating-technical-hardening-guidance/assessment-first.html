@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en" data-base=".">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assessment-first | Automating Technical Hardening Guidance with OSCAL</title>
+<meta name="description" content="Benchmark content is published as OSCAL assessment plans, one activity or step per recommendation, with the link to a control carried on the activity.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Assessment-first">
+<meta property="og:description" content="Benchmark content is published as OSCAL assessment plans, one activity or step per recommendation, with the link to a control carried on the activity.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Automating Technical Hardening Guidance with OSCAL">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Assessment-first">
+<meta name="twitter:description" content="Benchmark content is published as OSCAL assessment plans, one activity or step per recommendation, with the link to a control carried on the activity.">
+<link rel="stylesheet" href="./assets/site.css">
+<script>
+  /* Set the theme before first paint so the page never flashes the wrong one. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("tfg-theme"); } catch (e) {}
+    if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <p class="site-title"><a href="./index.html"><img class="site-logo site-logo--light" src="./assets/brand/oscal-foundation.png" alt="" width="208" height="96"><img class="site-logo site-logo--dark" src="./assets/brand/oscal-foundation-rev.png" alt="" width="208" height="96"><span>Automating Technical Hardening Guidance with OSCAL</span></a></p>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="./index.html">Start here</a></li>
+        <li><a href="./six-questions.html">The six questions</a></li>
+        <li><a href="./scenario.html">A worked scenario</a></li>
+        <li><a href="./catalog-first.html">Catalog-first</a></li>
+        <li><a href="./component-first.html">Component-first</a></li>
+        <li><a href="./assessment-first.html">Assessment-first</a></li>
+        <li><a href="./questions.html">Open questions</a></li>
+        <li><a href="./oscal-artifacts.html">OSCAL artifacts</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="theme-toggle" aria-pressed="false">Dark theme</button>
+  </div>
+</header>
+
+<main id="main">
+
+<h1>Assessment-first</h1>
+<p class="lede">In this approach, the rule is an activity in an assessment plan, or a step beneath one, and the check is named by a property called check on either of them. The activity states the requirement and its steps carry the procedure that verifies it.</p>
+<nav class="toc" aria-label="On this page">
+  <span class="toc__label">On this page</span>
+  <ol>
+    <li><a href="#stakeholder">1. The stakeholder mapping</a></li>
+    <li><a href="#tradeoffs">2. Strengths and risks with this approach</a></li>
+    <li><a href="#joins">3. Tracing rules and checks from implementation to assessment</a></li>
+  </ol>
+</nav>
+<section id="stakeholder">
+<h2>1. The stakeholder mapping</h2>
+<div class="tier2">
+  <p>Three readings of what a hardening rule is are on the record, and this approach reads it as <strong>an assessor's procedure</strong>, which puts it in the Assessment layer, in the <code>assessment-plan</code> model. That is what decides the table below.</p>
+  <p>Seven parties touch a hardening rule between a published guide and an audited system, and each works in an OSCAL model. Two sets of them are grouped: the bodies that author guidance, and the automation.</p>
+</div>
+<table class="criteria-table stakeholders">
+  <thead><tr><th scope="col">Party</th><th scope="col">OSCAL model</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Regulatory control providers<span class="stakeholders__who">NIST with SP 800-53, and bodies like it</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="13.0728 14.0728 37.8544 37.8544" aria-hidden="true" focusable="false"><path d="M18 18H30L34 22V48L27 45H18V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M46 18H34L30 22V48L37 45H46V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M22 26L28 26" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M22 32L28 32" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 26L42 26" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 32L42 32" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/></svg></span><span class="mtile__name">catalog</span></span></span></td></tr>
+    <tr><th scope="row">Mapping providers<span class="stakeholders__who">DISA's CCI list, NIST's OLIR programme, the Secure Controls Framework and bodies like them, tying a guide to a framework</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></span><span class="stakeholders__note">Edits the plan rather than writing one. Reviewed-controls on the activity names the framework controls the check covers.</span></td></tr>
+    <tr class="stakeholders__group"><th scope="colgroup" colspan="2">Hardening guidance authors<span class="stakeholders__note">One role, two kinds of organisation, the same model. Nothing downstream can tell which of them wrote a rule.</span></th></tr>
+    <tr class="stakeholders__in"><th scope="row">Technical hardening guidance providers<span class="stakeholders__who">CIS, DISA and other benchmark publishers</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></span><span class="stakeholders__note">Writes the activity and its steps. The check that runs them is the engine's.</span></td></tr>
+    <tr class="stakeholders__in"><th scope="row">Software providers<span class="stakeholders__who">Vendors publishing secure configuration guidance for their own product, alone or with a body such as CIS</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></span><span class="stakeholders__note">Writes the activity and its steps. The check that runs them is the engine's.</span></td></tr>
+    <tr class="stakeholders__group"><th scope="colgroup" colspan="2">Automation tools and who runs them<span class="stakeholders__note">The policy engine and the automation tool are the same thing. A provider builds it, and whoever runs it decides what comes out.</span></th></tr>
+    <tr class="stakeholders__in"><th scope="row">Policy engine providers<span class="stakeholders__who">OPA, Kyverno, ScubaGear, OpenSCAP and the like, assessing, auditing and checking</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></span><span class="stakeholders__note">The plan is the engine's, and the checks in it are what it adds. It is named inside the plan too, in assessment-assets.</span></td></tr>
+    <tr class="stakeholders__in"><th scope="row">System owners<span class="stakeholders__who">Implementing these concepts on a real system</span></th><td><span class="mflow"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M18 20H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><path d="M18 32H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><path d="M18 44H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><circle cx="26" cy="20" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/><circle cx="38" cy="32" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/><circle cx="30" cy="44" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/></svg></span><span class="mtile__name">profile</span></span><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M20 16H36L44 24V48H20V16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M36 16V24H44" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 30V40M32 30L28 31L26 33L26 36L28 39L32 42L36 39L38 36L38 33L36 31L32 30Z" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="mtile__name">system-security-plan</span></span></span><span class="stakeholders__note">The selection and the plan of record, and nothing beyond them. An assessor's run takes no dependency on what the owner automates, and cannot see it.</span></td></tr>
+    <tr class="stakeholders__in"><th scope="row">Independent auditors<span class="stakeholders__who">Running the same checks independently of the system owner, and reading the outcome</span></th><td><span class="mflow"><span class="mflow__by">runs the checks, making the observations</span><span class="mflow__run"><span class="lineage__end"><span class="lineage__box"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></span><span class="lineage__q"></span></span><span class="lineage__end lineage__end--mark"><span class="lineage__box"><svg class="mflow__runtime" viewBox="0 0 46 20" aria-hidden="true" focusable="false"><path d="M1,10 H12.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16.4,10 L10.8,7.1 v5.8 Z" fill="currentColor"/><rect x="17.6" y="1.7" width="12.2" height="16.6" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M21.5,6.1 L26.7,10 L21.5,13.9 Z" fill="currentColor"/><path d="M30.6,10 H41" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M45,10 L39.4,7.1 v5.8 Z" fill="currentColor"/></svg></span><span class="lineage__q">runtime</span><span class="visually-hidden"> is read by the policy engine, which runs and writes </span></span><span class="lineage__end"><span class="lineage__box"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><rect x="18" y="16" width="28" height="32" rx="3" stroke-width="2.21" stroke="currentColor" fill="none"/><path d="M24 24L27 27L33 21" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M24 34L27 37L33 31" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M37 24L40 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" fill="none"/><path d="M37 34L40 34" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" fill="none"/></svg></span><span class="mtile__name">assessment-results</span></span></span><span class="lineage__q"></span></span></span></span><span class="stakeholders__note">The only run here. There is no path from a check to a claim, so what comes out is a result and never the plan of record.</span></td></tr>
+  </tbody>
+</table>
+<p class="stakeholders__key"><svg class="mflow__runtime" viewBox="0 0 46 20" aria-hidden="true" focusable="false"><path d="M1,10 H12.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M16.4,10 L10.8,7.1 v5.8 Z" fill="currentColor"/><rect x="17.6" y="1.7" width="12.2" height="16.6" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M21.5,6.1 L26.7,10 L21.5,13.9 Z" fill="currentColor"/><path d="M30.6,10 H41" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M45,10 L39.4,7.1 v5.8 Z" fill="currentColor"/></svg><span><strong>The runtime.</strong> A tool reads OSCAL, executes, and writes OSCAL. The party in this row builds it; the party on each flow runs it.</span></p>
+</section>
+<section id="tradeoffs">
+<h2>2. Strengths and risks with this approach</h2>
+<div class="tier2">
+  <p>Considerations when introducing technical hardening guidance as an assessment plan have been captured</p>
+</div>
+<div class="tradeoffs">
+  <div class="tradeoffs__side tradeoffs__side--pro">
+    <h3 class="tradeoffs__head"><span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>2.1 Strengths<span class="tradeoffs__count">4</span></h3>
+    <ol class="tradeoffs__list">
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">The plan of record does not move</p>
+        <p class="tradeoff__body">The plan points at the document holding the claim rather than making one, so adding or retiring a guide touches the assessment plan alone.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">Plan to result is a lifecycle this layer has</p>
+        <p class="tradeoff__body">A result is a document of its own importing a plan, and the corpus ships one whose findings target objectives and rest on observations.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">The subject is whatever was assessed</p>
+        <p class="tradeoff__body">A subject can be an inventory item, so two hosts of one operating system configured differently each carry their own finding.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.4 8.3 L6.9 10.8 L11.6 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="tradeoff__title">Execution context travels with the plan</p>
+        <p class="tradeoff__body">A task carries a schedule and names the platform that runs it, which no other approach expresses.</p>
+      </li>
+    </ol>
+  </div>
+  <div class="tradeoffs__side tradeoffs__side--con">
+    <h3 class="tradeoffs__head"><span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>2.2 Risks<span class="tradeoffs__count">3</span></h3>
+    <ol class="tradeoffs__list">
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">No parameter to resolve</p>
+        <p class="tradeoff__body">A required value is written into the activity title, so selection means writing a plan rather than resolving a profile.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">Two tiers, where a guide is sometimes deeper</p>
+        <p class="tradeoff__body">The model runs activity to step, and guidance that nests four levels deep has two of them to land in.</p>
+      </li>
+      <li class="tradeoff">
+        <span class="tradeoff__mark"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.1" y="1.1" width="13.8" height="13.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.4 5.4 L10.6 10.6 M10.6 5.4 L5.4 10.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <p class="tradeoff__title">The published set does not join up</p>
+        <p class="tradeoff__body">The result names a plan no file here carries and gives an observation a subject type the model does not define.</p>
+      </li>
+    </ol>
+  </div>
+</div>
+</section>
+<section id="joins" class="wide">
+<h2>3. Tracing rules and checks from implementation to assessment</h2>
+<div class="tier2">
+  <p>The chain starts where the rule is introduced and runs to the claim and the result. What a step costs is how many relationships it is made of and how each one resolves.</p>
+  <ol class="joins__steps">
+    <li><strong><a href="./six-questions.html#q1-assessment-first">Rule</a>, as it is introduced.</strong> The rule is an activity in the plan that assesses it, so it is introduced in the assessment layer and does not enter the implementation layer at all. Every step below starts from that uuid. <code>assessment-plan</code>, <code>activities[].uuid</code>.</li>
+    <li><strong><a href="./six-questions.html#q1-assessment-first">Rule</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q3-assessment-first">Check</a>.</strong> The check is the first step, so nothing has to match. The step then names a check that resolves outside OSCAL.</li>
+    <li><strong><a href="./six-questions.html#q1-assessment-first">Rule</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q2-assessment-first">Control</a>.</strong> The tie sits on the activity, so there is no second document and no second identifier to keep in step.</li>
+    <li><strong><a href="./six-questions.html#q3-assessment-first">Check</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q5-assessment-first">Runtime</a>.</strong> The plan names its platforms once, for every activity, so it cannot say which engine ran which check.</li>
+    <li><strong><a href="./six-questions.html#q5-assessment-first">Runtime</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q6a-assessment-first">Claim</a>.</strong> One pointer for the whole plan. Where no plan of record exists the same resource can describe the system in prose.</li>
+    <li><strong><a href="./six-questions.html#q5-assessment-first">Runtime</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q6b-assessment-first">Result</a>.</strong> The observation points back at the activity that ran. The thing observed is the thing planned.</li>
+    <li><strong><a href="./six-questions.html#q6b-assessment-first">Result</a> <span class="joins__to" aria-hidden="true">&rarr;</span><span class="visually-hidden">to</span> <a href="./six-questions.html#q2-assessment-first">Control</a>.</strong> The finding targets the control objective, so a result reads against the framework with no plan of record.</li>
+  </ol>
+</div>
+<figure>
+  <div class="diagram" data-diagram="73-join-assessment"></div>
+  <figcaption>The same chain with the values, which are rule 1, data at rest, exactly as the six questions page encodes it for this approach. Every step is a field a consumer has to follow, so the number of steps is the cost of the chain and the way each one resolves is how much the schema can do to help.</figcaption>
+</figure>
+</section>
+
+</main>
+
+<!-- Footer kept identical to assets/shell.html. The generator used to emit a
+     longer one carrying provenance, sources and a data-generated stamp; the
+     shell was since reduced to the one line that matters and site.js stopped
+     wiring data-generated, so regenerating these pages reintroduced a hook
+     nothing filled. One footer, one place. -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>This site makes no recommendation.</strong> It states three approaches in the
+       terms their proponents use and shows the content each one ships.</p>
+  </div>
+</footer>
+
+<!-- Read only when the page is opened from a folder rather than served.
+     Generated by tools/bundle.py from data/; a served copy ignores it. -->
+<script src="./assets/bundle.js"></script>
+<script src="./assets/highlight.js"></script>
+<script src="./assets/site.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,319 @@
+{
+  "note": "The oscal-ssp-oscal-ssp:by-component definition, which is the only way a system security plan responds to a control. It is keyed by component-uuid and has no subject of any kind: no inventory-item, no location, no party, no user. A plan can describe inventory items elsewhere, in system-implementation, but a control response cannot be made against one, so two hosts of the same component share a single response.",
+  "model": "system-security-plan",
+  "definition": "oscal-ssp-oscal-ssp:by-component",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.1.3/oscal-ssp-schema.json",
+  "oscal_version": "1.1.3",
+  "fetched_at": "2026-08-21",
+  "provenance": "Taken from the offline OSCAL reference copy of the 1.1.3 schemas rather than from the published 1.2.1 set the other fragments here record, because 1.2.1 could not be fetched. The CI re-fetch compares it against 1.2.1.",
+  "constraints": [
+    "required == [\"component-uuid\",\"uuid\",\"description\"]",
+    "has property \"component-uuid\"",
+    "has no property \"subject\", \"subject-uuid\", \"inventory-item-uuid\" or \"type\""
+  ],
+  "fragment": {
+    "title": "Component Control Implementation",
+    "description": "Defines how the referenced component implements a set of controls.",
+    "$id": "#/definitions/oscal-ssp-oscal-ssp:by-component",
+    "type": "object",
+    "properties": {
+      "component-uuid": {
+        "title": "Component Universally Unique Identifier Reference",
+        "description": "A machine-oriented identifier reference to the component that is implemeting a given control.",
+        "$ref": "#/definitions/UUIDDatatype"
+      },
+      "uuid": {
+        "title": "By-Component Universally Unique Identifier",
+        "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this by-component entry elsewhere in this or other OSCAL instances. The locally defined UUID of the by-component entry can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+        "$ref": "#/definitions/UUIDDatatype"
+      },
+      "description": {
+        "title": "Control Implementation Description",
+        "description": "An implementation statement that describes how a control or a control statement is implemented within the referenced system component.",
+        "type": "string"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ssp-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ssp-oscal-metadata:link"
+        }
+      },
+      "set-parameters": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ssp-oscal-implementation-common:set-parameter"
+        }
+      },
+      "implementation-status": {
+        "$ref": "#/definitions/oscal-ssp-oscal-implementation-common:implementation-status"
+      },
+      "export": {
+        "title": "Export",
+        "description": "Identifies content intended for external consumption, such as with leveraged organizations.",
+        "type": "object",
+        "properties": {
+          "description": {
+            "title": "Control Implementation Export Description",
+            "description": "An implementation statement that describes the aspects of the control or control statement implementation that can be available to another system leveraging this system.",
+            "type": "string"
+          },
+          "props": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/definitions/oscal-ssp-oscal-metadata:property"
+            }
+          },
+          "links": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/definitions/oscal-ssp-oscal-metadata:link"
+            }
+          },
+          "provided": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "title": "Provided Control Implementation",
+              "description": "Describes a capability which may be inherited by a leveraging system.",
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "title": "Provided Universally Unique Identifier",
+                  "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this provided entry elsewhere in this or other OSCAL instances. The locally defined UUID of the provided entry can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+                  "$ref": "#/definitions/UUIDDatatype"
+                },
+                "description": {
+                  "title": "Provided Control Implementation Description",
+                  "description": "An implementation statement that describes the aspects of the control or control statement implementation that can be provided to another system leveraging this system.",
+                  "type": "string"
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ssp-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ssp-oscal-metadata:link"
+                  }
+                },
+                "responsible-roles": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ssp-oscal-metadata:responsible-role"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ssp-oscal-metadata:remarks"
+                }
+              },
+              "required": [
+                "uuid",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "responsibilities": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "title": "Control Implementation Responsibility",
+              "description": "Describes a control implementation responsibility imposed on a leveraging system.",
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "title": "Responsibility Universally Unique Identifier",
+                  "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this responsibility elsewhere in this or other OSCAL instances. The locally defined UUID of the responsibility can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+                  "$ref": "#/definitions/UUIDDatatype"
+                },
+                "provided-uuid": {
+                  "title": "Provided UUID",
+                  "description": "A machine-oriented identifier reference to an inherited control implementation that a leveraging system is inheriting from a leveraged system.",
+                  "$ref": "#/definitions/UUIDDatatype"
+                },
+                "description": {
+                  "title": "Control Implementation Responsibility Description",
+                  "description": "An implementation statement that describes the aspects of the control or control statement implementation that a leveraging system must implement to satisfy the control provided by a leveraged system.",
+                  "type": "string"
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ssp-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ssp-oscal-metadata:link"
+                  }
+                },
+                "responsible-roles": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ssp-oscal-metadata:responsible-role"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ssp-oscal-metadata:remarks"
+                }
+              },
+              "required": [
+                "uuid",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "remarks": {
+            "$ref": "#/definitions/oscal-ssp-oscal-metadata:remarks"
+          }
+        },
+        "additionalProperties": false
+      },
+      "inherited": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Inherited Control Implementation",
+          "description": "Describes a control implementation inherited by a leveraging system.",
+          "type": "object",
+          "properties": {
+            "uuid": {
+              "title": "Inherited Universally Unique Identifier",
+              "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this inherited entry elsewhere in this or other OSCAL instances. The locally defined UUID of the inherited control implementation can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+              "$ref": "#/definitions/UUIDDatatype"
+            },
+            "provided-uuid": {
+              "title": "Provided UUID",
+              "description": "A machine-oriented identifier reference to an inherited control implementation that a leveraging system is inheriting from a leveraged system.",
+              "$ref": "#/definitions/UUIDDatatype"
+            },
+            "description": {
+              "title": "Inherited Control Implementation Description",
+              "description": "An implementation statement that describes the aspects of a control or control statement implementation that a leveraging system is inheriting from a leveraged system.",
+              "type": "string"
+            },
+            "props": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ssp-oscal-metadata:property"
+              }
+            },
+            "links": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ssp-oscal-metadata:link"
+              }
+            },
+            "responsible-roles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ssp-oscal-metadata:responsible-role"
+              }
+            }
+          },
+          "required": [
+            "uuid",
+            "description"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "satisfied": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Satisfied Control Implementation Responsibility",
+          "description": "Describes how this system satisfies a responsibility imposed by a leveraged system.",
+          "type": "object",
+          "properties": {
+            "uuid": {
+              "title": "Satisfied Universally Unique Identifier",
+              "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this satisfied control implementation entry elsewhere in this or other OSCAL instances. The locally defined UUID of the control implementation can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+              "$ref": "#/definitions/UUIDDatatype"
+            },
+            "responsibility-uuid": {
+              "title": "Responsibility UUID",
+              "description": "A machine-oriented identifier reference to a control implementation that satisfies a responsibility imposed by a leveraged system.",
+              "$ref": "#/definitions/UUIDDatatype"
+            },
+            "description": {
+              "title": "Satisfied Control Implementation Responsibility Description",
+              "description": "An implementation statement that describes the aspects of a control or control statement implementation that a leveraging system is implementing based on a requirement from a leveraged system.",
+              "type": "string"
+            },
+            "props": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ssp-oscal-metadata:property"
+              }
+            },
+            "links": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ssp-oscal-metadata:link"
+              }
+            },
+            "responsible-roles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ssp-oscal-metadata:responsible-role"
+              }
+            },
+            "remarks": {
+              "$ref": "#/definitions/oscal-ssp-oscal-metadata:remarks"
+            }
+          },
+          "required": [
+            "uuid",
+            "description"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "responsible-roles": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ssp-oscal-metadata:responsible-role"
+        }
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-ssp-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "component-uuid",
+      "uuid",
+      "description"
+    ],
+    "additionalProperties": false
+  }
+}

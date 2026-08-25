@@ -1,0 +1,13 @@
+{
+  "id": "ez-stig-import-ssp",
+  "slot": "meta",
+  "approach": "assessment-first",
+  "title": "STIG import-ssp, an unresolved placeholder",
+  "source": "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json",
+  "pointer": "/assessment-plan/import-ssp",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"href\": \"PLACEHOLDER\"\n}",
+  "sha256_of_source_file": "997ecb028020fdacee66352651a5992e5a1ec1b964d1b332d6c7a5480b7897b6",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

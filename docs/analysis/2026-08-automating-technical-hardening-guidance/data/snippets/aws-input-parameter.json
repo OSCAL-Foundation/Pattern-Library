@@ -1,0 +1,13 @@
+{
+  "id": "aws-input-parameter",
+  "slot": "1",
+  "approach": "catalog-first",
+  "title": "InputParameter props, the parameter mechanism",
+  "source": "AWS/oscal-content-for-aws-services-main/component-definitions/iam.oscal.json",
+  "pointer": "/component-definition/components/2/props",
+  "section": null,
+  "language": "json",
+  "content": "[\n  {\n    \"name\": \"ConfigRuleId\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"IAM_PASSWORD_POLICY\"\n  },\n  {\n    \"name\": \"asset-type\",\n    \"value\": \"automated-inspection\"\n  },\n  {\n    \"name\": \"MaxPasswordAge\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"90\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"PasswordReusePrevention\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"24\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"MinimumPasswordLength\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"14\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"RequireNumbers\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"true\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"RequireSymbols\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"true\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"RequireLowercaseCharacters\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"true\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"RequireUppercaseCharacters\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"true\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"MinimumPasswordLength\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"7\",\n    \"class\": \"InputParameter\"\n  },\n  {\n    \"name\": \"PasswordReusePrevention\",\n    \"ns\": \"http://aws.amazon.com/ns/oscal\",\n    \"value\": \"4\",\n    \"class\": \"InputParameter\"\n  }\n]",
+  "sha256_of_source_file": "940cab9d3328d5ff55e6c69fbfae6fd4e846873d07f70ef7c096651bc8f750ab",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

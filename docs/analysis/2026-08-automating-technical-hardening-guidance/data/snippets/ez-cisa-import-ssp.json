@@ -1,0 +1,13 @@
+{
+  "id": "ez-cisa-import-ssp",
+  "slot": "6a",
+  "approach": "assessment-first",
+  "title": "import-ssp, resolving to a resource in the same document",
+  "source": "Easy Dynamics/CISA BOD 25-01/assessment-plan.json",
+  "pointer": "/assessment-plan/import-ssp",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"href\": \"#75e00698-e43b-4d6f-be7f-d1227a3a3e39\",\n  \"remarks\": \"Link the SAP to the SSP.\"\n}",
+  "sha256_of_source_file": "97dad5eeba5efdb6b45ce22b92b9316df1479808bca698235c7dfc2d00ed37ee",
+  "extracted_at": "2026-08-22T18:44:16+00:00"
+}

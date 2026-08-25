@@ -1,0 +1,13 @@
+{
+  "id": "ez-cisa-ar-observation",
+  "slot": "6b",
+  "approach": "assessment-first",
+  "title": "The observation it rests on, and what was examined",
+  "source": "Easy Dynamics/CISA BOD 25-01/ar-cisa-scuba-scubagear.json",
+  "pointer": "/assessment-results/results/0/observations/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"941e3133-152b-5301-8762-abd228b5ee80\",\n  \"title\": \"Observation: MS.AAD.1.1v1 - Legacy Authentication Blocking\",\n  \"types\": [\n    \"finding\"\n  ],\n  \"methods\": [\n    \"TEST\"\n  ],\n  \"remarks\": \"Legacy authentication is blocked tenant-wide via a Conditional Access policy in the enabled state. Control CM-7 is satisfied.\",\n  \"subjects\": [\n    {\n      \"type\": \"assessment-activity\",\n      \"subject-uuid\": \"422ccfe4-7b60-4fe8-81ff-3d4464cc6e05\"\n    }\n  ],\n  \"collected\": \"2026-03-05T15:30:00-05:00\",\n  \"description\": \"Examiner queried the Conditional Access policy configuration via Microsoft Graph API. A policy targeting all users with a condition for legacy authentication protocols and a grant control of 'Block' was identified and confirmed enabled.\"\n}",
+  "sha256_of_source_file": "2e13fc65380024e6da79f539fec07f906659c100ae0cec555ed0541d5fce973d",
+  "extracted_at": "2026-08-22T18:43:41+00:00"
+}

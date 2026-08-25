@@ -1,0 +1,13 @@
+{
+  "id": "aws-acm-service-rollup",
+  "slot": "2",
+  "approach": "catalog-first",
+  "title": "AWS Certificate Manager, the service roll-up",
+  "source": "AWS/oscal-content-for-aws-services-main/component-definitions/acm.oscal.json",
+  "pointer": "/component-definition/components/0/control-implementations/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"ae50c910-9057-4345-89d9-c2ae4c1f0b08\",\n  \"source\": \"#f32021d5-0666-4698-8a41-2e733c2035f3\",\n  \"description\": \"AWS Security Hub control implementation\",\n  \"implemented-requirements\": [\n    {\n      \"uuid\": \"c3e6d492-b3b6-46d9-9e2a-7d6d9922f3fa\",\n      \"control-id\": \"ACM.1\",\n      \"description\": \"Security Hub control ACM.1\"\n    },\n    {\n      \"uuid\": \"551c5fc8-569a-4ea5-a0d8-0b524e9f4205\",\n      \"control-id\": \"ACM.2\",\n      \"description\": \"Security Hub control ACM.2\"\n    }\n  ]\n}",
+  "sha256_of_source_file": "5d4722e62660af4e0ab9a0acd08c337a860c674a748b9e6a0f41bcba47457fb1",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

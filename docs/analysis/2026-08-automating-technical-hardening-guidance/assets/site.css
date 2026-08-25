@@ -1,0 +1,1983 @@
+/* ==========================================================================
+   The six questions about a rule and a check
+   Design system. One stylesheet, no build step, no external requests.
+
+   Sections, in order:
+     1. TOKENS        the only place raw colour values appear
+     2. RESET
+     3. LAYOUT
+     4. TYPOGRAPHY
+     5. COMPONENTS
+     6. UTILITIES
+     7. PRINT
+     8. REDUCED MOTION
+
+   The question palette was selected by simulation, not by eye. Six hues sit on
+   a monotonic lightness ladder so that dichromats retain a second discriminating
+   channel when hue collapses. Measured minimum perceptual distance (CIE76)
+   across normal vision, deuteranopia and protanopia:
+       light theme   dE 23.4 dichromat / 32.9 normal
+       dark theme    dE 18.8 dichromat / 35.0 normal
+   Colour is never the only channel: every rendering also carries the question
+   number and a short label.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. TOKENS
+   ========================================================================== */
+
+:root {
+  /* --- surface, text, line ------------------------------------------------ */
+  --bg:             #FFFFFF;
+  --bg-subtle:      #F6F7F9;
+  --bg-inset:       #EEF1F4;
+  --bg-code:        #F8F9FB;
+  --text:           #12161C;
+  --text-muted:     #4A5462;
+  --text-faint:     #6B7684;
+  --border:         #D5DAE1;   /* hairline separators, decorative           */
+  --border-strong:  #848C99;   /* meaningful outlines, 3.39:1 on --bg       */
+
+  /* --- accent -------------------------------------------------------------
+     The OSCAL Foundation's primary is #4E79D8, hue 221, saturation 0.64. It is
+     4.16:1 on --bg and 4.36:1 on the dark --bg, so it clears neither theme's
+     4.5 for a link and cannot be the accent itself. Adopting it as one would
+     have traded this file's whole argument for a colour match.
+
+     So the hue and the saturation are adopted and only the lightness moves,
+     to wherever the contrast the site already had comes back. 45% here, 6.53:1
+     against the 6.57:1 of the #0B5FA5 it replaces; 75% in dark, 8.36:1 against
+     8.29:1. Every accent pair on the site is within 0.07 of where it was, and
+     the hue is the Foundation's rather than the cyan-leaning 205 it was.
+
+     The brand blue is drawn at full strength where it is identity rather than
+     text, which is the one place 4.16:1 is the right number. */
+  --accent:         #2958BC;   /* 6.53:1 on --bg, 6.09:1 on --bg-subtle */
+  --accent-fg:      #FFFFFF;   /* 6.53:1 on --accent */
+  --focus:          #2958BC;
+  --shadow:         0 1px 2px rgb(18 22 28 / 8%), 0 4px 12px rgb(18 22 28 / 6%);
+
+  /* --- media-type icon ----------------------------------------------------
+     A PDF badge is red because a reader expects it to be, and expectation is
+     worth something on an icon that has to be recognised at 27px. It is the
+     one media type with a colour convention, so it is the one that gets a
+     token; XML and JSON stay on --accent with everything else that links.
+
+     This is decoration, not information. Red and --accent sit at almost the
+     same lightness, 1.1:1, so they collapse for a dichromat and in grayscale.
+     What tells the three media types apart is the word on the badge, which is
+     part of the drawing, and the file name and type on the link's own title.
+     Contrast here is measured against --bg, because the letters are reversed
+     out of the fill in the page colour. */
+  --micon-pdf:      #C0281E;   /* 5.89:1 on --bg */
+
+  /* --- strength and risk ---------------------------------------------------
+     The two colours of the tradeoffs block, and the one place on this site
+     where green and red carry meaning. Three things make that safe.
+
+     They are never the only channel. Each entry carries a box with a tick or a
+     box with a cross, which are different shapes; the two columns keep the
+     solid and dashed edges they had before the colour arrived; and each column
+     is headed with the word. A dichromat, a grayscale printer and a screen
+     reader each have something to go on.
+
+     They are matched in contrast, deliberately, to within a hundredth: 6.53
+     against 6.54 here and 7.97 against 7.98 in dark. A red that shouted louder
+     than the green would be an argument, on a block whose whole point is that
+     the two sides are given the same weight.
+
+     They clear 4.5:1 on both surfaces they are drawn on, so they would be
+     legible as text and are comfortable as a 1.6px stroke. */
+  --strength:       #146C2E;   /* 6.53:1 on --bg, 6.10:1 on --bg-subtle */
+  --risk:           #B3261E;   /* 6.54:1 on --bg, 6.10:1 on --bg-subtle */
+
+  /* --- the inline JSON view ------------------------------------------------
+     A code surface that does not follow the theme. The worked example's JSON is
+     read as an artifact rather than as page content, and an artifact that
+     inverts when the reader flips the theme reads as part of the page. So these
+     five are identical in both themes, which is why they are written twice
+     rather than inherited: tools/verify.py --a11y resolves tokens per theme and
+     a token defined in one block only would be missing from the other.
+
+     Contrast is measured against --code-bg rather than --bg, because nothing
+     here is ever drawn on the page background. */
+  --code-bg:        #12161C;
+  --code-fg:        #E8ECF1;   /* 14.8:1 on --code-bg */
+  --code-dim:       #8592A2;   /* 5.9:1 on --code-bg, for context lines */
+  --code-focus:     #1E2733;   /* the lift under the lines being pointed at */
+  --code-rule:      #303A47;
+  /* Syntax, on the same fixed surface. Defined in both blocks with the same
+     values so the two definitions cannot drift. */
+  --code-key:       #8FC8FF;   /* 8.9:1 on --code-bg */
+  --code-str:       #A5D6FF;   /* 10.6:1 */
+  --code-num:       #F2CC60;   /* 11.5:1 */
+  --code-bool:      #FFA657;   /* 9.6:1 */
+  --code-warn-bg:   #3D2D0A;
+
+  /* --- question palette, base (borders, diagram strokes, chip accents) ----
+     The framework is the six questions. These token names, the .slot-*
+     classes and the slot keys in data/ still say slot: they are machine
+     identifiers no reader ever sees, and renaming them would churn this
+     file, tools/diagrams.py and nineteen SVG files for no reader's benefit.
+     Everything rendered says question. */
+  --slot-1: #930019;   /* Rule                       hue  30, L* 30 */
+  --slot-2: #004DB3;   /* Control tie                hue 290, L* 35 */
+  --slot-3: #00696C;   /* Check                      hue 200, L* 40 */
+  --slot-4: #0071A7;   /* Subject                    hue 260, L* 45 */
+  --slot-5: #6F7F00;   /* Actor                      hue 110, L* 50 */
+  --slot-6: #009765;   /* Satisfaction               hue 160, L* 55 */
+
+  --slot-1-bg: #FFEDEA;  --slot-1-fg: #8F0F1D;  --slot-1-border: #9D413C;
+  --slot-2-bg: #EFEFFF;  --slot-2-fg: #1248A5;  --slot-2-border: #5666B0;
+  --slot-3-bg: #D7F7F7;  --slot-3-fg: #005759;  --slot-3-border: #008588;
+  --slot-4-bg: #E6F2FF;  --slot-4-fg: #00527C;  --slot-4-border: #008BCD;
+  --slot-5-bg: #F2F2DD;  --slot-5-fg: #485300;  --slot-5-border: #8E9645;
+  --slot-6-bg: #DEF6E9;  --slot-6-fg: #005A3A;  --slot-6-border: #47B081;
+
+  /* --- empty-state renderings ---------------------------------------------
+     Three states must be told apart in colour, in grayscale and in print, so
+     each is carried by geometry rather than by hue. */
+  --empty-line:        var(--border-strong);
+  --empty-dot:         var(--text-faint);
+  --empty-absent-fill: #E3E7EC;
+
+  /* --- approach identity, for diagram footprints only ----------------------
+     These are NOT part of the question palette and never colour a question.
+     They tint the footprint outlines on the layer map and the path overlays
+     on the three-readers figure, and nothing else.
+
+     Three constraints decided them, in this order.
+     1. Equal weight. All three sit at CIE L* 47 (light) / L* 71 (dark) and at
+        the same chroma, so no approach is louder than another. Equal lightness
+        is what neutrality requires here and it is the opposite of the
+        question palette, whose whole point is a lightness ladder.
+     2. No valence. The hues are 185, 265 and 340: teal, blue, mauve. A
+        120-degree triad would have forced a red, a green and an amber onto
+        three positions in a live disagreement, which is an argument no word
+        count can see.
+     3. Hue is decorative. Because lightness is equal, dichromats cannot
+        separate these three, and that is accepted: approach identity on every
+        diagram is carried by outline offset, by a marker shape and by a
+        written label. Colour only reinforces. verify.py --a11y asserts the
+        equal-luminance property; verify.py --diagrams asserts that every
+        approach outline also carries a marker and a label.
+     Assignment is a fixed mapping, made once when the palette was built and
+     deliberately not changed when the display order moved to the pre-read's
+     option letters. A hue that changed hands would invalidate every published
+     figure and every association a reader had already formed, and it would buy
+     nothing: the three are equal-lightness and carry no valence, so which hue an
+     approach has means nothing. */
+  --approach-assessment: #007E73;   /* hue 185, 4.96:1 on --bg */
+  --approach-catalog:    #3B74A5;   /* hue 265, 4.97:1 on --bg */
+  --approach-component:  #985C82;   /* hue 340, 5.01:1 on --bg */
+
+  /* --- the three OSCAL layers ---------------------------------------------
+     The model icons are coloured by layer, not by approach. A model belongs to
+     one layer and is used by whichever approaches reach it: assessment-plan is
+     the assessment layer whether catalog-first, component-first or
+     assessment-first is the one putting content in it. Colouring these with
+     --approach-* would have said the opposite.
+
+     Blue, green and amber as authored in assets/images. Each trio is a chip
+     background, the ink of the glyph, and the lighter second tone the drawings
+     use for detail. Both tones clear the 3.0 non-text ratio against their own
+     chip in both themes, which is the standard for a graphical object. */
+  --layer-control-bg:  #EFF6FF;  --layer-control-ink:  #1D4ED8;  --layer-control-soft:  #4C86E8;
+  --layer-impl-bg:     #ECFDF5;  --layer-impl-ink:     #047857;  --layer-impl-soft:     #279270;
+  --layer-assess-bg:   #FFFBEB;  --layer-assess-ink:   #A85A06;  --layer-assess-soft:   #BB7712;
+
+  /* --- type --------------------------------------------------------------- */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+
+  --fs-xs:   0.75rem;    /* 12px  chips, pointers            */
+  --fs-sm:   0.8125rem;  /* 13px  code, table cells          */
+  --fs-base: 1rem;       /* 16px  body                       */
+  --fs-md:   1.125rem;   /* 18px  gist                       */
+  --fs-lg:   1.375rem;   /* 22px  h3                         */
+  --fs-xl:   1.75rem;    /* 28px  h2                         */
+  --fs-2xl:  2.25rem;    /* 36px  h1                         */
+
+  --lh-tight: 1.25;
+  --lh-body:  1.65;
+
+  /* --- spacing, 4px base --------------------------------------------------- */
+  --s1: 0.25rem;  --s2: 0.5rem;   --s3: 0.75rem;  --s4: 1rem;
+  --s5: 1.5rem;   --s6: 2rem;     --s7: 3rem;     --s8: 4rem;
+
+  /* The reading measure, set to the reading column rather than to a character
+     count. 54rem is 864px, which is exactly what main leaves once its padding,
+     the column gap and the 13.5rem rail are taken off 1160px, so prose fills
+     the column it sits in instead of stopping short of it.
+
+     It was 78ch, about 650px, which left 215px of empty column between the end
+     of every line and the start of the rail. Bounded on both sides, that reads
+     as a hole rather than as margin. A previous pass narrowed the page and the
+     gutter to close it and closed about half.
+
+     Two things make the cap still worth having. Below 1120px there is no rail,
+     so the column is the full 1112px and this holds a line to the same length
+     it has on a wide screen. And a reader who has raised their browser's font
+     size scales the rem with it, at which point the cap stops binding and the
+     column governs, which is the right way round.
+
+     tools/verify.py --css recomputes the column from the same four values and
+     fails if the two drift apart. */
+  --measure: 54rem;
+  --radius:  6px;
+  --radius-sm: 4px;
+}
+
+[data-theme="dark"] {
+  --bg:             #12161C;
+  --bg-subtle:      #1A1F27;
+  --bg-inset:       #222833;
+  --bg-code:        #171C24;
+  --text:           #E8ECF1;
+  --text-muted:     #A3AEBC;
+  --text-faint:     #8592A2;
+  --border:         #2E3742;
+  --border-strong:  #606D7C;   /* 3.44:1 on --bg */
+  /* The same brand hue as the light block, lightened rather than darkened to
+     reach the contrast that block explains. */
+  --accent:         #96B0E8;   /* 8.36:1 on --bg, 7.62:1 on --bg-subtle */
+  --accent-fg:      #0B1017;   /* 8.79:1 on --accent */
+  --focus:          #96B0E8;
+  --micon-pdf:      #EE8A80;   /* 7.42:1 on --bg */
+
+  /* Strength and risk, matched to within a hundredth here too. See the note in
+     the light block for why the pairing is deliberate. */
+  --strength:       #4AC26B;   /* 7.97:1 on --bg, 7.26:1 on --bg-subtle */
+  --risk:           #F98E85;   /* 7.98:1 on --bg, 7.28:1 on --bg-subtle */
+
+  /* --- the inline JSON view ------------------------------------------------
+     A code surface that does not follow the theme. The worked example's JSON is
+     read as an artifact rather than as page content, and an artifact that
+     inverts when the reader flips the theme reads as part of the page. So these
+     five are identical in both themes, which is why they are written twice
+     rather than inherited: tools/verify.py --a11y resolves tokens per theme and
+     a token defined in one block only would be missing from the other.
+
+     Contrast is measured against --code-bg rather than --bg, because nothing
+     here is ever drawn on the page background. */
+  --code-bg:        #12161C;
+  --code-fg:        #E8ECF1;   /* 14.8:1 on --code-bg */
+  --code-dim:       #8592A2;   /* 5.9:1 on --code-bg, for context lines */
+  --code-focus:     #1E2733;   /* the lift under the lines being pointed at */
+  --code-rule:      #303A47;
+  /* Syntax, on the same fixed surface. Defined in both blocks with the same
+     values so the two definitions cannot drift. */
+  --code-key:       #8FC8FF;   /* 8.9:1 on --code-bg */
+  --code-str:       #A5D6FF;   /* 10.6:1 */
+  --code-num:       #F2CC60;   /* 11.5:1 */
+  --code-bool:      #FFA657;   /* 9.6:1 */
+  --code-warn-bg:   #3D2D0A;
+  --shadow:         0 1px 2px rgb(0 0 0 / 40%), 0 4px 14px rgb(0 0 0 / 32%);
+
+  --slot-1: #E55652;
+  --slot-2: #6E8CFE;
+  --slot-3: #00B2B6;
+  --slot-4: #49B6FF;
+  --slot-5: #B5C444;
+  --slot-6: #2AE49E;
+
+  --slot-1-bg: #452C29;  --slot-1-fg: #FFB0A7;  --slot-1-border: #AE504A;
+  --slot-2-bg: #2F3144;  --slot-2-fg: #B9BFFF;  --slot-2-border: #6675C0;
+  --slot-3-bg: #153839;  --slot-3-fg: #00D9DE;  --slot-3-border: #009599;
+  --slot-4-bg: #213445;  --slot-4-fg: #8DCAFF;  --slot-4-border: #279BDF;
+  --slot-5-bg: #333420;  --slot-5-fg: #C1CB66;  --slot-5-border: #9EA654;
+  --slot-6-bg: #20372C;  --slot-6-fg: #5FE0A6;  --slot-6-border: #59C191;
+
+  --empty-absent-fill: #262D38;
+
+  /* Same three hues, lifted to L* 71 and held equal. 8.2:1 on --bg. */
+  --approach-assessment: #00C3B3;
+  --approach-catalog:    #60B4FD;
+  --approach-component:  #EA91CA;
+
+  /* The layers keep their hue and invert their lightness: the chip becomes a
+     dark tint of the same hue and the ink lifts off it. Same three-way coding,
+     read the same way round, at ratios that are higher here than in light. */
+  --layer-control-bg:  #16243D;  --layer-control-ink:  #8CBAFF;  --layer-control-soft:  #5E8FD6;
+  --layer-impl-bg:     #12291F;  --layer-impl-ink:     #5FD3A8;  --layer-impl-soft:     #3F9C79;
+  --layer-assess-bg:   #2C2411;  --layer-assess-ink:   #F0B45E;  --layer-assess-soft:   #BE8636;
+}
+
+/* Sub-questions inherit their parent hue: 6a and 6b are the two forms of
+   satisfaction. They are distinguished by label and by geometry, never by hue
+   alone. There was a third, 2b, late binding under the control tie; it was
+   removed as a question, and its tokens with it. */
+:root, [data-theme="dark"] {
+  --slot-6a: var(--slot-6);
+  --slot-6a-bg: var(--slot-6-bg);
+  --slot-6a-fg: var(--slot-6-fg);
+  --slot-6a-border: var(--slot-6-border);
+  --slot-6b: var(--slot-6);
+  --slot-6b-bg: var(--slot-6-bg);
+  --slot-6b-fg: var(--slot-6-fg);
+  --slot-6b-border: var(--slot-6-border);
+}
+
+/* ==========================================================================
+   2. RESET
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* The site header is sticky. Without this, following any same-page link
+     lands the target heading underneath it. */
+  scroll-padding-top: calc(var(--header-h, 4.5rem) + var(--s3));
+}
+body { margin: 0; }
+h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol { margin: 0; }
+ul[class], ol[class] { list-style: none; padding: 0; }
+img, svg { max-width: 100%; display: block; }
+button, input, select, textarea { font: inherit; color: inherit; }
+table { border-collapse: collapse; width: 100%; }
+:target { scroll-margin-top: var(--s7); }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+}
+
+.skip-link {
+  position: absolute; left: var(--s2); top: calc(-1 * var(--s8));
+  background: var(--accent); color: var(--accent-fg);
+  padding: var(--s2) var(--s4); border-radius: var(--radius);
+  z-index: 100; transition: top 120ms ease;
+}
+.skip-link:focus { top: var(--s2); }
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky; top: 0; z-index: 20;
+}
+.site-header__inner {
+  max-width: 1180px; margin: 0 auto; padding: var(--s3) var(--s5);
+  display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap;
+}
+.site-title { font-size: var(--fs-base); font-weight: 650; letter-spacing: -0.01em; }
+.site-title a { color: inherit; text-decoration: none;
+                display: flex; align-items: center; gap: var(--s3); }
+
+/* --- the Foundation's mark -----------------------------------------------
+   Two files rather than one. The Foundation ships a reversed mark for dark
+   grounds, and the theme here is a data-theme attribute a reader sets rather
+   than a media query, so <picture> could not follow it.
+
+   The mark is the one thing on this page drawn in the brand blue at full
+   strength, 4.16:1. WCAG exempts a logotype from the contrast it holds text
+   to, which is the whole reason --accent had to move off that colour and this
+   does not. It is decorative here: the link it sits in is named by the title
+   beside it, so a second accessible name would only be announced twice. */
+.site-logo { display: block; flex: none; height: 2.25rem; width: auto; }
+.site-logo--dark { display: none; }
+[data-theme="dark"] .site-logo--light { display: none; }
+[data-theme="dark"] .site-logo--dark { display: block; }
+
+.site-nav ul { display: flex; flex-wrap: wrap; gap: var(--s1); list-style: none; margin: 0; padding: 0; }
+.site-nav a {
+  display: block; padding: var(--s1) var(--s3);
+  font-size: var(--fs-sm); color: var(--text-muted);
+  text-decoration: none; border-radius: var(--radius-sm);
+}
+.site-nav a:hover { background: var(--bg-inset); color: var(--text); }
+.site-nav a[aria-current="page"] {
+  color: var(--text); font-weight: 620;
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+/* --- the page grid -------------------------------------------------------
+   Two columns on a wide screen: a reading column held at --measure, and a rail
+   the table of contents moves into. The rail is what stops a 1440px viewport
+   from being a third empty, and it costs no markup: the .toc that was already
+   in every page is placed into it by grid column, so it still works with
+   scripting off and still prints in document order.
+
+   The columns are named LINES, not a named AREA, and the difference is the
+   whole layout. grid-area: content resolves to the named area's row and
+   column, which is one cell, so every section of every page renders stacked
+   on top of the others. grid-column: content pins only the column and leaves
+   the row to auto-placement, which is what lets the sections flow downward.
+   That one-word bug shipped once and is now a verify.py --css assertion.
+
+   Anything that is a picture rather than a sentence drops the measure cap and
+   takes the full reading column. It does not extend under the rail: the rail
+   is occupied top to bottom by the sticky toc, and a grid places two items in
+   one cell by overlapping them, which is the bug this comment starts with. */
+
+/* The page was 1280 wide with a 3rem gutter and a 15rem rail, which left the
+   reading column about 930px against a 700px measure. The 230px that fell
+   between the end of a paragraph and the start of the rail read as a hole
+   rather than as margin, because it was bounded on both sides. Narrowing the
+   page and the gutter closed part of it, and widening the measure to a
+   character count closed part of it, and 215px was still left.
+
+   The measure is the column now, not a character count: 54rem against the
+   864px this leaves. Prose fills the column it is given, and the four numbers
+   below are the ones --measure is derived from, so changing any of them
+   without changing it fails tools/verify.py --css. */
+main {
+  max-width: 1160px; margin: 0 auto;
+  padding: var(--s6) var(--s5) var(--s8);
+  display: grid;
+  grid-template-columns: [content-start] minmax(0, 1fr) [content-end];
+  column-gap: var(--s6);
+  align-items: start;
+}
+
+/* The measure is a property of PROSE, not of the page. An earlier revision
+   capped every child of main at the measure, which put every figure, table
+   and board inside a 600px box: diagrams have a 720px floor below which
+   their smallest label drops under 12px, so each one grew a horizontal
+   scrollbar while the column beside it sat empty. Sections now take the full
+   reading column and only the things made of sentences are held to the
+   measure, wherever they sit. */
+main > * { grid-column: content; min-width: 0; }
+
+main .lede,
+main .tier2,
+main .callout,
+main figcaption,
+main section > p,
+main > p { max-width: var(--measure); }
+
+@media (min-width: 1120px) {
+  main {
+    grid-template-columns: [content-start] minmax(0, 1fr) [content-end rail-start] 13.5rem [rail-end];
+  }
+  main > .toc {
+    grid-column: rail;
+    /* Span far more rows than any page has children, so the rail is the
+       toc's for the grid's whole height and the sticky box can slide the
+       length of the page. The empty implicit rows cost nothing: they are
+       auto-sized, there is no row gap, and the toc's own height distributes
+       across rows the content has already made tall. */
+    grid-row: 1 / span 999;
+    /* The site header is sticky, so the toc must stick below it or the
+       header covers the top of the list. site.js measures the real header
+       and writes --header-h; the fallback only has to be close. */
+    position: sticky; top: calc(var(--header-h, 4.5rem) + var(--s4));
+    margin-block: 0;
+    max-height: calc(100vh - var(--header-h, 4.5rem) - var(--s7));
+    overflow-y: auto;
+  }
+  main > .toc ol { columns: 1; }
+}
+
+.prose { max-width: var(--measure); }
+.prose > * + * { margin-top: var(--s4); }.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.site-footer__inner {
+  max-width: 1180px; margin: 0 auto; padding: var(--s5);
+  display: grid; gap: var(--s3);
+}
+.site-footer a { color: var(--text-muted); }
+
+/* ==========================================================================
+   4. TYPOGRAPHY
+   ========================================================================== */
+
+h1, h2, h3, h4 { line-height: var(--lh-tight); font-weight: 650; letter-spacing: -0.015em; }
+h1 { font-size: var(--fs-2xl); margin-bottom: var(--s3); }
+h2 { font-size: var(--fs-xl);  margin-top: var(--s7); margin-bottom: var(--s3);
+     padding-bottom: var(--s2); border-bottom: 1px solid var(--border); }
+h3 { font-size: var(--fs-lg);  margin-top: var(--s6); margin-bottom: var(--s2); }
+h4 { font-size: var(--fs-base); margin-top: var(--s5); margin-bottom: var(--s2); }
+
+.lede { font-size: var(--fs-md); color: var(--text-muted); }
+a { color: var(--accent); text-underline-offset: 2px; }
+code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
+:not(pre) > code {
+  background: var(--bg-inset); padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm); word-break: break-word;
+}
+.prose ul, .prose ol { padding-left: var(--s5); }
+.prose li + li { margin-top: var(--s1); }
+
+/* ==========================================================================
+   5. COMPONENTS
+   ========================================================================== */
+
+/* --- .tier2 : the explanatory body --------------------------------------- */
+.tier2 { max-width: var(--measure); }
+.tier2 > * + * { margin-top: var(--s4); }
+
+/* --- .slot-chip : one question's number and name, the atom of the grammar - */
+.slot-chip {
+  display: inline-flex; align-items: baseline; gap: var(--s2);
+  padding: 0.1em 0.55em 0.15em;
+  border: 1px solid var(--chip-border, var(--border-strong));
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--chip-bg, var(--bg-inset));
+  color: var(--chip-fg, var(--text));
+  font-size: var(--fs-xs); line-height: 1.5; white-space: nowrap;
+  vertical-align: baseline;
+}
+.slot-chip__n { font-weight: 700; font-variant-numeric: tabular-nums; }
+.slot-chip__name { font-weight: 500; }
+
+.slot-1  { --chip-bg: var(--slot-1-bg);  --chip-fg: var(--slot-1-fg);  --chip-border: var(--slot-1-border);  --slot: var(--slot-1); }
+.slot-2  { --chip-bg: var(--slot-2-bg);  --chip-fg: var(--slot-2-fg);  --chip-border: var(--slot-2-border);  --slot: var(--slot-2); }
+.slot-3  { --chip-bg: var(--slot-3-bg);  --chip-fg: var(--slot-3-fg);  --chip-border: var(--slot-3-border);  --slot: var(--slot-3); }
+.slot-4  { --chip-bg: var(--slot-4-bg);  --chip-fg: var(--slot-4-fg);  --chip-border: var(--slot-4-border);  --slot: var(--slot-4); }
+.slot-5  { --chip-bg: var(--slot-5-bg);  --chip-fg: var(--slot-5-fg);  --chip-border: var(--slot-5-border);  --slot: var(--slot-5); }
+.slot-6  { --chip-bg: var(--slot-6-bg);  --chip-fg: var(--slot-6-fg);  --chip-border: var(--slot-6-border);  --slot: var(--slot-6); }
+.slot-6a { --chip-bg: var(--slot-6a-bg); --chip-fg: var(--slot-6a-fg); --chip-border: var(--slot-6a-border); --slot: var(--slot-6a); }
+.slot-6b { --chip-bg: var(--slot-6b-bg); --chip-fg: var(--slot-6b-fg); --chip-border: var(--slot-6b-border); --slot: var(--slot-6b); }
+
+/* Sub-questions add a geometric mark so they never rely on the shared hue. */
+.slot-6a .slot-chip__n::after,
+.slot-6b .slot-chip__n::after { content: ""; }
+.slot-chip.slot-6a, .slot-chip.slot-6b { border-left-style: double; border-left-width: 4px; }
+
+/* --- the five answer states, as variables --------------------------------
+   These set tokens only. They are worn by .state-swatch, by a matrix cell and
+   by a row of the answer list, and each of those decides for itself what to do
+   with them.
+
+   They used to paint as well as set: a border style, a hatch fill and a dot,
+   applied to whatever carried the class. That was written when the answer
+   states were a row of boxes and the box was the message. On the list that
+   replaced it the row inherited all of it, so every row carried a coloured
+   border restating the state its own swatch already showed. Painting now lives
+   with the thing being painted. */
+.is-filled  { --cell-bg: var(--chip-bg); --cell-fg: var(--chip-fg); --cell-border: var(--chip-border); }
+.is-partial { --cell-bg: transparent;    --cell-fg: var(--chip-fg);   --cell-border: var(--chip-border); }
+.is-empty-absent { --cell-bg: transparent; --cell-fg: var(--text-faint); --cell-border: var(--empty-line); }
+
+.slot-strip__legend {
+  display: flex; flex-wrap: wrap; gap: var(--s4);
+  font-size: var(--fs-xs); color: var(--text-muted); margin-top: var(--s3);
+}
+.slot-strip__legend span { display: inline-flex; align-items: center; gap: var(--s2); }/* --- .snippet : tier 3 --------------------------------------------------- */
+.snippet {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-code); margin-block: var(--s4);
+}
+.snippet > summary {
+  display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap;
+  padding: var(--s3) var(--s4); cursor: pointer; list-style: none;
+  border-radius: var(--radius);
+}
+.snippet > summary::-webkit-details-marker { display: none; }
+.snippet > summary::before {
+  content: "\25B8"; color: var(--text-faint); flex: none;
+  transition: transform 120ms ease;
+}
+.snippet[open] > summary::before { transform: rotate(90deg); }
+.snippet[open] > summary { border-bottom: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+.snippet__title { font-weight: 600; font-size: var(--fs-sm); }
+.snippet__body { padding: 0; }
+.snippet__bar {
+  display: flex; gap: var(--s2); align-items: center;
+  padding: var(--s2) var(--s4); border-bottom: 1px solid var(--border);
+  font-size: var(--fs-xs);
+}
+.snippet { min-width: 0; max-width: 100%; }
+.snippet__body { min-width: 0; }
+
+/* --- the code window -------------------------------------------------------
+   A dark window in both themes. JSON is the one thing on the page that is not
+   prose, and giving it a surface of its own stops it reading as more body text.
+   The colours are fixed rather than themed for the same reason: an extract
+   should look identical to two readers discussing it.
+
+   max-width:100% with overflow-x:auto is what keeps a long line inside the
+   column. Without it the widest line sets the width of the block and the whole
+   answer spans past its container. */
+.snippet pre {
+  margin: 0; padding: var(--s4);
+  overflow-x: auto; max-width: 100%; min-width: 0;
+  font-size: var(--fs-sm); line-height: 1.55; tab-size: 2;
+  background: var(--code-bg); color: var(--code-fg);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.snippet pre code { display: block; min-width: 0; }
+
+/* --- the part that answers the question ----------------------------------
+   A block is a whole document, because what is absent from one is often the
+   finding, so the lines a reader is being sent to look at arrive wrapped in
+   metadata. On a page putting one question to three approaches, the part that
+   differs is the part worth seeing first.
+
+   Two channels, not one. The lit lines take the lift the --code-focus token
+   exists for, and the rest drop to --code-dim, which is the token named for
+   context lines and is still AA on the code surface: dimmed, not disabled, and
+   a reader who wants the whole document can still read every line of it.
+
+   Dimming has to reach the syntax colours too. A key or a string on a context
+   line carries its own colour, which would otherwise sit at full strength
+   inside a line that is meant to have receded. */
+.snippet__line { display: block; margin-inline: calc(var(--s4) * -1); padding-inline: var(--s4); }
+.snippet__line:not(.is-lit) { color: var(--code-dim); }
+.snippet__line:not(.is-lit) [class^="tok-"] { color: inherit; }
+.snippet__line.is-lit {
+  background: var(--code-focus); color: var(--code-fg);
+  box-shadow: inset 0.2rem 0 0 var(--code-rule);
+}
+.snippet pre .tok-key    { color: var(--code-key); }
+.snippet pre .tok-str    { color: var(--code-str); }
+.snippet pre .tok-num    { color: var(--code-num); }
+.snippet pre .tok-bool   { color: var(--code-bool); font-weight: 600; }
+.snippet pre .tok-null   { color: var(--code-dim); font-style: italic; }
+.snippet pre .tok-punct  { color: var(--code-dim); }
+.snippet pre .tok-md-h   { color: var(--code-key); font-weight: 700; }
+.snippet pre .tok-md-code{ color: var(--code-str); }
+.snippet pre .tok-trunc  { background: var(--code-warn-bg); color: var(--code-num); }
+.btn {
+  border: 1px solid var(--border-strong); background: var(--bg);
+  color: var(--text); border-radius: var(--radius-sm);
+  padding: var(--s1) var(--s3); font-size: var(--fs-xs); cursor: pointer;
+}
+.btn:hover { background: var(--bg-inset); }
+.btn[data-copied="true"] { border-color: var(--slot-6-border); color: var(--slot-6-fg); }
+
+/* Syntax colours. Deliberately low-chroma so they never compete with the
+   palette, which is the site's meaningful colour channel. */
+.tok-key    { color: var(--slot-2-fg); }
+.tok-str    { color: var(--slot-6-fg); }
+.tok-num    { color: var(--slot-1-fg); }
+.tok-bool   { color: var(--slot-5-fg); font-weight: 600; }
+.tok-null   { color: var(--text-faint); font-style: italic; }
+.tok-punct  { color: var(--text-muted); }
+.tok-md-h   { color: var(--slot-2-fg); font-weight: 700; }
+.tok-md-code{ color: var(--slot-3-fg); }.tok-trunc  { background: var(--slot-5-bg); color: var(--slot-5-fg); padding: 0 0.25em; border-radius: 2px; }
+
+/* --- .quote -------------------------------------------------------------- */
+.quote {
+  border-left: 3px solid var(--border-strong);
+  padding: var(--s2) 0 var(--s2) var(--s4);
+  margin-block: var(--s4); max-width: var(--measure);
+}
+.quote p { font-size: var(--fs-md); line-height: 1.55; }
+.quote footer {
+  margin-top: var(--s2); font-size: var(--fs-sm); color: var(--text-muted);
+}
+.quote footer b { font-weight: 600; color: var(--text); }
+
+/* --- .status-badge : identical treatment for all three ------------------- */
+.status-badge {
+  display: inline-flex; align-items: center; gap: var(--s2);
+  padding: 0.1em 0.55em; border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm); background: var(--bg-inset);
+  color: var(--text-muted); font-size: var(--fs-xs); font-weight: 550;
+}
+.status-badge::before { content: "\24D8"; font-style: normal; }
+
+/* --- .pillars -------------------------------------------------------------
+   Two columns of equal width with a narrow bridge between them. The bridge is
+   the point of the component: what sits in it belongs to neither side and is
+   reached from both, so it is drawn as a channel rather than as a third column
+   of the same weight. Equal width is by construction, 1fr against 1fr, so
+   neither side can be given more room by editing prose.
+
+   Below 900px it stacks and the bridge becomes a horizontal band, keeping the
+   same reading order: left, bridge, right. */
+
+.pillars {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 13rem) 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-block: var(--s5);
+}
+.pillar {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+  padding: var(--s4);
+  display: flex; flex-direction: column; gap: var(--s3);
+  min-width: 0;
+}
+.pillar__label {
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.pillar__title { margin: 0; font-size: var(--fs-base); font-weight: 650;
+                 line-height: var(--lh-tight); letter-spacing: -0.01em; }
+.pillar p { margin: 0; font-size: var(--fs-sm); }/* The candidate that is also the right-hand pillar's model. Marked, because a
+   reader who took the left column as "not the assessment plan" would have the
+   division wrong. */.bridge {
+  display: flex; flex-direction: column; align-items: stretch;
+  justify-content: center; text-align: center;
+  padding: var(--s3) var(--s3);
+  position: relative;
+}
+/* The channel. Drawn behind the label so the two pillars read as joined. */
+.bridge::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%;
+  border-top: 2px dashed var(--border-strong);
+}
+.bridge__inner {
+  position: relative;
+  background: var(--bg);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: var(--s3);
+  display: grid; gap: var(--s2);
+}
+.bridge__label {
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.bridge .pillar__title { font-size: var(--fs-sm); }
+.bridge p { margin: 0; font-size: var(--fs-xs); color: var(--text-muted); text-align: left; }
+.bridge .slot-chip { justify-self: center; }
+
+@media (max-width: 900px) {
+  .pillars { grid-template-columns: 1fr; gap: var(--s3); }
+  .bridge { padding: 0; }
+  .bridge::before { display: none; }
+  .bridge__inner { text-align: left; }
+}
+
+/* --- media-type icons and file links --------------------------------------
+   A file is a page with its type reversed out of a filled badge; a page on a
+   publisher's site is a globe. Drawn inline, so they need no font and no
+   request, and they inherit currentColor.
+
+   The first drawing lettered the type inside the page outline at 16px, and the
+   letters were a smudge: three characters in about 11 units of a 20 unit box.
+   The badge overhangs the page on both sides, which buys about 70% more width
+   for the same icon, and it reads as a shape before the letters resolve. The
+   icon is also drawn larger here than an inline icon would be, because it is
+   the whole link and there is no text beside it to carry the meaning. */
+
+/* The icon letters are SVG text, so they would otherwise land in a copied
+   selection as a prefix on the filename. The icon is decorative and the
+   link carries its own aria-label, so take it out of selection. */
+.micon-wrap { display: inline-flex; flex: none; user-select: none; }
+.micon { width: 1.15em; height: 1.15em; flex: none; vertical-align: -0.2em; }.micon__badge { fill: currentColor; }
+.micon__label { fill: var(--bg); font-size: 6.4px; font-weight: 700;
+                text-anchor: middle; font-family: var(--font-sans);
+                letter-spacing: 0; }
+.micon--json .micon__label { font-size: 5.6px; letter-spacing: -0.2px; }
+/* The only media type with a colour convention of its own. */
+.micon--pdf { color: var(--micon-pdf); }
+
+/* A row of icons, in a line. Documents in a row are siblings, not a list to be
+   read down, and stacking them was what made a single benchmark take three
+   lines in the table.
+
+   nowrap, not wrap: white-space does not govern flex items, so a squeezed
+   column would wrap four icons onto two lines and put the row back where it
+   started. The widest row holds four, which is about 170px. */
+.filelist { display: flex; flex-wrap: nowrap; align-items: center; gap: 2px; }
+
+.filelink {
+  display: flex; align-items: baseline; gap: var(--s2);
+  padding: 2px 0; font-size: var(--fs-sm);
+  text-decoration: none; color: var(--accent);
+}
+
+/* Icon only. With no text to underline, the hit area has to be the feedback:
+   a 40px square, which is reachable on a touch screen, and a tinted box on
+   hover and on focus so a keyboard reader can see where they are. */
+.filelink--icon {
+  align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem; padding: 0;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+}
+.filelink--icon:hover, .filelink--icon:focus-visible {
+  background: var(--bg-inset); border-color: var(--border);
+}
+.filelink--icon .micon { width: 1.9em; height: 1.9em; vertical-align: 0; }
+
+@media print {
+  .micon { display: none; }
+  /* On paper an icon cannot be clicked. The icon-only links print what they
+     stand for instead of a glyph that leads nowhere. */
+  .filelink--icon { width: auto; height: auto; display: block; border: 0; }
+  .filelink--icon::after { content: attr(title); font-size: var(--fs-xs); color: #000; }
+  .filelist { display: block; }
+}
+
+/* --- .sources -------------------------------------------------------------
+   The guidance read as input. A plain table: one row per benchmark or guide,
+   the publisher it came from, what of its material is held, and the documents.
+
+   Every row is one line. Thirteen rows that each wrap to two are a list of
+   twenty-six things to scan, and the shape of the corpus stops being legible.
+   The cost is a table that can outgrow its column, so .table-wrap scrolls it
+   rather than letting a cell reflow. */
+
+.sources { font-size: var(--fs-sm); width: 100%; }
+.sources caption {
+  caption-side: top; text-align: left;
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); padding-bottom: var(--s2);
+}
+.sources th, .sources td {
+  border-top: 1px solid var(--border);
+  padding: var(--s2) var(--s3) var(--s2) 0;
+  vertical-align: middle; text-align: left; white-space: nowrap;
+}
+.sources thead th {
+  border-top: 0; border-bottom: 1px solid var(--border-strong);
+  font-weight: 650; font-size: var(--fs-xs);
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted);
+}
+.sources tbody th { font-weight: 650; padding-right: var(--s5); }
+.sources td:last-child { padding-right: 0; }
+/* The release read, beside the name and subordinate to it. */
+.sources__version {
+  margin-left: var(--s2); font-size: var(--fs-xs);
+  color: var(--text-muted); font-variant-numeric: tabular-nums;
+}
+.sources__none { color: var(--text-faint); font-size: var(--fs-xs); }
+
+/* --- .sources-panel : the table, closed until it is wanted -----------------
+   Fourteen rows of provenance is reference material, not the argument, and
+   open by default it pushed the argument below the fold on the one page a
+   newcomer arrives at. Built on <details> for the same three reasons as
+   .panel: it is keyboard reachable and announced with no script, print opens
+   every disclosure so a printed page is still the whole document, and it needs
+   no state of its own. */
+.sources-panel {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); margin-block: var(--s5);
+}
+.sources-panel > summary {
+  cursor: pointer; list-style: none;
+  padding: var(--s3) var(--s4);
+  display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap;
+  border-radius: var(--radius);
+}
+.sources-panel > summary::-webkit-details-marker { display: none; }
+.sources-panel > summary::before {
+  content: "\25B8"; color: var(--text-faint); flex: none;
+  transition: transform 120ms ease;
+}
+.sources-panel[open] > summary::before { transform: rotate(90deg); }
+.sources-panel[open] > summary {
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.sources-panel > summary:hover { background: var(--bg-subtle); }
+.sources-panel > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.sources-panel__title { font-weight: 650; font-size: var(--fs-sm); flex: none; }
+.sources-panel__sub {
+  font-size: var(--fs-xs); color: var(--text-muted);
+  flex: 1 1 20ch; min-width: 0;
+}
+.sources-panel__hint {
+  margin-left: auto; flex: none;
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--accent); white-space: nowrap;
+}
+.sources-panel[open] > summary .sources-panel__hint::after { content: " \2212"; }
+.sources-panel:not([open]) > summary .sources-panel__hint::after { content: " +"; }
+.sources-panel__body { padding: var(--s4); }
+.sources-panel__body .table-wrap { margin-block: 0; }
+
+@media (max-width: 768px) {
+  .sources thead { display: none; }
+  .sources tr { display: block; border-top: 1px solid var(--border); padding: var(--s3) 0; }
+  .sources th, .sources td { display: block; border: 0; padding: 0 0 var(--s2); white-space: normal; }
+  .sources td::before {
+    content: attr(data-label) ": "; font-weight: 650;
+    color: var(--text-muted); font-size: var(--fs-xs);
+  }
+}
+
+@media print {
+  /* Nothing scrolls on paper, so the cells reflow rather than run off the page. */
+  .sources th, .sources td { white-space: normal; vertical-align: top; }
+}
+
+/* --- .chain ---------------------------------------------------------------
+   One option's pattern, as three steps: where the rule is written, where the
+   check is written, and where the response is recorded. Three rows rather than
+   three columns, because at a pillar's width three side-by-side boxes leave
+   about 90px each and the model names do not fit.
+
+   The row accent reuses the question palette: the rule is question 1, the check
+   is question 3, the response is question 6. A reader who has met those chips
+   elsewhere on the site meets the same three colours here. */
+
+.option { display: grid; gap: var(--s2); }
+.option + .option { margin-top: var(--s4); padding-top: var(--s4); border-top: 1px solid var(--border); }
+.option__label {
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.option__label b { font-weight: 650; color: var(--text); text-transform: none; letter-spacing: 0; }
+.option__eg { font-size: var(--fs-xs); color: var(--text-muted); margin: 0; }
+
+.chain { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; }
+.chain__row {
+  display: grid; grid-template-columns: 5.25rem minmax(0, 1fr);
+  gap: var(--s2); align-items: baseline;
+  padding: var(--s2) var(--s3);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--chip-border, var(--border-strong));
+  border-radius: 0;
+  font-size: var(--fs-sm);
+}
+.chain__label {
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--chip-fg, var(--text-muted));
+}
+.chain__where { color: var(--text); min-width: 0; }
+.chain__where em { color: var(--text-muted); font-style: normal; font-size: var(--fs-xs); display: block; }
+/* Applied to the response row of every option, so the annotation is symmetric.
+   No option publishes the artifact its response step names. *//* --- .callout ------------------------------------------------------------ */
+.callout {
+  border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
+  border-radius: var(--radius); padding: var(--s4);
+  background: var(--bg-subtle); margin-block: var(--s4);
+  max-width: var(--measure); font-size: var(--fs-sm);
+}
+.callout__label {
+  display: block; font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); margin-bottom: var(--s2);
+}.callout--not-established{ border-left-color: var(--slot-5-border); border-left-style: dashed; }
+
+/* --- .criteria-table ----------------------------------------------------- */
+.table-wrap { overflow-x: auto; margin-block: var(--s5); }
+.criteria-table { font-size: var(--fs-sm); min-width: 720px; }
+.criteria-table.register { min-width: 640px; }
+.criteria-table th, .criteria-table td {
+  border: 1px solid var(--border); padding: var(--s2) var(--s3);
+  text-align: left; vertical-align: top;
+}
+.criteria-table thead th {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--bg-inset); font-weight: 650;
+}
+.criteria-table tbody th {
+  position: sticky; left: 0; z-index: 1;
+  background: var(--bg); font-weight: 600; min-width: 190px;
+}
+.criteria-table__who { color: var(--text-muted); font-size: var(--fs-xs); display: block; }
+
+/* --- .matrix : the six-question answer matrix --------------------------- */
+.matrix { font-size: var(--fs-sm); min-width: 780px; }
+.matrix th, .matrix td {
+  border: 1px solid var(--border); padding: var(--s3); vertical-align: top; text-align: left;
+}
+.matrix thead th { position: sticky; top: 0; z-index: 2; background: var(--bg-inset); }
+.matrix tbody th { position: sticky; left: 0; z-index: 1; background: var(--bg); min-width: 180px; }.matrix__note { color: var(--text-muted); }
+.matrix button.matrix__toggle {
+  border: 0; background: none; padding: 0; color: var(--accent);
+  font-size: var(--fs-xs); cursor: pointer; text-align: left; text-decoration: underline;
+}
+/* One section per question, three blocks per section, each with its own anchor
+   so a link from the matrix lands on the lines rather than at the top. */
+.exwalk { margin-block: var(--s7); }
+.exwalk h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s3); }/* A block the reader was sent to, so the anchor is visible on arrival. *//* The code surface. Dark in both themes: this is an artifact rather than page
+   content, and a code block that inverts with the theme reads as prose. *//* The lines the question is about. Lit and lifted, so the run of them has an
+   edge and the distinction survives without colour. *//* --- .published : what a group actually shipped, marked as reference -------
+   The approach pages walk our own encodings, one pair of rules in all three
+   shapes. Beside that they state what the group's published content does about
+   the same question, and for several questions the answer is nothing. Both are
+   true and they answer different questions, but unlabelled and adjacent they
+   read as one claim disagreeing with itself: an encoding that models a subject,
+   directly above a cell reading "not modelled".
+
+   So this block is labelled and set back. Every publisher-specific identifier
+   on the page lives inside one, which is the point: the corpora are reference
+   here, not the argument. */
+.published {
+  border-left: 3px solid var(--border-strong); padding: var(--s2) 0 var(--s2) var(--s4);
+  margin-block: var(--s4); max-width: var(--measure);
+}.published > p { margin: 0 0 var(--s2); }
+.published > p:last-child { margin-bottom: 0; }
+.published .snippet { margin-top: var(--s3); }
+
+/* --- .qacc : one question at a time, north to south -----------------------
+   The same answers as the matrix, without the columns. A four-column table
+   gives every cell a quarter of the width, so the construct wraps and the note
+   wraps harder, and a reader following one question reads across a row while
+   their eye wants to go down. Here the page runs downward: one accordion per
+   question, and inside it the three approaches stacked, each with the full
+   width.
+
+   Closed by default, so the page opens as a list of six questions. Six
+   questions times three approaches open at once is not a page anyone holds. */
+.qacc {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); margin-block: var(--s3);
+}
+.qacc[open] { border-color: var(--border-strong); }
+.qacc > summary {
+  cursor: pointer; list-style: none;
+  display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap;
+  padding: var(--s3) var(--s4); border-radius: var(--radius);
+}
+.qacc > summary::-webkit-details-marker { display: none; }
+.qacc > summary::before {
+  content: "\25B8"; color: var(--text-faint); flex: none;
+  transition: transform 120ms ease;
+}
+.qacc[open] > summary::before { transform: rotate(90deg); }
+.qacc[open] > summary {
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.qacc > summary:hover { background: var(--bg-subtle); }
+.qacc > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.qacc__q { flex: 1 1 20ch; min-width: 0; font-weight: 650; }
+.qacc__hint {
+  margin-left: auto; flex: none;
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--accent); white-space: nowrap;
+}
+.qacc[open] > summary .qacc__hint::after { content: " \2212"; }
+.qacc:not([open]) > summary .qacc__hint::after { content: " +"; }
+
+/* One approach per block, stacked. Each gets the whole width, which is the
+   point of the rearrangement. */
+.qacc__body { padding: var(--s3) var(--s4) var(--s4); }
+.qacc__one {
+  display: grid; gap: var(--s2); padding: var(--s4) 0;
+  min-width: 0;
+}
+/* Nothing in an answer is capped at the measure, including the words. The
+   measure is for running prose, and an answer is not running prose: it is a
+   label-and-value pair, one or two sentences, and an extract. At 78ch the note
+   broke to a second line to carry a single word while a third of the accordion
+   sat empty beside it, which is the measure costing legibility rather than
+   buying it.
+
+   A grid item is min-width:auto by default, so a wide <pre> refuses to shrink
+   below its content. min-width:0 pins it, or a long line stretches the column
+   instead of scrolling inside it. */
+.qacc__one > * { min-width: 0; max-width: 100%; }
+/* The three answers used to sit one under another and needed a rule between
+   them. They are tabs now, so only one is ever visible and the rule would draw
+   a stray line above whichever was selected. The tab strip is the separator. */
+.qacc__tabs { margin-top: var(--s2); }
+.qacc__tabs > .tabs__list { flex-wrap: wrap; }
+.qacc__one { padding-top: 0; }
+.qacc__one.tabs__panel { padding-top: var(--s4); }
+.qacc__state {
+  margin: 0; display: flex; align-items: center; gap: var(--s2);
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* An absence, set like an answer. The two rows read the same way as Model and
+   Assembly above them, so a cell with nothing in it still has a shape. */
+.nothing__why {
+  display: grid; grid-template-columns: max-content 1fr;
+  gap: var(--s1) var(--s3); margin: 0; align-items: baseline;
+}
+.nothing__why dt {
+  font-size: var(--fs-xs); font-weight: 650; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.nothing__why dd { margin: 0; }
+
+/* --- the model and the assembly -------------------------------------------
+   Named the same way in every cell, and set as a pair rather than a sentence,
+   because the whole comparison turns on the model differing between the three.
+   The label column is fixed so the two rows line up down a column of answers. */
+.carrier {
+  display: grid; grid-template-columns: max-content 1fr;
+  gap: var(--s1) var(--s3); margin: 0 0 var(--s2);
+  align-items: baseline;
+}
+.carrier dt {
+  font-size: var(--fs-xs); font-weight: 650; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.carrier dd { margin: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+.carrier code {
+  font-size: var(--fs-sm); padding: 0 var(--s2);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle); border: 1px solid var(--border);
+}
+/* Every box rule below is qualified with `.carrier code`, and has to be.
+   `.carrier code` is (0,1,1) and sets the whole `border` shorthand, so a bare
+   `.carrier__prop` at (0,1,0) loses border-style, border-width and background
+   to it no matter where it sits in the file. That is not a style preference,
+   it is the cascade, and it silently discarded three declarations: the prop
+   box's dots, its weight, and this rule's stronger border colour. Only `color`
+   and `font-weight` ever reached the page, which is why the prop box arrived
+   tinted and solid.
+
+   `.carrier__assembly.is-proposed` escaped it by accident, being (0,2,0), which
+   is why the proposed box has looked right from the start and nothing else
+   did. */
+.carrier code.carrier__model { font-weight: 650; border-color: var(--border-strong); }
+
+/* A box in this row is drawn like the badge that declares it: same border
+   style, same hue, same 2px weight. Three borders, three mechanisms, one
+   vocabulary, and `verify.py --css` holds each pair to its badge so the two
+   cannot drift apart.
+
+   The weight matters more than it looks. These started at the 1px every other
+   box in the row uses, and 1px dotted is nearly a solid line at text size, so
+   the prop box read as an ordinary assembly with an odd tint. Dashes survive
+   1px; dots do not. */
+.carrier code.carrier__assembly.is-proposed,
+.carrier code.carrier__prop { border-width: 2px; background: var(--bg); }
+/* A proposed assembly is marked where it is named, so a reader does not have to
+   hold the proposal in their head to know which half of a pair is not OSCAL. */
+.carrier code.carrier__assembly.is-proposed {
+  border-style: dashed; border-color: var(--slot-2-border); color: var(--slot-2-fg);
+}
+/* A prop, in the publisher's own namespace, doing the job an assembly does in
+   the boxes beside it. */
+.carrier code.carrier__prop {
+  border-style: dotted; border-color: var(--slot-5-border); color: var(--slot-5-fg);
+  font-weight: 650;
+}
+
+/* --- how a capability is enabled ------------------------------------------
+   A badge, not a swatch. The geometry channel already carries the answer state,
+   and a second family of shapes in the same place would read as one vocabulary.
+
+   The three are separable with no colour at all: the border tells them apart
+   (solid, dashed, dotted) and each badge carries its own word. Colour is a
+   fourth cue for readers who have it, never the only one. */
+.mech-legend__item { display: flex; align-items: baseline; gap: var(--s2); }
+.mech-row { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0 0 var(--s2); }
+.mech {
+  display: inline-block; flex: none;
+  padding: 0 var(--s2); border-radius: var(--radius-sm);
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  border: 2px solid var(--border-strong); background: var(--bg);
+  color: var(--text-muted); white-space: nowrap;
+}
+.mech--assembly { border-style: solid;  border-color: var(--slot-6-border); color: var(--slot-6-fg); }
+.mech--proposed { border-style: dashed; border-color: var(--slot-2-border); color: var(--slot-2-fg); }
+.mech--prop     { border-style: dotted; border-color: var(--slot-5-border); color: var(--slot-5-fg); }
+
+/* The link out of a matrix cell. A link, not a control: it goes to a page. */.matrix__nojson { margin: 0; font-size: var(--fs-xs); color: var(--text-faint); }@media print {
+  /* The walkthrough is a document, so it prints whole. */}
+
+/* --- .state-swatch : the five answer states, inline, at text size --------
+   The same five marks the answer list uses, sized to sit beside a word. The
+   geometry carries the distinction, so the five separate in grayscale, in print
+   and for a reader who cannot tell the hues apart. */
+.state-swatch {
+  display: inline-block; position: relative; flex: none;
+  width: 22px; height: 15px; vertical-align: -2px; margin-right: var(--s2);
+  border: 1.5px solid var(--cell-border, var(--empty-line));
+  border-radius: 3px; background: var(--cell-bg, transparent);
+}
+.state-swatch.is-partial { border-style: dashed; }
+.state-swatch.is-empty-absent {
+  background-image: radial-gradient(var(--empty-dot) 0.8px, transparent 0.9px);
+  background-size: 4px 4px;
+}
+
+/* --- .slot-fill : how the three approaches answer one question -----------
+   One item per approach, same template, emitted by a loop over one ordered
+   list. Editorial rule 5 is a property of the markup here, not a thing to
+   remember while writing. */
+.slot-fill { display: grid; gap: var(--s5); margin-block: var(--s5); }
+.slot-fill__item {
+  border-top: 2px solid var(--border-strong);
+  padding-top: var(--s3);
+}
+.slot-fill__head { margin-top: 0; }
+.slot-fill__head .muted { font-weight: 400; font-size: var(--fs-sm); }
+.slot-fill__state {
+  display: flex; align-items: center; gap: var(--s1);
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em;
+  font-weight: 650; color: var(--text-muted); cursor: help;
+}@media (min-width: 900px) {
+  .slot-fill { grid-template-columns: repeat(3, 1fr); align-items: start; }
+}
+
+/* --- .worked : one rule, two expressions, side by side ------------------- */
+.worked { display: grid; gap: var(--s5); margin-block: var(--s5); }@media (min-width: 860px) { .worked { grid-template-columns: 1fr 1fr; } }
+
+/* --- .tradeoffs : four gains and four costs, side by side -----------------
+   Two columns of the same width, holding lists of the same length, because the
+   block opens every approach page and the first thing a reader takes from it is
+   its shape. A wider or longer column would deliver a verdict before a word of
+   it has been read.
+
+   Geometry carries the difference and not colour alone: gains are marked with a
+   rule on the leading edge, costs with a dashed one, so the two are still apart
+   in grayscale and in print. The numbering is an ordered list, so a reader can
+   refer to "the third cost" and be understood. */
+.tradeoffs { display: grid; gap: var(--s5); margin-block: var(--s5); }
+@media (min-width: 900px) { .tradeoffs { grid-template-columns: 1fr 1fr; } }
+
+.tradeoffs__side {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: var(--s4); background: var(--bg-subtle);
+}
+/* Colour and geometry together. The edge was already solid on one column and
+   dashed on the other before either was coloured, and it stays that way: the
+   dash is what survives a grayscale print and a monochrome eye. */
+.tradeoffs__side--pro { border-left: 4px solid var(--strength); }
+.tradeoffs__side--con { border-left: 4px dashed var(--risk); }
+.tradeoffs__side--pro { --mark: var(--strength); }
+.tradeoffs__side--con { --mark: var(--risk); }
+
+.tradeoffs__head {
+  margin: 0 0 var(--s3); font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);
+  display: flex; align-items: center; gap: var(--s2);
+}
+.tradeoffs__head .tradeoff__mark { color: var(--mark); }
+.tradeoffs__count {
+  margin-left: auto; font-weight: 500; letter-spacing: 0;
+  text-transform: none; color: var(--text-faint);
+}
+
+.tradeoffs__list { margin: 0; padding: 0; list-style: none;
+                   display: grid; gap: var(--s4); }
+
+/* The mark sits in a column of its own so the second and later lines of a
+   title align with the first, rather than running back under the icon. */
+.tradeoff {
+  font-size: var(--fs-sm);
+  display: grid; grid-template-columns: 1.25rem 1fr; gap: var(--s1) var(--s3);
+}
+.tradeoff__mark {
+  grid-row: 1; grid-column: 1; color: var(--mark);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 0.1em;
+}
+.tradeoff__mark svg { width: 1.05rem; height: 1.05rem; display: block; }
+.tradeoff__title { grid-row: 1; grid-column: 2; margin: 0; font-weight: 650; }
+.tradeoff__body  { grid-column: 2; margin: 0; line-height: 1.6; }/* The scenario's file table. A zero is set as the word none in muted text
+   rather than as a nought, because a column of noughts and a column of small
+   numbers read as the same kind of thing at a glance, and they are not. */
+.criteria-table td.is-none { color: var(--text-faint); }
+.criteria-table tr.is-total th, .criteria-table tr.is-total td {
+  border-top: 2px solid var(--border-strong);
+}
+
+/* A strip row that links. The strip is the summary of the six questions and
+   sits at the top of them, so a reader who reads "question 3, partly answered"
+   can go straight there. Underlining every row would draw seven rules across
+   the block, so the affordance is the hover and the focus ring, and the row
+   keeps the same colour as an unlinked one. */
+.answers__row--link { text-decoration: none; color: inherit; cursor: pointer; }
+.answers__row--link:hover { background: var(--bg-inset); }
+.answers__row--link:hover .answers__q { text-decoration: underline; }
+.answers__row--link:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: -2px;
+}
+
+/* --- .joins : the chain from the rule to the claim and the result ---------
+   A note for each step, then the figure. This was a four-column table above
+   the figure, a row per relationship, with the fields and the questions and
+   the way each one resolved. All of that is drawn on the figure, so the table
+   was the figure again in words, a screen and a half of it, directly above the
+   thing it was describing. What is left is what a drawing cannot say: why a
+   step costs what it costs. */
+.joins__steps { margin-block: var(--s4); padding-left: var(--s5); }
+.joins__steps li { margin-bottom: var(--s3); }
+.joins__steps li:last-child { margin-bottom: 0; }
+.joins__to { color: var(--text-muted); padding-inline: 0.15em; }
+
+/*  Two rows are one role, so a heading spans them and they indent under it.
+    A group heading is a row of its own rather than a rowspan cell: a rowspan
+    would put the two parties inside one cell, and they are two answers. */
+.stakeholders__group th {
+  padding-top: var(--s5); font-weight: 650;
+  border-bottom: 1px solid var(--border);
+}
+.stakeholders__group:first-child th { padding-top: var(--s2); }
+.stakeholders__in th[scope="row"] { padding-left: var(--s5); }
+/*  The label takes a row of its own. .mflow is a flex container, so a block
+    child is still a flex item and sat beside the first tile, which pushed what
+    the run produces onto a line of its own two rows down. */
+.mflow__by {
+  flex: 0 0 100%; font-size: var(--fs-xs); color: var(--text-muted);
+}
+/*  In, runtime, out: one line, because it is one fact. */
+.mflow__run {
+  display: inline-flex; align-items: flex-start; flex-wrap: nowrap;
+  gap: var(--s2); max-width: 100%;
+}
+@media (max-width: 40rem) { .mflow__run { flex-wrap: wrap; } }
+/*  The mark, defined where it is used. */
+.stakeholders__key {
+  display: flex; align-items: flex-start; gap: var(--s3);
+  margin-top: var(--s4); font-size: var(--fs-sm); color: var(--text-muted);
+}
+.stakeholders__key .mflow__runtime { margin-top: 0.15em; }
+.mflow__none { font-size: var(--fs-sm); color: var(--text-faint); }
+/*  28 rather than 32. The widest run in the table is a component definition,
+    the runtime and a plan of record on one line, which needs about 540px, and
+    32 per cent left 540 available: the line fitted or wrapped depending on the
+    reader's font. Four points of the party column buys 34px of slack, and the
+    party names were already wrapping at either width. */
+.stakeholders th[scope="row"] { font-weight: 650; width: 28%; }
+.stakeholders__who {
+  display: block; margin-top: var(--s1);
+  font-weight: 400; font-size: var(--fs-xs); color: var(--text-muted);
+}
+.stakeholders__note {
+  display: block; margin-top: var(--s3);
+  font-size: var(--fs-xs); color: var(--text-muted);
+}
+
+/* --- .micon : one model, drawn as itself ----------------------------------
+   Eight glyphs, one per OSCAL model, from assets/images by way of
+   tools/model_icons.py. Every tile used to draw the same page-with-a-folded-
+   corner, which said "this is a file" seven times in a table whose subject is
+   which file, so the icon column carried nothing.
+
+   Colour is here and not in the SVG. An icon loaded through <img src> is a
+   separate document and cannot see these properties, so the geometry is
+   inlined and takes its ink from currentColor, its second tone from a class,
+   and its chip from a CSS background. That is what makes it follow the theme,
+   and it is why the drawings hold no hex.
+
+   The hue is the layer, so the same model reads the same on every page and two
+   models in one layer look related, which they are. */
+   Named .model-icon and not .micon. That name was already the media icon in the
+   sources table, the one with the PDF badge on it, and a second rule further
+   down the stylesheet quietly resized every one of them. Nothing caught it: the
+   download links override the width themselves, so the only marks affected were
+   the web-link globes, which got bigger and looked fine. */
+.model-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: 1.6em; height: 1.6em;
+  border-radius: var(--radius-sm); background: var(--model-icon-chip);
+  color: var(--model-icon-ink);
+}
+/* The glyph fills the chip. It used to be inset to 78 per cent, which was one
+   of three reductions applied in series: the drawing occupied about half its
+   authored canvas, the canvas was inset inside the chip, and the chip is around
+   21px. The margin is cropped into the viewBox now, once, where it can be
+   measured, so this is 100 and the reductions do not multiply. */
+.model-icon svg { width: 100%; height: 100%; display: block; }
+.model-icon__soft { stroke: var(--model-icon-soft); }
+.model-icon__knockout { fill: var(--model-icon-chip); }
+.model-icon--control        { --model-icon-chip: var(--layer-control-bg);
+                              --model-icon-ink:  var(--layer-control-ink);
+                              --model-icon-soft: var(--layer-control-soft); }
+.model-icon--implementation { --model-icon-chip: var(--layer-impl-bg);
+                              --model-icon-ink:  var(--layer-impl-ink);
+                              --model-icon-soft: var(--layer-impl-soft); }
+.model-icon--assessment     { --model-icon-chip: var(--layer-assess-bg);
+                              --model-icon-ink:  var(--layer-assess-ink);
+                              --model-icon-soft: var(--layer-assess-soft); }
+
+/* --- .mtile : a model, drawn as the file it is ----------------------------
+   The same glyph the worked scenario draws, at text size. The two pages talk
+   about the same seven models, and a reader moving between them should be
+   looking at the same thing rather than at a drawing in one place and a code
+   span in the other.
+
+   A flow is a row of tiles with an arrow in it. The arrow is aria-hidden and
+   the word "produces" sits beside it for anyone not seeing the glyph, because
+   an arrow read aloud is silence. */
+.mflow {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--s2); margin-bottom: var(--s2);
+}
+.mflow:last-of-type { margin-bottom: 0; }
+.mflow__arrow { color: var(--text-muted); font-size: var(--fs-md); }
+
+/*  The policy engine's row. The glyph carries its own arrowheads, so it needs
+    the breathing room an arrow would have on either side and none of its own
+    inside. Sized against the tiles it sits between rather than the text: it
+    reads as a third thing in the row, which is what it is. */
+.mflow__runtime {
+  width: 2.75em; height: 1.3em; flex: none;
+  color: var(--text-muted); margin: 0 0.1rem;
+}
+.mtile {
+  display: inline-flex; align-items: center; gap: var(--s2);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 0.15em var(--s2) 0.15em var(--s2);
+  background: var(--bg); white-space: nowrap;
+}
+/* The tile's chip is a shade tighter than a free-standing one: it sits inside a
+   bordered tile that already separates it from the page, so it needs to mark
+   the model rather than to hold its own edge. */
+.mtile .model-icon { width: 1.45em; height: 1.45em; margin-left: -0.1em; }
+
+/* --- /*  --- .rpath : the runner's two paths --------------------------------------
+    A heading, one file in and one file out with the runtime between them, and
+    the encoding for that path underneath. Two sections where an approach has
+    both paths, one where it has only the implementer's or only the assessor's.
+    The section is the unit a reader compares across the three columns, so it
+    carries the rule that separates it from the next one. */
+.rpath { margin-block: var(--s5); }
+.rpath + .rpath { border-top: 1px solid var(--border); padding-top: var(--s5); }
+.rpath__head { margin: 0 0 var(--s3); font-size: var(--fs-md); font-weight: 650; }
+.rpath .snippet { margin-top: var(--s3); }
+/*  The copy mark carries its own arrowhead, like the runtime mark it sits
+    beside, so a row holding both is one line of marks rather than a mixture of
+    marks and arrows. */
+.mflow__copy { width: 2.6em; height: 1.3em; flex: none; color: var(--text-muted); }
+
+.lineage : what the runner sits between ------------------------------
+   Question 5 on the six questions page. Both ends are documents shown at other
+   questions, so each tile is an anchor into the question that holds it and the
+   whole strip is a link rather than a third copy of the content. */
+.lineage { margin: var(--s3) 0 var(--s4); }
+/*  A row is boxes and marks on one line with a word under each. Both kinds of
+    item are the same two-part stack, so the first lines share a band and the
+    second lines share a band, which is what makes the boxes ride one middle
+    rather than each being centred against whatever stands beside it. Without
+    the caption on the marks there was nothing on the mark's second line, and a
+    flex row centring items of two different heights put the mark half a caption
+    too low. */
+.lineage__end {
+  display: inline-flex; flex-direction: column; align-items: flex-start;
+  gap: 0.15em; text-decoration: none; color: inherit;
+}
+.lineage__box { display: flex; align-items: center; min-height: 2.15em; }
+.lineage__end--link:hover .mtile__name { text-decoration: underline; }
+.lineage__q {
+  font-size: var(--fs-xs); color: var(--text-muted); text-align: left;
+  min-height: 1.2em;
+}
+.lineage__end--mark .lineage__q { font-variant: small-caps; letter-spacing: 0.02em; }
+.lineage__note {
+  margin: var(--s2) 0 0; font-size: var(--fs-xs); color: var(--text-muted);
+  max-width: var(--measure);
+}
+/* The weight is set rather than inherited. The chip sits in a table cell on the
+   approach pages and in a row heading on the worked scenario, and a heading is
+   600, so the same model name came out two weights on two pages depending on
+   which cell it landed in. */
+.mtile__name {
+  font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 400;
+}
+.mtile__kind {
+  font-size: var(--fs-xs); font-style: italic; color: var(--text-muted);
+  border-left: 1px solid var(--border); padding-left: var(--s2);
+}
+
+/* --- .scenario : one system, modelled three ways --------------------------
+   The inputs are a definition list because they are label and value, and the
+   consequences are a list of pairs: what the scenario produces, and the entry
+   in section 2 it makes concrete. The tie is set as a chip on the right so a
+   reader can scan the ties alone and see that every one of them lands on
+   something the page has already claimed. */
+/* One list on this page now, the scenario's own inputs in section 1: the
+   framework, the three guides, and what they come to together. The three file
+   lists that used to repeat each figure's inventory underneath it are gone, and
+   the two classes that only they used went with them. Terms are one line here,
+   so the two columns tie at the baseline. */
+.scenario__inputs {
+  display: grid; grid-template-columns: max-content 1fr; align-items: baseline;
+  gap: var(--s2) var(--s4); margin: var(--s4) 0; font-size: var(--fs-sm);
+}
+.scenario__inputs dt { color: var(--text-muted); }
+.scenario__inputs dd { margin: 0; }/* --- .models : the seven OSCAL models, grouped by layer -------------------
+   Definition lists rather than cards, because a reader meeting these names for
+   the first time reads a list of names as a list of names. Unused since the
+   primer was removed; the component it styles is still in site.js. */@media (max-width: 640px) {}
+
+/* --- .toc : a long page needs a way in ----------------------------------- */
+.toc {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: var(--s4); background: var(--bg-subtle); margin-block: var(--s5);
+}
+.toc__label {
+  font-size: var(--fs-xs); font-weight: 650; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-muted);
+}
+/* No list marker. The number is already in the link text, because it has to
+   match the number in the heading and a check asserts that it does. With the
+   marker on as well, every entry read "1. 1. Three readers". The element stays
+   an ol: the order is meaningful, and that is what the tag is for. */
+.toc ol { margin: var(--s2) 0 0; padding-left: 0; list-style: none;
+          font-size: var(--fs-sm); columns: 2; column-gap: var(--s6); }
+.toc li { margin-bottom: var(--s1); break-inside: avoid; }
+@media (max-width: 700px) { .toc ol { columns: 1; } }
+
+/* --- .dfn : glossary term with a keyboard-reachable card ------------------ */
+.dfn {
+  border: 0; background: none; padding: 0; cursor: help; font: inherit;
+  color: inherit; border-bottom: 1px dotted var(--border-strong);
+}
+.dfn[aria-expanded="true"] { border-bottom-style: solid; border-bottom-color: var(--accent); }
+.dfn-card {
+  position: absolute; z-index: 40; max-width: 34ch;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: var(--s3) var(--s4);
+  font-size: var(--fs-sm); line-height: 1.5;
+}
+.dfn-card[hidden] { display: none; }
+.dfn-card__term { font-weight: 650; display: block; margin-bottom: var(--s1); }
+.dfn-card__status {
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted); display: block; margin-bottom: var(--s2);
+}
+.dfn-card__other { margin-top: var(--s2); color: var(--text-muted); font-size: var(--fs-xs); }
+
+/* --- .tabs --------------------------------------------------------------- */
+.tabs__list { display: flex; gap: var(--s1); border-bottom: 1px solid var(--border); }
+.tabs__tab {
+  border: 0; background: none; padding: var(--s2) var(--s4);
+  font-size: var(--fs-sm); color: var(--text-muted); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tabs__tab[aria-selected="true"] { color: var(--text); font-weight: 620; border-bottom-color: var(--accent); }
+.tabs__panel { padding-top: var(--s4); }
+.tabs__panel[hidden] { display: none; }
+.tabs__tab .criteria-table__who { text-transform: none; letter-spacing: 0; }
+
+/* An artifact answering a question the record left open is the one finding
+   this table can produce that the pre-read's own section 7 cannot, so it is
+   marked rather than left for the reader to spot by comparison. *//* --- .diagram-row : three diagrams at one size, for one comparison --------
+   Every diagram carries the 720px readability floor, and three floors are
+   2160px, which no viewport supplies. So the desktop row is one shared
+   horizontal scroller holding three equal 720px panes: the panes really are
+   at one size, about one and a half are in view at once, and one swipe reads
+   across all three. The alternatives both fail worse: three independent
+   scrollbars show 40% of each diagram, and dropping the floor puts the
+   labels under 12px. Below the table breakpoint the three stack. */@media (min-width: 769px) {}
+
+/* --- theme toggle -------------------------------------------------------- */
+.theme-toggle {
+  margin-left: auto; border: 1px solid var(--border-strong);
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: var(--s1) var(--s3); font-size: var(--fs-xs); cursor: pointer;
+}
+
+/* --- diagrams -------------------------------------------------------------
+   Every diagram in assets/diagrams/ is authored on a 960-unit-wide viewBox
+   with no text smaller than 16 units. 960 x (12 / 16) = 720, so a rendered
+   width of 720px is the point below which the smallest label would drop under
+   12px. The wrapper scrolls rather than shrinking past it. This is the whole
+   reason the min-width exists; changing one number without the other breaks
+   the guarantee, and verify.py --diagrams re-derives it. */
+.diagram { overflow-x: auto; margin-block: var(--s5); }
+.diagram > svg { min-width: 720px; width: 100%; height: auto; display: block; }/* The scale figure's three destinations. Buttons are .btn; this is the group. *//* --- figures ------------------------------------------------------------- */
+figure { margin: var(--s5) 0; }
+figure svg { width: 100%; height: auto; }
+figcaption {
+  font-size: var(--fs-sm); color: var(--text-muted);
+  margin-top: var(--s2); max-width: var(--measure);
+}
+
+/* --- .register : the evidence register and the settle table --------------
+   Same dense table treatment as .criteria-table. The state chip carries its
+   meaning by a written label rather than by colour, because the three states
+   are not a scale and rendering them as one would be an argument. */
+.register__state {
+  display: inline-block; padding: 0.1em 0.5em; margin-right: var(--s2);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: var(--bg-inset); color: var(--text-muted);
+  font-size: var(--fs-xs); font-weight: 650; white-space: nowrap;
+}
+.register__state--partial         { border-style: dashed; }
+.register__state--not-established { border-style: dotted; }
+.register caption { text-align: left; padding-bottom: var(--s3); }
+
+/* --- .approach-card : the three cards ------------------------------------
+   The one-line summaries are within ten per cent of each other in length, which
+   is a budget rule and not a layout guarantee: at a given column width one wraps
+   to four lines and another to three, so the lists underneath started at
+   different heights and the three could not be read across.
+
+   The card is a column and the list is pushed to the bottom of it. The grid row
+   already stretches all three cards to one height, and every list has the same
+   eight rows at the same height, so pinning the bottoms lines up every rank. */
+.approach-card { display: flex; flex-direction: column; }
+.approach-card h3 { margin-bottom: var(--s3); }
+.approach-card .slot-strip { margin-top: auto; }
+.approach-card > p { margin-bottom: var(--s4); }
+
+/* ==========================================================================
+   6. UTILITIES
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.muted  { color: var(--text-muted); }
+.small  { font-size: var(--fs-sm); }
+.mono   { font-family: var(--font-mono); }
+.stack > * + * { margin-top: var(--s4); }
+.cards  { display: grid; gap: var(--s4); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.card   { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--s4); background: var(--bg-subtle); }
+.row    { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
+
+/* ==========================================================================
+   7. PRINT
+   ========================================================================== */
+
+@media print {
+  .site-header, .site-nav, .theme-toggle, .skip-link, .btn, .matrix__toggle { display: none !important; }
+  body { background: #fff; color: #000; font-size: 10.5pt; }
+  main { max-width: none; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; word-break: break-all; }
+  .snippet > summary::before { display: none; }
+  .snippet__body { display: block !important; }
+  /* A printed page is the whole document, so every disclosure opens and the
+     rail is dropped: it is navigation, and navigation does not print. */
+  .sources-panel__body,
+  .qacc__body { display: block !important; }
+  .sources-panel__hint,
+  .qacc__hint { display: none !important; }
+  .qacc > summary::before { display: none; }
+  .sources-panel > summary::before { display: none; }
+  .toc { display: none !important; }
+  .answers { break-inside: avoid; }
+  .answers__row { background: #fff; }
+  main { display: block !important; max-width: none; }
+  main > * { max-width: none !important; }
+  .snippet, figure, .quote, .callout { break-inside: avoid; page-break-inside: avoid; }
+  .snippet pre { white-space: pre-wrap; word-break: break-word; overflow: visible; }
+    .matrix, .criteria-table { min-width: 0; font-size: 8.5pt; }
+  .matrix thead th, .criteria-table thead th, .matrix tbody th, .criteria-table tbody th { position: static; }
+  h2, h3 { break-after: avoid; page-break-after: avoid; }
+  figure svg { max-width: 100%; height: auto; }
+  .diagram { overflow: visible; }
+  .diagram > svg { min-width: 0; }
+  .dfn-card { display: none !important; }
+}
+
+/* ==========================================================================
+   8. REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   9. BOARD AND PANEL
+   The overview-first layer. A page lands as a board of its top-level units
+   plus the one figure or paragraph it exists to convey, and everything else
+   sits behind a panel that opens in place.
+
+   Both are built on <details>, not on a modal, for three reasons that are
+   properties of this site rather than preferences. Plan section 8 requires a
+   stable id on every section and claim so a discussion comment can link to
+   exactly one of them, and a modal has no address. The print stylesheet forces
+   every disclosure open, so a printed page is still the whole document. And a
+   native disclosure is keyboard reachable and announced without any script, so
+   the content is reachable when scripting is off.
+   ========================================================================== */
+
+/* --- .board : a grid of units, the landing view of a page ---------------- */
+.board {
+  display: grid; gap: var(--s4); margin-block: var(--s5);
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+}/* --- .qcard : one unit on a board ----------------------------------------
+   A card carries its own number and name, the question it answers, and the
+   three approach states at a glance. Closed, six of them are the whole
+   framework on one screen. Open, one of them is the full treatment. */
+.qcard {
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--qcard-accent, var(--border-strong));
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+  display: flex; flex-direction: column;
+}
+.qcard[open] { background: var(--bg); box-shadow: var(--shadow); }
+/* One rule per question, so the card takes its identity from the same palette
+   every diagram and every strip uses. Colour is never the only channel: the
+   number and the name are on the card too. */
+.qcard.slot-1 { --qcard-accent: var(--slot-1-border); --qcard-bg: var(--slot-1-bg); --qcard-fg: var(--slot-1-fg); }
+.qcard.slot-2 { --qcard-accent: var(--slot-2-border); --qcard-bg: var(--slot-2-bg); --qcard-fg: var(--slot-2-fg); }
+.qcard.slot-3 { --qcard-accent: var(--slot-3-border); --qcard-bg: var(--slot-3-bg); --qcard-fg: var(--slot-3-fg); }
+.qcard.slot-4 { --qcard-accent: var(--slot-4-border); --qcard-bg: var(--slot-4-bg); --qcard-fg: var(--slot-4-fg); }
+.qcard.slot-5 { --qcard-accent: var(--slot-5-border); --qcard-bg: var(--slot-5-bg); --qcard-fg: var(--slot-5-fg); }
+.qcard.slot-6 { --qcard-accent: var(--slot-6-border); --qcard-bg: var(--slot-6-bg); --qcard-fg: var(--slot-6-fg); }
+.qcard > summary {
+  cursor: pointer; padding: var(--s4); list-style: none;
+  display: grid; gap: var(--s2);
+}
+.qcard > summary::-webkit-details-marker { display: none; }
+.qcard > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }/* --- .panel : a whole section that opens in place ------------------------- */
+.panel {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-block: var(--s5); background: var(--bg);
+}
+.panel[open] { background: var(--bg); }
+.panel > summary {
+  cursor: pointer; list-style: none; padding: var(--s4) var(--s5);
+  display: flex; align-items: baseline; gap: var(--s4);
+  border-radius: var(--radius);
+}
+.panel > summary::-webkit-details-marker { display: none; }
+.panel[open] > summary { border-bottom: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+.panel > summary:hover { background: var(--bg-subtle); }
+.panel > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.panel > summary h2, .panel > summary h3 { margin: 0; flex: 1 1 auto; }/* --- .lead : the one thing a page keeps visible -------------------------- *//* --- .toc active tracking ------------------------------------------------
+   The first attempt drew the indicator with a left box-shadow, which painted a
+   solid block over the list number sitting in the ol's padding. The marker now
+   sits inside the anchor's own box, so it cannot collide with anything. */
+.toc a[aria-current="true"] {
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--bg-inset);
+  border-radius: var(--radius-sm);
+}
+.toc a { border-radius: var(--radius-sm); padding: 0.1em 0.35em; margin-left: -0.35em; }
+
+/* --- the extract card ----------------------------------------------------
+   An extract is evidence, so its address is part of it: the file name links to
+   the published file where the publisher has a public repository, and the
+   pointer sits beside it. The question chip says which question the extract
+   answers in words rather than as a bare digit, which is what it was. */.snippet__open {
+  margin-left: auto; flex: none;
+  font-size: var(--fs-xs); font-weight: 650;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--accent); white-space: nowrap;
+}
+.snippet > summary:hover .snippet__open { text-decoration: underline; }
+
+
+/* ==========================================================================
+   10. THE ANSWER LIST
+   What each approach answers, question by question.
+
+   This replaced a row of eight small coloured boxes. That row encoded the
+   question as one of six hues and the answer as one of five border treatments,
+   and wrote neither down, so a reader who had not memorised both palettes saw
+   coloured squares. It also drew the three unanswered states as three different
+   geometries, which reads as three degrees of severity when they are one fact
+   with three different reasons behind it.
+
+   Every row now writes what it means. The question tint survives as a chip,
+   which is what a palette is for: reinforcing a label rather than standing in
+   for one. The swatch keeps its geometry so grayscale and print still separate
+   the states, and neither channel is load-bearing, because the words are.
+   ========================================================================== */
+
+.answers {
+  display: grid; gap: 1px; margin-block: var(--s4);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--border); overflow: hidden;
+}
+/* Every row is the same shape and the same height, so three lists placed side
+   by side line up rank for rank. That is why the reason moved off the row: a row
+   that sometimes carried one and sometimes did not made the columns drift, and a
+   reader comparing across them had to find question 4 three times. The state
+   column is a fixed width for the same reason. */
+/* The state column was a fixed 10.5rem. In a three-up card the row is about
+   280px wide, so the name column got what was left and "Control link" rendered
+   as "Contr...". The state column is now content-sized and pushed to the right
+   edge, which gives the name every pixel the state does not need. Rows still
+   line up rank for rank across the three lists, because the row height is fixed
+   and the number chip is fixed; only the internal boundary moves, and it moves
+   to wherever the longest state word in that list puts it. */
+.answers__row {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr) auto;
+  align-items: center; gap: var(--s3);
+  padding: 0 var(--s3);
+  min-height: 2.15rem;
+  background: var(--bg); font-size: var(--fs-sm);
+}
+/* The compact list lives in a three-up card about 270px wide. Right-aligning the
+   state was necessary but not sufficient there: the number chip, the name, the
+   swatch and the words "Not answered" do not all fit, so the name was still
+   losing its tail. The gutter is tighter here than in the full-size list, and
+   two of the question names were shortened in data/six-questions.json for the same
+   reason. The full name is on the row's title and in its screen-reader text. */
+.answers--sm .answers__row {
+  min-height: 1.9rem; font-size: var(--fs-xs);
+  grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+  gap: var(--s2); padding: 0 var(--s2);
+}
+.answers--sm .answers__word { font-weight: 600; }
+.answers__row:hover { background: var(--bg-subtle); }
+
+/* --- the six questions, named and defined ---------------------------------
+   The definition list in section 3 of the start page. Same number chip and same hue per question as
+   the answer lists use, because a reader who learns the chip here should meet
+   the identical chip on every later page. No state marks: this list says what
+   the questions are, not what anyone answered, and mixing the two is what made
+   the first version of the strip unreadable. */
+
+.qlist { margin: var(--s4) 0 0; display: grid; gap: 0; }
+.qlist__term {
+  display: flex; align-items: baseline; gap: var(--s2);
+  padding-top: var(--s3); margin-top: var(--s3);
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+.qlist__term:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+.qlist__n {
+  width: 2.1rem; flex: none; text-align: center;
+  padding: 0.05em 0.35em; border-radius: var(--radius-sm);
+  background: var(--chip-bg, var(--bg-inset));
+  color: var(--chip-fg, var(--text-muted));
+  font-size: var(--fs-xs); font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.qlist__name { color: var(--text); }
+.qlist__def { margin: var(--s1) 0 0 calc(2.1rem + var(--s2)); }
+.qlist__line { margin: 0 0 var(--s1); color: var(--text-muted); }
+.qlist__line:last-child { margin-bottom: 0; }
+.qlist__sub {
+  display: inline-block; min-width: 1.6rem;
+  color: var(--text-muted); font-size: var(--fs-xs); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.qlist__short { color: var(--text); font-weight: 600; }
+
+/* --- the three readings ---------------------------------------------------
+   One card per reading, carrying the reader it serves and the model it implies.
+   Equal width and equal order by construction: the grid gives every card the
+   same track, so no reading can be given more room than another. */.reading { display: flex; flex-direction: column; }.answers__n {
+  justify-self: start;
+  /* Fixed, not content-sized: 1 and 6a must occupy the same box or the names
+     beside them start at different places down the column. */
+  width: 2.1rem; text-align: center;
+  padding: 0.05em 0.35em; border-radius: var(--radius-sm);
+  background: var(--chip-bg, var(--bg-inset));
+  color: var(--chip-fg, var(--text-muted));
+  font-size: var(--fs-xs); font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.answers__q {
+  color: var(--text); min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.answers__state {
+  display: flex; align-items: center; gap: var(--s2);
+  justify-self: end; text-align: right;
+}
+.answers__word { font-weight: 650; white-space: nowrap; }
+
+/* The swatch keeps the five geometries, so the states stay separable with no
+   colour at all. It is now a reinforcement rather than the message. */
+.answers__swatch {
+  display: inline-block; flex: none; position: relative;
+  width: 14px; height: 10px; vertical-align: -1px;
+  border: 1.5px solid var(--empty-line);
+  border-radius: 2px; background: transparent;
+}
+
+/* One rule per question, from the same palette every diagram uses. */
+.answers__row.slot-1  { --chip-bg: var(--slot-1-bg);  --chip-fg: var(--slot-1-fg); }
+.answers__row.slot-2,
+.answers__row.slot-3  { --chip-bg: var(--slot-3-bg);  --chip-fg: var(--slot-3-fg); }
+.answers__row.slot-4  { --chip-bg: var(--slot-4-bg);  --chip-fg: var(--slot-4-fg); }
+.answers__row.slot-5  { --chip-bg: var(--slot-5-bg);  --chip-fg: var(--slot-5-fg); }
+.answers__row.slot-6a,
+.answers__row.slot-6b { --chip-bg: var(--slot-6-bg);  --chip-fg: var(--slot-6-fg); }
+
+/* Each geometry is written twice, for the two places a swatch is drawn.
+   In an answer list the state class is on the row and the swatch inherits its
+   meaning from the row. In the legend there is no row: the swatch carries the
+   state class itself. Every one of these rules used to require the row
+   ancestor, so no rule at all matched a legend swatch and all five drew as the
+   same plain outline. The legend was decorative, on every page that had one,
+   which is worse than the missing legends it was added to fix: a reader
+   comparing a dashed mark in a list against five identical marks in the legend
+   is being told the mark means nothing. */
+.answers__row.is-filled  .answers__swatch,
+.answers__swatch.is-filled { background: currentColor; border-color: currentColor; }
+.answers__row.is-partial .answers__swatch,
+.answers__swatch.is-partial { border-style: dashed; }
+.answers__row.is-empty-absent .answers__swatch,
+.answers__swatch.is-empty-absent {
+  background: radial-gradient(var(--empty-dot) 0.5px, transparent 0.6px);
+  background-size: 3px 3px;
+}
+.answers__row.is-filled  .answers__word { color: var(--text); }
+.answers__row.is-partial .answers__word,
+.answers__row.is-empty-absent .answers__word { color: var(--text-muted); }
+
+/* --- the legend ---------------------------------------------------------- */
+/* One block, one or two groups. The groups are the two axes: what is answered,
+   and what the answer rests on.
+
+   Stacked rather than side by side. The first group is three words and the
+   second is three sentences, so in two columns the short one ended a third of
+   the way down and left the rest of its column empty beside a wall of prose.
+   Stacked, each group gets the full width and the answers-only pages render
+   exactly as they did before there was a second group. */
+.answers-legend {
+  display: grid; gap: var(--s4) var(--s5); grid-template-columns: 1fr;
+  margin-block: var(--s4); font-size: var(--fs-xs);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+/* The answer states are three short labels and sit side by side where there is
+   room; the mechanisms carry a sentence each and stack.
+
+   The title is a sibling of the items grid rather than a full-span child of it.
+   Spanning it would have meant `grid-column: 1 / -1`, which verify.py --css
+   bans outright: a full-span child of main overlaps the sticky rail the table
+   of contents occupies, and the ban is a plain string search that cannot tell a
+   nested grid from that one. Two elements costs nothing and leaves the guard
+   doing its job. */
+.answers-legend__group { align-content: start; }
+.answers-legend__items {
+  display: grid; gap: var(--s2) var(--s5);
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+/* One badge column, so every meaning starts at the same place.
+   The three badges are different widths, OSCAL ASSEMBLY against PROP, so a row
+   that put each badge next to its own text started the three blocks of prose at
+   three different places and there was no column to read down. max-content on
+   the first track sizes it to the widest badge across every row, which is what
+   a shared column means; display: contents on the item lifts its badge and its
+   text into that grid rather than boxing them together. */
+.mech-legend .answers-legend__items {
+  grid-template-columns: max-content 1fr;
+  column-gap: var(--s3);
+}
+.mech-legend__item { display: contents; }
+/* A grid item fills its row unless told otherwise, so a badge beside two lines
+   of prose grew to two lines of box with the word floating in the middle of it.
+   Sized to its own text and sat on the first line's baseline, which is where it
+   was before the row became a grid. */
+.mech-legend__item > .mech { justify-self: start; align-self: baseline; }
+.answers-legend__title {
+  margin: 0 0 var(--s2); font-weight: 600; color: var(--text-muted);
+}
+.answers-legend__item { display: flex; align-items: baseline; gap: var(--s2); }
+/* Ordinary flowing text, not a flex row. The label and the sentence after it
+   were two flex items, so the sentence wrapped as a whole and landed on a line
+   of its own beginning with the full stop that joins it to the label. One
+   inline flow puts the label and its meaning in one paragraph, wrapping where a
+   line runs out rather than between the two. */
+.answers-legend__text { display: block; }
+.answers-legend__text .answers__word { margin-right: 0.15em; }
+
+/* --- three of them, side by side ----------------------------------------- *//* Any card carrying an answer list pins it to the bottom, for the same reason
+   the approach cards do: prose above it wraps to different heights and the
+   lists have to start level. */
+.card:has(.answers) { display: flex; flex-direction: column; }
+.card:has(.answers) .answers { margin-top: auto; }

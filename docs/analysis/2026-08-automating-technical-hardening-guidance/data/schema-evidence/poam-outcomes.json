@@ -1,0 +1,45 @@
+{
+  "note": "The root assembly of the OSCAL 1.2.1 plan-of-action-and-milestones model. It carries observations and findings as sibling arrays, so assessment results is not the only model in which an outcome can be recorded. Both models sit in the Assessment layer; no control-layer or implementation-layer model carries either.",
+  "model": "plan-of-action-and-milestones",
+  "definition": "oscal-poam-oscal-poam:plan-of-action-and-milestones",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-poam-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-18",
+  "constraints": [
+    "properties includes \"observations\"",
+    "properties includes \"findings\"",
+    "observations items ref the shared assessment-common observation",
+    "findings items ref the shared assessment-common finding"
+  ],
+  "fragment_note": "Only required and the observations, findings and risks properties are carried.",
+  "fragment": {
+    "required": [
+      "uuid",
+      "metadata",
+      "poam-items"
+    ],
+    "properties": {
+      "observations": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-poam-oscal-assessment-common:observation"
+        }
+      },
+      "findings": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-poam-oscal-assessment-common:finding"
+        }
+      },
+      "risks": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-poam-oscal-assessment-common:risk"
+        }
+      }
+    }
+  }
+}

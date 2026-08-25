@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patterns | OSCAL Foundation Pattern Library</title>
+<meta name="description" content="Model office examples covering the seven OSCAL models, published as files a tool can read.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Patterns">
+<meta property="og:description" content="Model office examples covering the seven OSCAL models, published as files a tool can read.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OSCAL Foundation Pattern Library">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/brand/oscal-foundation.png">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <p class="site-title"><a href="../index.html"><img class="site-logo site-logo--light" src="../assets/brand/oscal-foundation.png" alt="" width="208" height="96"><img class="site-logo site-logo--dark" src="../assets/brand/oscal-foundation-rev.png" alt="" width="208" height="96"><span>Pattern Library</span></a></p>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="../index.html">Start here</a></li>
+        <li><a href="./index.html" aria-current="page">Patterns</a></li>
+        <li><a href="../analysis/index.html">Analyses</a></li>
+        <li><a href="../recommendations/index.html">Recommendations</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<h1>Patterns</h1>
+
+<p class="lede">Complete, realistic compliance packages in OSCAL, published as
+files rather than described in prose.</p>
+
+<h2>Summit, by Oscalate Systems</h2>
+
+<p>A model office system carried through all seven OSCAL models, from the
+controls it selects to the weaknesses it is still tracking. The models form one
+chain: a catalog defines the controls, a profile selects and tailors them,
+component definitions say how components implement them, the SSP documents the
+system, the assessment plan says how it will be checked, the results record what
+was found, and the POA&amp;M tracks what is being fixed.</p>
+
+<p><strong>Two of the seven are published so far.</strong> The rest are named
+here with the rest of the chain rather than omitted, because which models an
+example is missing is part of what a reader needs to know about it.</p>
+
+<table class="models">
+  <thead>
+    <tr><th>#</th><th>Model</th><th>Artifact</th><th>OSCAL</th></tr>
+  </thead>
+  <tbody>
+    <tr class="is-pending">
+      <td>1</td><td>Catalog</td><td>not yet published</td><td></td>
+    </tr>
+    <tr>
+      <td>2</td><td>Profile</td>
+      <td><a href="./summit/profile/oscalate_systems_moderate_profile.json">Oscalate Systems Moderate Baseline</a>
+          <br><code>9 KB, JSON</code></td>
+      <td>1.1.2</td>
+    </tr>
+    <tr class="is-pending">
+      <td>3</td><td>Component Definition</td><td>not yet published</td><td></td>
+    </tr>
+    <tr>
+      <td>4</td><td>System Security Plan</td>
+      <td><a href="./summit/system-security-plan/summit_system_ssp.json">Summit System SSP</a>
+          <br><code>130 KB, JSON</code></td>
+      <td>1.2.1</td>
+    </tr>
+    <tr class="is-pending">
+      <td>5</td><td>Assessment Plan</td><td>not yet published</td><td></td>
+    </tr>
+    <tr class="is-pending">
+      <td>6</td><td>Assessment Results</td><td>not yet published</td><td></td>
+    </tr>
+    <tr class="is-pending">
+      <td>7</td><td>Plan of Action &amp; Milestones</td><td>not yet published</td><td></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Architecture</h2>
+
+<p>The system the artifacts describe, drawn two ways: the technical view and the
+authorization boundary.</p>
+
+<ul class="cards">
+  <li class="card">
+    <h3><a href="./summit/diagrams/Oscalate_Systems-Summit_Diagram-Technical.svg">Technical architecture</a></h3>
+    <p>Components, their relationships, and where each one sits.</p>
+    <div class="card__meta"><span>SVG</span></div>
+  </li>
+  <li class="card">
+    <h3><a href="./summit/diagrams/Oscalate_Systems-Summit_Diagram-Boundary.svg">Authorization boundary</a></h3>
+    <p>What is inside the boundary, what is inherited, and what is external.</p>
+    <div class="card__meta"><span>SVG</span></div>
+  </li>
+  <li class="card">
+    <h3><a href="./summit/diagrams/Oscalate_Systems_Summit_diagram.puml">Diagram source</a></h3>
+    <p>The PlantUML both drawings are rendered from.</p>
+    <div class="card__meta"><span>PlantUML</span></div>
+  </li>
+</ul>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>Published by the <a href="https://oscalfoundation.org">OSCAL Foundation</a>.
+       Source at <a href="https://github.com/OSCAL-Foundation/Pattern-Library">OSCAL-Foundation/Pattern-Library</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>

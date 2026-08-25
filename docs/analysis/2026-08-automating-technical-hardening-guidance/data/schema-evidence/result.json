@@ -1,0 +1,26 @@
+{
+  "note": "The result assembly of the OSCAL 1.2.1 assessment-results model. Every result is required to declare the controls it reviewed, so the control frame is unavoidable at the result level. The referenced reviewed-controls assembly requires control-selections, and a selection may use include-all rather than naming individual controls, so the requirement can be met without listing any one control.",
+  "model": "assessment-results",
+  "definition": "oscal-ar-oscal-ar:result",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ar-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-18",
+  "constraints": [
+    "required includes \"reviewed-controls\""
+  ],
+  "fragment_note": "Only required and the reviewed-controls property are carried. The other properties of result are not relevant to this claim and are omitted.",
+  "fragment": {
+    "required": [
+      "uuid",
+      "title",
+      "description",
+      "start",
+      "reviewed-controls"
+    ],
+    "properties": {
+      "reviewed-controls": {
+        "$ref": "#/definitions/oscal-ar-oscal-assessment-common:reviewed-controls"
+      }
+    }
+  }
+}

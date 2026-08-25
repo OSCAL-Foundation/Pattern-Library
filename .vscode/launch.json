@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Edge first because it is the browser this machine has. Chrome is not
+      // installed and its configuration below fails to launch without one.
+      //
+      // preLaunchTask starts the server, so this works from a cold editor. The
+      // task frees the port when you run "site: stop" or end the session.
+      "name": "Pattern Library",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:4173/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "site: serve",
+      "postDebugTask": "site: stop"
+    },
+    {
+      "name": "Pattern Library (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:4173/index.html",
+      "webRoot": "${workspaceFolder}/docs",
+      "preLaunchTask": "site: serve",
+      "postDebugTask": "site: stop"
+    },
+    {
+      // The analysis harness is the one thing here that is not a static site.
+      "name": "Debug the 2026-08 analysis harness",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance/tools/verify.py",
+      "args": ["--all"],
+      "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
+      "console": "integratedTerminal",
+      "env": { "TFG_CORPORA": "${env:HOME}/pagesource/tfg-automated-assessments" },
+      "justMyCode": false
+    }
+  ]
+}

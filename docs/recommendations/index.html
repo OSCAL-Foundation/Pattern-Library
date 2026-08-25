@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recommendations | OSCAL Foundation Pattern Library</title>
+<meta name="description" content="What the Foundation recommends, each one citing the analysis it came from.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Recommendations">
+<meta property="og:description" content="What the Foundation recommends, each one citing the analysis it came from.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OSCAL Foundation Pattern Library">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/brand/oscal-foundation.png">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <p class="site-title"><a href="../index.html"><img class="site-logo site-logo--light" src="../assets/brand/oscal-foundation.png" alt="" width="208" height="96"><img class="site-logo site-logo--dark" src="../assets/brand/oscal-foundation-rev.png" alt="" width="208" height="96"><span>Pattern Library</span></a></p>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="../index.html">Start here</a></li>
+        <li><a href="../patterns/index.html">Patterns</a></li>
+        <li><a href="../analysis/index.html">Analyses</a></li>
+        <li><a href="./index.html" aria-current="page">Recommendations</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<h1>Recommendations</h1>
+
+<p class="lede">What the Foundation recommends, and the analysis each
+recommendation came out of.</p>
+
+<p>A recommendation lives here rather than inside the analysis that produced it.
+It is what a reader will cite, and it has a lifecycle of its own: proposed, then
+accepted, then superseded by a later one. The analysis it came from is named on
+it, and that analysis names it back.</p>
+
+<div data-registry="./recommendations.json" data-href-base="./" data-empty="no-recommendations"></div>
+
+<div class="empty" id="no-recommendations" hidden>
+  <p><strong>None published yet.</strong> One analysis is open and it has not
+     reached a recommendation.</p>
+  <p>The open effort is a comparison that states three approaches and prices
+     what each one costs, and it says on every page that it makes no
+     recommendation. An area with nothing in it is the honest rendering of
+     that, so this page says so rather than standing empty.</p>
+  <p>When an effort does reach one, it becomes an area under
+     <code>docs/recommendations/</code> with a <code>recommendation.json</code>
+     naming the analysis it came from, an entry appended to
+     <code>recommendations.json</code>, and the
+     <code>recommendation</code> field filled in on the analysis it settles.</p>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>Published by the <a href="https://oscalfoundation.org">OSCAL Foundation</a>.
+       Source at <a href="https://github.com/OSCAL-Foundation/Pattern-Library">OSCAL-Foundation/Pattern-Library</a>.</p>
+  </div>
+</footer>
+
+<script src="../assets/site.js"></script>
+</body>
+</html>

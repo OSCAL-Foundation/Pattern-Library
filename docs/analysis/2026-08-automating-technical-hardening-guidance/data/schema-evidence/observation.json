@@ -1,0 +1,171 @@
+{
+  "note": "The oscal-ar-oscal-assessment-common:observation definition from the OSCAL 1.2.1 assessment-results model, demonstrating that an observation requires uuid, description, methods, and collected, and defines no target, control-id, or objective-id property.",
+  "model": "assessment-results",
+  "definition": "oscal-ar-oscal-assessment-common:observation",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ar-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-12",
+  "constraints": [
+    "required == [\"uuid\",\"description\",\"methods\",\"collected\"]",
+    "no property named 'target'",
+    "no property named 'control-id'",
+    "no property named 'objective-id'"
+  ],
+  "fragment": {
+    "title": "Observation",
+    "description": "Describes an individual observation.",
+    "$id": "#/definitions/oscal-ar-oscal-assessment-common:observation",
+    "type": "object",
+    "properties": {
+      "uuid": {
+        "title": "Observation Universally Unique Identifier",
+        "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this observation elsewhere in this or other OSCAL instances. The locally defined UUID of the observation can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+        "$ref": "#/definitions/UUIDDatatype"
+      },
+      "title": {
+        "title": "Observation Title",
+        "description": "The title for this observation.",
+        "$ref": "#/definitions/MarkupLineDatatype"
+      },
+      "description": {
+        "title": "Observation Description",
+        "description": "A human-readable description of this assessment observation.",
+        "$ref": "#/definitions/MarkupMultilineDatatype"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+        }
+      },
+      "methods": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Observation Method",
+          "description": "Identifies how the observation was made.",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/StringDatatype"
+            },
+            {
+              "enum": [
+                "EXAMINE",
+                "INTERVIEW",
+                "TEST",
+                "UNKNOWN"
+              ]
+            }
+          ]
+        }
+      },
+      "types": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Observation Type",
+          "description": "Identifies the nature of the observation. More than one may be used to further qualify and enable filtering.",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/TokenDatatype"
+            },
+            {
+              "enum": [
+                "ssp-statement-issue",
+                "control-objective",
+                "mitigation",
+                "finding",
+                "discovery",
+                "historic"
+              ]
+            }
+          ]
+        }
+      },
+      "origins": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-assessment-common:origin"
+        }
+      },
+      "subjects": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-assessment-common:subject-reference"
+        }
+      },
+      "relevant-evidence": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Relevant Evidence",
+          "description": "Links this observation to relevant evidence.",
+          "type": "object",
+          "properties": {
+            "href": {
+              "title": "Relevant Evidence Reference",
+              "description": "A resolvable URL reference to relevant evidence.",
+              "$ref": "#/definitions/URIReferenceDatatype"
+            },
+            "description": {
+              "title": "Relevant Evidence Description",
+              "description": "A human-readable description of this evidence.",
+              "$ref": "#/definitions/MarkupMultilineDatatype"
+            },
+            "props": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+              }
+            },
+            "links": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+              }
+            },
+            "remarks": {
+              "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+            }
+          },
+          "required": [
+            "description"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "collected": {
+        "title": "Collected Field",
+        "description": "Date/time stamp identifying when the finding information was collected.",
+        "$ref": "#/definitions/DateTimeWithTimezoneDatatype"
+      },
+      "expires": {
+        "title": "Expires Field",
+        "description": "Date/time identifying when the finding information is out-of-date and no longer valid. Typically used with continuous assessment scenarios.",
+        "$ref": "#/definitions/DateTimeWithTimezoneDatatype"
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "uuid",
+      "description",
+      "methods",
+      "collected"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "note": "The published OSCAL held in this repository, copied from the corpora by tools/copy_examples.py so the inventory can link to a document rather than only count it. Catalog-first is not here: it is published in a public repository and is linked there instead.",
+  "link_only": {
+    "catalog-first": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/"
+  },
+  "cis_derived": [
+    "assessment-first/Center for Internet Security/CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.json",
+    "assessment-first/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json"
+  ],
+  "files": [
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/CISA BOD 25-01/ap-cisa-scuba-agnostic.json",
+      "bytes": 309023,
+      "sha256": "d69fd8b49feb6cf83de9cf00ba0c1ee1068f8afb7a4591116ab0b0beb86b0550"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/CISA BOD 25-01/ap-cisa-scuba-maester.json",
+      "bytes": 314033,
+      "sha256": "49d218b196333445dd67178dd58aba441fc596a28d2221c1c724d8eba460ee57"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/CISA BOD 25-01/ap-cisa-scuba-scubagear.json",
+      "bytes": 291731,
+      "sha256": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/CISA BOD 25-01/ar-cisa-scuba-scubagear.json",
+      "bytes": 298328,
+      "sha256": "2e13fc65380024e6da79f539fec07f906659c100ae0cec555ed0541d5fce973d"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/CISA BOD 25-01/assessment-plan.json",
+      "bytes": 19829,
+      "sha256": "97dad5eeba5efdb6b45ce22b92b9316df1479808bca698235c7dfc2d00ed37ee"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/Center for Internet Security/CIS_PostgreSQL_18_Benchmark_v1.0.0.json",
+      "bytes": 1032133,
+      "sha256": "b72eda73c5bef60e2971c93261bc226594cfb8d8aa1be92deb6b2e121bf05379"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/Center for Internet Security/CIS_PostgreSQL_18_Benchmark_v1_0_0_OSCAL_AP.json",
+      "bytes": 423087,
+      "sha256": "96220c0786192c3892ada09458a78bebb4d3f3bd20ed8f2cf8f9d776b8cd8fa8"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/Center for Internet Security/CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.json",
+      "bytes": 6823924,
+      "sha256": "1a90fccb4442decd119382233ff8986caaaeede83dcf3c5ab22a87c747ab0c81"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json",
+      "bytes": 1768114,
+      "sha256": "741bbe5e1b651aa74a0298942a91170df9348e8124746c0a16a0ccca911c803c"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json",
+      "bytes": 821083,
+      "sha256": "997ecb028020fdacee66352651a5992e5a1ec1b964d1b332d6c7a5480b7897b6"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/postgres16.json",
+      "bytes": 823183,
+      "sha256": "e1eed16a4a0f6d6b6025ce05c16832458bbcd4ba16d597340d0c764333197841"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/rhel8.json",
+      "bytes": 2454926,
+      "sha256": "54cd0e15efb7c96347cfd16012d6fc81b93861079ce8a2ccf4e61eac57b538f7"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/rhel9.json",
+      "bytes": 3051725,
+      "sha256": "9fbd810f7c658809a3be29bdb9bc14dfdafabbe289482454208f86b3646c7783"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/ubuntu22.json",
+      "bytes": 1310065,
+      "sha256": "46738bf619cdfbef00913d761586633bec301e4aae5050a30c823f27509c7e7d"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/ubuntu24.json",
+      "bytes": 1341083,
+      "sha256": "aebb58537acdacaba6667d6076c2f6147baac9d436641789266cb857c126fd3e"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/win2019.json",
+      "bytes": 1940350,
+      "sha256": "4bb6d17f71a90122b0a2dbfaa560a5e6f80d57fdeaeb3d5c5288c79f5764e329"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/win2022.json",
+      "bytes": 1858871,
+      "sha256": "f5f821b671f8494ef155c6c2bcf5e17ae4792fcf200d1115a4c596caa2d03630"
+    },
+    {
+      "approach": "assessment-first",
+      "path": "assessment-first/DISA/STIG_XCCDF to OSCAL Assessment Plans/win2025.json",
+      "bytes": 1867817,
+      "sha256": "b8e54f5a9f6e554cd58bfe0c6b5be46085af5b760786ff6c933b1be7f8150bf8"
+    },
+    {
+      "approach": "component-first",
+      "path": "component-first/ansible-validation-component-definition.json",
+      "bytes": 1106,
+      "sha256": "f22d30678a24146f1be62758a843ad1f34c34eb6a2c00b1008e84a163c4cadbd"
+    },
+    {
+      "approach": "component-first",
+      "path": "component-first/assessment-plan.json",
+      "bytes": 5105,
+      "sha256": "fd50fa2d32cb8a19d9baab6bc4679d863e0b8bddc7902a01c34b25927f61b7d6"
+    },
+    {
+      "approach": "component-first",
+      "path": "component-first/assessment-result.json",
+      "bytes": 4275,
+      "sha256": "06a6ae6a9756dbf9aed6c5c67822e35a4ca324cb2baae47cfed32003b0c57806"
+    },
+    {
+      "approach": "component-first",
+      "path": "component-first/cos-component-definition.json",
+      "bytes": 2525,
+      "sha256": "4944f506f1f2127950e0fb2cd8e251e66e4ec5a83c5e9126ef147117ad233f4a"
+    },
+    {
+      "approach": "component-first",
+      "path": "component-first/idservice-component-definition.json",
+      "bytes": 5230,
+      "sha256": "36b8140ae1272f5e6fef535409375e3cbbd0f0e8387b378ee7d550a3a1760eaf"
+    },
+    {
+      "approach": "component-first",
+      "path": "component-first/oscap-validation-component-definition.json",
+      "bytes": 1297,
+      "sha256": "9efe6492ede4a21a743db6afe6bf05efda79c206d00dc6ee40e89f16145323f3"
+    }
+  ]
+}

@@ -1,0 +1,433 @@
+{
+  "note": "Every figure the site cites, with the derivation that tools/verify.py --stats recomputes from the source corpora. A mismatch is a hard failure.",
+  "generated_from": "tfg-automated-assessments",
+  "stats": [
+    {
+      "key": "aws_groups",
+      "value": 77,
+      "label": "groups in the AWS Security Hub catalog",
+      "derivation": "len(catalog.groups) in AWS/oscal-content-for-aws-services-main/catalogs/aws_security-hub.oscal.json"
+    },
+    {
+      "key": "aws_controls",
+      "value": 452,
+      "label": "controls in the AWS Security Hub catalog",
+      "derivation": "sum(len(g.controls) for g in catalog.groups) in aws_security-hub.oscal.json"
+    },
+    {
+      "key": "aws_cdef_files",
+      "value": 230,
+      "label": "AWS component definition files",
+      "derivation": "count of AWS/oscal-content-for-aws-services-main/component-definitions/*.oscal.json"
+    },
+    {
+      "key": "aws_software_components",
+      "value": 429,
+      "label": "AWS Config rules modelled as software components",
+      "derivation": "count of components with type == 'software' across all AWS component-definitions"
+    },
+    {
+      "key": "aws_title_matches",
+      "value": 429,
+      "label": "software component titles matching the catalog TechnicalControlId, out of 429",
+      "derivation": "count of software-component implemented-requirements where catalog control's assessment-method part title == component title"
+    },
+    {
+      "key": "aws_controls_without_check",
+      "value": 29,
+      "label": "catalog controls with no software check component",
+      "derivation": "452 minus the count of distinct control-ids cited by software components"
+    },
+    {
+      "key": "aws_controls_unreferenced",
+      "value": 14,
+      "label": "catalog controls referenced by no component at all",
+      "derivation": "452 minus the count of distinct control-ids cited by any component"
+    },
+    {
+      "key": "ibm_rules",
+      "value": 5,
+      "label": "rules in the IBM component definitions",
+      "derivation": "sum(len(component.rules)) across cos- and idservice-component-definition.json"
+    },
+    {
+      "key": "ibm_checks",
+      "value": 5,
+      "label": "checks in the IBM validation component definitions",
+      "derivation": "sum(len(component.checks)) across ansible- and oscap-validation-component-definition.json"
+    },
+    {
+      "key": "ibm_control_ids",
+      "value": 9,
+      "label": "distinct control-ids covered by the IBM component definitions",
+      "derivation": "count of distinct implemented-requirements.control-id across cos and idservice"
+    },
+    {
+      "key": "ez_activities",
+      "value": 2425,
+      "label": "assessment plan activities across the Easy Dynamics corpus",
+      "derivation": "sum(len(assessment-plan.local-definitions.activities)) across the 15 Easy Dynamics assessment plans"
+    },
+    {
+      "key": "ez_steps",
+      "value": 5694,
+      "label": "assessment plan steps across the Easy Dynamics corpus",
+      "derivation": "sum(len(activity.steps)) across the 15 Easy Dynamics assessment plans"
+    },
+    {
+      "key": "stig_method_test",
+      "value": 2271,
+      "label": "STIG activities carrying method TEST, out of 2271",
+      "derivation": "count of activity props where name == 'method' and value == 'TEST' across the 9 STIG files; no other method value occurs"
+    },
+    {
+      "key": "cis_ubuntu_automated",
+      "value": 576,
+      "label": "CIS Ubuntu 24.04 steps marked automated",
+      "derivation": "count of step props where name == 'assessment-status' and value == 'automated' in CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json"
+    },
+    {
+      "key": "cis_ubuntu_manual",
+      "value": 40,
+      "label": "CIS Ubuntu 24.04 steps marked manual",
+      "derivation": "same file, value == 'manual'"
+    },
+    {
+      "key": "cis_postgres_automated",
+      "value": 0,
+      "label": "CIS PostgreSQL 18 steps marked automated",
+      "derivation": "count of step props where name == 'assessment-status' and value == 'automated' in CIS_PostgreSQL_18_Benchmark_v1_0_0_OSCAL_AP.json"
+    },
+    {
+      "key": "cis_postgres_manual",
+      "value": 144,
+      "label": "CIS PostgreSQL 18 steps marked manual",
+      "derivation": "same file, value == 'manual'"
+    },
+    {
+      "key": "stig_files",
+      "value": 9,
+      "label": "STIG assessment plan files",
+      "derivation": "count of Easy Dynamics/STIG_XCCDF to OSCAL Assessment Plans/*.json"
+    },
+    {
+      "key": "stig_placeholder",
+      "value": 9,
+      "label": "STIG files whose import-ssp.href is the literal string PLACEHOLDER",
+      "derivation": "count of STIG files where assessment-plan.import-ssp.href == 'PLACEHOLDER'"
+    },
+    {
+      "key": "aws_catalog_files",
+      "value": 1,
+      "label": "AWS catalog files",
+      "derivation": "count of AWS/oscal-content-for-aws-services-main/catalogs/*.oscal.json"
+    },
+    {
+      "key": "ez_files",
+      "value": 15,
+      "label": "Easy Dynamics assessment plan files",
+      "derivation": "count of files under Easy Dynamics/** whose root element is assessment-plan. The corpus also holds one assessment-results file and two non-OSCAL benchmark files, which this does not count"
+    },
+    {
+      "key": "ibm_cdef_files",
+      "value": 4,
+      "label": "IBM component definition files",
+      "derivation": "count of IBM/*component-definition.json"
+    },
+    {
+      "key": "ibm_ap_files",
+      "value": 1,
+      "label": "IBM assessment plan files",
+      "derivation": "count of IBM/assessment-plan.json"
+    },
+    {
+      "key": "ibm_ar_files",
+      "value": 1,
+      "label": "IBM assessment result files",
+      "derivation": "count of IBM/assessment-result.json"
+    },
+    {
+      "key": "ez_props",
+      "value": 55458,
+      "label": "props across the Easy Dynamics assessment plans",
+      "derivation": "recursive count of every props array across Easy Dynamics/**/*.json"
+    },
+    {
+      "key": "aws_props",
+      "value": 6094,
+      "label": "props across the AWS catalog and component definitions",
+      "derivation": "recursive count of every props array across AWS/oscal-content-for-aws-services-main/**/*.json"
+    },
+    {
+      "key": "ibm_cdef_props",
+      "value": 0,
+      "label": "props across the four IBM component definitions",
+      "derivation": "recursive count of every props array across IBM/*component-definition.json"
+    },
+    {
+      "key": "aws_nested_groups",
+      "value": 0,
+      "label": "AWS catalog groups that themselves contain groups",
+      "derivation": "sum(1 for g in catalog.groups if g.groups) in aws_security-hub.oscal.json"
+    },
+    {
+      "key": "aws_control_params",
+      "value": 0,
+      "label": "params declared on AWS catalog controls",
+      "derivation": "sum(len(c.params) for g in catalog.groups for c in g.controls)"
+    },
+    {
+      "key": "aws_profile_files",
+      "value": 0,
+      "label": "profile files in the AWS corpus",
+      "derivation": "count of AWS/**/*.json whose root key is profile"
+    },
+    {
+      "key": "cisa_files",
+      "value": 5,
+      "label": "CISA BOD 25-01 assessment plan files",
+      "derivation": "count of Easy Dynamics/CISA BOD 25-01/*.json"
+    },
+    {
+      "key": "cisa_criticality_shall",
+      "value": 73,
+      "label": "steps carrying criticality SHALL in ap-cisa-scuba-agnostic.json",
+      "derivation": "count of step props named criticality with value SHALL in Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-agnostic.json"
+    },
+    {
+      "key": "cisa_criticality_should",
+      "value": 55,
+      "label": "steps carrying criticality SHOULD in ap-cisa-scuba-agnostic.json",
+      "derivation": "count of step props named criticality with value SHOULD in the same file"
+    },
+    {
+      "key": "ez_subjects_component",
+      "value": 2407,
+      "label": "assessment-subject blocks typed component across the Easy Dynamics corpus",
+      "derivation": "count of objects carrying a string type together with include-all or include-subjects, where type is component"
+    },
+    {
+      "key": "ez_subjects_inventory_item",
+      "value": 11,
+      "label": "assessment-subject blocks typed inventory-item across the Easy Dynamics corpus",
+      "derivation": "same walk, where type is inventory-item"
+    },
+    {
+      "key": "ibm_ar_findings",
+      "value": 0,
+      "label": "findings inside the result object of the IBM assessment result",
+      "derivation": "len(assessment-results.results[0].findings) in IBM/assessment-result.json. The file also carries a findings array at the document root, outside results, where the model does not define one"
+    },
+    {
+      "key": "ibm_ar_observations",
+      "value": 1,
+      "label": "observations in the IBM assessment result",
+      "derivation": "len(assessment-results.results[0].observations) in IBM/assessment-result.json"
+    },
+    {
+      "key": "ez_activities_with_related_controls",
+      "value": 2279,
+      "label": "assessment plan activities carrying related-controls, out of 2425",
+      "derivation": "sum(1 for a in every assessment-plan.local-definitions.activities if a.related-controls) across Easy Dynamics/**/*.json"
+    },
+    {
+      "key": "ibm_ir_without_rules",
+      "value": 1,
+      "label": "IBM implemented-requirements listing no implementing rule, out of 9",
+      "derivation": "sum(1 for ir in every control-implementation.implemented-requirements if not ir.implementing-rules) across IBM/*component-definition.json"
+    },
+    {
+      "key": "cis_ap_files",
+      "value": 2,
+      "label": "CIS assessment plan files",
+      "derivation": "count of assessment plans under Easy Dynamics/Center for Internet Security/"
+    },
+    {
+      "key": "cis_control_ids",
+      "value": 82,
+      "label": "distinct control ids referenced across the CIS assessment plans",
+      "derivation": "size of the set of control-id values under reviewed-controls.control-selections[].include-controls[] in the two CIS plans"
+    },
+    {
+      "key": "cis_synthetic_ids",
+      "value": 53,
+      "label": "control ids the content itself flags as synthetic",
+      "derivation": "distinct control ids under a control-selection whose props carry resolution-status = synthetic-ids"
+    },
+    {
+      "key": "cis_synthetic_refs",
+      "value": 84,
+      "label": "references to those 53 synthetic control ids",
+      "derivation": "count, not set size, of include-control entries under a control-selection flagged resolution-status = synthetic-ids"
+    },
+    {
+      "key": "ez_step_type_remediate",
+      "value": 2271,
+      "label": "steps carrying step-type remediate, all in the STIG plans",
+      "derivation": "count of props name=step-type value=remediate across the 15 Easy Dynamics assessment plans"
+    },
+    {
+      "key": "ez_step_type_remediation",
+      "value": 380,
+      "label": "steps carrying step-type remediation, all in the CIS plans",
+      "derivation": "count of props name=step-type value=remediation across the 15 Easy Dynamics assessment plans"
+    },
+    {
+      "key": "ez_step_type_check",
+      "value": 2271,
+      "label": "steps carrying step-type check, all in the STIG plans",
+      "derivation": "count of props name=step-type value=check across the 15 Easy Dynamics assessment plans"
+    },
+    {
+      "key": "ez_step_type_audit",
+      "value": 380,
+      "label": "steps carrying step-type audit, all in the CIS plans",
+      "derivation": "count of props name=step-type value=audit across the 15 Easy Dynamics assessment plans"
+    },
+    {
+      "key": "ez_step_type_vocabularies",
+      "value": 2,
+      "label": "distinct step-type vocabularies in use across the two benchmark families",
+      "derivation": "size of the set of sorted step-type value sets, grouped by the directory each plan sits in"
+    },
+    {
+      "key": "ez_ar_files",
+      "value": 1,
+      "label": "assessment results in the corpus",
+      "derivation": "count of files under Easy Dynamics/** whose root element is assessment-results"
+    },
+    {
+      "key": "ez_ssp_files",
+      "value": 0,
+      "label": "system security plans in the corpus",
+      "derivation": "count of files in Easy Dynamics/** whose root element is system-security-plan"
+    },
+    {
+      "key": "aws_owner_refs",
+      "value": 429,
+      "label": "references to role-id owner across the AWS component definitions",
+      "derivation": "count of role-id keys valued 'owner' at any depth in AWS/**/component-definitions/*.oscal.json"
+    },
+    {
+      "key": "aws_files_referencing_owner",
+      "value": 67,
+      "label": "component definition files referencing role-id owner",
+      "derivation": "count of AWS component definition files containing at least one role-id valued 'owner'"
+    },
+    {
+      "key": "aws_files_declaring_author",
+      "value": 230,
+      "label": "component definition files declaring the role author",
+      "derivation": "count of metadata.roles entries with id 'author', by file"
+    },
+    {
+      "key": "aws_roles_declared",
+      "value": 1,
+      "label": "distinct roles declared anywhere in the AWS component definitions",
+      "derivation": "size of the set of metadata.roles[].id across all 230 AWS component definition files"
+    },
+    {
+      "key": "aws_guidance_parts",
+      "value": 452,
+      "label": "guidance parts across the catalog controls, one per control",
+      "derivation": "count of control parts with name='guidance' in aws_security-hub.oscal.json"
+    },
+    {
+      "key": "aws_guidance_distinct",
+      "value": 1,
+      "label": "distinct guidance prose strings among the guidance parts",
+      "derivation": "size of the set of prose values among control parts named 'guidance'"
+    },
+    {
+      "key": "aws_test_groups",
+      "value": 1,
+      "label": "catalog groups with the id TestControl",
+      "derivation": "count of catalog.groups entries whose id is exactly 'TestControl'"
+    },
+    {
+      "key": "aws_test_controls",
+      "value": 1,
+      "label": "controls inside the TestControl group",
+      "derivation": "sum(len(g.controls)) over catalog groups with id 'TestControl'"
+    },
+    {
+      "key": "aws_test_controls_mislinked",
+      "value": 1,
+      "label": "TestControl controls whose remediation link names a different control",
+      "derivation": "count of TestControl controls with a rel='remediation' link whose href does not contain the control's own service prefix"
+    },
+    {
+      "key": "aws_ssp_files",
+      "value": 0,
+      "label": "system security plans in the corpus",
+      "derivation": "count of files in AWS/** whose root element is system-security-plan"
+    },
+    {
+      "key": "aws_ap_files",
+      "value": 0,
+      "label": "assessment plans in the corpus",
+      "derivation": "count of files in AWS/** whose root element is assessment-plan"
+    },
+    {
+      "key": "aws_ar_files",
+      "value": 0,
+      "label": "assessment results in the corpus",
+      "derivation": "count of files in AWS/** whose root element is assessment-results"
+    },
+    {
+      "key": "ibm_document_uuids",
+      "value": 1,
+      "label": "distinct document uuids across the 4 IBM component definition files",
+      "derivation": "size of the set of component-definition.uuid across IBM/*component-definition.json"
+    },
+    {
+      "key": "ibm_oscap_checks",
+      "value": 3,
+      "label": "checks in the OSCAP validation component",
+      "derivation": "sum(len(c.checks)) over components in IBM/oscap-validation-component-definition.json"
+    },
+    {
+      "key": "ibm_oscap_checks_dangling",
+      "value": 3,
+      "label": "OSCAP checks whose target-component-uuid resolves to no component",
+      "derivation": "count of OSCAP checks whose target-component-uuid is not a component uuid declared in any of the 4 IBM component definitions"
+    },
+    {
+      "key": "ibm_ansible_checks",
+      "value": 2,
+      "label": "checks in the ANSIBLE validation component",
+      "derivation": "sum(len(c.checks)) over components in IBM/ansible-validation-component-definition.json"
+    },
+    {
+      "key": "ibm_ansible_checks_dangling",
+      "value": 0,
+      "label": "ANSIBLE checks whose target-component-uuid resolves to no component",
+      "derivation": "count of ANSIBLE checks whose target-component-uuid is not a component uuid declared in any of the 4 IBM component definitions"
+    },
+    {
+      "key": "ibm_ap_local_definitions_misspelled",
+      "value": 1,
+      "label": "assessment plans spelling local-definitions without its second i",
+      "derivation": "1 if the IBM assessment plan carries a 'local-defintions' key and no 'local-definitions' key, else 0"
+    },
+    {
+      "key": "ibm_ssp_files",
+      "value": 0,
+      "label": "system security plans in the corpus",
+      "derivation": "count of files in IBM/*.json whose root element is system-security-plan"
+    },
+    {
+      "key": "ez_files_with_step_type",
+      "value": 11,
+      "label": "assessment plans using step-type at all",
+      "derivation": "count of Easy Dynamics assessment plan files whose text contains the key \"step-type\""
+    }
+  ],
+  "cited_from_position_paper": {
+    "note": "These three figures are NOT computed from the corpora. They come from Technology_Specific_Hardening_Guidance_in_OSCAL.docx, an Easy Dynamics position paper, and must be attributed as such at every appearance per editorial rule 10.",
+    "regulatory_controls": 304,
+    "benchmark_requirements": 563,
+    "combined": 867,
+    "source": "Technology_Specific_Hardening_Guidance_in_OSCAL.docx, Easy Dynamics position paper"
+  }
+}

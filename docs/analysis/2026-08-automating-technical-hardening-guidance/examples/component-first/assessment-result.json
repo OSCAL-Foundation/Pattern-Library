@@ -1,0 +1,131 @@
+{
+  "assessment-results": {
+    "uuid": "60077e84-e62f-4375-8c6c-b0e0d4560d1f",
+    "metadata": {
+      "title": "Assessment Result",
+      "last-modified": "2026-07-03T13:57:28.355446-04:00",
+      "version": "1.0",
+      "oscal-version": "1.2.1"
+    },
+    "import-ap": {
+      "href": "trestle:///assessment-plans/ACME_AP/assessment-plan.json"
+    },
+    "results": [
+      {
+        "uuid": "038d213e-6b05-449a-a68d-8020c61df132",
+        "title": "XCCDF",
+        "description": "XCCDF Scan Results",
+        "start": "2025-02-26T12:45:58+00:00",
+        "end": "2025-02-26T12:45:58+00:00",
+        "local-definitions": {
+            "components": [
+              {
+                "uuid": "9d9c0c13-4f6e-4564-af0b-4e237bd2d8fe",
+                "type": "Service",
+                "title": "ubuntu2404",
+                "description": "ubuntu2404",
+                "status": {
+                  "state": "operational"
+                }
+              }
+            ],
+            "inventory-items": [
+              {
+                "uuid": "c8ca2d73-c917-4901-9098-71b2c601f471",
+                "description": "inventory",
+                "props": [
+                  {
+                    "name": "target",
+                    "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                    "value": "Dade"
+                  },
+                  {
+                    "name": "target_type",
+                    "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                    "value": "ubuntu2404"
+                  },
+                  {
+                    "name": "host_name",
+                    "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                    "value": "Dade"
+                  }
+                ],
+                "implemented-components": [
+                  {
+                    "component-uuid": "9d9c0c13-4f6e-4564-af0b-4e237bd2d8fe"
+                  }
+                ]
+              }
+            ]
+        },
+        "reviewed-controls": {
+          "control-selections": [
+            {
+              "include-all": {}
+            }
+          ]
+        },
+        "observations": [
+          {
+            "uuid": "6c0a18ff-36b4-45b2-9e8b-6e3011bee6b1",
+            "description": "check-result",
+            "assessment-check-id": "check-1",
+            "assessment-asset/component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e8",
+            "result": "pass",
+            "props": [
+              {
+                "name": "idref",
+                "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                "value": "xccdf_org.ssgproject.content_rule_package_prelink_removed"
+              },
+              {
+                "name": "result",
+                "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                "value": "pass"
+              },
+              {
+                "name": "time",
+                "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                "value": "2025-02-26T03:47:26-05:00"
+              },
+              {
+                "name": "severity",
+                "ns": "https://oscal-compass.github.io/compliance-trestle/schemas/oscal/ar/OpenSCAP",
+                "value": "medium"
+              }
+            ],
+            "methods": [
+                "TEST-AUTOMATED"
+            ],
+            "subjects": [
+                {
+                "subject-uuid": "c8ca2d73-c917-4901-9098-71b2c601f471",
+                "type": "inventory-item"
+                }
+            ],
+            "collected": "2025-02-26T12:45:58+00:00"
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "uuid": "99c0a0de-e34e-4e22-95a1-1d4f24826565",
+        "title": "AC 4",
+        "description": "AC 4 conpliance findings",
+        "target": {
+          "type": "statement-id",
+          "target-id": "ac-4_smt",
+          "status": {
+            "state": "satisfied"
+          }
+        },
+        "related-observations": [
+          {
+            "observation-uuid": "6c0a18ff-36b4-45b2-9e8b-6e3011bee6b1"
+          }
+        ]
+      }
+    ]
+  }
+}

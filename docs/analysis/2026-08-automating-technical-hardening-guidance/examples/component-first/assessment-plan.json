@@ -1,0 +1,159 @@
+{
+  "assessment-plan": {
+    "uuid": "60077e84-e62f-4375-8c6c-b0e0d4560d5f",
+    "metadata": {
+      "title": "Assessment Plan",
+      "last-modified": "2026-05-26T13:57:28.355446-04:00",
+      "version": "1.0",
+      "oscal-version": "1.2.1"
+    },
+    "import-ssp": {
+      "href": "trestle:///system-security-plans/ACME_SSP/system-security-plan.json"
+    },
+    "local-defintions": [
+      {
+        "activities": [
+          {
+            "uuid": "a1b2c3d4-1111-4aaa-8888-111111111111",
+            "description": "Execute Ansible checks to validate the controls.",
+            "assessment-asset-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f8",
+            "check-ids": [
+              "check-1",
+              "check-2"
+            ]
+          },
+          {
+            "uuid": "b2c3d4e5-2222-4bbb-9999-222222222222",
+            "description": "Execute OSCAP checks to validate the controls.",
+            "assessment-asset-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e8",
+            "check-ids": [
+              "check-1",
+              "check-3"
+            ]
+          }
+        ]
+      }
+    ],
+    "reviewed-controls": {
+      "control-selections": [
+        {
+          "include-all": {}
+        }
+      ]
+    },
+    "assessment-subjects": [
+      {
+        "type": "component",
+        "description": "All components in the SSP.",
+        "include-all": {}
+      }
+    ],
+    "assessment-assets": [
+      {
+        "components": [
+          {
+            "uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f8",
+            "type": "validation",
+            "title": "ANSIBLE",
+            "description": "ANSIBLE",
+            "checks": [
+              {
+                "id": "check-1",
+                "description": "Check Cloud Object Storage is accessible only by using private endpoints",
+                "rule-id": "cos_access_endpoint_type",
+                "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a985f9"
+              },
+              {
+                "id": "check-2",
+                "description": "Check Cloud Object Storage is enabled with customer-managed encryption and Keep Your Own Key (KYOK)",
+                "rule-id": "cos_encryption_hyperprotect_key_configured",
+                "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a985f9"
+              }
+            ],
+            "status": {
+              "state": "operational" 
+            }
+          },
+          {
+            "uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e8",
+            "type": "validation",
+            "title": "OSCAP",
+            "description": "OSCAP",
+            "checks": [
+              {
+                "id": "check-1",
+                "description": "Check min. length of password",
+                "rule-id": "idservice_password_min_length",
+                "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e9"
+              },
+              {
+                "id": "check-2",
+                "description": "Check password is not reused below # count",
+                "rule-id": "idservice_password_not_reuse_min_count",
+                "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e9"
+              },
+              {
+                "id": "check-3",
+                "description": "Check strong password policy with mix of alphabets, digits, and special chars",
+                "rule-id": "idservice_strong_pass_enabled",
+                "target-component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e9"
+              }
+            ],
+            "status": {
+              "state": "operational" 
+            }
+          }
+        ],
+        "assessment-platforms": [
+          {
+            "uuid": "d8c9a1e5-1c3b-4f0b-9c8e-2a1b2c3d4e5f",
+            "title": "Ansible Assessment Platform",
+            "uses-components": [
+              {
+                "component-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984f8"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tasks": [
+      {
+        "uuid": "b3504d22-0e75-4dd7-9247-618661beba4e",
+        "type": "action",
+        "title": "Execute Ansible Checks",
+        "description": "The assessor will execute the Ansible checks defined in the validation component using the Ansible assessment platform to collect evidence for the assessment.",
+        "props": [
+            {
+                "name": "assessment-platform",
+                "value": "d8c9a1e5-1c3b-4f0b-9c8e-2a1b2c3d4e5f"
+            }
+        ],
+        "timing": {
+          "at-frequency": {
+            "period": 1,
+            "unit": "days"
+          }
+        },
+        "associated-activities": [
+          {
+            "activity-uuid": "a1b2c3d4-1111-4aaa-8888-111111111111",
+            "subjects": [
+              {
+                "subject-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984fe"
+              }
+            ]
+          },
+          {
+            "activity-uuid": "b2c3d4e5-2222-4bbb-9999-222222222222",
+            "subjects": [
+              {
+                "subject-uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984ff"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

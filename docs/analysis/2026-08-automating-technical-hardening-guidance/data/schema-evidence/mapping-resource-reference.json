@@ -1,0 +1,67 @@
+{
+  "note": "The oscal-mapping-oscal-mapping-common:mapping-resource-reference definition from the OSCAL 1.2.1 mapping-collection model, demonstrating that a mapped resource reference requires type and href and constrains type with an open anyOf vocabulary whose enumeration lists catalog and profile.",
+  "model": "mapping-collection",
+  "definition": "oscal-mapping-oscal-mapping-common:mapping-resource-reference",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-mapping-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-12",
+  "constraints": [
+    "required == [\"type\",\"href\"]",
+    "type uses anyOf (open vocabulary) with enum [\"catalog\",\"profile\"]"
+  ],
+  "fragment": {
+    "title": "Mapped Resource Reference",
+    "description": "A reference to a resource that is either the source or the target of a mapping.",
+    "$id": "#/definitions/oscal-mapping-oscal-mapping-common:mapping-resource-reference",
+    "type": "object",
+    "properties": {
+      "ns": {
+        "title": "Resource Type Namespace",
+        "description": "An optional namespace qualifying the resource's type.",
+        "$ref": "#/definitions/URIDatatype"
+      },
+      "type": {
+        "title": "Resource Type",
+        "description": "The semantic type of the resource.",
+        "anyOf": [
+          {
+            "$ref": "#/definitions/TokenDatatype"
+          },
+          {
+            "enum": [
+              "catalog",
+              "profile"
+            ]
+          }
+        ]
+      },
+      "href": {
+        "title": "Catalog or Profile Reference",
+        "description": "A resolvable URL reference to the base catalog or profile that this profile is tailoring.",
+        "$ref": "#/definitions/URIReferenceDatatype"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-mapping-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-mapping-oscal-metadata:link"
+        }
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-mapping-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "type",
+      "href"
+    ],
+    "additionalProperties": false
+  }
+}

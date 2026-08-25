@@ -1,0 +1,87 @@
+{
+  "note": "The oscal-ar-oscal-assessment-common:finding definition from the OSCAL 1.2.1 assessment-results model, demonstrating that every finding must carry a target.",
+  "model": "assessment-results",
+  "definition": "oscal-ar-oscal-assessment-common:finding",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ar-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-12",
+  "constraints": [
+    "required includes \"target\""
+  ],
+  "fragment": {
+    "title": "Finding",
+    "description": "Describes an individual finding.",
+    "$id": "#/definitions/oscal-ar-oscal-assessment-common:finding",
+    "type": "object",
+    "properties": {
+      "uuid": {
+        "title": "Finding Universally Unique Identifier",
+        "description": "A machine-oriented, globally unique identifier with cross-instance scope that can be used to reference this finding in this or other OSCAL instances. The locally defined UUID of the finding can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which means it should be consistently used to identify the same subject across revisions of the document.",
+        "$ref": "#/definitions/UUIDDatatype"
+      },
+      "title": {
+        "title": "Finding Title",
+        "description": "The title for this finding.",
+        "$ref": "#/definitions/MarkupLineDatatype"
+      },
+      "description": {
+        "title": "Finding Description",
+        "description": "A human-readable description of this finding.",
+        "$ref": "#/definitions/MarkupMultilineDatatype"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+        }
+      },
+      "origins": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-assessment-common:origin"
+        }
+      },
+      "target": {
+        "$ref": "#/definitions/oscal-ar-oscal-assessment-common:finding-target"
+      },
+      "implementation-statement-uuid": {
+        "title": "Implementation Statement UUID",
+        "description": "A machine-oriented identifier reference to the implementation statement in the SSP to which this finding is related.",
+        "$ref": "#/definitions/UUIDDatatype"
+      },
+      "related-observations": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-assessment-common:related-observation"
+        }
+      },
+      "related-risks": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-assessment-common:associated-risk"
+        }
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "uuid",
+      "title",
+      "description",
+      "target"
+    ],
+    "additionalProperties": false
+  }
+}

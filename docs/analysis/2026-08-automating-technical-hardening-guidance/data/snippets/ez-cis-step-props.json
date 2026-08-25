@@ -1,0 +1,13 @@
+{
+  "id": "ez-cis-step-props",
+  "slot": "3",
+  "approach": "assessment-first",
+  "title": "CIS audit step props",
+  "source": "Easy Dynamics/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json",
+  "pointer": "/assessment-plan/local-definitions/activities/0/steps/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"5c4c3bec-7bbe-521d-9a90-c04102edce9b\",\n  \"title\": \"Audit for Ensure cramfs kernel module is not available\",\n  \"description\": \"## Description\\n\\nThe `cramfs` filesystem type is a compressed read-only Linux filesystem embedded in small footprint systems. A `cramfs` image can be used without having to first decompress the image.\\n\\n## Audit\\n\\nRun the following script to verify:\\n\\n**- IF -** the `cramfs` kernel module is available in ANY installed kernel, verify:\\n\\n- An entry including `/bin/true` or `/bin/false` exists in a file w [truncated]\",\n  \"props\": [\n    {\n      \"name\": \"assessment-status\",\n      \"value\": \"automated\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"cis-rule-id\",\n      \"value\": \"xccdf_org.cisecurity.benchmarks_rule_1.1.1.1_Ensure_cramfs_kernel_module_is_not_available\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"step-type\",\n      \"value\": \"audit\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"cis-control-uri\",\n      \"value\": \"http://cisecurity.org/20-cc/v7.0/control/9/subcontrol/2\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"cis-control-uri\",\n      \"value\": \"http://cisecurity.org/20-cc/v8.0/control/4/subcontrol/8\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"nist-control\",\n      \"value\": \"CM-7\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"stig-finding-id\",\n      \"value\": \"V-230498\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"cis-safeguard-urn\",\n      \"value\": \"urn:cisecurity.org:controls:8.0:4:8\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"cis-safeguard-urn\",\n      \"value\": \"urn:cisecurity.org:controls:7.0:9:2\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    }\n  ],\n  \"remarks\": \"Removing support for unneeded filesystem types reduces the local attack surface of the system. If this filesystem type is not needed, disable it.\"\n}",
+  "sha256_of_source_file": "741bbe5e1b651aa74a0298942a91170df9348e8124746c0a16a0ccca911c803c",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ez-cis-remediation-step",
+  "slot": "3",
+  "approach": "assessment-first",
+  "title": "CIS remediation step",
+  "source": "Easy Dynamics/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json",
+  "pointer": "/assessment-plan/local-definitions/activities/0/steps/1",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"7be22348-467b-563a-9c21-d438e47df7df\",\n  \"title\": \"Remediation for Ensure cramfs kernel module is not available\",\n  \"description\": \"Run the following script to unload and disable the `cramfs` module:\\n\\n**- IF -** the `cramfs` kernel module is available in ANY installed kernel:\\n\\n- Create a file ending in `.conf` with `install cramfs /bin/false` in the `/etc/modprobe.d/` directory\\n- Create a file ending in `.conf` with `blacklist cramfs` in the `/etc/modprobe.d/` directory\\n- Run `modprobe -r cramfs 2>/dev/null; rmmod cramfs 2>/de [truncated]\",\n  \"props\": [\n    {\n      \"name\": \"assessment-status\",\n      \"value\": \"automated\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"cis-rule-id\",\n      \"value\": \"xccdf_org.cisecurity.benchmarks_rule_1.1.1.1_Ensure_cramfs_kernel_module_is_not_available\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"step-type\",\n      \"value\": \"remediation\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    }\n  ]\n}",
+  "sha256_of_source_file": "741bbe5e1b651aa74a0298942a91170df9348e8124746c0a16a0ccca911c803c",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

@@ -1,0 +1,91 @@
+{
+  "note": "Three views of what a hardening rule is. Each is internally coherent and each implies a different home. The site takes no position on which is correct and declares a working definition instead. Rendered in the order given, which is the order of the OSCAL layers and not a ranking. The advocate and quote fields are retained as provenance and are NOT rendered: per the Gate 7 decision, no personal name, proponent organization or quotation appears on any page. Each view also names the stakeholder it serves, joining to the glossary term of that name, because the three stakeholders and the three readings are the same three-way split seen from two sides.",
+  "why_this_matters": "OSCAL has no field for normativity. The pre-read's criterion 3 records requirement level as absent from OSCAL entirely, an orthogonal gap affecting every option. Location has therefore become the only channel available for expressing which of these three views an author holds.",
+  "views": [
+    {
+      "key": "requirement",
+      "label": "A requirement",
+      "definition": "Normative. A shall. A control by another name, differing from a regulatory control only in specificity.",
+      "stakeholder": "publisher",
+      "implies_layer": "Control",
+      "implies_model": "catalog",
+      "aligned_approach": "catalog-first",
+      "advocate": "Fritz Kunstler, AWS",
+      "quote": "fritz-standard-setter",
+      "supporting_quotes": [
+        "fritz-catalogs-for-requirements"
+      ]
+    },
+    {
+      "key": "capability",
+      "label": "A capability statement",
+      "definition": "Descriptive. How a component may be configured. The vendor states what is possible; the organization decides what is required.",
+      "stakeholder": "implementer",
+      "implies_layer": "Implementation",
+      "implies_model": "component-definition",
+      "aligned_approach": "component-first",
+      "advocate": "Anca Sailer and Vikas Agarwal, IBM",
+      "quote": "deck-may-be-configured",
+      "supporting_quotes": [
+        "fritz-possible-state",
+        "vikas-cdef-automation"
+      ]
+    },
+    {
+      "key": "procedure",
+      "label": "An assessor's procedure",
+      "definition": "Guidance that is never performed by hand. It is automated to apply and automated to verify, so its natural expression is the thing that does the applying and the verifying.",
+      "stakeholder": "assessor",
+      "implies_layer": "Assessment",
+      "implies_model": "assessment-plan",
+      "aligned_approach": "assessment-first",
+      "advocate": "Easy Dynamics",
+      "quote": "pranav-assessment-start",
+      "supporting_quotes": [
+        "dave-as-intended"
+      ]
+    }
+  ],
+  "crux": {
+    "quote": "brian-not-normative",
+    "note": "Brian Ruf's objection applies to any option, not only to the one it was raised against."
+  },
+  "automation_argument": {
+    "claim": "Hardening guidance is predominantly and increasingly automated, both to apply and to verify, which distinguishes it from a regulatory control in kind rather than in granularity.",
+    "claim_not_made": "That hardening guidance is never performed manually. The corpus contradicts that stronger form and the site does not assert it.",
+    "evidence": [
+      {
+        "corpus": "STIG, all 9 files",
+        "automated": "2271 activities carry method TEST",
+        "manual": "none",
+        "stat_keys": [
+          "stig_method_test"
+        ]
+      },
+      {
+        "corpus": "CIS Ubuntu 24.04",
+        "automated": "576 steps",
+        "manual": "40 steps",
+        "stat_keys": [
+          "cis_ubuntu_automated",
+          "cis_ubuntu_manual"
+        ]
+      },
+      {
+        "corpus": "CIS PostgreSQL 18",
+        "automated": "0 steps",
+        "manual": "144 steps, all of them, and every activity carries method EXAMINE",
+        "stat_keys": [
+          "cis_postgres_automated",
+          "cis_postgres_manual"
+        ],
+        "note": "The counterexample. Published because it is what makes the other two rows credible."
+      }
+    ]
+  },
+  "working_definition": {
+    "term": "rule",
+    "text": "One technical requirement or recommendation, at a granularity finer than a control, without any claim about whether it is binding.",
+    "status": "A working definition adopted so that three comparable pages can be written. It is not a position on which of the three views is correct."
+  }
+}

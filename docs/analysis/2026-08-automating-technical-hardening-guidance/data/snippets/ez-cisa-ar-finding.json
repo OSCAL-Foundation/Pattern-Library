@@ -1,0 +1,13 @@
+{
+  "id": "ez-cisa-ar-finding",
+  "slot": "6b",
+  "approach": "assessment-first",
+  "title": "A finding, targeting an objective",
+  "source": "Easy Dynamics/CISA BOD 25-01/ar-cisa-scuba-scubagear.json",
+  "pointer": "/assessment-results/results/0/findings/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"b5d014ae-23b1-51b8-845a-972f40def692\",\n  \"title\": \"MS.AAD.1.1v1: Legacy Authentication Blocking\",\n  \"target\": {\n    \"type\": \"objective-id\",\n    \"status\": {\n      \"state\": \"satisfied\"\n    },\n    \"target-id\": \"ms.aad.1.1v1\"\n  },\n  \"description\": \"Conditional Access policy confirmed blocking all legacy authentication protocols for all users.\",\n  \"related-observations\": [\n    {\n      \"observation-uuid\": \"941e3133-152b-5301-8762-abd228b5ee80\"\n    }\n  ]\n}",
+  "sha256_of_source_file": "2e13fc65380024e6da79f539fec07f906659c100ae0cec555ed0541d5fce973d",
+  "extracted_at": "2026-08-22T18:43:40+00:00"
+}

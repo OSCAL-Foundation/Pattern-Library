@@ -1,0 +1,76 @@
+{
+  "component-definition": {
+    "uuid": "bbdf7ee6-3e0a-4065-8ecf-50f4129de473",
+    "metadata": {
+      "title": "Demo component definition",
+      "last-modified": "2026-05-15T14:29:37+00:00",
+      "version": "1.0",
+      "oscal-version": "1.2.1"
+    },
+    "components": [
+      {
+        "uuid": "0c410eb1-52cd-40bc-bf1d-c80126a985f9",
+        "type": "service",
+        "title": "COS",
+        "description": "COS",
+        "rules": [
+          {
+            "id": "cos_access_endpoint_type",
+            "description": "Ensure Cloud Object Storage is accessible only by using {param: endpoint_access} endpoints",
+            "params": [
+              {
+                "id": "endpoint_access",
+                "label": "Endpoint Access type",
+                "select": {
+                  "how-many": "one",
+                  "choice": [
+                    "public", 
+                    "private", 
+                    "direct"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "cos_encryption_hyperprotect_key_configured",
+            "description": "Ensure Cloud Object Storage is enabled with customer-managed encryption and Keep Your Own Key (KYOK)"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "08159454-994c-49ed-8f78-f2293b1274a2",
+            "source": "trestle://profiles/ACME_official/profile.json",
+            "description": "ACME Official Profile",
+            "set-parameters": [
+              {
+                "param-id": "endpoint_access",
+                "values": [
+                  "private"
+                ]
+              }
+            ],
+            "implemented-requirements": [
+              {
+                "uuid": "c6ccfcbc-4553-40e6-b4e8-eadbff8d4756",
+                "control-id": "ac-4",
+                "description": "This control is implmeneted by ensuring the COS is only available on private endpoints.",
+                "implementing-rules": [
+                   {"rule-id": "cos_access_endpoint_type"}
+                ]
+              },
+              {
+                "uuid": "455563ca-c454-41d5-aa3b-f57843d95aab",
+                "control-id": "sc-28",
+                "description": "Ensure that data is encrypted and the key is managed by the customer.",
+                "implementing-rules": [
+                   {"rule-id": "cos_encryption_hyperprotect_key_configured"}
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

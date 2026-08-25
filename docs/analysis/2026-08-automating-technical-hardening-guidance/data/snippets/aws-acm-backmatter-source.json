@@ -1,0 +1,13 @@
+{
+  "id": "aws-acm-backmatter-source",
+  "slot": "2",
+  "approach": "catalog-first",
+  "title": "Back-matter, source to the catalog",
+  "source": "AWS/oscal-content-for-aws-services-main/component-definitions/acm.oscal.json",
+  "pointer": "/component-definition/back-matter",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"resources\": [\n    {\n      \"uuid\": \"ab8a6a36-2706-49e5-b87e-498c52ba6a61\",\n      \"title\": \"AWS Regions Component Definition\",\n      \"rlinks\": [\n        {\n          \"href\": \"../aws_regions.oscal.json\",\n          \"media-type\": \"application/json\"\n        }\n      ]\n    },\n    {\n      \"uuid\": \"f32021d5-0666-4698-8a41-2e733c2035f3\",\n      \"title\": \"AWS Security Hub Controls\",\n      \"rlinks\": [\n        {\n          \"href\": \"../catalogs/aws_security-hub.oscal.json\",\n          \"media-type\": \"application/json\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "5d4722e62660af4e0ab9a0acd08c337a860c674a748b9e6a0f41bcba47457fb1",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}
