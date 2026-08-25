@@ -26,31 +26,32 @@ rests on one, and they are still re-derived on every build.
 Published hardening guidance from four publishers was read as input: CIS, DISA,
 CISA and AWS. The introduction tabulates it one row per benchmark or guide, in a
 disclosure that is closed until it is wanted, and every row carries what stands
-behind it. A file icon downloads one of the 17 documents recorded under
-`sources/`, about 29 MB in all, and names the file, its type and its size on
+behind it. A file icon downloads one of the 16 documents recorded under
+`sources/`, 29.0 MB in all, and names the file, its type and its size on
 hover; a globe opens
 the publisher's own page for guidance that is not a document to hold. Every one
 of them opens in a new tab. **Only inputs are listed.** The OSCAL written from
-this guidance is
-published separately, so `sources/oscal/` is excluded by `tools/sources_files.py` and
-by `.gitignore`. `verify.py --sources` recomputes every count from the corpora,
+this guidance is published separately, so `sources/oscal/` is in the repository
+but carries no row: `tools/sources_files.py` excludes it from the inventory, as
+it excludes `disa/U_Readme_SRG_and_STIG.pdf`, which is about the STIG packages
+as a set rather than about any one guide. `verify.py --sources` recomputes every
+count from the corpora,
 confirms every link resolves to a file, confirms no file sits in `sources/` unlinked,
 and confirms nothing from the excluded tree is linked. Terms differ by publisher and
 each file carries its own.
 
-**Four of the 17 are not in this repository.** `.gitignore` also excludes
-`sources/cis/`, which holds the two CIS Benchmarks in both their JSON and PDF
-form, 19.7 MB of the 29.3 MB. CIS licenses its Benchmarks under its own Agreed
-Terms of Use, a public repository is redistribution, and that licence does not
-grant it. The DISA material is a work of the United States Government and is in
-the repository, 13 files and 9.6 MB. The CIS files are still described in
-`data/source-files.json`, with their size, media type, SHA-256 and terms, so the
-provenance record is complete without shipping the documents. **To rebuild the
-CIS material, download the two Benchmarks from cisecurity.org into
-`sources/cis/`** under the filenames `data/source-files.json` records. Until they
-are there, `tools/sources_files.py` will see 13 files where the committed file
-records 17, `verify.py --sources` will report the four as not on disk, and their
-four download links will not resolve on a copy served from this repository alone.
+**The CIS material is here on a recorded basis.** `sources/cis/` holds the two
+CIS Benchmarks in both their JSON and PDF form, 19.7 MB of the 29.0 MB. CIS
+licenses its Benchmarks under its own Agreed Terms of Use, which on their face
+say a Benchmark may not be redistributed or posted on any website. The material
+is here because CIS is a stakeholder receiving this brief and confirmed that
+copying and linking infringes nothing. That call is recorded in `BUILD-LOG.md`,
+and each of the four files carries the basis rather than a general grant in its
+own terms line: *"Reproduced here with the publisher's participation in this
+review. The Benchmarks carry CIS's own Agreed Terms of Use; consult the
+publisher before reusing them elsewhere."* **A fork or a mirror made outside
+that conversation does not inherit the basis.** The DISA material is a work of
+the United States Government, 13 files and 9.3 MB, 12 of them with a row.
 
 **It makes no recommendation.** There is no ranking, no score, and no summary
 that adds up to one. Where an approach carries a cost, the cost is stated and the
@@ -59,7 +60,7 @@ reader prices it.
 ## Status
 
 Ready to publish, not published. Eight pages, all built: `index.html`,
-`six-questions.html`, the three approach pages, `compare.html`, `questions.html`
+`six-questions.html`, the three approach pages, `scenario.html`, `questions.html`
 and `oscal-artifacts.html`. What remains is not a build step:
 
 - **Proponent review has not happened.** No request for corrections has been sent
@@ -85,7 +86,7 @@ From a terminal, the same thing:
 ```
 python tools/serve.py                    # then open the address it prints
 python tools/serve.py --port 8080        # if 8000 is taken
-python tools/serve.py --page compare.html
+python tools/serve.py --page scenario.html
 python tools/serve.py --no-open          # do not launch a browser
 ```
 
@@ -125,8 +126,19 @@ appear. GitHub Pages serves over HTTP, so a published copy never shows it.
 One command:
 
 ```
-pip install pyyaml
+pip install pyyaml pillow
 python tools/verify.py --all
+```
+
+Pillow is not optional: `verify.py` imports `svgrender`, which imports it at
+module scope to rasterise the diagrams for `--diagrams`.
+
+The corpora are read from `TFG_CORPORA` when it is set, and from the
+`corpora_root` in `tools/manifest.yaml` when it is not. This site sits under
+`docs/analysis/` in a repository the corpora are not a sibling of, so set it:
+
+```
+export TFG_CORPORA=/path/to/tfg-automated-assessments
 ```
 
 Eighteen checks. Each prints `PASS` or `FAIL` with detail. A check that cannot run
@@ -160,7 +172,8 @@ against one page: `node tools/pagecheck.js six-questions.html`.
 
 **In CI**, `--strict` turns every skip into a failure, on a runner that has the
 network and the validators. That is what stops a skipped check from staying
-skipped. See `.github/workflows/verify.yml`.
+skipped. See `.github/workflows/verify-2026-08-hardening-guidance.yml` at the
+root of this repository.
 
 ### What needs network
 
@@ -403,6 +416,7 @@ that licence.
 Nothing else here is. The three OSCAL corpora belong to their publishers and are
 not redistributed; only extracts at declared pointers, with provenance in
 `data/provenance.json`. Under `sources/`, the DISA material is a work of the
-United States Government and is in the repository; the CIS Benchmarks are not,
-because their Agreed Terms of Use do not grant it. Each file in
-`data/source-files.json` carries its own terms.
+United States Government; the CIS Benchmarks are here on the publisher's
+participation in this review rather than on a grant in their Agreed Terms of
+Use, which is why that basis is written on each of those files rather than
+assumed. Each file in `data/source-files.json` carries its own terms.

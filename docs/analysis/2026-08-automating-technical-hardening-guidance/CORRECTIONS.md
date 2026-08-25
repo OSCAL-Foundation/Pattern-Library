@@ -31,7 +31,7 @@ field names.
 - received:   2026-09-01
 - corrected:  what they said was wrong, in their words, unedited
 - applied:    what changed on the site, and where
-- pages:      catalog-first.html, compare.html
+- pages:      catalog-first.html, scenario.html
 - data:       data/six-questions.json cell 3/catalog-first
 - verified:   the check that now covers it, if any
 ```
