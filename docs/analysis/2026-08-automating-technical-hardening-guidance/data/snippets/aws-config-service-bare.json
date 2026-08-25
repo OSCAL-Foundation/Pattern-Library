@@ -1,0 +1,13 @@
+{
+  "id": "aws-config-service-bare",
+  "slot": "5",
+  "approach": "catalog-first",
+  "title": "AWS Config, the engine that runs the checks",
+  "source": "AWS/oscal-content-for-aws-services-main/component-definitions/config.oscal.json",
+  "pointer": "/component-definition/components/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"9a02ef98-02b2-49c4-a3ea-3c546e830a15\",\n  \"type\": \"service\",\n  \"title\": \"AWS Config\",\n  \"description\": \"AWS Config is a service that continuously monitors and records your AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired settings.\",\n  \"props\": [\n    {\n      \"name\": \"service-id\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"Config Service\"\n    },\n    {\n      \"name\": \"version\",\n      \"value\": \"2014-11-12\"\n    },\n    {\n      \"name\": \"availability\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"REGIONAL\"\n    },\n    {\n      \"name\": \"label\",\n      \"value\": \"AWS Config\",\n      \"class\": \"marketingName\",\n      \"group\": \"marketing\"\n    },\n    {\n      \"name\": \"apiEndpointPrefix\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"config\"\n    },\n    {\n      \"name\": \"arnNamespace\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"config\"\n    },\n    {\n      \"name\": \"cloudTrailEventSource\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"config\"\n    },\n    {\n      \"name\": \"lifecycle-stage\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"generally-available\"\n    },\n    {\n      \"name\": \"iamServicePrefix\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"config\"\n    }\n  ],\n  \"links\": \"...\"\n}",
+  "sha256_of_source_file": "d5049e46d7a1251932be3e74c1f9bace606ac9b5f5542249ccb884171394a6e7",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

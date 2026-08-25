@@ -1,0 +1,13 @@
+{
+  "id": "ez-cisa-no-ssp-resource",
+  "slot": "6a",
+  "approach": "assessment-first",
+  "title": "The alternative resource, where no OSCAL system security plan exists",
+  "source": "Easy Dynamics/CISA BOD 25-01/assessment-plan.json",
+  "pointer": "/assessment-plan/back-matter/resources/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"f56da5c6-da67-4c40-acc8-6814bf7aa374\",\n  \"title\": \"System's Full Name\",\n  \"description\": \"# USE THIS RESOURCE WHEN NO OSCAL-BASED SSP EXISTS\\n\\nBriefly describe the system. This will appear in the SAR.\",\n  \"props\": [\n    {\n      \"name\": \"type\",\n      \"value\": \"no-oscal-ssp\"\n    },\n    {\n      \"name\": \"import-profile\",\n      \"ns\": \"https://fedramp.gov/ns/oscal\",\n      \"value\": \"#890170c3-d4fa-4d25-ab96-8e4bf7cc237c\"\n    },\n    {\n      \"name\": \"purpose\",\n      \"ns\": \"https://fedramp.gov/ns/oscal\",\n      \"value\": \"Briefly state the system's purpose. This will appear in the SAR.\"\n    }\n  ],\n  \"remarks\": \"Only include this resource if no OSCAL-based SSP is available.\"\n}",
+  "sha256_of_source_file": "97dad5eeba5efdb6b45ce22b92b9316df1479808bca698235c7dfc2d00ed37ee",
+  "extracted_at": "2026-08-22T18:46:12+00:00"
+}

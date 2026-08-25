@@ -1,0 +1,13 @@
+{
+  "id": "aws-acm2-control",
+  "slot": "1",
+  "approach": "catalog-first",
+  "title": "ACM.2, the control",
+  "source": "AWS/oscal-content-for-aws-services-main/catalogs/aws_security-hub.oscal.json",
+  "pointer": "/catalog/groups/0/controls/1",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"id\": \"ACM.2\",\n  \"title\": \"ACM.2\",\n  \"props\": [\n    {\n      \"name\": \"SeverityLabel\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"HIGH\"\n    },\n    {\n      \"name\": \"TriggerType\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"Change Triggered\"\n    },\n    {\n      \"name\": \"EvaluatedServices\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"ACM\"\n    }\n  ],\n  \"links\": [\n    {\n      \"href\": \"https://docs.aws.amazon.com/console/securityhub/ACM.2/remediation\",\n      \"rel\": \"remediation\"\n    }\n  ],\n  \"parts\": [\n    {\n      \"name\": \"overview\",\n      \"prose\": \"This control checks whether RSA certificates managed by AWS Certificate Manager use a key length of at least 2,048 bits. The control fails if the key length is smaller than 2,048 bits.\"\n    },\n    {\n      \"name\": \"statement\",\n      \"prose\": \"RSA certificates managed by ACM should use a key length of at least 2,048 bits\"\n    },\n    {\n      \"name\": \"guidance\",\n      \"prose\": \"For information on how to correct this issue, consult the AWS Security Hub controls documentation.\"\n    },\n    {\n      \"name\": \"assessment-method\",\n      \"title\": \"acm-certificate-rsa-check\",\n      \"props\": [\n        {\n          \"name\": \"TechnicalControlId\",\n          \"ns\": \"http://aws.amazon.com/ns/oscal\",\n          \"value\": \"acm-certificate-rsa-check\",\n          \"class\": \"config-rule\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "916b0d94359061632f068b2c131c0538c59231c1a065026f83a898f1a4334d33",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

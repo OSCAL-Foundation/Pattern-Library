@@ -1,0 +1,653 @@
+{
+  "note": "The six questions are answered one at a time, which hides the thing that decides whether the set works: what joins one answer to the next. This is the chain from the moment the rule is introduced to the moment something records that it was met, with every foreign key and the primary key it resolves to. Every literal is one of the two running rules as the six questions page encodes it, so the three chains can be read against each other; tools/verify.py fails the build if a value here is not in that encoding.",
+  "title": "What joins one answer to the next",
+  "intro": "The chain starts where the rule is introduced and runs to the claim and the result. What a step costs is how many relationships it is made of and how each one resolves.",
+  "stages": [
+    {
+      "key": "rule",
+      "label": "Rule",
+      "slot": "1",
+      "meaning": "where the rule is introduced"
+    },
+    {
+      "key": "control",
+      "label": "Control",
+      "slot": "2",
+      "meaning": "the regulation it serves"
+    },
+    {
+      "key": "check",
+      "label": "Check",
+      "slot": "3",
+      "meaning": "how it is tested"
+    },
+    {
+      "key": "runtime",
+      "label": "Runtime",
+      "slot": "5",
+      "meaning": "what executes the check"
+    },
+    {
+      "key": "claim",
+      "label": "Claim",
+      "slot": "6a",
+      "meaning": "the system's statement that it holds"
+    },
+    {
+      "key": "result",
+      "label": "Result",
+      "slot": "6b",
+      "meaning": "what an assessment recorded"
+    }
+  ],
+  "step_order": [
+    [
+      "rule",
+      "check"
+    ],
+    [
+      "rule",
+      "control"
+    ],
+    [
+      "check",
+      "runtime"
+    ],
+    [
+      "runtime",
+      "claim"
+    ],
+    [
+      "runtime",
+      "result"
+    ],
+    [
+      "claim",
+      "result"
+    ],
+    [
+      "result",
+      "control"
+    ]
+  ],
+  "how": [
+    {
+      "key": "containment",
+      "label": "Containment",
+      "meaning": "One is inside the other, so there is no key to match and nothing to dereference."
+    },
+    {
+      "key": "reference",
+      "label": "Reference",
+      "meaning": "A field holds an identifier the schema knows is an identifier, and it resolves."
+    },
+    {
+      "key": "name-match",
+      "label": "Name match",
+      "meaning": "Two strings are equal by convention. It holds where the two agree and breaks silently where they do not, and no schema can check it."
+    },
+    {
+      "key": "composite",
+      "label": "Composite key",
+      "meaning": "Two fields have to match together. Either one alone resolves to the wrong thing or to nothing."
+    },
+    {
+      "key": "none",
+      "label": "No join",
+      "meaning": "There is no field on either side. The relation has to be recovered by walking through something else, or it is simply not there."
+    }
+  ],
+  "approaches": {
+    "catalog-first": {
+      "introduced": {
+        "model": "catalog",
+        "field": "controls[].id",
+        "value": "UBTU-24-600090",
+        "slot": "1",
+        "note": "The rule is a control in a product catalog, in the same model and the same shape a regulatory control has. Every step below starts from that id."
+      },
+      "hops": [
+        {
+          "from": "rule",
+          "to": "check",
+          "how": "name-match",
+          "note": "Two ties, opposite ways. The control names its check by title, which no schema can check; the check names its control by id, which resolves.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "catalog",
+                "field": "parts[assessment-method].props.TechnicalControlId",
+                "value": "SV-270747r1066730_rule",
+                "slot": "1"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "components[].title",
+                "value": "SV-270747r1066730_rule",
+                "slot": "3"
+              },
+              "how": "name-match"
+            },
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "implemented-requirements[].control-id",
+                "value": "UBTU-24-600090",
+                "slot": "3"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].id",
+                "value": "UBTU-24-600090",
+                "slot": "1"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "rule",
+          "to": "control",
+          "how": "reference",
+          "note": "A document of its own, written after both catalogs and by someone who owns neither.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "mapping-collection",
+                "field": "maps[].sources[].id-ref",
+                "value": "UBTU-24-600090",
+                "slot": "2"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].id",
+                "value": "UBTU-24-600090",
+                "slot": "1"
+              },
+              "how": "reference"
+            },
+            {
+              "foreign": {
+                "model": "mapping-collection",
+                "field": "maps[].targets[].id-ref",
+                "value": "sc-28",
+                "slot": "2"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].id",
+                "value": "sc-28",
+                "slot": "2",
+                "where": "the framework catalog"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "check",
+          "to": "runtime",
+          "how": "none",
+          "note": "The prop names the rule the engine runs. The engine itself is nowhere in the content.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "components[].props.ConfigRuleId",
+                "value": "SV_270747R1066730_RULE",
+                "slot": "3"
+              },
+              "primary": {
+                "model": "nothing",
+                "field": "no field",
+                "slot": "5"
+              },
+              "how": "none"
+            }
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "claim",
+          "how": "reference",
+          "note": "The claim is against a component, not a host. A by-component takes no subject.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "system-security-plan",
+                "field": "implemented-requirements[].control-id",
+                "value": "UBTU-24-600090",
+                "slot": "6a"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].id",
+                "value": "UBTU-24-600090",
+                "slot": "1"
+              },
+              "how": "reference"
+            },
+            {
+              "foreign": {
+                "model": "system-security-plan",
+                "field": "by-components[].component-uuid",
+                "value": "534b356b-0de1-48d4-8536-5d41ed717456",
+                "slot": "6a"
+              },
+              "primary": {
+                "model": "system-security-plan",
+                "field": "system-implementation.components[].uuid",
+                "slot": "6a"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "claim",
+          "to": "result",
+          "how": "reference",
+          "note": "The finding targets the statement in the plan of record, which is what makes it an answer to the claim.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "findings[].target.target-id",
+                "value": "UBTU-24-600090_smt",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "system-security-plan",
+                "field": "statements[].statement-id",
+                "value": "UBTU-24-600090_smt",
+                "slot": "6a"
+              },
+              "how": "reference"
+            },
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "related-observations[].observation-uuid",
+                "value": "28e28d31-4428-4ff5-8c9e-ea1198dfb552",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "assessment-results",
+                "field": "observations[].uuid",
+                "slot": "6b"
+              },
+              "how": "reference"
+            }
+          ]
+        }
+      ]
+    },
+    "component-first": {
+      "introduced": {
+        "model": "component-definition",
+        "field": "components[].rules[].id",
+        "value": "ubtu24_data_at_rest_encrypted",
+        "slot": "1",
+        "note": "The rule is a first-class entry on the component it configures, so it is introduced inside the document that describes the thing being hardened. Every step below starts from that id."
+      },
+      "hops": [
+        {
+          "from": "rule",
+          "to": "check",
+          "how": "composite",
+          "note": "Both halves of the key sit on the check side. A rule id is unique only inside the component that declares it.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "checks[].rule-id",
+                "value": "ubtu24_data_at_rest_encrypted",
+                "slot": "3"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "components[].rules[].id",
+                "value": "ubtu24_data_at_rest_encrypted",
+                "slot": "1"
+              },
+              "how": "composite"
+            },
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "checks[].target-component-uuid",
+                "value": "5ca997b3-bb3e-4c7a-8969-69ed44577d47",
+                "slot": "3"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "components[].uuid",
+                "value": "5ca997b3-bb3e-4c7a-8969-69ed44577d47",
+                "slot": "1"
+              },
+              "how": "composite"
+            }
+          ]
+        },
+        {
+          "from": "rule",
+          "to": "control",
+          "how": "reference",
+          "note": "Both sides in one document. The control implementation already ties component to control; naming the rule inside it is the proposal.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "implemented-requirements[].implementing-rules[].rule-id",
+                "value": "ubtu24_data_at_rest_encrypted",
+                "slot": "2"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "components[].rules[].id",
+                "value": "ubtu24_data_at_rest_encrypted",
+                "slot": "1"
+              },
+              "how": "reference"
+            },
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "implemented-requirements[].control-id",
+                "value": "sc-28",
+                "slot": "2"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].id",
+                "value": "sc-28",
+                "slot": "2",
+                "where": "the framework catalog"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "check",
+          "to": "runtime",
+          "how": "containment",
+          "note": "The checks are inside the component that runs them. A second engine is a second component.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "component-definition",
+                "field": "no field",
+                "slot": "3"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "components[].uuid",
+                "value": "b3c8813d-d479-450a-8178-fbbf846faccf",
+                "slot": "5",
+                "where": "the validation component"
+              },
+              "how": "containment"
+            }
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "claim",
+          "how": "reference",
+          "note": "The claim names the rule it rests on, so a reader gets from claim to check without leaving OSCAL.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "system-security-plan",
+                "field": "by-components[].implementing-rules[].rule-id",
+                "value": "ubtu24_data_at_rest_encrypted",
+                "slot": "6a"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "components[].rules[].id",
+                "value": "ubtu24_data_at_rest_encrypted",
+                "slot": "1"
+              },
+              "how": "reference"
+            },
+            {
+              "foreign": {
+                "model": "system-security-plan",
+                "field": "by-components[].component-uuid",
+                "value": "534b356b-0de1-48d4-8536-5d41ed717456",
+                "slot": "6a"
+              },
+              "primary": {
+                "model": "system-security-plan",
+                "field": "system-implementation.components[].uuid",
+                "slot": "6a"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "result",
+          "how": "reference",
+          "note": "The observation names the check and the host, so two machines in one boundary can disagree and both be recorded.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "observations[].assessment-check-id",
+                "value": "SV-270747r1066730_rule",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "component-definition",
+                "field": "checks[].id",
+                "value": "SV-270747r1066730_rule",
+                "slot": "3"
+              },
+              "how": "reference"
+            },
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "observations[].subjects[].subject-uuid",
+                "value": "06297a03-cae0-414b-8332-2fc882f81aa1",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "system-security-plan",
+                "field": "system-implementation.inventory-items[].uuid",
+                "slot": "4"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "result",
+          "to": "control",
+          "how": "none",
+          "note": "The result never states the control. It carries observations and no findings, so there is no status to hold one.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "no field",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "no field",
+                "slot": "2"
+              },
+              "how": "none"
+            }
+          ]
+        }
+      ]
+    },
+    "assessment-first": {
+      "introduced": {
+        "model": "assessment-plan",
+        "field": "activities[].uuid",
+        "value": "61b3ec99-dfbe-4997-8a66-6f2279edb84b",
+        "slot": "1",
+        "note": "The rule is an activity in the plan that assesses it, so it is introduced in the assessment layer and does not enter the implementation layer at all. Every step below starts from that uuid."
+      },
+      "hops": [
+        {
+          "from": "rule",
+          "to": "check",
+          "how": "containment",
+          "note": "The check is the first step, so nothing has to match. The step then names a check that resolves outside OSCAL.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-plan",
+                "field": "no field",
+                "slot": "1"
+              },
+              "primary": {
+                "model": "assessment-plan",
+                "field": "activities[].steps[].uuid",
+                "value": "333ddd0f-22da-4c18-8bc3-98e808746bca",
+                "slot": "3"
+              },
+              "how": "containment"
+            },
+            {
+              "foreign": {
+                "model": "assessment-plan",
+                "field": "steps[].props[name=check].value",
+                "value": "SV-270747r1066730_rule",
+                "slot": "3"
+              },
+              "primary": {
+                "model": "nothing",
+                "field": "no field",
+                "slot": "5"
+              },
+              "how": "name-match"
+            }
+          ]
+        },
+        {
+          "from": "rule",
+          "to": "control",
+          "how": "reference",
+          "note": "The tie sits on the activity, so there is no second document and no second identifier to keep in step.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-plan",
+                "field": "activities[].related-controls.control-selections[].include-controls[].control-id",
+                "value": "sc-28",
+                "slot": "2"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].id",
+                "value": "sc-28",
+                "slot": "2",
+                "where": "the framework catalog"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "check",
+          "to": "runtime",
+          "how": "reference",
+          "note": "The plan names its platforms once, for every activity, so it cannot say which engine ran which check.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-plan",
+                "field": "assessment-platforms[].uses-components[].component-uuid",
+                "value": "56270516-2673-4d4c-8d4f-52e4107f968d",
+                "slot": "5"
+              },
+              "primary": {
+                "model": "assessment-plan",
+                "field": "assessment-assets.components[].uuid",
+                "slot": "5"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "claim",
+          "how": "reference",
+          "note": "One pointer for the whole plan. Where no plan of record exists the same resource can describe the system in prose.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-plan",
+                "field": "import-ssp.href",
+                "value": "#d381c885-4851-4931-828c-29bbb24fbaa3",
+                "slot": "6a"
+              },
+              "primary": {
+                "model": "assessment-plan",
+                "field": "back-matter.resources[].uuid",
+                "value": "d381c885-4851-4931-828c-29bbb24fbaa3",
+                "slot": "6a"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "result",
+          "how": "reference",
+          "note": "The observation points back at the activity that ran. The thing observed is the thing planned.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "observations[].subjects[].subject-uuid",
+                "value": "61b3ec99-dfbe-4997-8a66-6f2279edb84b",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "assessment-plan",
+                "field": "activities[].uuid",
+                "value": "61b3ec99-dfbe-4997-8a66-6f2279edb84b",
+                "slot": "1"
+              },
+              "how": "reference"
+            }
+          ]
+        },
+        {
+          "from": "result",
+          "to": "control",
+          "how": "reference",
+          "note": "The finding targets the control objective, so a result reads against the framework with no plan of record.",
+          "pairs": [
+            {
+              "foreign": {
+                "model": "assessment-results",
+                "field": "findings[].target.target-id",
+                "value": "sc-28_obj",
+                "slot": "6b"
+              },
+              "primary": {
+                "model": "catalog",
+                "field": "controls[].parts[objective].id",
+                "slot": "2"
+              },
+              "how": "reference"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

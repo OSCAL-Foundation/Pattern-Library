@@ -1,0 +1,13 @@
+{
+  "id": "ibm-statement-rules",
+  "slot": "2",
+  "approach": "component-first",
+  "title": "implementing-rules on ia-5.1",
+  "source": "IBM/idservice-component-definition.json",
+  "pointer": "/component-definition/components/0/control-implementations/0/implemented-requirements/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"c6ccfcbc-4553-40e6-b4e8-eadbff8d4756\",\n  \"control-id\": \"ia-5.1\",\n  \"description\": \"\",\n  \"statements\": [\n    {\n      \"statement-id\": \"ia-5.1_smt.a\",\n      \"uuid\": \"08cc185d-27d8-4412-9cb4-25ebf1397a39\",\n      \"description\": \"\",\n      \"implementing-rules\": [\n        {\n          \"rule-id\": \"idservice_password_min_length\"\n        },\n        {\n          \"rule-id\": \"idservice_strong_pass_enabled\"\n        }\n      ]\n    },\n    {\n      \"statement-id\": \"ia-5.1_smt.e\",\n      \"uuid\": \"89f1f3be-d915-4134-94ab-577cba3f3c9a\",\n      \"description\": \"\",\n      \"implementing-rules\": [\n        {\n          \"rule-id\": \"idservice_password_not_reuse_min_count\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "36b8140ae1272f5e6fef535409375e3cbbd0f0e8387b378ee7d550a3a1760eaf",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

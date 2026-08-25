@@ -1,0 +1,13 @@
+{
+  "id": "aws-control-cloudtrail2",
+  "slot": "1",
+  "approach": "catalog-first",
+  "title": "CloudTrail.2, the control",
+  "source": "AWS/oscal-content-for-aws-services-main/catalogs/aws_security-hub.oscal.json",
+  "pointer": "/catalog/groups/15/controls/2",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"id\": \"CloudTrail.2\",\n  \"title\": \"CloudTrail.2\",\n  \"props\": [\n    {\n      \"name\": \"SeverityLabel\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"MEDIUM\"\n    },\n    {\n      \"name\": \"TriggerType\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"Periodic\"\n    },\n    {\n      \"name\": \"EvaluatedServices\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"CloudTrail\"\n    }\n  ],\n  \"links\": [\n    {\n      \"href\": \"https://docs.aws.amazon.com/console/securityhub/CloudTrail.2/remediation\",\n      \"rel\": \"remediation\"\n    }\n  ],\n  \"parts\": [\n    {\n      \"name\": \"overview\",\n      \"prose\": \"This AWS control checks whether AWS CloudTrail is configured to use the server side encryption (SSE) AWS Key Management Service (AWS KMS) customer master key (CMK) encryption. The check will pass if the KmsKeyId is defined.\"\n    },\n    {\n      \"name\": \"statement\",\n      \"prose\": \"CloudTrail should have encryption at-rest enabled\"\n    },\n    {\n      \"name\": \"guidance\",\n      \"prose\": \"For information on how to correct this issue, consult the AWS Security Hub controls documentation.\"\n    },\n    {\n      \"name\": \"assessment-method\",\n      \"title\": \"cloud-trail-encryption-enabled\",\n      \"props\": [\n        {\n          \"name\": \"TechnicalControlId\",\n          \"ns\": \"http://aws.amazon.com/ns/oscal\",\n          \"value\": \"cloud-trail-encryption-enabled\",\n          \"class\": \"config-rule\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "916b0d94359061632f068b2c131c0538c59231c1a065026f83a898f1a4334d33",
+  "extracted_at": "2026-08-21T03:10:41+00:00"
+}

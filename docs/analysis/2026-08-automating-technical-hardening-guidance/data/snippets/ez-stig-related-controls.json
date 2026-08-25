@@ -1,0 +1,13 @@
+{
+  "id": "ez-stig-related-controls",
+  "slot": "2",
+  "approach": "assessment-first",
+  "title": "STIG related-controls, the control tie",
+  "source": "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json",
+  "pointer": "/assessment-plan/local-definitions/activities/100/related-controls",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"control-selections\": [\n    {\n      \"description\": \"NIST SP 800-53 controls associated with this STIG rule (derived from CCI references).\",\n      \"include-controls\": [\n        {\n          \"control-id\": \"au-12\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "997ecb028020fdacee66352651a5992e5a1ec1b964d1b332d6c7a5480b7897b6",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

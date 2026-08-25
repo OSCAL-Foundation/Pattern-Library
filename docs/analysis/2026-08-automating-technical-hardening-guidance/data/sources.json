@@ -1,0 +1,173 @@
+{
+  "note": "The hardening guidance read as input to this analysis, one row per benchmark or guide rather than one per publisher, because the unit a reader recognises is the benchmark. Each row carries the documents read for it: a file icon downloads one file, a globe opens the publisher's page. What was written from this guidance, in OSCAL, is published separately and is not a column here; it is kept under 'publishers' so tools/verify.py --sources can still recompute it against the corpora.",
+  "summary": "Hardening guidance used as input",
+  "summary_sub": "Two CIS Benchmarks, nine DISA STIGs, CISA BOD 25-01 and the AWS Security Hub controls, with the documents read for each.",
+  "columns": [
+    "Publisher",
+    "Guidance",
+    "Source form held"
+  ],
+  "rows": [
+    {
+      "key": "cis-ubuntu-24-04",
+      "publisher": "cis",
+      "guidance": "Ubuntu Linux 24.04 LTS Benchmark",
+      "version": "v1.0.0",
+      "source_form": "XCCDF-derived JSON, and PDF"
+    },
+    {
+      "key": "cis-postgresql-18",
+      "publisher": "cis",
+      "guidance": "PostgreSQL 18 Benchmark",
+      "version": "v1.0.0",
+      "source_form": "XCCDF-derived JSON, and PDF"
+    },
+    {
+      "key": "disa-ubuntu-22-04",
+      "publisher": "disa",
+      "guidance": "Ubuntu 22.04 LTS STIG",
+      "version": "V2R8",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-ubuntu-24-04",
+      "publisher": "disa",
+      "guidance": "Ubuntu 24.04 LTS STIG",
+      "version": "V1R5",
+      "source_form": "XCCDF XML, and three release notes"
+    },
+    {
+      "key": "disa-rhel-8",
+      "publisher": "disa",
+      "guidance": "Red Hat Enterprise Linux 8 STIG",
+      "version": "V2R7",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-rhel-9",
+      "publisher": "disa",
+      "guidance": "Red Hat Enterprise Linux 9 STIG",
+      "version": "V2R8",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-windows-2019",
+      "publisher": "disa",
+      "guidance": "Windows Server 2019 STIG",
+      "version": "V3R8",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-windows-2022",
+      "publisher": "disa",
+      "guidance": "Windows Server 2022 STIG",
+      "version": "V2R8",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-windows-2025",
+      "publisher": "disa",
+      "guidance": "Windows Server 2025 STIG",
+      "version": "V1R1",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-postgres-16",
+      "publisher": "disa",
+      "guidance": "PostgreSQL 16 STIG",
+      "version": "V1R2",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "disa-epas",
+      "publisher": "disa",
+      "guidance": "EDB Postgres Advanced Server STIG",
+      "version": "V2R1",
+      "source_form": "XCCDF XML"
+    },
+    {
+      "key": "cisa-bod-25-01",
+      "publisher": "cisa",
+      "guidance": "BOD 25-01, the SCuBA baselines",
+      "version": null,
+      "source_form": "None held here",
+      "links": [
+        {
+          "kind": "web",
+          "href": "https://www.cisa.gov/resources-tools/services/bod-25-01-implementing-secure-practices-cloud-services-required-configurations",
+          "label": "BOD 25-01, on the publisher's site"
+        }
+      ]
+    },
+    {
+      "key": "aws-security-hub",
+      "publisher": "aws",
+      "guidance": "Security Hub security best-practice controls",
+      "version": null,
+      "source_form": "Published as OSCAL, and linked",
+      "links": [
+        {
+          "kind": "web",
+          "href": "https://aws.github.io/aws-security-services-best-practices/guides/security-hub/",
+          "label": "Security Hub best practices, on the publisher's site"
+        },
+        {
+          "kind": "web",
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services",
+          "label": "The same controls as OSCAL, in the publisher's repository"
+        }
+      ]
+    }
+  ],
+  "publishers": {
+    "cis": {
+      "name": "CIS",
+      "full_name": "Center for Internet Security",
+      "source_counts": {
+        "xccdf_json": 2,
+        "pdf": 2
+      },
+      "oscal_form": "two assessment plans",
+      "oscal_counts": {
+        "assessment_plans": 2
+      },
+      "derivation": "assessment-plan documents under Easy Dynamics/Center for Internet Security; source files under Hardening Guides/Center for Internet Security"
+    },
+    "disa": {
+      "name": "DISA",
+      "full_name": "Defense Information Systems Agency",
+      "source_counts": {
+        "xccdf_xml": 9
+      },
+      "oscal_form": "nine assessment plans",
+      "oscal_counts": {
+        "assessment_plans": 9
+      },
+      "derivation": "assessment-plan documents under Easy Dynamics/DISA; *-xccdf.xml under Hardening Guides/DISA"
+    },
+    "cisa": {
+      "name": "CISA",
+      "full_name": "Cybersecurity and Infrastructure Security Agency",
+      "source_counts": {},
+      "oscal_form": "four assessment plans and one assessment result",
+      "oscal_counts": {
+        "assessment_plans": 4,
+        "assessment_results": 1
+      },
+      "derivation": "assessment-plan documents under Easy Dynamics/CISA BOD 25-01; no publisher source material is present"
+    },
+    "aws": {
+      "name": "AWS",
+      "full_name": "Amazon Web Services",
+      "source_counts": {},
+      "oscal_form": "one catalog of 452 controls across 77 groups, and 230 component definitions",
+      "oscal_counts": {
+        "catalogs": 1,
+        "controls": 452,
+        "groups": 77,
+        "component_definitions": 230
+      },
+      "derivation": "AWS/oscal-content-for-aws-services-main: catalogs/*.oscal.json and component-definitions/*.oscal.json"
+    }
+  }
+}

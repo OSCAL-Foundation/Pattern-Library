@@ -1,0 +1,64 @@
+{
+  "note": "The oscal-mapping-oscal-mapping-common:mapping-item definition from the OSCAL 1.2.1 mapping-collection model, demonstrating that a mapping item requires only type and id-ref, restricts type by allOf to the closed enumeration control or statement, and defines no uuid or href property.",
+  "model": "mapping-collection",
+  "definition": "oscal-mapping-oscal-mapping-common:mapping-item",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-mapping-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-12",
+  "constraints": [
+    "required == [\"type\",\"id-ref\"]",
+    "type is constrained by allOf to enum [\"control\",\"statement\"]",
+    "no property named 'uuid'",
+    "no property named 'href'"
+  ],
+  "fragment": {
+    "title": "Mapping Entry Item (source or target)",
+    "description": "A specific edge within a source or target that is the subject of a mapping.",
+    "$id": "#/definitions/oscal-mapping-oscal-mapping-common:mapping-item",
+    "type": "object",
+    "properties": {
+      "type": {
+        "title": "Subject Type",
+        "description": "The semantic type of the subject.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/TokenDatatype"
+          },
+          {
+            "enum": [
+              "control",
+              "statement"
+            ]
+          }
+        ]
+      },
+      "id-ref": {
+        "title": "Subject Identifier Reference",
+        "description": "A reference to an identified subject that is of the specified type .",
+        "$ref": "#/definitions/StringDatatype"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-mapping-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-mapping-oscal-metadata:link"
+        }
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-mapping-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "type",
+      "id-ref"
+    ],
+    "additionalProperties": false
+  }
+}

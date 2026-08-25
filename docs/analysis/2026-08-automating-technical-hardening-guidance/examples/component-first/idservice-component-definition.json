@@ -1,0 +1,157 @@
+{
+  "component-definition": {
+    "uuid": "bbdf7ee6-3e0a-4065-8ecf-50f4129de473",
+    "metadata": {
+      "title": "Demo component definition",
+      "last-modified": "2026-05-15T14:29:37+00:00",
+      "version": "1.0",
+      "oscal-version": "1.2.1"
+    },
+    "components": [
+      {
+        "uuid": "0c410eb1-52cd-40bc-bf1d-c80126a984e9",
+        "type": "service",
+        "title": "IDSERVICE",
+        "description": "IDSERVICE",
+        "rules": [
+          {
+            "id": "idservice_password_min_length",
+            "description": "Ensure min. length of password",
+            "params": [
+              {
+                "id": "idservice_min_pass_len",
+                "label": "Min. password length",
+                "select": {
+                  "how-many": "one",
+                  "choice": [
+                    "8", 
+                    "12", 
+                    "16"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "idservice_password_not_reuse_min_count",
+            "description": "Ensure password is not reused below # count",
+            "params": [
+              {
+                "id": "idservice_min_pass_reuse_count",
+                "label": "Min. password reuse count",
+                "select": {
+                  "how-many": "one",
+                  "choice": [
+                    "4",
+                    "8"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "idservice_strong_pass_enabled",
+            "description": "Ensure strong password policy with mix of alphabets, digits, and special chars"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "08159454-994c-49ed-8f78-f2293b1274a2",
+            "source": "trestle://profiles/ACME_official/profile.json",
+            "description": "ACME Official Profile",
+            "set-parameters": [
+              {
+                "param-id": "idservice_min_pass_len",
+                "values": [
+                  "8"
+                ]
+              },
+              {
+                "param-id": "idservice_min_pass_reuse_count",
+                "values": [
+                  "4"
+                ]
+              }
+            ],
+            "implemented-requirements": [
+              {
+                "uuid": "c6ccfcbc-4553-40e6-b4e8-eadbff8d4756",
+                "control-id": "ia-5.1",
+                "description": "",
+                "statements": [
+                  {
+                    "statement-id": "ia-5.1_smt.a",
+                    "uuid": "08cc185d-27d8-4412-9cb4-25ebf1397a39",
+                    "description": "",
+                    "implementing-rules": [
+                      {"rule-id": "idservice_password_min_length"},
+                      {"rule-id": "idservice_strong_pass_enabled"}
+                    ]
+                  },
+                  {
+                    "statement-id": "ia-5.1_smt.e",
+                    "uuid": "89f1f3be-d915-4134-94ab-577cba3f3c9a",
+                    "description": "",
+                    "implementing-rules": [
+                      {"rule-id": "idservice_password_not_reuse_min_count"}
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "455563ca-c454-41d5-aa3b-f57843d95aab",
+                "control-id": "ia-5.4",
+                "description": "",
+                "implementing-rules": [
+                   {"rule-id": "idservice_password_min_length"},
+                   {"rule-id": "idservice_strong_pass_enabled"}
+                ]
+              },
+              {
+                "uuid": "8d18be8a-232a-42dd-8554-f3ff42770915",
+                "control-id": "cc-1",
+                "description": "",
+                "implementing-rules": [
+                   {"rule-id": "idservice_password_min_length"},
+                   {"rule-id": "idservice_strong_pass_enabled"}
+                ]
+              },
+              {
+                "uuid": "9fda67bf-8e40-47ea-830f-d045ce5113d9",
+                "control-id": "cc-2",
+                "description": "",
+                "implementing-rules":[
+                  {"rule-id":"idservice_password_min_length"}
+                ]
+              },
+              {
+                "uuid": "2c457819-da30-44a3-9497-b2838f7cbdd1",
+                "control-id": "pr-1",
+                "description": "",
+                "implementing-rules":[
+                  {"rule-id":"idservice_password_min_length"}
+                ]
+              },
+              {
+                "uuid": "a5cdefdc-7f6b-4ffa-849f-196785e6432f",
+                "control-id": "pr-2",
+                "description": "",
+                "implementing-rules":[
+                  {"rule-id":"idservice_password_not_reuse_min_count"}
+                ]
+              },
+              {
+                "uuid": "1c4da059-486c-4383-b564-6aa57229ab6a",
+                "control-id": "sc-1",
+                "description": "",
+                "implementing-rules":[
+                  {"rule-id":"idservice_password_not_reuse_min_count"}
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

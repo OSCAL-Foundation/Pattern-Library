@@ -1,0 +1,123 @@
+{
+  "note": "The oscal-ar-oscal-assessment-common:finding-target definition from the OSCAL 1.2.1 assessment-results model, demonstrating that a finding target requires type, target-id, and status, restricts type by allOf to the closed enumeration statement-id or objective-id, and requires a status.state drawn from the closed enumeration satisfied or not-satisfied.",
+  "model": "assessment-results",
+  "definition": "oscal-ar-oscal-assessment-common:finding-target",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ar-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-12",
+  "constraints": [
+    "required == [\"type\",\"target-id\",\"status\"]",
+    "type is constrained by allOf to enum [\"statement-id\",\"objective-id\"]",
+    "status.required includes \"state\"",
+    "status.state enum == [\"satisfied\",\"not-satisfied\"]"
+  ],
+  "fragment": {
+    "title": "Objective Status",
+    "description": "Captures an assessor's conclusions regarding the degree to which an objective is satisfied.",
+    "$id": "#/definitions/oscal-ar-oscal-assessment-common:finding-target",
+    "type": "object",
+    "properties": {
+      "type": {
+        "title": "Finding Target Type",
+        "description": "Identifies the type of the target.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/StringDatatype"
+          },
+          {
+            "enum": [
+              "statement-id",
+              "objective-id"
+            ]
+          }
+        ]
+      },
+      "target-id": {
+        "title": "Finding Target Identifier Reference",
+        "description": "A machine-oriented identifier reference for a specific target qualified by the type.",
+        "$ref": "#/definitions/TokenDatatype"
+      },
+      "title": {
+        "title": "Objective Status Title",
+        "description": "The title for this objective status.",
+        "$ref": "#/definitions/MarkupLineDatatype"
+      },
+      "description": {
+        "title": "Objective Status Description",
+        "description": "A human-readable description of the assessor's conclusions regarding the degree to which an objective is satisfied.",
+        "$ref": "#/definitions/MarkupMultilineDatatype"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+        }
+      },
+      "status": {
+        "title": "Objective Status",
+        "description": "A determination of if the objective is satisfied or not within a given system.",
+        "type": "object",
+        "properties": {
+          "state": {
+            "title": "Objective Status State",
+            "description": "An indication as to whether the objective is satisfied or not.",
+            "allOf": [
+              {
+                "$ref": "#/definitions/TokenDatatype"
+              },
+              {
+                "enum": [
+                  "satisfied",
+                  "not-satisfied"
+                ]
+              }
+            ]
+          },
+          "reason": {
+            "title": "Objective Status Reason",
+            "description": "The reason the objective was given it's status.",
+            "anyOf": [
+              {
+                "$ref": "#/definitions/TokenDatatype"
+              },
+              {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "other"
+                ]
+              }
+            ]
+          },
+          "remarks": {
+            "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+          }
+        },
+        "required": [
+          "state"
+        ],
+        "additionalProperties": false
+      },
+      "implementation-status": {
+        "$ref": "#/definitions/oscal-ar-oscal-implementation-common:implementation-status"
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "type",
+      "target-id",
+      "status"
+    ],
+    "additionalProperties": false
+  }
+}

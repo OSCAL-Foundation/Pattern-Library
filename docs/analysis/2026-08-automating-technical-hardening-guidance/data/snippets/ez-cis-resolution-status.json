@@ -1,0 +1,13 @@
+{
+  "id": "ez-cis-resolution-status",
+  "slot": "meta",
+  "approach": "assessment-first",
+  "title": "CIS resolution status",
+  "source": "Easy Dynamics/Center for Internet Security/CIS_PostgreSQL_18_Benchmark_v1_0_0_OSCAL_AP.json",
+  "pointer": "/assessment-plan/reviewed-controls/control-selections/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"description\": \"CIS Controls v8.0 derived from benchmark cc8:controlURI paths. Provide a CIS Controls v8 OSCAL catalog via --cis-catalog-v8 for authoritative control-id resolution.\",\n  \"props\": [\n    {\n      \"name\": \"framework\",\n      \"value\": \"CIS Controls v8.0\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    },\n    {\n      \"name\": \"resolution-status\",\n      \"value\": \"synthetic-ids\",\n      \"ns\": \"https://cisecurity.org/ns\"\n    }\n  ],\n  \"include-controls\": \"...\"\n}",
+  "sha256_of_source_file": "96220c0786192c3892ada09458a78bebb4d3f3bd20ed8f2cf8f9d776b8cd8fa8",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

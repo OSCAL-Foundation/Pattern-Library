@@ -1,0 +1,118 @@
+{
+  "note": "Strengths and risks per approach. The counts are not held equal: they were, three a side on every page, so that the shape of the block could not itself be an argument, and that rule was dropped when it started deciding what could be said. An approach has the risks it has. What is still held is that no approach is argued at greater length than another, which tools/approach_pages.py enforces across the three pages. No figures: the site describes one scenario, on one page, and every count belongs there. What each entry rests on is recorded in BUILD-LOG.md and, where it is a claim about what a model can express, in the schema_evidence field here, which is checked but not rendered.",
+  "approaches": {
+    "catalog-first": {
+      "intro": "Considerations when introducing technical hardening controls as a catalog have been captured",
+      "pros": [
+        {
+          "title": "Requirements of any kind stay in one model",
+          "body": "Technical requirements are defined in the catalog and tracked through the remaining models exactly as regulatory controls are."
+        },
+        {
+          "title": "Rules can be tailored",
+          "body": "A profile gives a hardening guide organizationally defined parameters and selects the part of it an organisation holds itself to."
+        },
+        {
+          "title": "The catalog absorbs the shape of real guides",
+          "body": "Controls, parts and nested groups carry checks, remediation and prose at the scale of a thousand-page guide."
+        },
+        {
+          "title": "The mapping is a document someone else can write",
+          "body": "The tie to a framework is its own <code>mapping-collection</code>, so a third party can publish it without owning either catalog."
+        }
+      ],
+      "cons": [
+        {
+          "title": "More models to keep",
+          "body": "Benchmark requirements join the regulatory controls the plan of record already answers, and whether each new catalog needs its own plan is unsettled."
+        },
+        {
+          "title": "More complexity to resolve",
+          "body": "Several frameworks and several benchmarks multiply catalogs, profiles and mappings, raising the entry cost for tools and producing hard profile resolution cases."
+        },
+        {
+          "title": "The response cannot be made per instance",
+          "body": "A response is a <code>by-component</code>, so it names a component and never an instance, and one exception among a hundred hosts cannot be recorded."
+        }
+      ]
+    },
+    "component-first": {
+      "intro": "Considerations when introducing technical hardening rules into a component definition have been captured",
+      "pros": [
+        {
+          "title": "One artifact serves the reader and the tool",
+          "body": "A component definition says how a component can meet a control, the world of possibility for software, and rules inside it make that document drive automation."
+        },
+        {
+          "title": "The rule and the check are separate things",
+          "body": "The rule sits on the product and the check on a second component, so a second engine is a second component."
+        },
+        {
+          "title": "The claim can name the rule it rests on",
+          "body": "The proposed <code>implementing-rules</code> closes the distance between saying a control is implemented and saying which rule implements it."
+        },
+        {
+          "title": "Vendors already have advice for this model",
+          "body": "Vendors are told to describe how their product can meet requirements in a component definition, so the rules land in one model."
+        }
+      ],
+      "cons": [
+        {
+          "title": "Four models have to change",
+          "body": "The proposal changes the component definition, the plan of record, the assessment plan and the result, so today it is a proposal."
+        },
+        {
+          "title": "Desired state enters the plan of record",
+          "body": "Rules describing how a component should be configured join a document whose job is to say how the system actually is today."
+        },
+        {
+          "title": "The fidelity fields are proposed, not carried",
+          "body": "Rationale, audit procedure and remediation are most of a published guide, and the shipped rules carry none of them."
+        },
+        {
+          "title": "The response is still not per instance",
+          "body": "An exception reaches a rule but still not an instance, because the response is a <code>by-component</code> here too."
+        },
+        {
+          "title": "Inventory items may need it too",
+          "body": "For a claim to reach a host rather than a class, <code>implementing-rules</code> would have to be carried by inventory items as well."
+        }
+      ]
+    },
+    "assessment-first": {
+      "intro": "Considerations when introducing technical hardening guidance as an assessment plan have been captured",
+      "pros": [
+        {
+          "title": "The plan of record does not move",
+          "body": "The plan points at the document holding the claim rather than making one, so adding or retiring a guide touches the assessment plan alone."
+        },
+        {
+          "title": "Plan to result is a lifecycle this layer has",
+          "body": "A result is a document of its own importing a plan, and the corpus ships one whose findings target objectives and rest on observations."
+        },
+        {
+          "title": "The subject is whatever was assessed",
+          "body": "A subject can be an inventory item, so two hosts of one operating system configured differently each carry their own finding."
+        },
+        {
+          "title": "Execution context travels with the plan",
+          "body": "A task carries a schedule and names the platform that runs it, which no other approach expresses."
+        }
+      ],
+      "cons": [
+        {
+          "title": "No parameter to resolve",
+          "body": "A required value is written into the activity title, so selection means writing a plan rather than resolving a profile."
+        },
+        {
+          "title": "Two tiers, where a guide is sometimes deeper",
+          "body": "The model runs activity to step, and guidance that nests four levels deep has two of them to land in."
+        },
+        {
+          "title": "The published set does not join up",
+          "body": "The result names a plan no file here carries and gives an observation a subject type the model does not define."
+        }
+      ]
+    }
+  }
+}

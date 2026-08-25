@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+build/
+
+# The OSCAL corpora and the CIS Benchmarks used to be excluded here. Both are
+# committed now, on the call recorded in BUILD-LOG.md: the artifacts page names
+# every document each approach ships, and a row naming a file nobody can open is
+# a count a reader has to take on trust.
+#
+# What is committed and what is linked is decided in tools/copy_examples.py.
+# The catalog-first corpus is not here: it is published in a public repository
+# and its rows link there, so 231 files do not need a second home.

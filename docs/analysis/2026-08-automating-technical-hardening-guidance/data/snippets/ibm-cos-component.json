@@ -1,0 +1,13 @@
+{
+  "id": "ibm-cos-component",
+  "slot": "1",
+  "approach": "component-first",
+  "title": "COS component, carrying rules",
+  "source": "IBM/cos-component-definition.json",
+  "pointer": "/component-definition/components/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a985f9\",\n  \"type\": \"service\",\n  \"title\": \"COS\",\n  \"description\": \"COS\",\n  \"rules\": [\n    {\n      \"id\": \"cos_access_endpoint_type\",\n      \"description\": \"Ensure Cloud Object Storage is accessible only by using {param: endpoint_access} endpoints\",\n      \"params\": [\n        {\n          \"id\": \"endpoint_access\",\n          \"label\": \"Endpoint Access type\",\n          \"select\": {\n            \"how-many\": \"one\",\n            \"choice\": [\n              \"public\",\n              \"private\",\n              \"direct\"\n            ]\n          }\n        }\n      ]\n    },\n    {\n      \"id\": \"cos_encryption_hyperprotect_key_configured\",\n      \"description\": \"Ensure Cloud Object Storage is enabled with customer-managed encryption and Keep Your Own Key (KYOK)\"\n    }\n  ],\n  \"control-implementations\": [\n    {\n      \"uuid\": \"08159454-994c-49ed-8f78-f2293b1274a2\",\n      \"source\": \"trestle://profiles/ACME_official/profile.json\",\n      \"description\": \"ACME Official Profile\",\n      \"set-parameters\": [\n        {\n          \"param-id\": \"endpoint_access\",\n          \"values\": [\n            \"private\"\n          ]\n        }\n      ],\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"c6ccfcbc-4553-40e6-b4e8-eadbff8d4756\",\n          \"control-id\": \"ac-4\",\n          \"description\": \"This control is implmeneted by ensuring the COS is only available on private endpoints.\",\n          \"implementing-rules\": [\n            {\n              \"rule-id\": \"cos_access_endpoint_type\"\n            }\n          ]\n        },\n        {\n          \"uuid\": \"455563ca-c454-41d5-aa3b-f57843d95aab\",\n          \"control-id\": \"sc-28\",\n          \"description\": \"Ensure that data is encrypted and the key is managed by the customer.\",\n          \"implementing-rules\": [\n            {\n              \"rule-id\": \"cos_encryption_hyperprotect_key_configured\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "4944f506f1f2127950e0fb2cd8e251e66e4ec5a83c5e9126ef147117ad233f4a",
+  "extracted_at": "2026-08-22T16:15:34+00:00"
+}

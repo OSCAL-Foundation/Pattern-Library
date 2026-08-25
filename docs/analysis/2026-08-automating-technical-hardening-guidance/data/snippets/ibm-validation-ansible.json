@@ -1,0 +1,13 @@
+{
+  "id": "ibm-validation-ansible",
+  "slot": "3",
+  "approach": "component-first",
+  "title": "Ansible validation component, and its checks",
+  "source": "IBM/ansible-validation-component-definition.json",
+  "pointer": "$",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"component-definition\": {\n    \"uuid\": \"bbdf7ee6-3e0a-4065-8ecf-50f4129de473\",\n    \"metadata\": {\n      \"title\": \"Demo validation component definition\",\n      \"last-modified\": \"2026-05-15T14:29:37+00:00\",\n      \"version\": \"1.0\",\n      \"oscal-version\": \"1.2.1\"\n    },\n    \"components\": [\n      {\n        \"uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a984f8\",\n        \"type\": \"validation\",\n        \"title\": \"ANSIBLE\",\n        \"description\": \"ANSIBLE\",\n        \"checks\": [\n          {\n            \"id\": \"check-1\",\n            \"description\": \"Check Cloud Object Storage is accessible only by using private endpoints\",\n            \"rule-id\": \"cos_access_endpoint_type\",\n            \"target-component-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a985f9\"\n          },\n          {\n            \"id\": \"check-2\",\n            \"description\": \"Check Cloud Object Storage is enabled with customer-managed encryption and Keep Your Own Key (KYOK)\",\n            \"rule-id\": \"cos_encryption_hyperprotect_key_configured\",\n            \"target-component-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a985f9\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+  "sha256_of_source_file": "f22d30678a24146f1be62758a843ad1f34c34eb6a2c00b1008e84a163c4cadbd",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

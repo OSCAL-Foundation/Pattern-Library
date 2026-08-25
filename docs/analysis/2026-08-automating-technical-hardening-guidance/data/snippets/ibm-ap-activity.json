@@ -1,0 +1,13 @@
+{
+  "id": "ibm-ap-activity",
+  "slot": "5",
+  "approach": "component-first",
+  "title": "AP activity, binding check-ids",
+  "source": "IBM/assessment-plan.json",
+  "pointer": "/assessment-plan/local-defintions",
+  "section": null,
+  "language": "json",
+  "content": "[\n  {\n    \"activities\": [\n      {\n        \"uuid\": \"a1b2c3d4-1111-4aaa-8888-111111111111\",\n        \"description\": \"Execute Ansible checks to validate the controls.\",\n        \"assessment-asset-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a984f8\",\n        \"check-ids\": [\n          \"check-1\",\n          \"check-2\"\n        ]\n      },\n      {\n        \"uuid\": \"b2c3d4e5-2222-4bbb-9999-222222222222\",\n        \"description\": \"Execute OSCAP checks to validate the controls.\",\n        \"assessment-asset-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a984e8\",\n        \"check-ids\": [\n          \"check-1\",\n          \"check-3\"\n        ]\n      }\n    ]\n  }\n]",
+  "sha256_of_source_file": "fd50fa2d32cb8a19d9baab6bc4679d863e0b8bddc7902a01c34b25927f61b7d6",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

@@ -1,0 +1,143 @@
+<html lang="en" data-base=".">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A worked scenario | Automating Technical Hardening Guidance with OSCAL</title>
+<meta name="description" content="One system under 800-53 High with three hardening guides, modelled in all three approaches, with the file each one would produce.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="A worked scenario">
+<meta property="og:description" content="One system under 800-53 High with three hardening guides, modelled in all three approaches, with the file each one would produce.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Automating Technical Hardening Guidance with OSCAL">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A worked scenario">
+<meta name="twitter:description" content="One system under 800-53 High with three hardening guides, modelled in all three approaches, with the file each one would produce.">
+<link rel="stylesheet" href="./assets/site.css">
+<script>
+  /* Set the theme before first paint so the page never flashes the wrong one. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("tfg-theme"); } catch (e) {}
+    if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <p class="site-title"><a href="./index.html">Automating Technical Hardening Guidance with OSCAL</a></p>
+    <nav class="site-nav" aria-label="Sections">
+      <ul>
+        <li><a href="./index.html">Start here</a></li>
+        <li><a href="./six-questions.html">The six questions</a></li>
+        <li><a href="./scenario.html">A worked scenario</a></li>
+        <li><a href="./catalog-first.html">Catalog-first</a></li>
+        <li><a href="./component-first.html">Component-first</a></li>
+        <li><a href="./assessment-first.html">Assessment-first</a></li>
+        <li><a href="./questions.html">Open questions</a></li>
+        <li><a href="./oscal-artifacts.html">OSCAL artifacts</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="theme-toggle" aria-pressed="false">Dark theme</button>
+  </div>
+</header>
+
+<main id="main">
+<h1>One system, three hardening guides</h1>
+<p class="lede">A system under NIST SP 800-53 Revision 5 at the High baseline, running Ubuntu, PostgreSQL and Microsoft 365, hardened against a published guide for each. The same scenario is modelled in all three approaches, using every OSCAL model except the plan of action and milestones.</p>
+<nav class="toc" aria-label="On this page">
+  <span class="toc__label">On this page</span>
+  <ol>
+    <li><a href="#inputs">1. The system, and what it is held to</a></li>
+    <li><a href="#files">2. What each approach would produce</a></li>
+  </ol>
+</nav>
+<section id="inputs">
+<h2>1. The system, and what it is held to</h2>
+<div class="tier2">
+  <p>One scenario, described once. Every figure on this site is on this page, so a count read anywhere is a count of the same system. None of them is typed: each says below where it was counted from.</p>
+  <dl class="scenario__inputs">
+    <dt>Framework</dt><dd>NIST SP 800-53 Revision 5, High baseline. <strong>370</strong> controls: 188 base and 182 enhancements, across 18 families.</dd>
+    <dt>Ubuntu</dt><dd>CIS Ubuntu 24.04 LTS Benchmark. <strong>308</strong> requirements in 53 sections.</dd>
+    <dt>PostgreSQL</dt><dd>DISA STIG PostgreSQL 16. <strong>111</strong> requirements in 111 activities, one per requirement.</dd>
+    <dt>Microsoft 365</dt><dd>CISA BOD 25-01 SCuBA. <strong>128</strong> requirements in 7 services.</dd>
+    <dt>Together</dt><dd><strong>547</strong> hardening requirements alongside <strong>370</strong> regulatory controls, which is <strong>917</strong> requirements in total for one system.</dd>
+  </dl>
+</div>
+</section>
+<section id="files" class="wide">
+<h2>2. What each approach would produce</h2>
+<div class="tier2">
+  <p>One tile is one file, and the tile is the same size in all three figures, which are drawn on one grid. So the three can be compared by eye, and the comparison is area rather than a number to be taken on trust. A model an approach does not use is drawn as a dashed rule and labelled none, because an absence is half of what separates the three.</p>
+</div>
+<table class="criteria-table">
+  <caption class="small muted">Files by model. The row order is the OSCAL layers, from controls down to assessment.</caption>
+  <thead><tr><th scope="col">Model</th><th scope="col">Catalog-first</th><th scope="col">Component-first</th><th scope="col">Assessment-first</th></tr></thead>
+  <tbody>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="13.0728 14.0728 37.8544 37.8544" aria-hidden="true" focusable="false"><path d="M18 18H30L34 22V48L27 45H18V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M46 18H34L30 22V48L37 45H46V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M22 26L28 26" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M22 32L28 32" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 26L42 26" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 32L42 32" class="model-icon__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/></svg></span><span class="mtile__name">catalog</span></span></th><td>4</td><td>1</td><td>1</td></tr>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M18 20H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><path d="M18 32H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><path d="M18 44H46" stroke-width="2.21" stroke-linecap="round" stroke="currentColor" fill="none"/><circle cx="26" cy="20" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/><circle cx="38" cy="32" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/><circle cx="30" cy="44" r="4" class="model-icon__soft model-icon__knockout" stroke-width="2.21"/></svg></span><span class="mtile__name">profile</span></span></th><td>5</td><td>1</td><td>1</td></tr>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--control"><svg viewBox="13.0728 13.0728 37.8544 37.8544" aria-hidden="true" focusable="false"><circle cx="22" cy="22" r="5" stroke-width="2.08" stroke="currentColor" fill="none"/><circle cx="42" cy="22" r="5" stroke-width="2.08" stroke="currentColor" fill="none"/><circle cx="32" cy="42" r="5" stroke-width="2.08" stroke="currentColor" fill="none"/><path d="M26 24L38 24" class="model-icon__soft" stroke-width="2.08" stroke-dasharray="2 2" fill="none"/><path d="M25 26L29 38" class="model-icon__soft" stroke-width="2.08" fill="none"/><path d="M39 26L35 38" class="model-icon__soft" stroke-width="2.08" fill="none"/></svg></span><span class="mtile__name">mapping-collection</span></span></th><td>3</td><td class="is-none">none</td><td class="is-none">none</td></tr>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">component-definition</span></span></th><td>3</td><td>6</td><td class="is-none">none</td></tr>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--implementation"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><path d="M20 16H36L44 24V48H20V16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M36 16V24H44" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M32 30V40M32 30L28 31L26 33L26 36L28 39L32 42L36 39L38 36L38 33L36 31L32 30Z" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span><span class="mtile__name">system-security-plan</span></span></th><td>1</td><td>1</td><td>1</td></tr>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.1907 10.6907 41.6186 41.6186" aria-hidden="true" focusable="false"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M26 26L38 26" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="model-icon__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" stroke="currentColor" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" stroke="currentColor" fill="none"/></svg></span><span class="mtile__name">assessment-plan</span></span></th><td>1</td><td>1</td><td>4</td></tr>
+    <tr><th scope="row"><span class="mtile"><span class="model-icon model-icon--assessment"><svg viewBox="11.8161 11.8161 40.3678 40.3678" aria-hidden="true" focusable="false"><rect x="18" y="16" width="28" height="32" rx="3" stroke-width="2.21" stroke="currentColor" fill="none"/><path d="M24 24L27 27L33 21" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M24 34L27 37L33 31" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M37 24L40 24" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" fill="none"/><path d="M37 34L40 34" class="model-icon__soft" stroke-width="2.21" stroke-linecap="round" fill="none"/></svg></span><span class="mtile__name">assessment-results</span></span></th><td>1</td><td>1</td><td>4</td></tr>
+    <tr class="is-total"><th scope="row">Total files</th><td><strong>18</strong></td><td><strong>11</strong></td><td><strong>11</strong></td></tr>
+    <tr><th scope="row">Models used</th><td>7 of 7</td><td>6 of 7</td><td>5 of 7</td></tr>
+  </tbody>
+</table>
+<h3 id="files-catalog">2.1 Catalog-first, 18 files</h3>
+<div class="tier2">
+  <p>Each guide is published as a catalog, selected by a profile of its own, and tied back to the framework by a mapping collection. The plan of record answers every control in the merged set.</p>
+</div>
+<figure>
+  <div class="diagram" data-diagram="710-scenario-catalog"></div>
+  <figcaption>The plan of record answers 917 controls, 370 from the framework and 547 from the guides. <a href="./catalog-first.html">Catalog-first</a> sets out the approach in full.</figcaption>
+</figure>
+<h3 id="files-component">2.2 Component-first, 11 files</h3>
+<div class="tier2">
+  <p>Each guide becomes rules on the component it configures, and each engine that tests them becomes a component of its own. The framework side is unchanged.</p>
+</div>
+<figure>
+  <div class="diagram" data-diagram="710-scenario-component"></div>
+  <figcaption>The plan of record answers 370 controls, and carries 547 desired-state rules inside its components. <a href="./component-first.html">Component-first</a> sets out the approach in full.</figcaption>
+</figure>
+<h3 id="files-assessment">2.3 Assessment-first, 11 files</h3>
+<div class="tier2">
+  <p>Each guide becomes an assessment plan. The framework side is unchanged, and each plan produces a result of its own.</p>
+</div>
+<figure>
+  <div class="diagram" data-diagram="710-scenario-assessment"></div>
+  <figcaption>The plan of record answers 370 controls, and none of the three guides enters it. <a href="./assessment-first.html">Assessment-first</a> sets out the approach in full.</figcaption>
+</figure>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p><strong>This site makes no recommendation.</strong> It states three approaches in the
+       terms their proponents use and shows the content each one ships.</p>
+  </div>
+</footer>
+
+<!-- Read only when the page is opened from a folder rather than served.
+     Generated by tools/bundle.py from data/; a served copy ignores it. -->
+<script src="./assets/bundle.js"></script>
+<script src="./assets/highlight.js"></script>
+<script src="./assets/site.js"></script>
+<script>
+  /* Mark the current nav item. */
+  (function () {
+    var slug = "scenario.html";
+    document.querySelectorAll(".site-nav a").forEach(function (a) {
+      if (a.getAttribute("href").split("/").pop() === slug) a.setAttribute("aria-current", "page");
+    });
+  })();
+</script>
+
+</body>
+</html>

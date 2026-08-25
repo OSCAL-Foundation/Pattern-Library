@@ -1,0 +1,374 @@
+{
+  "note": "One system, one baseline, three hardening guides, modelled three ways. The point of the scenario is that the three approaches do not differ in what they can express so much as in how many documents it takes to express it, and what the plan of record ends up holding. Every count is either recomputed from a corpus in this repository, read from the NIST profile stored in data/scenario-evidence/, or forced by the OSCAL schemas, and each says which. What the schemas force is stated on the file rows it explains rather than in a section of its own.",
+  "title": "One system, three hardening guides",
+  "summary": "A system under NIST SP 800-53 Revision 5 at the High baseline, running Ubuntu, PostgreSQL and Microsoft 365, hardened against a published guide for each. The same scenario is modelled in all three approaches, using every OSCAL model except the plan of action and milestones.",
+  "excluded_model": {
+    "model": "plan-of-action-and-milestones",
+    "reason": "It records what was not met and what is being done about it. That is the same document in all three approaches, so it separates none of them."
+  },
+  "framework": {
+    "label": "NIST SP 800-53 Revision 5, High baseline",
+    "controls": 370,
+    "base": 188,
+    "enhancements": 182,
+    "families": 18,
+    "source": "data/scenario-evidence/nist-high-baseline.json",
+    "derivation": "count of /profile/imports/0/include-controls/0/with-ids in the published HIGH baseline profile, version 5.2.0"
+  },
+  "hardening": [
+    {
+      "key": "cis-ubuntu",
+      "label": "CIS Ubuntu 24.04 LTS Benchmark",
+      "technology": "Ubuntu",
+      "requirements": 308,
+      "grouping": 53,
+      "grouping_label": "sections",
+      "derivation": "count of steps titled 'Audit for ...' in Easy Dynamics/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json. The file carries 616 steps, one audit and one remediation for each recommendation, in 53 activities.",
+      "source": "Easy Dynamics/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json",
+      "count_rule": "audit-steps"
+    },
+    {
+      "key": "disa-postgres",
+      "label": "DISA STIG PostgreSQL 16",
+      "technology": "PostgreSQL",
+      "requirements": 111,
+      "grouping": 111,
+      "grouping_label": "activities, one per requirement",
+      "derivation": "count of props step-type=check in Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/postgres16.json. The file carries 111 activities and 222 steps, one check and one remediate for each.",
+      "source": "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/postgres16.json",
+      "count_rule": "step-type-check"
+    },
+    {
+      "key": "cisa-bod-25-01",
+      "label": "CISA BOD 25-01 SCuBA",
+      "technology": "Microsoft 365",
+      "requirements": 128,
+      "grouping": 7,
+      "grouping_label": "services",
+      "derivation": "count of steps in Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-agnostic.json, which carries 128 steps across 7 activities, one activity per Microsoft 365 service.",
+      "source": "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-agnostic.json",
+      "count_rule": "steps"
+    }
+  ],
+  "models": [
+    "catalog",
+    "profile",
+    "mapping-collection",
+    "component-definition",
+    "system-security-plan",
+    "assessment-plan",
+    "assessment-results"
+  ],
+  "approaches": {
+    "catalog-first": {
+      "rule": "Each guide is published as a catalog, selected by a profile of its own, and tied back to the framework by a mapping collection. The plan of record answers every control in the merged set.",
+      "files": [
+        {
+          "model": "catalog",
+          "count": 4,
+          "what": "one for the framework, one for each guide",
+          "detail": "800-53 Revision 5, CIS Ubuntu, DISA PostgreSQL, CISA SCuBA",
+          "items": [
+            {
+              "name": "NIST 800-53"
+            },
+            {
+              "name": "CIS Ubuntu"
+            },
+            {
+              "name": "DISA PgSQL"
+            },
+            {
+              "name": "CISA SCuBA"
+            }
+          ]
+        },
+        {
+          "model": "profile",
+          "count": 5,
+          "what": "one selection per catalog, and one to merge them",
+          "detail": "the High baseline, three guide selections, and the organisational profile that merges them, which is needed because a plan reaches all four through one import-profile and that field is a single required object",
+          "items": [
+            {
+              "name": "800-53 High"
+            },
+            {
+              "name": "CIS Ubuntu"
+            },
+            {
+              "name": "DISA PgSQL"
+            },
+            {
+              "name": "CISA SCuBA"
+            },
+            {
+              "name": "Org merged"
+            }
+          ]
+        },
+        {
+          "model": "mapping-collection",
+          "count": 3,
+          "what": "one per guide, tying its controls to the framework",
+          "detail": "without these the guide's controls and the framework's controls are two unrelated sets in the same plan",
+          "items": [
+            {
+              "name": "CIS to 800-53"
+            },
+            {
+              "name": "STIG to 800-53"
+            },
+            {
+              "name": "SCuBA to 800-53"
+            }
+          ]
+        },
+        {
+          "model": "component-definition",
+          "count": 3,
+          "what": "one per technology, carrying the check components",
+          "detail": "the control names the check by identifier and a software component of that name carries the runner detail",
+          "items": [
+            {
+              "name": "Ubuntu checks",
+              "kind": "software"
+            },
+            {
+              "name": "PgSQL checks",
+              "kind": "software"
+            },
+            {
+              "name": "M365 checks",
+              "kind": "software"
+            }
+          ]
+        },
+        {
+          "model": "system-security-plan",
+          "count": 1,
+          "what": "one, answering 917 controls",
+          "detail": "370 from the framework and 547 from the guides, each needing a by-component response, and all of them reached through one import-profile because that field is a single required object",
+          "items": [
+            {
+              "name": "System SSP"
+            }
+          ]
+        },
+        {
+          "model": "assessment-plan",
+          "count": 1,
+          "what": "one",
+          "detail": "",
+          "items": [
+            {
+              "name": "System AP"
+            }
+          ]
+        },
+        {
+          "model": "assessment-results",
+          "count": 1,
+          "what": "one",
+          "detail": "",
+          "items": [
+            {
+              "name": "System AR"
+            }
+          ]
+        }
+      ],
+      "plan_of_record": "The plan of record answers 917 controls, 370 from the framework and 547 from the guides"
+    },
+    "component-first": {
+      "rule": "Each guide becomes rules on the component it configures, and each engine that tests them becomes a component of its own. The framework side is unchanged.",
+      "files": [
+        {
+          "model": "catalog",
+          "count": 1,
+          "what": "the framework only",
+          "detail": "800-53 Revision 5",
+          "items": [
+            {
+              "name": "NIST 800-53"
+            }
+          ]
+        },
+        {
+          "model": "profile",
+          "count": 1,
+          "what": "the High baseline",
+          "detail": "",
+          "items": [
+            {
+              "name": "800-53 High"
+            }
+          ]
+        },
+        {
+          "model": "mapping-collection",
+          "count": 0,
+          "what": "none, the tie is inside the component definition",
+          "detail": "control-implementation names the control the rule serves, so no second document carries the tie"
+        },
+        {
+          "model": "component-definition",
+          "count": 6,
+          "what": "three products carrying 547 rules, three engines carrying the checks",
+          "detail": "Ubuntu, PostgreSQL and Microsoft 365, and one validation component definition per engine that tests them",
+          "items": [
+            {
+              "name": "Ubuntu",
+              "kind": "software"
+            },
+            {
+              "name": "PostgreSQL",
+              "kind": "software"
+            },
+            {
+              "name": "Microsoft 365",
+              "kind": "software"
+            },
+            {
+              "name": "Ubuntu checks",
+              "kind": "validation"
+            },
+            {
+              "name": "PgSQL checks",
+              "kind": "validation"
+            },
+            {
+              "name": "M365 checks",
+              "kind": "validation"
+            }
+          ]
+        },
+        {
+          "model": "system-security-plan",
+          "count": 1,
+          "what": "one, answering 370 controls and carrying 547 rules",
+          "detail": "the control count does not move; the rules arrive inside system-implementation instead",
+          "items": [
+            {
+              "name": "System SSP"
+            }
+          ]
+        },
+        {
+          "model": "assessment-plan",
+          "count": 1,
+          "what": "one",
+          "detail": "",
+          "items": [
+            {
+              "name": "System AP"
+            }
+          ]
+        },
+        {
+          "model": "assessment-results",
+          "count": 1,
+          "what": "one",
+          "detail": "",
+          "items": [
+            {
+              "name": "System AR"
+            }
+          ]
+        }
+      ],
+      "plan_of_record": "The plan of record answers 370 controls, and carries 547 desired-state rules inside its components"
+    },
+    "assessment-first": {
+      "rule": "Each guide becomes an assessment plan. The framework side is unchanged, and each plan produces a result of its own.",
+      "files": [
+        {
+          "model": "catalog",
+          "count": 1,
+          "what": "the framework only",
+          "detail": "800-53 Revision 5",
+          "items": [
+            {
+              "name": "NIST 800-53"
+            }
+          ]
+        },
+        {
+          "model": "profile",
+          "count": 1,
+          "what": "the High baseline",
+          "detail": "",
+          "items": [
+            {
+              "name": "800-53 High"
+            }
+          ]
+        },
+        {
+          "model": "mapping-collection",
+          "count": 0,
+          "what": "none, the tie is on the activity",
+          "detail": "an activity names the control it serves through related-controls or reviewed-controls"
+        },
+        {
+          "model": "component-definition",
+          "count": 0,
+          "what": "none, the engines are named inside each plan",
+          "detail": "assessment-assets carries the components that run the checks, so they need no document of their own"
+        },
+        {
+          "model": "system-security-plan",
+          "count": 1,
+          "what": "one, answering 370 controls",
+          "detail": "no guidance enters it; the plans point at it rather than adding to it",
+          "items": [
+            {
+              "name": "System SSP"
+            }
+          ]
+        },
+        {
+          "model": "assessment-plan",
+          "count": 4,
+          "what": "one for the framework assessment, one per guide",
+          "detail": "the three guides carry 547 requirements between them, as activities and steps, and each plan names one system security plan through import-ssp",
+          "items": [
+            {
+              "name": "800-53 AP"
+            },
+            {
+              "name": "CIS Ubuntu AP"
+            },
+            {
+              "name": "DISA PgSQL AP"
+            },
+            {
+              "name": "CISA SCuBA AP"
+            }
+          ]
+        },
+        {
+          "model": "assessment-results",
+          "count": 4,
+          "what": "one per plan, because a result names exactly one plan",
+          "detail": "four separate results rather than four sections of one, because a result names exactly one plan through import-ap and that field is neither an array nor optional",
+          "items": [
+            {
+              "name": "800-53 AR"
+            },
+            {
+              "name": "CIS Ubuntu AR"
+            },
+            {
+              "name": "DISA PgSQL AR"
+            },
+            {
+              "name": "CISA SCuBA AR"
+            }
+          ]
+        }
+      ],
+      "plan_of_record": "The plan of record answers 370 controls, and none of the three guides enters it"
+    }
+  },
+  "items_note": "One entry per file, so a reader can follow a particular document from the figure into the list beneath it. The names are shortened to fit a tile. Where a model has more than one kind of file in it, the kind is named too: a component definition holding the thing being configured is software, and one holding the checks that test it is validation, which is the distinction the whole approach rests on and is invisible from the file count alone."
+}

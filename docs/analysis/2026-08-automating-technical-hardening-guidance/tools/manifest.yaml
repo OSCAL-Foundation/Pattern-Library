@@ -1,0 +1,300 @@
+# Snippet manifest: the declarative source of truth for every code block on the site.
+#
+# Every pointer below was resolved against the corpora on 2026-08-12 and is
+# asserted by tools/verify.py. Nothing on the site is hand-typed.
+#
+# Fields
+#   id         kebab-case, unique, stable. Used as the HTML anchor.
+#   slot       1 | 2 | 3 | 4 | 5 | 6a | 6b | meta
+#   approach   assessment-first | catalog-first | component-first | schema
+#   title      short human label shown in the block header
+#   source     path relative to the corpora root
+#   pointer    RFC 6901 JSON pointer, or "$" for the whole document
+#   language   json | markdown | text   (defaults to json)
+#   section    optional, markdown and text only. A heading, matched exactly.
+#              The whole section is taken, from its heading to the next heading
+#              of the same or a higher level. Never a partial section, because a
+#              section cut short is an undeclared trim.
+#   trim       optional. RFC 6901 pointers, relative to the extracted node,
+#              whose values are replaced by the string "..."
+#   max_prose  optional int. Any string value longer than this is cut and
+#              suffixed with " [truncated]". Never silent.
+
+corpora_root: "../../tfg-automated-assessments"
+
+snippets:
+
+  # ---------------------------------------------------------------- #
+  # Assessment-first  (Option C, Easy Dynamics)                       #
+  # ---------------------------------------------------------------- #
+
+  - id: ez-stig-activity-v259312
+    slot: "1"
+    approach: assessment-first
+    title: "STIG activity V-259312"
+    source: "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json"
+    pointer: "/assessment-plan/local-definitions/activities/100"
+
+  - id: ez-stig-sc28-v270747
+    slot: "1"
+    approach: assessment-first
+    title: "STIG activity V-270747, SC-28"
+    source: "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/ubuntu24.json"
+    pointer: "/assessment-plan/local-definitions/activities/101"
+    max_prose: 600
+
+  - id: ez-cis-step-props
+    slot: "3"
+    approach: assessment-first
+    title: "CIS audit step props"
+    source: "Easy Dynamics/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json"
+    pointer: "/assessment-plan/local-definitions/activities/0/steps/0"
+    max_prose: 400
+
+  - id: ez-cis-remediation-step
+    slot: "3"
+    approach: assessment-first
+    title: "CIS remediation step"
+    source: "Easy Dynamics/Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json"
+    pointer: "/assessment-plan/local-definitions/activities/0/steps/1"
+    max_prose: 400
+
+  - id: ez-cisa-context-activity
+    slot: "5"
+    approach: assessment-first
+    title: "CISA activity context prop"
+    source: "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json"
+    pointer: "/assessment-plan/local-definitions/activities/0/props"
+
+  - id: ez-cisa-assessment-assets
+    slot: "5"
+    approach: assessment-first
+    title: "CISA assessment-assets"
+    source: "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json"
+    pointer: "/assessment-plan/assessment-assets"
+
+  - id: ez-cisa-context-step
+    slot: "3"
+    approach: assessment-first
+    title: "CISA step context prop"
+    source: "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-maester.json"
+    pointer: "/assessment-plan/local-definitions/activities/0/steps/10"
+    max_prose: 400
+
+  - id: ez-stig-related-controls
+    slot: "2"
+    approach: assessment-first
+    title: "STIG related-controls, the control tie"
+    source: "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json"
+    pointer: "/assessment-plan/local-definitions/activities/100/related-controls"
+
+  - id: ez-cisa-step-reviewed
+    slot: "2"
+    approach: assessment-first
+    title: "CISA step reviewed-controls"
+    source: "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json"
+    pointer: "/assessment-plan/local-definitions/activities/0/steps/0/reviewed-controls"
+
+  - id: ez-subjects-includeall
+    slot: "4"
+    approach: assessment-first
+    title: "STIG assessment-subjects, include-all"
+    source: "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json"
+    pointer: "/assessment-plan/assessment-subjects"
+
+  - id: ez-subjects-explicit
+    slot: "4"
+    approach: assessment-first
+    title: "CISA assessment-subjects, one inventory item"
+    source: "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json"
+    pointer: "/assessment-plan/assessment-subjects"
+
+  - id: ez-cisa-task-timing
+    slot: "5"
+    approach: assessment-first
+    title: "CISA task, with timing"
+    source: "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json"
+    pointer: "/assessment-plan/tasks/0"
+    max_prose: 400
+
+  - id: ez-stig-import-ssp
+    slot: meta
+    approach: assessment-first
+    title: "STIG import-ssp, an unresolved placeholder"
+    source: "Easy Dynamics/DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json"
+    pointer: "/assessment-plan/import-ssp"
+
+  - id: ez-cisa-import-ssp
+    slot: "6a"
+    approach: assessment-first
+    title: "import-ssp, resolving to a resource in the same document"
+    source: "Easy Dynamics/CISA BOD 25-01/assessment-plan.json"
+    pointer: "/assessment-plan/import-ssp"
+
+  - id: ez-cisa-ssp-resource
+    slot: "6a"
+    approach: assessment-first
+    title: "The resource a resolved import-ssp lands on"
+    source: "Easy Dynamics/CISA BOD 25-01/assessment-plan.json"
+    pointer: "/assessment-plan/back-matter/resources/1"
+
+  - id: ez-cisa-no-ssp-resource
+    slot: "6a"
+    approach: assessment-first
+    title: "The alternative resource, where no OSCAL system security plan exists"
+    source: "Easy Dynamics/CISA BOD 25-01/assessment-plan.json"
+    pointer: "/assessment-plan/back-matter/resources/0"
+    max_prose: 400
+
+  - id: ez-cisa-ar-finding
+    slot: "6b"
+    approach: assessment-first
+    title: "A finding, targeting an objective"
+    source: "Easy Dynamics/CISA BOD 25-01/ar-cisa-scuba-scubagear.json"
+    pointer: "/assessment-results/results/0/findings/0"
+    max_prose: 400
+
+  - id: ez-cisa-ar-observation
+    slot: "6b"
+    approach: assessment-first
+    title: "The observation it rests on, and what was examined"
+    source: "Easy Dynamics/CISA BOD 25-01/ar-cisa-scuba-scubagear.json"
+    pointer: "/assessment-results/results/0/observations/0"
+    max_prose: 400
+
+  - id: ez-cis-resolution-status
+    slot: meta
+    approach: assessment-first
+    title: "CIS resolution status"
+    source: "Easy Dynamics/Center for Internet Security/CIS_PostgreSQL_18_Benchmark_v1_0_0_OSCAL_AP.json"
+    pointer: "/assessment-plan/reviewed-controls/control-selections/0"
+    trim:
+      - "/include-controls"
+
+  # ---------------------------------------------------------------- #
+  # Catalog-first  (Option A, AWS)                                    #
+  # ---------------------------------------------------------------- #
+
+  - id: aws-acm2-control
+    slot: "1"
+    approach: catalog-first
+    title: "ACM.2, the control"
+    source: "AWS/oscal-content-for-aws-services-main/catalogs/aws_security-hub.oscal.json"
+    pointer: "/catalog/groups/0/controls/1"
+    # groups/0 is the ACM group. verify.py asserts id == "ACM.2".
+
+  - id: aws-acm-rsa-check-component
+    slot: "3"
+    approach: catalog-first
+    title: "acm-certificate-rsa-check, the check component"
+    source: "AWS/oscal-content-for-aws-services-main/component-definitions/acm.oscal.json"
+    pointer: "/component-definition/components/2"
+
+  - id: aws-acm-backmatter-source
+    slot: "2"
+    approach: catalog-first
+    title: "Back-matter, source to the catalog"
+    source: "AWS/oscal-content-for-aws-services-main/component-definitions/acm.oscal.json"
+    pointer: "/component-definition/back-matter"
+
+  - id: aws-control-cloudtrail2
+    slot: "1"
+    approach: catalog-first
+    title: "CloudTrail.2, the control"
+    source: "AWS/oscal-content-for-aws-services-main/catalogs/aws_security-hub.oscal.json"
+    pointer: "/catalog/groups/15/controls/2"
+    # Used only by the SC-28 comparison, which needs a control about protection
+    # of information at rest. ACM.2 is key length, so it cannot stand in here.
+    # verify.py asserts id == "CloudTrail.2".
+
+  - id: aws-input-parameter
+    slot: "1"
+    approach: catalog-first
+    title: "InputParameter props, the parameter mechanism"
+    source: "AWS/oscal-content-for-aws-services-main/component-definitions/iam.oscal.json"
+    pointer: "/component-definition/components/2/props"
+
+  - id: aws-acm-service-rollup
+    slot: "2"
+    approach: catalog-first
+    title: "AWS Certificate Manager, the service roll-up"
+    source: "AWS/oscal-content-for-aws-services-main/component-definitions/acm.oscal.json"
+    pointer: "/component-definition/components/0/control-implementations/0"
+
+  - id: aws-config-service-bare
+    slot: "5"
+    approach: catalog-first
+    title: "AWS Config, the engine that runs the checks"
+    source: "AWS/oscal-content-for-aws-services-main/component-definitions/config.oscal.json"
+    pointer: "/component-definition/components/0"
+    trim:
+      - "/links"
+
+  # ---------------------------------------------------------------- #
+  # Component-first  (Option B, IBM)                                  #
+  # ---------------------------------------------------------------- #
+
+  - id: ibm-rules-md
+    slot: meta
+    approach: component-first
+    title: "IBM's proposed rule and check assemblies"
+    source: "IBM/Automated-assessment.md"
+    pointer: "$"
+    language: markdown
+
+  # The four open questions the proposal raises against itself. Sliced from the
+  # same file as ibm-rules-md so that "verbatim" is produced rather than
+  # asserted, including the source's own typographic errors. Gate 7 removed
+  # every quotation from the site; this is a snippet from a published file at a
+  # declared location, which is what the standing rules require instead.
+  - id: ibm-open-questions
+    slot: meta
+    approach: component-first
+    title: "IBM's open questions"
+    source: "IBM/Automated-assessment.md"
+    pointer: "$"
+    language: markdown
+    section: "Open questions?"
+
+  - id: ibm-cos-component
+    slot: "1"
+    approach: component-first
+    title: "COS component, carrying rules"
+    source: "IBM/cos-component-definition.json"
+    pointer: "/component-definition/components/0"
+
+  - id: ibm-statement-rules
+    slot: "2"
+    approach: component-first
+    title: "implementing-rules on ia-5.1"
+    source: "IBM/idservice-component-definition.json"
+    pointer: "/component-definition/components/0/control-implementations/0/implemented-requirements/0"
+
+  - id: ibm-validation-ansible
+    slot: "3"
+    approach: component-first
+    title: "Ansible validation component, and its checks"
+    source: "IBM/ansible-validation-component-definition.json"
+    pointer: "$"
+
+  - id: ibm-ap-activity
+    slot: "5"
+    approach: component-first
+    title: "AP activity, binding check-ids"
+    source: "IBM/assessment-plan.json"
+    pointer: "/assessment-plan/local-defintions"
+    # The key is misspelled in the source. Reproduced verbatim.
+
+  - id: ibm-ap-task-subjects
+    slot: "4"
+    approach: component-first
+    title: "AP task, subjects and platform"
+    source: "IBM/assessment-plan.json"
+    pointer: "/assessment-plan/tasks/0"
+
+  - id: ibm-ar-observation
+    slot: "6b"
+    approach: component-first
+    title: "AR observation, carrying a result"
+    source: "IBM/assessment-result.json"
+    pointer: "/assessment-results/results/0/observations/0"

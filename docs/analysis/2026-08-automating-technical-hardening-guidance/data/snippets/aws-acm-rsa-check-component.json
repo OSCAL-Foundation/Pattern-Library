@@ -1,0 +1,13 @@
+{
+  "id": "aws-acm-rsa-check-component",
+  "slot": "3",
+  "approach": "catalog-first",
+  "title": "acm-certificate-rsa-check, the check component",
+  "source": "AWS/oscal-content-for-aws-services-main/component-definitions/acm.oscal.json",
+  "pointer": "/component-definition/components/2",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"b5e8b205-cc1f-4bd0-9e51-4ebaab18f69a\",\n  \"type\": \"software\",\n  \"title\": \"acm-certificate-rsa-check\",\n  \"description\": \"Checks if RSA certificates managed by AWS Certificate Manager (ACM) have a key length of at least '2048' bits. The rule is NON_COMPLIANT if the minimum key length is less than 2048 bits.\",\n  \"props\": [\n    {\n      \"name\": \"ConfigRuleId\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"ACM_CERTIFICATE_RSA_CHECK\"\n    },\n    {\n      \"name\": \"asset-type\",\n      \"value\": \"automated-inspection\"\n    },\n    {\n      \"name\": \"ResourceType\",\n      \"ns\": \"http://aws.amazon.com/ns/oscal\",\n      \"value\": \"AWS::ACM::Certificate\"\n    }\n  ],\n  \"responsible-roles\": [\n    {\n      \"role-id\": \"owner\"\n    }\n  ],\n  \"control-implementations\": [\n    {\n      \"uuid\": \"4f227b9d-b47b-4c06-bb55-8f3a17e29b74\",\n      \"source\": \"#f32021d5-0666-4698-8a41-2e733c2035f3\",\n      \"description\": \"Security Hub control implementation\",\n      \"implemented-requirements\": [\n        {\n          \"uuid\": \"4de99497-e4fe-4dfd-80a7-ebbd59f06364\",\n          \"control-id\": \"ACM.2\",\n          \"description\": \"Implemented via AWS Config Rule\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "5d4722e62660af4e0ab9a0acd08c337a860c674a748b9e6a0f41bcba47457fb1",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}

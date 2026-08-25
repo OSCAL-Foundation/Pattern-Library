@@ -1,0 +1,236 @@
+{
+  "note": "The reviewed-controls assembly of the OSCAL 1.2.1 assessment-results model. It requires control-selections, and each selection must carry either include-all or include-controls. So the requirement that a result declare the controls it reviewed can be satisfied with include-all, without naming any one control. The single assessment result in the three bodies of content does exactly that.",
+  "model": "assessment-results",
+  "definition": "oscal-ar-oscal-assessment-common:reviewed-controls",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ar-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-08-18",
+  "constraints": [
+    "required == [\"control-selections\"]",
+    "control-selections items use anyOf with required [\"include-all\"] or [\"include-controls\"]"
+  ],
+  "fragment": {
+    "title": "Reviewed Controls and Control Objectives",
+    "description": "Identifies the controls being assessed and their control objectives.",
+    "$id": "#/definitions/oscal-ar-oscal-assessment-common:reviewed-controls",
+    "type": "object",
+    "properties": {
+      "description": {
+        "title": "Control Objective Description",
+        "description": "A human-readable description of control objectives.",
+        "$ref": "#/definitions/MarkupMultilineDatatype"
+      },
+      "props": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+        }
+      },
+      "links": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+        }
+      },
+      "control-selections": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Assessed Controls",
+          "description": "Identifies the controls being assessed. In the assessment plan, these are the planned controls. In the assessment results, these are the actual controls, and reflects any changes from the plan.",
+          "type": "object",
+          "anyOf": [
+            {
+              "properties": {
+                "description": {
+                  "title": "Assessed Controls Description",
+                  "description": "A human-readable description of in-scope controls specified for assessment.",
+                  "$ref": "#/definitions/MarkupMultilineDatatype"
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+                  }
+                },
+                "include-all": {
+                  "$ref": "#/definitions/oscal-ar-oscal-control-common:include-all"
+                },
+                "exclude-controls": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-assessment-common:select-control-by-id"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+                }
+              },
+              "required": [
+                "include-all"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "description": {
+                  "title": "Assessed Controls Description",
+                  "description": "A human-readable description of in-scope controls specified for assessment.",
+                  "$ref": "#/definitions/MarkupMultilineDatatype"
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+                  }
+                },
+                "include-controls": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-assessment-common:select-control-by-id"
+                  }
+                },
+                "exclude-controls": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-assessment-common:select-control-by-id"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+                }
+              },
+              "required": [
+                "include-controls"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "control-objective-selections": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "title": "Referenced Control Objectives",
+          "description": "Identifies the control objectives of the assessment. In the assessment plan, these are the planned objectives. In the assessment results, these are the assessed objectives, and reflects any changes from the plan.",
+          "type": "object",
+          "anyOf": [
+            {
+              "properties": {
+                "description": {
+                  "title": "Control Objectives Description",
+                  "description": "A human-readable description of this collection of control objectives.",
+                  "$ref": "#/definitions/MarkupMultilineDatatype"
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+                  }
+                },
+                "include-all": {
+                  "$ref": "#/definitions/oscal-ar-oscal-control-common:include-all"
+                },
+                "exclude-objectives": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-assessment-common:select-objective-by-id"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+                }
+              },
+              "required": [
+                "include-all"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "properties": {
+                "description": {
+                  "title": "Control Objectives Description",
+                  "description": "A human-readable description of this collection of control objectives.",
+                  "$ref": "#/definitions/MarkupMultilineDatatype"
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-metadata:link"
+                  }
+                },
+                "include-objectives": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-assessment-common:select-objective-by-id"
+                  }
+                },
+                "exclude-objectives": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ar-oscal-assessment-common:select-objective-by-id"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+                }
+              },
+              "required": [
+                "include-objectives"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "remarks": {
+        "$ref": "#/definitions/oscal-ar-oscal-metadata:remarks"
+      }
+    },
+    "required": [
+      "control-selections"
+    ],
+    "additionalProperties": false
+  }
+}

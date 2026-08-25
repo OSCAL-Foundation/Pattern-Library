@@ -1,0 +1,435 @@
+{
+  "note": "tools/oscal_artifacts.py: author data/oscal-artifacts.json.",
+  "publishers": [
+    {
+      "key": "catalog-first",
+      "name": "Catalog-first",
+      "full_name": "Option A",
+      "option": "Option A",
+      "repo": "https://github.com/awslabs/oscal-content-for-aws-services",
+      "root": "AWS/oscal-content-for-aws-services-main",
+      "totals": {
+        "Catalog": 1,
+        "Component definition": 230
+      },
+      "files": [
+        {
+          "file": "catalogs/aws_security-hub.oscal.json",
+          "model": "catalog",
+          "model_label": "Catalog",
+          "title": "AWS Security Hub Controls",
+          "counts": {
+            "groups": 77,
+            "controls": 452
+          },
+          "bytes": 924964,
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/catalogs/aws_security-hub.oscal.json",
+          "href_external": true
+        },
+        {
+          "file": "component-definitions/acm.oscal.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "AWS Certificate Manager",
+          "counts": {
+            "components": 3,
+            "service": 1,
+            "software": 2,
+            "implemented requirements": 4
+          },
+          "bytes": 16118,
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/acm.oscal.json",
+          "href_external": true
+        },
+        {
+          "file": "component-definitions/cloudtrail.oscal.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "AWS CloudTrail",
+          "counts": {
+            "components": 8,
+            "service": 2,
+            "software": 6,
+            "implemented requirements": 12
+          },
+          "bytes": 27913,
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/cloudtrail.oscal.json",
+          "href_external": true
+        },
+        {
+          "file": "component-definitions/config.oscal.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "AWS Config",
+          "counts": {
+            "components": 1,
+            "service": 1
+          },
+          "bytes": 12332,
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/config.oscal.json",
+          "href_external": true
+        },
+        {
+          "file": "component-definitions/iam.oscal.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "AWS Identity and Access Management",
+          "counts": {
+            "components": 18,
+            "service": 1,
+            "software": 17,
+            "implemented requirements": 43
+          },
+          "bytes": 43914,
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/iam.oscal.json",
+          "href_external": true
+        }
+      ],
+      "rollup": {
+        "model_label": "Component definition",
+        "count": 230,
+        "components": 861,
+        "software": 429,
+        "note": "One per service. Four are listed above as examples; the rest follow the same shape."
+      }
+    },
+    {
+      "key": "component-first",
+      "name": "Component-first",
+      "full_name": "Option B",
+      "option": "Option B",
+      "repo": null,
+      "root": "IBM",
+      "totals": {
+        "Assessment plan": 1,
+        "Assessment results": 1,
+        "Component definition": 4
+      },
+      "files": [
+        {
+          "file": "ansible-validation-component-definition.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "Demo validation component definition",
+          "counts": {
+            "components": 1,
+            "validation": 1
+          },
+          "bytes": 1106,
+          "href": "examples/component-first/ansible-validation-component-definition.json",
+          "href_external": false
+        },
+        {
+          "file": "assessment-plan.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "Assessment Plan",
+          "counts": {
+            "activities": 0,
+            "tasks": 1
+          },
+          "bytes": 5105,
+          "href": "examples/component-first/assessment-plan.json",
+          "href_external": false
+        },
+        {
+          "file": "assessment-result.json",
+          "model": "assessment-results",
+          "model_label": "Assessment results",
+          "title": "Assessment Result",
+          "counts": {
+            "results": 1,
+            "observations": 1,
+            "findings": 0
+          },
+          "bytes": 4275,
+          "href": "examples/component-first/assessment-result.json",
+          "href_external": false
+        },
+        {
+          "file": "cos-component-definition.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "Demo component definition",
+          "counts": {
+            "components": 1,
+            "service": 1,
+            "rules": 2,
+            "implemented requirements": 2
+          },
+          "bytes": 2525,
+          "href": "examples/component-first/cos-component-definition.json",
+          "href_external": false
+        },
+        {
+          "file": "idservice-component-definition.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "Demo component definition",
+          "counts": {
+            "components": 1,
+            "service": 1,
+            "rules": 3,
+            "implemented requirements": 7
+          },
+          "bytes": 5230,
+          "href": "examples/component-first/idservice-component-definition.json",
+          "href_external": false
+        },
+        {
+          "file": "oscap-validation-component-definition.json",
+          "model": "component-definition",
+          "model_label": "Component definition",
+          "title": "Demo validation component definition",
+          "counts": {
+            "components": 1,
+            "validation": 1
+          },
+          "bytes": 1297,
+          "href": "examples/component-first/oscap-validation-component-definition.json",
+          "href_external": false
+        }
+      ],
+      "rollup": null
+    },
+    {
+      "key": "assessment-first",
+      "name": "Assessment-first",
+      "full_name": "Option C",
+      "option": "Option C",
+      "repo": null,
+      "root": "Easy Dynamics",
+      "totals": {
+        "Assessment plan": 15,
+        "Assessment results": 1
+      },
+      "files": [
+        {
+          "file": "CISA BOD 25-01/ap-cisa-scuba-agnostic.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "CISA SCuBA Assessment Plan",
+          "counts": {
+            "activities": 7,
+            "tasks": 0,
+            "steps": 128
+          },
+          "bytes": 309023,
+          "href": "examples/assessment-first/CISA%20BOD%2025-01/ap-cisa-scuba-agnostic.json",
+          "href_external": false
+        },
+        {
+          "file": "CISA BOD 25-01/ap-cisa-scuba-maester.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "CISA SCuBA Assessment Plan",
+          "counts": {
+            "activities": 7,
+            "tasks": 1,
+            "steps": 128
+          },
+          "bytes": 314033,
+          "href": "examples/assessment-first/CISA%20BOD%2025-01/ap-cisa-scuba-maester.json",
+          "href_external": false
+        },
+        {
+          "file": "CISA BOD 25-01/ap-cisa-scuba-scubagear.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "CISA SCuBA Assessment Plan",
+          "counts": {
+            "activities": 7,
+            "tasks": 1,
+            "steps": 128
+          },
+          "bytes": 291731,
+          "href": "examples/assessment-first/CISA%20BOD%2025-01/ap-cisa-scuba-scubagear.json",
+          "href_external": false
+        },
+        {
+          "file": "CISA BOD 25-01/ar-cisa-scuba-scubagear.json",
+          "model": "assessment-results",
+          "model_label": "Assessment results",
+          "title": "CISA SCuBA Assessment Results - M365 Tenant",
+          "counts": {
+            "results": 1,
+            "observations": 128,
+            "findings": 128
+          },
+          "bytes": 298328,
+          "href": "examples/assessment-first/CISA%20BOD%2025-01/ar-cisa-scuba-scubagear.json",
+          "href_external": false
+        },
+        {
+          "file": "CISA BOD 25-01/assessment-plan.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "Entra ID cATO Assessment Plan",
+          "counts": {
+            "activities": 8,
+            "tasks": 1,
+            "steps": 8
+          },
+          "bytes": 19829,
+          "href": "examples/assessment-first/CISA%20BOD%2025-01/assessment-plan.json",
+          "href_external": false
+        },
+        {
+          "file": "Center for Internet Security/CIS_PostgreSQL_18_Benchmark_v1_0_0_OSCAL_AP.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "CIS PostgreSQL 18 Benchmark",
+          "counts": {
+            "activities": 72,
+            "tasks": 8,
+            "steps": 144
+          },
+          "bytes": 423087,
+          "href": "examples/assessment-first/Center%20for%20Internet%20Security/CIS_PostgreSQL_18_Benchmark_v1_0_0_OSCAL_AP.json",
+          "href_external": false
+        },
+        {
+          "file": "Center for Internet Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "CIS Ubuntu Linux 24.04 LTS Benchmark",
+          "counts": {
+            "activities": 53,
+            "tasks": 7,
+            "steps": 616
+          },
+          "bytes": 1768114,
+          "href": "examples/assessment-first/Center%20for%20Internet%20Security/CIS_Ubuntu_Linux_24_04_LTS_Benchmark_v2_OSCAL_AP.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/epas.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Postgres Advanced Server",
+          "counts": {
+            "activities": 118,
+            "tasks": 2,
+            "steps": 236
+          },
+          "bytes": 821083,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/epas.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/postgres16.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Postgres 16",
+          "counts": {
+            "activities": 111,
+            "tasks": 2,
+            "steps": 222
+          },
+          "bytes": 823183,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/postgres16.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/rhel8.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Red Hat Enterprise Linux 8",
+          "counts": {
+            "activities": 366,
+            "tasks": 3,
+            "steps": 732
+          },
+          "bytes": 2454926,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/rhel8.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/rhel9.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Red Hat Enterprise Linux 9",
+          "counts": {
+            "activities": 446,
+            "tasks": 3,
+            "steps": 892
+          },
+          "bytes": 3051725,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/rhel9.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/ubuntu22.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Ubuntu 22.04 LTS",
+          "counts": {
+            "activities": 188,
+            "tasks": 3,
+            "steps": 376
+          },
+          "bytes": 1310065,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/ubuntu22.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/ubuntu24.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Ubuntu 24.04 LTS",
+          "counts": {
+            "activities": 194,
+            "tasks": 3,
+            "steps": 388
+          },
+          "bytes": 1341083,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/ubuntu24.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/win2019.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Windows Server 2019",
+          "counts": {
+            "activities": 282,
+            "tasks": 3,
+            "steps": 564
+          },
+          "bytes": 1940350,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/win2019.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/win2022.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Windows Server 2022",
+          "counts": {
+            "activities": 282,
+            "tasks": 3,
+            "steps": 564
+          },
+          "bytes": 1858871,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/win2022.json",
+          "href_external": false
+        },
+        {
+          "file": "DISA/STIG_XCCDF to OSCAL Assessment Plans/win2025.json",
+          "model": "assessment-plan",
+          "model_label": "Assessment plan",
+          "title": "STIG Windows Server 2025",
+          "counts": {
+            "activities": 284,
+            "tasks": 3,
+            "steps": 568
+          },
+          "bytes": 1867817,
+          "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/win2025.json",
+          "href_external": false
+        }
+      ],
+      "rollup": null
+    }
+  ]
+}

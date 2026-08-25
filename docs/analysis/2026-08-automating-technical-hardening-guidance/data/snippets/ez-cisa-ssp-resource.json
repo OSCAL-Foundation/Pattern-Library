@@ -1,0 +1,13 @@
+{
+  "id": "ez-cisa-ssp-resource",
+  "slot": "6a",
+  "approach": "assessment-first",
+  "title": "The resource a resolved import-ssp lands on",
+  "source": "Easy Dynamics/CISA BOD 25-01/assessment-plan.json",
+  "pointer": "/assessment-plan/back-matter/resources/1",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"75e00698-e43b-4d6f-be7f-d1227a3a3e39\",\n  \"title\": \"Kalvico Enterprise ICAM SSP\",\n  \"props\": [\n    {\n      \"name\": \"type\",\n      \"value\": \"oscal-ssp\"\n    }\n  ],\n  \"rlinks\": [\n    {\n      \"href\": \"system-security-plan.json\",\n      \"media-type\": \"application/oscal.catalog+json\"\n    }\n  ],\n  \"remarks\": \"Use this to point to an OSCAL-based SSP.\"\n}",
+  "sha256_of_source_file": "97dad5eeba5efdb6b45ce22b92b9316df1479808bca698235c7dfc2d00ed37ee",
+  "extracted_at": "2026-08-22T18:43:40+00:00"
+}

@@ -1,0 +1,204 @@
+{
+  "note": "The fifteen evaluation criteria, verbatim from section 6 of the working group pre-read. The site authors none of them. The raised_by field is retained as provenance and is NOT rendered: per the Gate 7 decision, no personal name appears on any page.",
+  "source": "Hardening-Guidance-Options-Comparison.docx, Section 6, Draft evaluation criteria",
+  "source_status": "Offered for the group to ratify, amend, or reject. Reproduced unchanged.",
+  "criteria": [
+    {
+      "number": 1,
+      "name": "Triad fidelity",
+      "raised_by": [
+        "Brian Ruf",
+        "Anca Sailer"
+      ],
+      "question": "Does the option keep regulator, implementer and assessor roles separable?",
+      "slots": [
+        "1",
+        "3",
+        "6a",
+        "6b"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Normativity",
+      "raised_by": [
+        "Brian Ruf"
+      ],
+      "question": "Can the artifact express must versus may? Can an auditor treat it as binding?",
+      "slots": [
+        "1"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Requirement level",
+      "raised_by": [
+        "Raised in discussion"
+      ],
+      "question": "Can shall, should and may be represented at all?",
+      "slots": [
+        "1"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Hierarchy support",
+      "raised_by": [
+        "CIS, via Anca Sailer"
+      ],
+      "question": "Does the model natively carry deep benchmark hierarchies?",
+      "slots": [
+        "1"
+      ]
+    },
+    {
+      "number": 5,
+      "name": "Tailoring",
+      "raised_by": [
+        "Position paper"
+      ],
+      "question": "Can an organization select, exclude and parameterize at scale?",
+      "slots": [
+        "1"
+      ]
+    },
+    {
+      "number": 6,
+      "name": "Authoring burden",
+      "raised_by": [
+        "Pirooz Javan"
+      ],
+      "question": "How many OSCAL artifacts must a benchmark author produce per benchmark, multiplied across roughly 100 CIS guides?",
+      "slots": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6a",
+        "6b"
+      ]
+    },
+    {
+      "number": 7,
+      "name": "SSP impact",
+      "raised_by": [
+        "Position paper"
+      ],
+      "question": "How many additional items enter the SSP? Does the SSP end up mixing desired and actual state?",
+      "slots": [
+        "6a"
+      ]
+    },
+    {
+      "number": 8,
+      "name": "Response fidelity",
+      "raised_by": [
+        "Pirooz Javan"
+      ],
+      "question": "Can a system owner answer per host or inventory item, or only per component?",
+      "slots": [
+        "4"
+      ]
+    },
+    {
+      "number": 9,
+      "name": "Traceability",
+      "raised_by": [
+        "Vikas Agarwal"
+      ],
+      "question": "Can a consumer traverse control to rule to check to activity to task to observation using core schema only?",
+      "slots": [
+        "1",
+        "2",
+        "3",
+        "5",
+        "6b"
+      ]
+    },
+    {
+      "number": 10,
+      "name": "Schema change cost",
+      "raised_by": [
+        "Fritz Kunstler"
+      ],
+      "question": "How many models change, and what is the realistic ratification timeline?",
+      "slots": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6a",
+        "6b"
+      ]
+    },
+    {
+      "number": 11,
+      "name": "Update decoupling",
+      "raised_by": [
+        "Position paper"
+      ],
+      "question": "When a benchmark revises independently of the regulation, what has to change downstream?",
+      "slots": [
+        "1"
+      ]
+    },
+    {
+      "number": 12,
+      "name": "Cross-framework use",
+      "raised_by": [
+        "Pirooz Javan"
+      ],
+      "question": "Does this help someone operating under SOC 2, ISO and FedRAMP at the same time?",
+      "slots": [
+        "2"
+      ]
+    },
+    {
+      "number": 13,
+      "name": "Inspectability",
+      "raised_by": [
+        "Raised in discussion"
+      ],
+      "question": "Can an operator see what a check does before running it on their systems?",
+      "slots": [
+        "3"
+      ]
+    },
+    {
+      "number": 14,
+      "name": "Prop dependence",
+      "raised_by": [
+        "Brian Ruf"
+      ],
+      "question": "How much meaning lives in namespaced props rather than core schema?",
+      "slots": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6a",
+        "6b"
+      ]
+    },
+    {
+      "number": 15,
+      "name": "Existing content",
+      "raised_by": [
+        "All"
+      ],
+      "question": "Is there working end-to-end content today, including an SSP and an AR?",
+      "slots": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6a",
+        "6b"
+      ]
+    }
+  ]
+}

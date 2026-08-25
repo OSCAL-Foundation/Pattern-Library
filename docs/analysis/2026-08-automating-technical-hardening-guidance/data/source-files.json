@@ -1,0 +1,280 @@
+{
+  "note": "Every file under sources/, with its media type and size read from disk, and the benchmark row it belongs to. Built by tools/sources_files.py; verified by tools/verify.py --sources, which fails if a link points at a missing file, a file sits in the folder unlinked, or a file names a row that does not exist.",
+  "media_types": {
+    "xml": {
+      "label": "XML document",
+      "mime": "application/xml"
+    },
+    "pdf": {
+      "label": "PDF document",
+      "mime": "application/pdf"
+    },
+    "json": {
+      "label": "JSON document",
+      "mime": "application/json"
+    }
+  },
+  "files": [
+    {
+      "publisher": "cis",
+      "guidance": "cis-postgresql-18",
+      "kind": "source",
+      "terms": "Reproduced here with the publisher's participation in this review. The Benchmarks carry CIS's own Agreed Terms of Use; consult the publisher before reusing them elsewhere.",
+      "href": "sources/cis/CIS_PostgreSQL_18_Benchmark_v1.0.0.json",
+      "name": "CIS_PostgreSQL_18_Benchmark_v1.0.0.json",
+      "media": "json",
+      "media_label": "JSON document",
+      "mime": "application/json",
+      "bytes": 1032133,
+      "size": "1.0 MB",
+      "sha256": "b72eda73c5bef60e2971c93261bc226594cfb8d8aa1be92deb6b2e121bf05379"
+    },
+    {
+      "publisher": "cis",
+      "guidance": "cis-postgresql-18",
+      "kind": "source",
+      "terms": "Reproduced here with the publisher's participation in this review. The Benchmarks carry CIS's own Agreed Terms of Use; consult the publisher before reusing them elsewhere.",
+      "href": "sources/cis/CIS_PostgreSQL_18_Benchmark_v1.0.0.pdf",
+      "name": "CIS_PostgreSQL_18_Benchmark_v1.0.0.pdf",
+      "media": "pdf",
+      "media_label": "PDF document",
+      "mime": "application/pdf",
+      "bytes": 1506309,
+      "size": "1.5 MB",
+      "sha256": "eae098af712ef333be2ebb146e72d8cdcba9f740f3a99e15de8363055f49f1b9"
+    },
+    {
+      "publisher": "cis",
+      "guidance": "cis-ubuntu-24-04",
+      "kind": "source",
+      "terms": "Reproduced here with the publisher's participation in this review. The Benchmarks carry CIS's own Agreed Terms of Use; consult the publisher before reusing them elsewhere.",
+      "href": "sources/cis/CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.json",
+      "name": "CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.json",
+      "media": "json",
+      "media_label": "JSON document",
+      "mime": "application/json",
+      "bytes": 6823924,
+      "size": "6.8 MB",
+      "sha256": "1a90fccb4442decd119382233ff8986caaaeede83dcf3c5ab22a87c747ab0c81"
+    },
+    {
+      "publisher": "cis",
+      "guidance": "cis-ubuntu-24-04",
+      "kind": "source",
+      "terms": "Reproduced here with the publisher's participation in this review. The Benchmarks carry CIS's own Agreed Terms of Use; consult the publisher before reusing them elsewhere.",
+      "href": "sources/cis/CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.pdf",
+      "name": "CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.pdf",
+      "media": "pdf",
+      "media_label": "PDF document",
+      "mime": "application/pdf",
+      "bytes": 10372494,
+      "size": "10.4 MB",
+      "sha256": "8ebe23d21c23e383c81620ad04655e3b1d8fdf0b6eb9ddfdb7a97d0a5b5e7ef1"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-ubuntu-22-04",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_CAN_Ubuntu_22-04_LTS_STIG_V2R8_Manual-xccdf.xml",
+      "name": "U_CAN_Ubuntu_22-04_LTS_STIG_V2R8_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 640043,
+      "size": "640 kB",
+      "sha256": "73c26b6592dfc02f7f0eb456e0f89143ea1e2d8af7ebc61bd8bfae01f5a4c9d8"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-ubuntu-24-04",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_CAN_Ubuntu_24-04_LTS_STIG_V1R5_Manual-xccdf.xml",
+      "name": "U_CAN_Ubuntu_24-04_LTS_STIG_V1R5_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 658230,
+      "size": "658 kB",
+      "sha256": "4c527cf0ed912947bb0c51be15f1a6bbc5a4bf05469ae083d94a01471edea77c"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-ubuntu-24-04",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_CAN_Ubuntu_24-04_LTS_STIG_V1_Release_Memo.pdf",
+      "name": "U_CAN_Ubuntu_24-04_LTS_STIG_V1_Release_Memo.pdf",
+      "media": "pdf",
+      "media_label": "PDF document",
+      "mime": "application/pdf",
+      "bytes": 934796,
+      "size": "935 kB",
+      "sha256": "9c3292baa367f97d0dc8c8a235a77dd49acfe53598d667902ab3e1e7d3d3d9a0"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-ubuntu-24-04",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_CAN_Ubuntu_24-04_LTS_V1R5_Overview.pdf",
+      "name": "U_CAN_Ubuntu_24-04_LTS_V1R5_Overview.pdf",
+      "media": "pdf",
+      "media_label": "PDF document",
+      "mime": "application/pdf",
+      "bytes": 425770,
+      "size": "426 kB",
+      "sha256": "7b4e8bc528e6e23c9bac33b760793d86e6d4954ff724f9db1e108ef071a22c8e"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-ubuntu-24-04",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_CAN_Ubuntu_24-04_LTS_V1R5_Revision_History.pdf",
+      "name": "U_CAN_Ubuntu_24-04_LTS_V1R5_Revision_History.pdf",
+      "media": "pdf",
+      "media_label": "PDF document",
+      "mime": "application/pdf",
+      "bytes": 301891,
+      "size": "302 kB",
+      "sha256": "3f00fb641e059376fb8b8d4404e3e2abf0a6a95950568740172086c441457a56"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-postgres-16",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_CD_Postgres_16_STIG_V1R2_Manual-xccdf.xml",
+      "name": "U_CD_Postgres_16_STIG_V1R2_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 456124,
+      "size": "456 kB",
+      "sha256": "d468632da49f29b1616347dc7d79f429ff72ded2685a2ffb55b416d76192ce32"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-epas",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_EPAS_STIG_V2R1_Manual-xccdf.xml",
+      "name": "U_EPAS_STIG_V2R1_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 432719,
+      "size": "433 kB",
+      "sha256": "c9a9fb2f652495433a3639f740ef08d856c722be5d8bfdb729c87f843f3767ec"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-windows-2019",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_MS_Windows_Server_2019_STIG_V3R8_Manual-xccdf.xml",
+      "name": "U_MS_Windows_Server_2019_STIG_V3R8_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 936441,
+      "size": "936 kB",
+      "sha256": "f483e86fdaf1caf0ad904b99ae117667fb61e48e0f62fbbcbd4ac30facef0e36"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-windows-2022",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_MS_Windows_Server_2022_STIG_V2R8_Manual-xccdf.xml",
+      "name": "U_MS_Windows_Server_2022_STIG_V2R8_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 906114,
+      "size": "906 kB",
+      "sha256": "991ad360c2ca40c5ab743b22b045ac9a98134a2c7360983ae32a1dac62de65de"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-windows-2025",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_MS_Windows_Server_2025_STIG_V1R1_Manual-xccdf.xml",
+      "name": "U_MS_Windows_Server_2025_STIG_V1R1_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 913750,
+      "size": "914 kB",
+      "sha256": "5ae22836beba53091fa6269eaa974e54c226f3e2113cc9a3ec0183a8e16f51ee"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-rhel-8",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_RHEL_8_STIG_V2R7_Manual-xccdf.xml",
+      "name": "U_RHEL_8_STIG_V2R7_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 1267893,
+      "size": "1.3 MB",
+      "sha256": "9c5c57f34c78e3c70d5bc9755169b99f9e6965509b8e06f277c82982bccc8411"
+    },
+    {
+      "publisher": "disa",
+      "guidance": "disa-rhel-9",
+      "kind": "source",
+      "terms": "Public domain. A work of the United States Government.",
+      "href": "sources/disa/U_RHEL_9_STIG_V2R8_Manual-xccdf.xml",
+      "name": "U_RHEL_9_STIG_V2R8_Manual-xccdf.xml",
+      "media": "xml",
+      "media_label": "XML document",
+      "mime": "application/xml",
+      "bytes": 1397262,
+      "size": "1.4 MB",
+      "sha256": "bcb1c86161034ced8accca81f15efe40d4e4cfdce003b6b2b456cb49fcd094e3"
+    }
+  ],
+  "excluded": [
+    {
+      "path": "disa/U_Readme_SRG_and_STIG.pdf",
+      "why": "About the STIG and SRG packages as a set rather than about any one guide, so it has no row in a table of one row per guide."
+    },
+    {
+      "path": "oscal",
+      "why": "The OSCAL representations of this guidance are published separately. This table lists the documents read as input, not what was written from them."
+    }
+  ],
+  "not_shipped": [
+    {
+      "path": "cis",
+      "why": "Held locally, not redistributed. Download the Benchmarks from cisecurity.org into sources/cis/ under the filenames recorded here to rebuild anything that reads them."
+    }
+  ],
+  "not_copied": [
+    {
+      "publisher": "cisa",
+      "what": "The SCuBA secure configuration baselines themselves",
+      "why": "The baselines are published by CISA and no copy of them is held here. What was read for this analysis was the baseline content as converted, and those conversions are published separately.",
+      "where": null,
+      "where_label": null
+    },
+    {
+      "publisher": "aws",
+      "what": "The Security Hub controls, as published",
+      "why": "This publisher ships its guidance as OSCAL already, so there is no separate source document to hold. The published content is linked rather than copied, so there is one copy to keep current.",
+      "where": "https://github.com/awslabs/oscal-content-for-aws-services",
+      "where_label": "oscal-content-for-aws-services"
+    }
+  ],
+  "totals": {
+    "files": 16,
+    "bytes": 29005893,
+    "size": "29.0 MB"
+  }
+}

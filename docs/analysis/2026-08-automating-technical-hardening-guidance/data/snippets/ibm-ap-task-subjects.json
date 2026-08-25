@@ -1,0 +1,13 @@
+{
+  "id": "ibm-ap-task-subjects",
+  "slot": "4",
+  "approach": "component-first",
+  "title": "AP task, subjects and platform",
+  "source": "IBM/assessment-plan.json",
+  "pointer": "/assessment-plan/tasks/0",
+  "section": null,
+  "language": "json",
+  "content": "{\n  \"uuid\": \"b3504d22-0e75-4dd7-9247-618661beba4e\",\n  \"type\": \"action\",\n  \"title\": \"Execute Ansible Checks\",\n  \"description\": \"The assessor will execute the Ansible checks defined in the validation component using the Ansible assessment platform to collect evidence for the assessment.\",\n  \"props\": [\n    {\n      \"name\": \"assessment-platform\",\n      \"value\": \"d8c9a1e5-1c3b-4f0b-9c8e-2a1b2c3d4e5f\"\n    }\n  ],\n  \"timing\": {\n    \"at-frequency\": {\n      \"period\": 1,\n      \"unit\": \"days\"\n    }\n  },\n  \"associated-activities\": [\n    {\n      \"activity-uuid\": \"a1b2c3d4-1111-4aaa-8888-111111111111\",\n      \"subjects\": [\n        {\n          \"subject-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a984fe\"\n        }\n      ]\n    },\n    {\n      \"activity-uuid\": \"b2c3d4e5-2222-4bbb-9999-222222222222\",\n      \"subjects\": [\n        {\n          \"subject-uuid\": \"0c410eb1-52cd-40bc-bf1d-c80126a984ff\"\n        }\n      ]\n    }\n  ]\n}",
+  "sha256_of_source_file": "fd50fa2d32cb8a19d9baab6bc4679d863e0b8bddc7902a01c34b25927f61b7d6",
+  "extracted_at": "2026-08-20T22:38:41+00:00"
+}
