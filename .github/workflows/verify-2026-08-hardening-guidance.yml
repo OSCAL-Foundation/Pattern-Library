@@ -1,7 +1,8 @@
-name: verify
+name: verify 2026-08 hardening guidance analysis
 
-# Every claim on this site is meant to be derivable from a published file. This
-# workflow is what keeps that true after the build session that wrote it.
+# Every claim on that analysis site is meant to be derivable from a published
+# file. This workflow is what keeps that true after the build session that wrote
+# it.
 #
 # It runs in two passes, and the split is the point:
 #
@@ -14,18 +15,33 @@ name: verify
 #
 # Without the second pass a skipped check stays skipped forever, and the harness
 # quietly stops covering the thing it was written to cover.
+#
+# The repository is checked out under site/ so the corpora can sit beside it
+# rather than inside it: the byte-identical check below runs `git diff`, and a
+# 231-file corpus inside the working tree would be untracked noise in it.
 
 on:
   push:
+    paths:
+      - "docs/analysis/2026-08-automating-technical-hardening-guidance/**"
+      - ".github/workflows/verify-2026-08-hardening-guidance.yml"
   pull_request:
+    paths:
+      - "docs/analysis/2026-08-automating-technical-hardening-guidance/**"
+      - ".github/workflows/verify-2026-08-hardening-guidance.yml"
   workflow_dispatch:
   schedule:
     # The NIST schema and the external links can change without anyone touching
-    # this repository, so the strict pass also runs weekly.
+    # this repository, so the strict pass also runs weekly. A schedule ignores
+    # the paths filter above, which is what that is for.
     - cron: "0 6 * * 1"
 
 permissions:
   contents: read
+
+env:
+  SITE: site/docs/analysis/2026-08-automating-technical-hardening-guidance
+  TFG_CORPORA: ${{ github.workspace }}/tfg-automated-assessments
 
 jobs:
   offline:
@@ -34,8 +50,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # The corpora live beside this repository, one directory up. Without
-          # them --snippets and --stats have nothing to read.
           path: site
 
       - name: Check out the source corpora
@@ -54,13 +68,18 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install PyYAML
-        run: pip install pyyaml
+      # Pillow is not optional: verify.py imports svgrender, which imports PIL
+      # at module scope, so the harness will not start without it.
+      - name: Install the harness dependencies
+        run: pip install pyyaml pillow
+
+      # svgrender loads DejaVu by absolute path rather than through fontconfig.
+      - name: Install the fonts the rasteriser names
+        run: sudo apt-get install -y --no-install-recommends fonts-dejavu-core
 
       - name: Report whether the corpora are present
-        working-directory: site
         run: |
-          if [ -d ../tfg-automated-assessments ]; then
+          if [ -d "$TFG_CORPORA" ]; then
             echo "corpora present, every check can run"
           else
             echo "::warning::the corpora are not available to this runner, so"\
@@ -68,19 +87,19 @@ jobs:
           fi
 
       - name: Re-extract every snippet and diff
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: python tools/verify.py --snippets
 
       - name: Run every offline check
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: python tools/verify.py --all
 
       - name: Render each page and inspect the result
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: node tools/pagecheck.js
 
       - name: Confirm the generated files are byte-identical to their generators
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: |
           # A generated file that has been hand-edited is the one failure this
           # repository cannot detect by reading. Regenerate and diff.
@@ -121,7 +140,10 @@ jobs:
           node-version: "20"
 
       - name: Install the harness dependencies
-        run: pip install pyyaml
+        run: pip install pyyaml pillow
+
+      - name: Install the fonts the rasteriser names
+        run: sudo apt-get install -y --no-install-recommends fonts-dejavu-core
 
       - name: Install an OSCAL validator
         # compliance-trestle carries its own copy of the OSCAL schemas and
@@ -130,16 +152,16 @@ jobs:
         run: pip install compliance-trestle
 
       - name: Install axe-core and a headless browser
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: npm install --no-save axe-core puppeteer
 
       - name: Every check, with a skip counted as a failure
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: python tools/verify.py --all --strict
 
       - name: Publish the accessibility report
         if: always()
-        working-directory: site
+        working-directory: ${{ env.SITE }}
         run: node tools/axe_run.mjs || true
 
   pages-build:
@@ -147,13 +169,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: site
 
       - name: The publication requirements that are not checks
+        working-directory: ${{ env.SITE }}
         run: |
           set -e
           test -f .nojekyll || { echo "::error::.nojekyll is missing, so Pages"\
             "would run Jekyll over the site and drop assets/"; exit 1; }
           # An absolute path works on one of Pages and a folder, never both.
+          # This is what holds the site relocatable now that it is nested.
           if grep -rn 'href="/\|src="/' --include='*.html' .; then
             echo "::error::an absolute path was found. Every path must be relative."
             exit 1

@@ -38,9 +38,11 @@ import os
 import shutil
 import sys
 
+import extract as ex        # same directory
+
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
-CORPORA = os.path.normpath(os.path.join(TOOLS, "..", "..", "tfg-automated-assessments"))
+CORPORA = ex.corpora_root()
 DEST = os.path.join(ROOT, "examples")
 OUT = os.path.join(ROOT, "data", "examples.json")
 

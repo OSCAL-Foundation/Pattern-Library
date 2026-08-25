@@ -20,6 +20,11 @@
 #   max_prose  optional int. Any string value longer than this is cut and
 #              suffixed with " [truncated]". Never silent.
 
+# Where the corpora are read from. Relative to this file's directory.
+#
+# TFG_CORPORA overrides it and is how this is normally set: the site sits under
+# docs/analysis/ in a repository the corpora are not a sibling of, so the path
+# below only resolves in the standalone layout the site was built in.
 corpora_root: "../../tfg-automated-assessments"
 
 snippets:

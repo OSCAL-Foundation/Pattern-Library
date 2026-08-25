@@ -122,10 +122,7 @@ def have(tool: str) -> bool:
 
 
 def corpora_root() -> str:
-    manifest = ex.load_manifest()
-    return os.path.normpath(
-        os.path.join(TOOLS_DIR, manifest.get("corpora_root", "../../tfg-automated-assessments"))
-    )
+    return ex.corpora_root()
 
 
 def load_snippet(sid: str) -> dict:
@@ -2049,6 +2046,8 @@ def check_diagrams() -> None:
     except SystemExit:
         bad = True
     check("and refuses a transform it cannot draw instead of skipping it", bad)
+    # build/ is gitignored, so on a fresh clone this directory does not exist.
+    os.makedirs(BUILD_GRAY, exist_ok=True)
     written = 0
     for path in files:
         name = os.path.splitext(os.path.basename(path))[0]
@@ -2138,7 +2137,7 @@ def _docx_or_skip(rel: str, what: str):
     if text is None:
         skip(what, f"{rel} is not in this working copy, so the reproduction "
                    f"could not be compared against its source",
-             f"place the corpora beside the site directory, then "
+             f"point TFG_CORPORA at the corpora checkout, then "
              f"python tools/verify.py --all")
     return text
 

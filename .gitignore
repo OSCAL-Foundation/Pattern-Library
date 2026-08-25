@@ -1,0 +1,5 @@
+# NTFS alternate data streams. A copy made through Windows or WSL materialises
+# these beside the file they annotate; 129 of them came with the 2026-08
+# analysis site. They are metadata, not content.
+*:Zone.Identifier
+*:sec.endpointdlp

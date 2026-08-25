@@ -175,6 +175,25 @@ def load_manifest(path: str = MANIFEST) -> dict:
     return manifest
 
 
+DEFAULT_CORPORA = "../../tfg-automated-assessments"
+
+
+def corpora_root() -> str:
+    """The corpora directory, which lives outside this repository.
+
+    TFG_CORPORA wins when it is set. The site now sits under docs/analysis/ in
+    a repository the corpora are not a sibling of, so no fixed relative path
+    reaches every caller's checkout; the manifest value is the fallback for a
+    layout where one still does.
+    """
+    env = os.environ.get("TFG_CORPORA")
+    if env:
+        return os.path.abspath(os.path.expanduser(env))
+    return os.path.normpath(
+        os.path.join(TOOLS_DIR, load_manifest().get("corpora_root", DEFAULT_CORPORA))
+    )
+
+
 def extract_one(entry: dict, corpora_root: str) -> dict:
     sid = entry["id"]
     src_rel = entry["source"]
@@ -224,11 +243,9 @@ def extract_one(entry: dict, corpora_root: str) -> dict:
 
 def run(out_dir: str, quiet: bool = False) -> int:
     manifest = load_manifest()
-    corpora_root = os.path.normpath(
-        os.path.join(TOOLS_DIR, manifest.get("corpora_root", "../../tfg-automated-assessments"))
-    )
-    if not os.path.isdir(corpora_root):
-        raise ExtractionError(f"corpora root not found: {corpora_root}")
+    root = corpora_root()
+    if not os.path.isdir(root):
+        raise ExtractionError(f"corpora root not found: {root}")
 
     snippet_dir = os.path.join(out_dir, "snippets")
     os.makedirs(snippet_dir, exist_ok=True)
@@ -238,7 +255,7 @@ def run(out_dir: str, quiet: bool = False) -> int:
     for entry in manifest["snippets"]:
         sid = entry["id"]
         try:
-            record = extract_one(entry, corpora_root)
+            record = extract_one(entry, root)
         except ExtractionError as exc:
             failures.append(str(exc))
             rows.append((sid, entry.get("slot", "?"), entry.get("approach", "?"), 0, "NO"))

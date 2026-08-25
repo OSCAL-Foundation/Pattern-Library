@@ -13,9 +13,11 @@ Nothing here is authored. Every number is read off disk.
 
 import json, os, sys, glob, collections, urllib.parse
 
+import extract as ex        # same directory
+
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
-CORPORA = os.path.normpath(os.path.join(TOOLS, "..", "..", "tfg-automated-assessments"))
+CORPORA = ex.corpora_root()
 OUT = os.path.join(ROOT, "data", "oscal-artifacts.json")
 
 #  Labelled by approach, not by publisher.
