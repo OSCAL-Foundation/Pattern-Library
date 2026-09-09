@@ -23,6 +23,41 @@
   var THEME_KEY = "tfg-theme";
   var BASE = document.documentElement.getAttribute("data-base") || ".";
 
+  // Status belongs to the analysis, not the library or a single page.
+  function initProgressBanner() {
+    var banner = document.querySelector(".wip-banner");
+    if (!banner) return;
+    banner.hidden = true;
+    // Use the packaged snapshot only for file://. A served page must not show
+    // an old active status after a decision, or when status cannot be read.
+    var metadata = IS_FILE
+      ? Promise.resolve(bundled("analysis.json"))
+      : fetch(BASE + "/analysis.json", { cache: "no-store" }).then(function (r) {
+        if (!r.ok) throw new Error("Analysis status unavailable");
+        return r.json();
+      });
+    return metadata.then(function (analysis) {
+      if (!analysis || typeof analysis.id !== "string" || !analysis.id.trim()
+          || analysis.status !== "active" || analysis.concluded
+          || analysis.recommendation || analysis.decision || analysis.decided
+          || analysis.supersededBy) return;
+      var key = "pattern-library-wip-dismissed:" + analysis.id;
+      var dismissed = false;
+      try { dismissed = sessionStorage.getItem(key) === "true"; } catch (e) {}
+      banner.hidden = dismissed;
+      var close = banner.querySelector(".wip-banner__dismiss");
+      close.hidden = false;
+      close.addEventListener("click", function () {
+        banner.hidden = true;
+        try { sessionStorage.setItem(key, "true"); } catch (e) {}
+        var next = document.querySelector(".site-title a");
+        if (next) next.focus();
+      });
+    }).catch(function () {
+      // Unknown status is not evidence of work in progress.
+    });
+  }
+
   /* Every page here is markup plus data: the markup carries hooks and this file
      fills them from data/ at load time, which is what plan section 8 asks for so
      that regenerating data never touches markup. The cost is that the site has
@@ -2020,6 +2055,7 @@
 
 
   function boot() {
+    initProgressBanner();
     initTheme();
     fileBanner();
     bundleNote();

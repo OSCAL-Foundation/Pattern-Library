@@ -516,7 +516,24 @@ async function checkPage(file) {
   const foot = doc.querySelectorAll(".site-footer");
   check(`${name}: carries the footer once`, foot.length === 1, `${foot.length}`);
   check(`${name}: the footer states that the site makes no recommendation`,
-        /This site makes no recommendation\./.test(textOf(foot[0] || { textContent: "" })));
+      /No recommendation is made\./.test(textOf(foot[0] || { textContent: "" })));
+
+    const metadata = JSON.parse(fs.readFileSync(path.join(ROOT, "analysis.json"), "utf8"));
+    const ongoing = metadata.status === "active" && !metadata.concluded
+      && !metadata.recommendation && !metadata.decision && !metadata.decided
+      && !metadata.supersededBy;
+    const notice = doc.querySelector(".wip-banner");
+    check(`${name}: progress banner reflects analysis status`,
+      Boolean(notice) && notice.hidden === !ongoing);
+
+    if (/^(assessment|catalog|component)-first\.html$/.test(name)) {
+      const mapping = doc.querySelector(".stakeholders");
+      const copy = textOf(mapping || { textContent: "" });
+      check(`${name}: stakeholder mapping names technology providers`,
+        /Technology providers/.test(copy));
+      check(`${name}: stakeholder mapping has no software-provider label`,
+        !/Software providers/i.test(copy));
+    }
 
   /* Every hook the page uses has to be one a script actually wires. Both
      scripts are read, not just site.js: the answer strip is drawn by

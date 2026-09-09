@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1074" id="dg-710-scenario-catalog" class="tfg-diagram" role="img" aria-labelledby="dg-710-scenario-catalog-t dg-710-scenario-catalog-d" preserveAspectRatio="xMidYMid meet">
   <title id="dg-710-scenario-catalog-t">One system, three hardening guides: the file set for the catalog first approach</title>
-  <desc id="dg-710-scenario-catalog-d">A count of the OSCAL files this approach needs for the scenario, drawn as one tile per file. 18 files in total, across all seven models. 4 catalog files, one for the framework, one for each guide, named NIST 800-53, CIS Ubuntu, DISA PgSQL, CISA SCuBA. 5 profile files, one selection per catalog, and one to merge them, named 800-53 High, CIS Ubuntu, DISA PgSQL, CISA SCuBA, Org merged. 3 mapping-collection files, one per guide, tying its controls to the framework, named CIS to 800-53, STIG to 800-53, SCuBA to 800-53. 3 component-definition files, one per technology, carrying the check components, named Ubuntu checks (software), PgSQL checks (software), M365 checks (software). 1 system-security-plan file, one, answering 917 controls, named System SSP. 1 assessment-plan file, one, named System AP. 1 assessment-results file, one, named System AR. A model this approach does not use is drawn hollow and labelled none, so the absence is as visible as the presence. The tile is the same size in all three figures, so the area of ink is the comparison. The plan of record answers 917 controls, 370 from the framework and 547 from the guides.</desc>
+  <desc id="dg-710-scenario-catalog-d">A count of the OSCAL files this approach needs for the scenario, drawn as one tile per file. 18 files in total, across all seven models. 4 catalog files, one for the framework, one for each guide, named NIST 800-53, CIS Ubuntu, DISA PgSQL, CISA SCuBA. 5 profile files, one selection per catalog and one merged selection, named 800-53 High, CIS Ubuntu, DISA PgSQL, CISA SCuBA, Org merged. 3 mapping-collection files, one per guide, linking guidance controls to framework controls, named CIS to 800-53, STIG to 800-53, SCuBA to 800-53. 3 component-definition files, one per technology, containing check components, named Ubuntu checks (software), PgSQL checks (software), M365 checks (software). 1 system-security-plan file, one, addressing 917 controls, named System SSP. 1 assessment-plan file, one, named System AP. 1 assessment-results file, one, named System AR. A model this approach does not use is drawn hollow and labelled none, so the absence is as visible as the presence. The tile is the same size in all three figures, so the area of ink is the comparison. The system security plan addresses 917 controls: 370 from the framework and 547 from the guides.</desc>
   <style>
   #dg-710-scenario-catalog text { font-family: var(--font-sans); fill: var(--text); }
   #dg-710-scenario-catalog .h { font-size: 20px; font-weight: 650; }
@@ -45,8 +45,8 @@
   </style>
   <defs><marker id="dg-710-scenario-catalog-ref" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5,0.8 L9.5,5 L0.5,9.2 z" class="mk-ref"/></marker><marker id="dg-710-scenario-catalog-join" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5,0.8 L9.5,5 L0.5,9.2 z" class="mk-join"/></marker><marker id="dg-710-scenario-catalog-weak" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5,0.8 L9.5,5 L0.5,9.2 z" class="mk-weak"/></marker></defs>
 <text x="24" y="34" class="h">18 files, across all seven models</text>
-<text x="24" y="60" class="s mu">Each guide is published as a catalog, selected by a profile of its own, and tied back to the framework</text>
-<text x="24" y="82" class="s mu">by a mapping collection. The plan of record answers every control in the merged set.</text>
+<text x="24" y="60" class="s mu">Each guide becomes a catalog with a selection profile and a mapping collection linking guidance to the</text>
+<text x="24" y="82" class="s mu">framework. The system security plan addresses every control in the merged set.</text>
 <rect x="16" y="128" width="928" height="394" rx="10" class="band"/>
 <text x="32" y="154" class="n mu">CONTROL LAYER</text>
 <g class="mi mi--control" transform="translate(32,164) scale(0.5548) translate(-13.0728,-14.0728)"><path d="M18 18H30L34 22V48L27 45H18V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M46 18H34L30 22V48L37 45H46V18Z" stroke-width="2.08" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M22 26L28 26" class="mi__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M22 32L28 32" class="mi__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 26L42 26" class="mi__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/><path d="M36 32L42 32" class="mi__soft" stroke-width="2.08" stroke-linecap="round" fill="none"/></g>
@@ -86,8 +86,8 @@
 <path d="M438,354 v9 h9" class="contain"/>
 <text x="386.0" y="394.5" class="tl" text-anchor="middle">Org merged</text>
 <text x="325" y="444" class="n">5 files</text>
-<text x="325" y="468" class="s mu">one selection per catalog, and</text>
-<text x="325" y="488" class="s mu">one to merge them</text>
+<text x="325" y="468" class="s mu">one selection per catalog and</text>
+<text x="325" y="488" class="s mu">one merged selection</text>
 <g class="mi mi--control" transform="translate(618,164) scale(0.5548) translate(-13.0728,-13.0728)"><circle cx="22" cy="22" r="5" stroke-width="2.08" fill="none"/><circle cx="42" cy="22" r="5" stroke-width="2.08" fill="none"/><circle cx="32" cy="42" r="5" stroke-width="2.08" fill="none"/><path d="M26 24L38 24" class="mi__soft" stroke-width="2.08" stroke-dasharray="2 2" fill="none"/><path d="M25 26L29 38" class="mi__soft" stroke-width="2.08" fill="none"/><path d="M39 26L35 38" class="mi__soft" stroke-width="2.08" fill="none"/></g>
 <text x="647" y="180" class="m">mapping-collection</text>
 <rect x="618" y="194" width="122" height="70" rx="3" class="model"/>
@@ -103,8 +103,8 @@
 <text x="679.0" y="304.0" class="tl" text-anchor="middle">SCuBA to</text>
 <text x="679.0" y="325.0" class="tl" text-anchor="middle">800-53</text>
 <text x="618" y="364" class="n">3 files</text>
-<text x="618" y="388" class="s mu">one per guide, tying its</text>
-<text x="618" y="408" class="s mu">controls to the framework</text>
+<text x="618" y="388" class="s mu">one per guide, linking</text>
+<text x="618" y="408" class="s mu">guidance controls to framework</text>
 <rect x="16" y="536" width="928" height="234" rx="10" class="band"/>
 <text x="32" y="562" class="n mu">IMPLEMENTATION LAYER</text>
 <g class="mi mi--impl" transform="translate(32,572) scale(0.5202) translate(-11.8161,-11.8161)"><path d="M32 16L46 24V40L32 48L18 40V24L32 16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M32 16V32M32 32L46 24M32 32L18 24" class="mi__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 32L32 40L46 32" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>
@@ -125,7 +125,7 @@
 <text x="357.0" y="642.5" class="tl" text-anchor="middle">checks</text>
 <text x="357.0" y="663.5" class="tk" text-anchor="middle">software</text>
 <text x="32" y="692" class="n">3 files</text>
-<text x="32" y="716" class="s mu">one per technology, carrying the check</text>
+<text x="32" y="716" class="s mu">one per technology, containing check</text>
 <text x="32" y="736" class="s mu">components</text>
 <g class="mi mi--impl" transform="translate(472,572) scale(0.5202) translate(-11.8161,-11.8161)"><path d="M20 16H36L44 24V48H20V16Z" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M36 16V24H44" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M32 30V40M32 30L28 31L26 33L26 36L28 39L32 42L36 39L38 36L38 33L36 31L32 30Z" class="mi__soft" stroke-width="2.21" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>
 <text x="501" y="588" class="m">system-security-plan</text>
@@ -133,7 +133,7 @@
 <path d="M585,602 v9 h9" class="contain"/>
 <text x="533.0" y="642.5" class="tl" text-anchor="middle">System SSP</text>
 <text x="472" y="692" class="n">1 file</text>
-<text x="472" y="716" class="s mu">one, answering 917 controls</text>
+<text x="472" y="716" class="s mu">one, addressing 917 controls</text>
 <rect x="16" y="784" width="928" height="214" rx="10" class="band"/>
 <text x="32" y="810" class="n mu">ASSESSMENT LAYER</text>
 <g class="mi mi--assess" transform="translate(32,820) scale(0.5046) translate(-11.1907,-10.6907)"><rect x="20" y="18" width="24" height="30" rx="3" stroke-width="2.27" fill="none"/><path d="M26 15H38V19H26V15Z" stroke-width="2.27" stroke-linejoin="round" fill="none"/><path d="M26 26L38 26" class="mi__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><path d="M26 32L34 32" class="mi__soft" stroke-width="2.27" stroke-linecap="round" fill="none"/><circle cx="36" cy="38" r="5" stroke-width="2.27" fill="none"/><path d="M36 36V38H38" stroke-width="1.70" stroke-linecap="round" fill="none"/></g>
@@ -151,5 +151,5 @@
 <text x="472" y="940" class="n">1 file</text>
 <text x="472" y="964" class="s mu">one</text>
 <rect x="16" y="1012" width="928" height="48" rx="10" class="band"/>
-<text x="32" y="1042" class="n">The plan of record answers 917 controls, 370 from the framework and 547 from the guides</text>
+<text x="32" y="1042" class="n">The system security plan addresses 917 controls: 370 from the framework and 547 from the guides</text>
 </svg>

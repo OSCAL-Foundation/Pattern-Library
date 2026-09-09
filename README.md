@@ -1,28 +1,28 @@
 # OSCAL Foundation — Pattern Library
 
-A curated collection of high-quality, realistic [OSCAL](https://pages.nist.gov/OSCAL/) example artifacts published by the **OSCAL Foundation** to serve as patterns and practices for the community.
+A collection of [OSCAL](https://pages.nist.gov/OSCAL/) example artifacts published by the **OSCAL Foundation** as community patterns and practices.
 
 ## About OSCAL Foundation
 
-The Open Security Controls Assessment Language (OSCAL) is a machine-readable language that simplifies and standardizes information system security assessments through the exchange of information via automation.
+The Open Security Controls Assessment Language (OSCAL) is a machine-readable language for simplifying and standardizing information system security assessments through automated information exchange.
 
-Originally developed by the National Institute of Standards and Technology (NIST) in collaboration with FedRAMP and industry, OSCAL aims to improve the efficiency, timeliness, accuracy, and consistency of system security assessments.
+Developed by the National Institute of Standards and Technology (NIST) with FedRAMP and industry, OSCAL aims to improve the efficiency, timeliness, accuracy, and consistency of system security assessments.
 
-The **OSCAL Foundation** is dedicated to furthering the development and adoption of the OSCAL standards. The Foundation is a nonprofit organization seeking 501(c)(3) tax-exempt status recognition.
+The **OSCAL Foundation** supports the development and adoption of OSCAL standards. The Foundation is a nonprofit organization seeking recognition of 501(c)(3) tax-exempt status.
 
 ## Purpose
 
-There are few high-quality, representative examples of what an actual compliance package in OSCAL looks like, and few places where the arguments about how to build one are written down and kept. This repository holds both.
+The repository collects OSCAL compliance-package examples and design analyses.
 
-It is published as a website: **<https://oscal-foundation.github.io/Pattern-Library/>**
+The repository is published as a website: **<https://oscal-foundation.github.io/Pattern-Library/>**
 
-Three areas, each with its own lifecycle.
+Three areas have separate lifecycles.
 
-| Area | What it holds |
+| Area | Contents |
 |---|---|
-| [**Patterns**](docs/patterns/summit/) | Model office examples covering the seven OSCAL models, published as files a tool can read |
-| [**Analyses**](docs/analysis/) | Efforts that debate a question about OSCAL, one area per effort, retained after the effort ends |
-| [**Recommendations**](docs/recommendations/) | What the Foundation recommends, each one citing the analysis it came from |
+| [**Patterns**](docs/patterns/summit/) | Model office examples covering the seven OSCAL models, published as machine-readable files |
+| [**Analyses**](docs/analysis/) | Comparisons of OSCAL approaches, retained in separate areas after conclusion |
+| [**Recommendations**](docs/recommendations/) | Foundation recommendations citing the supporting analyses |
 
 ## Examples
 
@@ -32,17 +32,17 @@ Three areas, each with its own lifecycle.
 
 ## Analyses
 
-Each effort gets its own dated area and keeps it. An area is never renamed, never moved and never deleted, and a concluded one is not edited into agreement with a later view: when an effort is superseded the new one gets its own area and the old one is marked, so the record shows the change rather than replacing it.
+Each analysis has a dated area, never renamed, moved, or deleted. Concluded analyses are not rewritten to match later views. A replacement analysis receives a new area; the earlier analysis is marked as superseded to preserve the record.
 
 | Opened | Analysis | Status |
 |---|---|---|
 | 2026-08 | [Automating Technical Hardening Guidance with OSCAL](docs/analysis/2026-08-automating-technical-hardening-guidance/) | active |
 
-An analysis carries an `analysis.json` beside its `index.html`, and an entry in [docs/analysis/analyses.json](docs/analysis/analyses.json) that the index page renders from. Adding an effort means adding an area and appending to that file; no page is edited.
+Each analysis has an `analysis.json` beside `index.html` and an entry in [docs/analysis/analyses.json](docs/analysis/analyses.json), the registry rendered by the analysis index. Adding an analysis requires a new area and registry entry, not an index-page edit.
 
 ## OSCAL Models Covered
 
-Each example in this library aims to include artifacts for all seven OSCAL models:
+Each library example aims to include artifacts for all seven OSCAL models:
 
 1. **Catalog** — Security control definitions
 2. **Profile** — Baseline selection and tailoring
@@ -54,7 +54,7 @@ Each example in this library aims to include artifacts for all seven OSCAL model
 
 ## Repository Structure
 
-`docs/` is the site, verbatim. There is no build step and nothing is generated at deploy time: what is in the folder is what is published.
+`docs/` is published unchanged, with no build or generation step at deployment.
 
 ```
 Pattern-Library/
@@ -85,34 +85,40 @@ Pattern-Library/
         └── recommendations.json
 ```
 
-The artifacts sit inside `patterns/` rather than at the repository root so that the pages linking them resolve the same way locally and published. Nothing has to be copied or rewritten between the two.
+Artifacts reside in `patterns/` rather than the repository root so links resolve identically in local and published pages. No copying or rewriting is required.
 
 ## Running the site
 
-Press **F5**. The `Pattern Library` configuration starts a static server on 4173 and opens the landing page with the debugger attached, so breakpoints in `docs/assets/site.js` bind to the served file. Edge is the default because Chrome is not installed everywhere; the Chrome configuration is there if you have it.
+Press **F5**. The `Pattern Library` configuration starts a static server on port 4173 and opens the landing page with the debugger attached. Breakpoints in `docs/assets/site.js` bind to the served file. Edge is the default; a Chrome configuration is available for installations with Chrome.
 
-Nothing is installed and nothing in this repository serves the site — the task is a stock `python3 -m http.server` over `docs/`. Any equivalent works:
+The task serves `docs/` with `python3 -m http.server`, without installing dependencies or using repository server code. An equivalent static server also works:
 
 ```
 python3 -m http.server --directory docs 4173
 npx serve docs
 ```
 
-If you install the recommended [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) extension you can skip all of that: click the preview button on any page under `docs/`, or run **Live Preview: Show Debug Preview** for breakpoints. `.vscode/settings.json` already points its server root at `docs/`.
+Alternatively, install the recommended [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) extension and click the preview button on a page under `docs/`, or run **Live Preview: Show Debug Preview** for breakpoints. `.vscode/settings.json` sets the server root to `docs/`.
 
-**Run Task** carries the rest:
+**Run Task** provides these tasks:
 
-| Task | What it does |
+| Task | Action |
 |---|---|
-| `site: serve` / `site: stop` | The server F5 uses, on its own |
+| `site: serve` / `site: stop` | Start or stop the F5 server without the debugger |
 | `analysis 2026-08: verify` | Recompute every figure and extract from its published source |
 | `analysis 2026-08: regenerate` | Run every generator; a file that differs afterwards was hand-edited |
 
-Opening a page from the filesystem does not work: every index renders its list from a JSON registry, and a browser blocks `fetch` on a `file://` origin. The pages say so when it happens rather than appearing empty.
+The library index pages require a server to load lists from JSON registries: browsers block `fetch` on a `file://` origin. Affected pages display a message rather than an empty list.
+
+The “Work in progress” bar appears only within active analyses without a recorded decision. Each analysis's `analysis.json` controls visibility: `status` must be `active`, with no `concluded`, `recommendation`, `decision`, `decided`, or `supersededBy` value. A missing decision does not imply that an analysis will issue a recommendation. Library landing pages and indexes carry no banner.
+
+Closing the bar hides the notice across pages of that analysis for the browser tab's session, without affecting other analyses. With JavaScript disabled or status unavailable, the notice stays hidden. Folder-based copies read analysis status from the generated bundle.
+
+Banner regression checks: `node docs/analysis/2026-08-automating-technical-hardening-guidance/tools/bannercheck.js`.
 
 ## Contributing
 
-Contributions of high-quality OSCAL examples are welcome. Please ensure examples are realistic, well-structured, and follow OSCAL best practices.
+Contribute OSCAL examples grounded in implementation practice, organized by model, and following OSCAL best practices.
 
 ## License
 

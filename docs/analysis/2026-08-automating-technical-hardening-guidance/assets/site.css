@@ -365,6 +365,26 @@ body {
 }
 .skip-link:focus { top: var(--s2); }
 
+/* Compact notice for active analyses without a recorded decision. */
+.wip-banner {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  min-height: 2.25rem; padding: 0.125rem 3rem;
+  position: relative; background: #FFEB00; color: #12161C;
+  font-size: 0.875rem; font-weight: 650; line-height: 1.4;
+  text-align: center;
+}
+.wip-banner__dismiss {
+  position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 3px;
+  background: transparent; color: #12161C; cursor: pointer;
+  font: inherit; font-size: 1.5rem; line-height: 1;
+}
+.wip-banner__dismiss:hover { background: #12161C1A; }
+.wip-banner__dismiss:focus-visible { outline: 2px solid #12161C; outline-offset: 0; }
+.wip-banner[hidden], .wip-banner__dismiss[hidden] { display: none; }
+@media print { .wip-banner__dismiss { display: none; } }
+
 .site-header {
   border-bottom: 1px solid var(--border);
   background: var(--bg);

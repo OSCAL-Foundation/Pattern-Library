@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The six questions considered for every approach | Automating Technical Hardening Guidance with OSCAL</title>
-<meta name="description" content="Six questions you can ask of any hardening guidance in OSCAL, the constructs available for each, and what each of the three approaches answers.">
+<meta name="description" content="Six questions about hardening guidance in OSCAL, available constructs, and answers from three approaches.">
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="The six questions">
-<meta property="og:description" content="Six questions you can ask of any hardening guidance in OSCAL, the constructs available for each, and what each of the three approaches answers.">
+<meta property="og:description" content="Six questions about hardening guidance in OSCAL, available constructs, and answers from three approaches.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Automating Technical Hardening Guidance with OSCAL">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The six questions">
-<meta name="twitter:description" content="Six questions you can ask of any hardening guidance in OSCAL, the constructs available for each, and what each of the three approaches answers.">
+<meta name="twitter:description" content="Six questions about hardening guidance in OSCAL, available constructs, and answers from three approaches.">
 <link rel="stylesheet" href="./assets/site.css">
 <script>
   /* Set the theme before first paint so the page never flashes the wrong one. */
@@ -28,6 +28,11 @@
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
+
+<aside class="wip-banner" aria-label="Analysis status" hidden>
+  <span>Work in progress</span>
+  <button type="button" class="wip-banner__dismiss" aria-label="Dismiss work in progress notice" hidden><span aria-hidden="true">×</span></button>
+</aside>
 
 <header class="site-header">
   <div class="site-header__inner">
@@ -51,20 +56,21 @@
 <main id="main">
 
 <h1>The six questions considered for every approach</h1>
-<p class="lede">Whatever model holds a benchmark recommendation, six questions
-   have to be answered. These questions factor capturing the rule, the bridge to execute a runtime (check) and how flexible answers can be scoped and provided.</p>
+<p class="lede">Each approach must address six questions, regardless of the
+  model holding the benchmark recommendation. The questions cover rule
+  representation, links to check execution, and options for scoping and
+  recording responses.</p>
 
 <section id="slots" class="wide">
 <h2>1. The six questions, one at a time</h2>
 
 <div class="tier2">
-  <p>Two example rules are used across each option. One is protection of <strong>data at rest</strong>, a
-     condition that is either met or not. The other is a <strong>minimum password length</strong>,
-     the same shape but carrying a value, which is what makes it the rule that
-     shows where each approach puts a parameter. </p>
+  <p>Two rules illustrate each approach. Protection of <strong>data at
+    rest</strong> is a condition either met or not. <strong>Minimum password
+    length</strong> adds a value to the same rule structure, showing parameter
+    placement in each approach.</p>
 
-  <p>Every question below is then put to all three approaches using those same
-     two rules. </p>
+  <p>Each question compares all three approaches using the same two rules.</p>
 
 </div>
 
@@ -77,21 +83,21 @@
 </div>
 
 <div class="tier2">
-  <p><a href="./scenario.html">A worked scenario</a> puts one real system to all
-     three and counts what each would produce. Each approach then has a page of
-     its own, carrying its strengths and risks:
+  <p><a href="./scenario.html">A worked scenario</a> applies all three approaches
+     to one system and counts the artifacts each approach would produce.
+     Separate pages describe strengths and risks:
      <a href="./catalog-first.html">Catalog-first</a>,
      <a href="./component-first.html">Component-first</a> and
      <a href="./assessment-first.html">Assessment-first</a>.
-     <a href="./questions.html">Open questions</a> carries what is unresolved.</p>
+     <a href="./questions.html">Open questions</a> lists unresolved issues.</p>
 </div>
 </section>
 </main>
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>This site makes no recommendation.</strong> It states three approaches in the
-       terms their proponents use and shows the content each one ships.</p>
+    <p><strong>No recommendation is made.</strong> The analysis compares three
+       approaches and the published OSCAL content.</p>
   </div>
 </footer>
 

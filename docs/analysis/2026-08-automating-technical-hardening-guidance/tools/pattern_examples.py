@@ -598,7 +598,7 @@ def component_q4_assessor(_):
     assessment plan carries validation components under assessment-assets, each
     holding checks with a rule-id and a target-component-uuid.
 
-    It matters because hardening guidance publishers and software vendors
+    It matters because hardening guidance publishers and technology providers
     publish secure configuration guidance openly, so the definition an assessor
     needs can be a public document rather than one the system owner has to hand
     over. The catalog approach has no equivalent: an assessor cannot introduce a

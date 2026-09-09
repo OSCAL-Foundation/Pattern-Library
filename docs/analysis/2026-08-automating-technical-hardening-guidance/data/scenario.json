@@ -1,10 +1,10 @@
 {
-  "note": "One system, one baseline, three hardening guides, modelled three ways. The point of the scenario is that the three approaches do not differ in what they can express so much as in how many documents it takes to express it, and what the plan of record ends up holding. Every count is either recomputed from a corpus in this repository, read from the NIST profile stored in data/scenario-evidence/, or forced by the OSCAL schemas, and each says which. What the schemas force is stated on the file rows it explains rather than in a section of its own.",
+  "note": "One system, one baseline and three hardening guides, modelled with each approach. The scenario compares document counts and system security plan content, not overall capability. Counts derive from the corpus, the NIST profile in data/scenario-evidence/, or OSCAL schema constraints. Each file row records the applicable constraint.",
   "title": "One system, three hardening guides",
-  "summary": "A system under NIST SP 800-53 Revision 5 at the High baseline, running Ubuntu, PostgreSQL and Microsoft 365, hardened against a published guide for each. The same scenario is modelled in all three approaches, using every OSCAL model except the plan of action and milestones.",
+  "summary": "A system follows the NIST SP 800-53 Revision 5 High baseline and hardening guides for Ubuntu, PostgreSQL and Microsoft 365. The three approaches model the same requirements, using every OSCAL model except the plan of action and milestones.",
   "excluded_model": {
     "model": "plan-of-action-and-milestones",
-    "reason": "It records what was not met and what is being done about it. That is the same document in all three approaches, so it separates none of them."
+    "reason": "The plan of action and milestones records unmet requirements and remediation. The document serves the same purpose in all three approaches and is excluded from the comparison."
   },
   "framework": {
     "label": "NIST SP 800-53 Revision 5, High baseline",
@@ -61,7 +61,7 @@
   ],
   "approaches": {
     "catalog-first": {
-      "rule": "Each guide is published as a catalog, selected by a profile of its own, and tied back to the framework by a mapping collection. The plan of record answers every control in the merged set.",
+      "rule": "Each guide becomes a catalog with a selection profile and a mapping collection linking guidance to the framework. The system security plan addresses every control in the merged set.",
       "files": [
         {
           "model": "catalog",
@@ -86,8 +86,8 @@
         {
           "model": "profile",
           "count": 5,
-          "what": "one selection per catalog, and one to merge them",
-          "detail": "the High baseline, three guide selections, and the organisational profile that merges them, which is needed because a plan reaches all four through one import-profile and that field is a single required object",
+          "what": "one selection per catalog and one merged selection",
+          "detail": "the High baseline, three guide selections and an organisational profile merging all four selections; import-profile is a single required object in the system security plan",
           "items": [
             {
               "name": "800-53 High"
@@ -109,8 +109,8 @@
         {
           "model": "mapping-collection",
           "count": 3,
-          "what": "one per guide, tying its controls to the framework",
-          "detail": "without these the guide's controls and the framework's controls are two unrelated sets in the same plan",
+          "what": "one per guide, linking guidance controls to framework controls",
+          "detail": "without mappings, guidance controls and framework controls remain two unrelated sets in the system security plan",
           "items": [
             {
               "name": "CIS to 800-53"
@@ -126,8 +126,8 @@
         {
           "model": "component-definition",
           "count": 3,
-          "what": "one per technology, carrying the check components",
-          "detail": "the control names the check by identifier and a software component of that name carries the runner detail",
+          "what": "one per technology, containing check components",
+          "detail": "the control references a check identifier; a software component with a matching name describes the check's execution",
           "items": [
             {
               "name": "Ubuntu checks",
@@ -146,8 +146,8 @@
         {
           "model": "system-security-plan",
           "count": 1,
-          "what": "one, answering 917 controls",
-          "detail": "370 from the framework and 547 from the guides, each needing a by-component response, and all of them reached through one import-profile because that field is a single required object",
+          "what": "one, addressing 917 controls",
+          "detail": "370 framework controls and 547 guidance controls, each requiring a by-component response; one import-profile references the merged profile because the field is a single required object",
           "items": [
             {
               "name": "System SSP"
@@ -177,10 +177,10 @@
           ]
         }
       ],
-      "plan_of_record": "The plan of record answers 917 controls, 370 from the framework and 547 from the guides"
+      "plan_of_record": "The system security plan addresses 917 controls: 370 from the framework and 547 from the guides"
     },
     "component-first": {
-      "rule": "Each guide becomes rules on the component it configures, and each engine that tests them becomes a component of its own. The framework side is unchanged.",
+      "rule": "Each guide becomes rules on the component being configured. Each checking engine becomes a separate validation component. The framework catalog and baseline profile remain unchanged.",
       "files": [
         {
           "model": "catalog",
@@ -207,14 +207,14 @@
         {
           "model": "mapping-collection",
           "count": 0,
-          "what": "none, the tie is inside the component definition",
-          "detail": "control-implementation names the control the rule serves, so no second document carries the tie"
+          "what": "none, framework mappings are inside component definitions",
+          "detail": "control implementations identify the controls served by the rules; no separate document carries the mapping"
         },
         {
           "model": "component-definition",
           "count": 6,
-          "what": "three products carrying 547 rules, three engines carrying the checks",
-          "detail": "Ubuntu, PostgreSQL and Microsoft 365, and one validation component definition per engine that tests them",
+          "what": "three products with 547 rules, three engines with checks",
+          "detail": "Ubuntu, PostgreSQL and Microsoft 365, with one validation component definition per checking engine",
           "items": [
             {
               "name": "Ubuntu",
@@ -245,8 +245,8 @@
         {
           "model": "system-security-plan",
           "count": 1,
-          "what": "one, answering 370 controls and carrying 547 rules",
-          "detail": "the control count does not move; the rules arrive inside system-implementation instead",
+          "what": "one, addressing 370 controls and containing 547 rules",
+          "detail": "the control count remains unchanged; rules are included in system-implementation",
           "items": [
             {
               "name": "System SSP"
@@ -276,10 +276,10 @@
           ]
         }
       ],
-      "plan_of_record": "The plan of record answers 370 controls, and carries 547 desired-state rules inside its components"
+      "plan_of_record": "The system security plan addresses 370 controls and contains 547 desired-state rules in components"
     },
     "assessment-first": {
-      "rule": "Each guide becomes an assessment plan. The framework side is unchanged, and each plan produces a result of its own.",
+      "rule": "Each guide becomes an assessment plan with a separate assessment results document. The framework catalog and baseline profile remain unchanged.",
       "files": [
         {
           "model": "catalog",
@@ -306,20 +306,20 @@
         {
           "model": "mapping-collection",
           "count": 0,
-          "what": "none, the tie is on the activity",
-          "detail": "an activity names the control it serves through related-controls or reviewed-controls"
+          "what": "none, framework mappings are on activities",
+          "detail": "activities identify related controls; reviewed-controls defines the assessment plan's control scope"
         },
         {
           "model": "component-definition",
           "count": 0,
-          "what": "none, the engines are named inside each plan",
-          "detail": "assessment-assets carries the components that run the checks, so they need no document of their own"
+          "what": "none, engines are identified in each plan",
+          "detail": "assessment-assets contains the components running checks; separate component definition documents are not needed"
         },
         {
           "model": "system-security-plan",
           "count": 1,
-          "what": "one, answering 370 controls",
-          "detail": "no guidance enters it; the plans point at it rather than adding to it",
+          "what": "one, addressing 370 controls",
+          "detail": "assessment plans reference the system security plan without adding guidance to the implementation claims",
           "items": [
             {
               "name": "System SSP"
@@ -330,7 +330,7 @@
           "model": "assessment-plan",
           "count": 4,
           "what": "one for the framework assessment, one per guide",
-          "detail": "the three guides carry 547 requirements between them, as activities and steps, and each plan names one system security plan through import-ssp",
+          "detail": "the three guides contain 547 requirements as activities and steps; each assessment plan references one system security plan through import-ssp",
           "items": [
             {
               "name": "800-53 AP"
@@ -349,8 +349,8 @@
         {
           "model": "assessment-results",
           "count": 4,
-          "what": "one per plan, because a result names exactly one plan",
-          "detail": "four separate results rather than four sections of one, because a result names exactly one plan through import-ap and that field is neither an array nor optional",
+          "what": "one per plan; each result references exactly one plan",
+          "detail": "four results documents, not four sections in one document; import-ap is a single required object referencing exactly one assessment plan",
           "items": [
             {
               "name": "800-53 AR"
@@ -367,8 +367,8 @@
           ]
         }
       ],
-      "plan_of_record": "The plan of record answers 370 controls, and none of the three guides enters it"
+      "plan_of_record": "The system security plan addresses 370 controls; all three guides remain in assessment plans"
     }
   },
-  "items_note": "One entry per file, so a reader can follow a particular document from the figure into the list beneath it. The names are shortened to fit a tile. Where a model has more than one kind of file in it, the kind is named too: a component definition holding the thing being configured is software, and one holding the checks that test it is validation, which is the distinction the whole approach rests on and is invisible from the file count alone."
+  "items_note": "Each entry represents one file, with a name shortened for the diagram tile. Component-first distinguishes the product component, of type software, from the checking component, of type validation. File counts alone do not show component types."
 }

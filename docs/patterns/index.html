@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Patterns | OSCAL Foundation Pattern Library</title>
-<meta name="description" content="Model office examples covering the seven OSCAL models, published as files a tool can read.">
+<meta name="description" content="Model office examples covering the seven OSCAL models, published as machine-readable files.">
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="Patterns">
-<meta property="og:description" content="Model office examples covering the seven OSCAL models, published as files a tool can read.">
+<meta property="og:description" content="Model office examples covering the seven OSCAL models, published as machine-readable files.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OSCAL Foundation Pattern Library">
 <meta name="twitter:card" content="summary">
@@ -36,21 +36,20 @@
 
 <h1>Patterns</h1>
 
-<p class="lede">Complete, realistic compliance packages in OSCAL, published as
-files rather than described in prose.</p>
+<p class="lede">OSCAL compliance-package examples, published as files rather
+than described in prose.</p>
 
 <h2>Summit, by Oscalate Systems</h2>
 
-<p>A model office system carried through all seven OSCAL models, from the
-controls it selects to the weaknesses it is still tracking. The models form one
-chain: a catalog defines the controls, a profile selects and tailors them,
-component definitions say how components implement them, the SSP documents the
-system, the assessment plan says how it will be checked, the results record what
-was found, and the POA&amp;M tracks what is being fixed.</p>
+<p>A model office system spanning all seven OSCAL models, from control selection
+to weakness tracking. The models form a chain: a catalog defines controls, a
+profile selects and tailors controls, component definitions describe control
+implementation, the SSP documents the system, the assessment plan defines
+assessment procedures, assessment results record findings, and the POA&amp;M
+tracks remediation.</p>
 
-<p><strong>Two of the seven are published so far.</strong> The rest are named
-here with the rest of the chain rather than omitted, because which models an
-example is missing is part of what a reader needs to know about it.</p>
+<p><strong>Two of the seven artifacts are published so far.</strong> The table
+lists all seven models to identify missing artifacts.</p>
 
 <table class="models">
   <thead>
@@ -89,23 +88,23 @@ example is missing is part of what a reader needs to know about it.</p>
 
 <h2>Architecture</h2>
 
-<p>The system the artifacts describe, drawn two ways: the technical view and the
+<p>Two diagrams describe the system: the technical architecture and the
 authorization boundary.</p>
 
 <ul class="cards">
   <li class="card">
     <h3><a href="./summit/diagrams/Oscalate_Systems-Summit_Diagram-Technical.svg">Technical architecture</a></h3>
-    <p>Components, their relationships, and where each one sits.</p>
+    <p>Components, relationships, and locations.</p>
     <div class="card__meta"><span>SVG</span></div>
   </li>
   <li class="card">
     <h3><a href="./summit/diagrams/Oscalate_Systems-Summit_Diagram-Boundary.svg">Authorization boundary</a></h3>
-    <p>What is inside the boundary, what is inherited, and what is external.</p>
+    <p>System scope, inheritance, and external elements.</p>
     <div class="card__meta"><span>SVG</span></div>
   </li>
   <li class="card">
     <h3><a href="./summit/diagrams/Oscalate_Systems_Summit_diagram.puml">Diagram source</a></h3>
-    <p>The PlantUML both drawings are rendered from.</p>
+    <p>PlantUML source for both diagrams.</p>
     <div class="card__meta"><span>PlantUML</span></div>
   </li>
 </ul>

@@ -1,11 +1,11 @@
 {
-  "note": "Three views of what a hardening rule is. Each is internally coherent and each implies a different home. The site takes no position on which is correct and declares a working definition instead. Rendered in the order given, which is the order of the OSCAL layers and not a ranking. The advocate and quote fields are retained as provenance and are NOT rendered: per the Gate 7 decision, no personal name, proponent organization or quotation appears on any page. Each view also names the stakeholder it serves, joining to the glossary term of that name, because the three stakeholders and the three readings are the same three-way split seen from two sides.",
-  "why_this_matters": "OSCAL has no field for normativity. The pre-read's criterion 3 records requirement level as absent from OSCAL entirely, an orthogonal gap affecting every option. Location has therefore become the only channel available for expressing which of these three views an author holds.",
+  "note": "Three interpretations of a hardening rule, ordered by OSCAL layer rather than rank. The analysis uses a working definition without selecting an interpretation. Each view links to a stakeholder glossary term. The advocate and quote fields retain provenance and are not rendered, following the Gate 7 decision.",
+  "why_this_matters": "Pre-read criterion 3 identifies the absence of an OSCAL requirement-level field. The gap affects every approach; model placement has become a proxy for whether authors treat guidance as requirements, capabilities or assessment procedures.",
   "views": [
     {
       "key": "requirement",
       "label": "A requirement",
-      "definition": "Normative. A shall. A control by another name, differing from a regulatory control only in specificity.",
+      "definition": "A binding requirement, expressed as a shall. A rule differs from a regulatory control in specificity.",
       "stakeholder": "publisher",
       "implies_layer": "Control",
       "implies_model": "catalog",
@@ -19,7 +19,7 @@
     {
       "key": "capability",
       "label": "A capability statement",
-      "definition": "Descriptive. How a component may be configured. The vendor states what is possible; the organization decides what is required.",
+      "definition": "A description of possible component configurations. The technology provider describes capabilities; the adopting organisation sets requirements.",
       "stakeholder": "implementer",
       "implies_layer": "Implementation",
       "implies_model": "component-definition",
@@ -34,7 +34,7 @@
     {
       "key": "procedure",
       "label": "An assessor's procedure",
-      "definition": "Guidance that is never performed by hand. It is automated to apply and automated to verify, so its natural expression is the thing that does the applying and the verifying.",
+      "definition": "A procedure for applying or verifying hardening guidance. Assessment activities and steps describe the work, with executable checks referenced for automation.",
       "stakeholder": "assessor",
       "implies_layer": "Assessment",
       "implies_model": "assessment-plan",
@@ -51,8 +51,8 @@
     "note": "Brian Ruf's objection applies to any option, not only to the one it was raised against."
   },
   "automation_argument": {
-    "claim": "Hardening guidance is predominantly and increasingly automated, both to apply and to verify, which distinguishes it from a regulatory control in kind rather than in granularity.",
-    "claim_not_made": "That hardening guidance is never performed manually. The corpus contradicts that stronger form and the site does not assert it.",
+    "claim": "The automation argument treats applying and verifying hardening guidance as operational work, not just a finer-grained form of regulatory control. Automation coverage varies across the published guides.",
+    "claim_not_made": "Hardening guidance is never performed manually. The corpus includes manual procedures and does not support that claim.",
     "evidence": [
       {
         "corpus": "STIG, all 9 files",
@@ -74,18 +74,18 @@
       {
         "corpus": "CIS PostgreSQL 18",
         "automated": "0 steps",
-        "manual": "144 steps, all of them, and every activity carries method EXAMINE",
+        "manual": "144 steps, covering every step; every activity carries method EXAMINE",
         "stat_keys": [
           "cis_postgres_automated",
           "cis_postgres_manual"
         ],
-        "note": "The counterexample. Published because it is what makes the other two rows credible."
+        "note": "This guide provides a counterexample to the claim that all hardening procedures are automated."
       }
     ]
   },
   "working_definition": {
     "term": "rule",
-    "text": "One technical requirement or recommendation, at a granularity finer than a control, without any claim about whether it is binding.",
-    "status": "A working definition adopted so that three comparable pages can be written. It is not a position on which of the three views is correct."
+    "text": "One technical requirement or recommendation, finer-grained than a control, without any claim about whether it is binding.",
+    "status": "A working definition for comparing the three approaches without selecting an interpretation."
   }
 }
