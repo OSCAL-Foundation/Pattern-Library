@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 build/
 node_modules/
+/.cache/oscal-sources/
 
 # The OSCAL corpora and the CIS Benchmarks used to be excluded here. Both are
 # committed now, on the call recorded in BUILD-LOG.md: the artifacts page names

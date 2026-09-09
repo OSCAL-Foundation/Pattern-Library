@@ -41,6 +41,7 @@ import urllib.parse
 
 import extract as ex        # same directory
 import svgrender as sr     # same directory
+import source_inputs
 
 # The site's option-letter order: Catalog-first is A, Component-first is B,
 # Assessment-first is C.
@@ -169,8 +170,8 @@ def check_snippets() -> None:
         try:
             a = load_snippet(sid)
             # Re-extract in memory: verification never rewrites site data.
-            b = ex.extract_one(entry, ex.corpora_root())
-        except (ex.ExtractionError, OSError, ValueError) as exc:
+            b = ex.extract_one(entry)
+        except (ex.ExtractionError, source_inputs.SourceInputError, OSError, ValueError) as exc:
             drift.append(f"{sid}: {exc}")
             continue
         # extracted_at is expected to differ; content and its address must not.
@@ -5066,6 +5067,7 @@ def check_icons() -> None:
 
 
 PHASES = {
+    "inputs": source_inputs.prepare,
     "snippets": check_snippets,
     "schema": check_schema,
     "stats": check_stats,
@@ -5115,7 +5117,11 @@ def main() -> None:
         sys.exit(2)
 
     for name in selected:
-        PHASES[name]()
+        try:
+            PHASES[name]()
+        except source_inputs.SourceInputError as exc:
+            check(f"{name}: repository-defined source inputs are available and intact", False, str(exc))
+            break
 
     passed = sum(1 for _, ok, _ in _RESULTS if ok)
     total = len(_RESULTS)

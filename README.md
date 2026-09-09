@@ -105,8 +105,13 @@ Alternatively, install the recommended [Live Preview](https://marketplace.visual
 | Task | Action |
 |---|---|
 | `site: serve` / `site: stop` | Start or stop the F5 server without the debugger |
-| `analysis 2026-08: verify` | Recompute every figure and extract from its published source |
-| `analysis 2026-08: regenerate` | Run every generator; a file that differs afterwards was hand-edited |
+| `analysis 2026-08: prepare sources` | Explicitly fetch or repair the pinned public AWS cache and check committed examples |
+| `analysis 2026-08: verify` | Check locked inputs, then recompute every figure and extract offline; never fetch inputs |
+| `analysis 2026-08: regenerate` | Check locked inputs, then run every generator in dependency order; never fetch inputs |
+
+For the August analysis, run **prepare sources** once before **verify** or **regenerate**, and again if the public cache is missing, corrupt, or its pin changes. Preparation is not an automatic task dependency, so verification cannot silently access the network. No personal corpus folder or source-repository Actions variables are needed.
+
+The [source lock](docs/analysis/2026-08-automating-technical-hardening-guidance/tools/source-lock.json) defines 6 committed IBM and 18 committed Easy Dynamics JSON inputs plus 231 public AWS JSON files pinned to revision `4a1779ffb556c4ab8fb3dad94a19d4d198116803`. Committed examples are authoritative, checked against the size and SHA-256 fingerprints in [data/examples.json](docs/analysis/2026-08-automating-technical-hardening-guidance/data/examples.json). Explicit preparation authenticates the AWS archive against the lock before caching it; subsequent source checks use that verified cache offline. Missing or corrupt inputs fail rather than becoming empty counts or skipped checks. Changing an input pin is an explicit tracked change requiring updates to affected provenance, link indexes and generated outputs. See the [analysis verification instructions](docs/analysis/2026-08-automating-technical-hardening-guidance/README.md#verifying-it) for the exact fetch/check commands and cache location. These are build-time inputs, not new browser downloads; Pages publication is unchanged.
 
 The library index pages require a server to load lists from JSON registries: browsers block `fetch` on a `file://` origin. Affected pages display a message rather than an empty list.
 

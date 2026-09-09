@@ -1,6 +1,6 @@
 {
   "note": "Every figure the site cites, with the derivation that tools/verify.py --stats recomputes from the source corpora. A mismatch is a hard failure.",
-  "generated_from": "tfg-automated-assessments",
+  "generated_from": "repository-defined inputs in tools/source-lock.json",
   "stats": [
     {
       "key": "aws_groups",

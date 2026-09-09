@@ -1,7 +1,7 @@
 {
-  "note": "The published OSCAL held in this repository, copied from the corpora by tools/copy_examples.py so the inventory can link to a document rather than only count it. Catalog-first is not here: it is published in a public repository and is linked there instead.",
+  "note": "The complete original OSCAL examples committed in this repository, validated and indexed by tools/copy_examples.py against the existing paths, byte counts and SHA-256 fingerprints. Originals are never rewritten. Catalog-first is not here: it is published in a public repository and linked at the locked revision instead.",
   "link_only": {
-    "catalog-first": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/"
+    "catalog-first": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/"
   },
   "cis_derived": [
     "assessment-first/Center for Internet Security/CIS_Ubuntu_Linux_24.04_LTS_Benchmark_v1.0.0.json",

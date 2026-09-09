@@ -1,6 +1,38 @@
 {
-  "generated_at": "2026-09-09T20:12:50+00:00",
-  "corpora_root": "../../tfg-automated-assessments",
+  "generated_at": "2026-09-09T21:30:26+00:00",
+  "source_lock": "tools/source-lock.json",
+  "source_inputs": {
+    "version": 1,
+    "sources": [
+      {
+        "key": "ibm",
+        "approach": "component-first",
+        "prefix": "IBM",
+        "directory": "examples/component-first",
+        "expected_files": 6
+      },
+      {
+        "key": "easy-dynamics",
+        "approach": "assessment-first",
+        "prefix": "Easy Dynamics",
+        "directory": "examples/assessment-first",
+        "expected_files": 18
+      },
+      {
+        "key": "aws",
+        "approach": "catalog-first",
+        "prefix": "AWS/oscal-content-for-aws-services-main",
+        "directory": ".cache/oscal-sources/aws/4a1779ffb556c4ab8fb3dad94a19d4d198116803",
+        "repository": "awslabs/oscal-content-for-aws-services",
+        "revision": "4a1779ffb556c4ab8fb3dad94a19d4d198116803",
+        "url": "https://codeload.github.com/awslabs/oscal-content-for-aws-services/tar.gz/4a1779ffb556c4ab8fb3dad94a19d4d198116803",
+        "archive_sha256": "f309b59344560b88a699c5908fbc70c51c7a0e8e0339d901b1285b9c8d804a18",
+        "archive_bytes": 379596,
+        "json_files": 231,
+        "file_base": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/"
+      }
+    ]
+  },
   "snippet_count": 32,
   "snippets": [
     {

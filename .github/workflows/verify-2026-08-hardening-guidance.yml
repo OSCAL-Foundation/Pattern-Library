@@ -11,16 +11,17 @@ name: verify 2026-08 hardening guidance analysis
 #   2. strict     --all --strict counts every skipped check as a failure,
 #                 including schema, external-link and browser checks.
 #
-# Both passes run corpus-independent regression checks before requiring a
-# readable source repository and a full commit SHA in repository variables.
-# Missing configuration or source files fails the job; it never skips sources.
+# Both passes run corpus-independent regression checks before preparing the
+# repository-defined sources in tools/source-lock.json. Explicit preparation
+# fetches only the pinned public AWS archive; --check verifies its cache and
+# the committed IBM/Easy Dynamics examples without network access. Missing or
+# corrupt inputs fail the job; source checks never skip or count empty inputs.
 #
 # Without the second pass a skipped check stays skipped forever, and the harness
 # quietly stops covering the thing it was written to cover.
 #
-# The repository is checked out under site/ so the corpora can sit beside it
-# rather than inside it: the byte-identical check below runs `git diff`, and a
-# 231-file corpus inside the working tree would be untracked noise in it.
+# The repository stays under site/. The public source cache is ignored by Git;
+# no second checkout or source-repository Actions variables are required.
 
 on:
   push:
@@ -43,9 +44,6 @@ permissions:
 
 env:
   SITE: site/docs/analysis/2026-08-automating-technical-hardening-guidance
-  TFG_CORPORA: ${{ github.workspace }}/tfg-automated-assessments
-  TFG_CORPORA_REPOSITORY: ${{ vars.TFG_CORPORA_REPOSITORY }}
-  TFG_CORPORA_REF: ${{ vars.TFG_CORPORA_REF }}
 
 jobs:
   offline:
@@ -77,11 +75,11 @@ jobs:
         working-directory: ${{ env.SITE }}
         run: node tools/bannercheck.js
 
-      - name: Run verifier unit tests
+      - name: Run verifier and source-resolver unit tests
         working-directory: ${{ env.SITE }}
         run: |
           [[ -f tools/test_verify.py ]] || { echo "::error::Missing tools/test_verify.py regression tests"; exit 1; }
-          python -m unittest discover -s tools -p test_verify.py -v
+          python -m unittest discover -s tools -p 'test_*.py' -v
 
       - name: Run corpus-independent structural checks without network
         working-directory: ${{ env.SITE }}
@@ -89,58 +87,13 @@ jobs:
         # the full --all pass below, not in this independent subset.
         run: python tools/verify.py --data --css --quotes --bundle --source --pages --offline
 
-      - name: Require a configured source repository and commit pin
-        shell: bash
-        run: |
-          status=0
-          if [[ ! "$TFG_CORPORA_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
-            echo "::error::Source gate: set repository variable TFG_CORPORA_REPOSITORY to owner/repository for an authorized full corpus readable with github.token. No default source repository exists."
-            status=1
-          fi
-          if [[ ! "$TFG_CORPORA_REF" =~ ^[0-9a-fA-F]{40}$ ]]; then
-            echo "::error::Source gate: set repository variable TFG_CORPORA_REF to a full 40-character commit SHA; branches and tags are not accepted."
-            status=1
-          fi
-          exit "$status"
-
-      - name: Check out the pinned source corpora
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.TFG_CORPORA_REPOSITORY }}
-          ref: ${{ env.TFG_CORPORA_REF }}
-          path: tfg-automated-assessments
-          token: ${{ github.token }}
-          persist-credentials: false
-
-      - name: Require the pinned commit and nonempty source files
+      - name: Prepare the locked sources (explicit public download)
         working-directory: ${{ env.SITE }}
-        shell: bash
-        run: |
-          [[ "$(git -C "$TFG_CORPORA" rev-parse HEAD)" == "${TFG_CORPORA_REF,,}" ]] || {
-            echo "::error::Source gate: checked-out commit does not match TFG_CORPORA_REF."
-            exit 1
-          }
-          # A directory containing only .git is not a corpus. Check every
-          # manifest source; --all below verifies the rest of the corpus too.
-          python - <<'PY'
-          import os
-          from pathlib import Path
-          import sys
-          import yaml
+        run: python tools/source_inputs.py --fetch
 
-          root = Path(os.environ["TFG_CORPORA"])
-          manifest = yaml.safe_load(Path("tools/manifest.yaml").read_text(encoding="utf-8"))
-          required = {entry["source"] for entry in manifest["snippets"]}
-          if not required:
-              sys.exit("::error::Source gate: the snippet manifest declares no source files.")
-          missing = sorted(rel for rel in required
-                           if not (root / rel).is_file() or (root / rel).stat().st_size == 0)
-          for rel in missing:
-              print(f"::error::Source gate: missing or empty corpus file: {rel}")
-          if missing:
-              sys.exit(1)
-          print(f"Source gate: {len(required)} required files present at the pinned commit.")
-          PY
+      - name: Check the locked sources without network
+        working-directory: ${{ env.SITE }}
+        run: python tools/source_inputs.py --check
 
       - name: Re-extract every snippet and diff
         working-directory: ${{ env.SITE }}
@@ -155,8 +108,10 @@ jobs:
         run: |
           # A generated file that has been hand-edited is the one failure this
           # repository cannot detect by reading. Regenerate and diff.
+          python tools/source_inputs.py --check
           python tools/extract.py
           python tools/pattern_examples.py
+          python tools/copy_examples.py
           python tools/oscal_artifacts.py
           python tools/sources_files.py
           python tools/diagrams.py
@@ -196,66 +151,23 @@ jobs:
         working-directory: ${{ env.SITE }}
         run: node tools/bannercheck.js
 
-      - name: Run verifier unit tests
+      - name: Run verifier and source-resolver unit tests
         working-directory: ${{ env.SITE }}
         run: |
           [[ -f tools/test_verify.py ]] || { echo "::error::Missing tools/test_verify.py regression tests"; exit 1; }
-          python -m unittest discover -s tools -p test_verify.py -v
+          python -m unittest discover -s tools -p 'test_*.py' -v
 
       - name: Run corpus-independent structural checks without network
         working-directory: ${{ env.SITE }}
         run: python tools/verify.py --data --css --quotes --bundle --source --pages --offline
 
-      - name: Require a configured source repository and commit pin
-        shell: bash
-        run: |
-          status=0
-          if [[ ! "$TFG_CORPORA_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
-            echo "::error::Source gate: set repository variable TFG_CORPORA_REPOSITORY to owner/repository for an authorized full corpus readable with github.token. No default source repository exists."
-            status=1
-          fi
-          if [[ ! "$TFG_CORPORA_REF" =~ ^[0-9a-fA-F]{40}$ ]]; then
-            echo "::error::Source gate: set repository variable TFG_CORPORA_REF to a full 40-character commit SHA; branches and tags are not accepted."
-            status=1
-          fi
-          exit "$status"
-
-      - name: Check out the pinned source corpora
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.TFG_CORPORA_REPOSITORY }}
-          ref: ${{ env.TFG_CORPORA_REF }}
-          path: tfg-automated-assessments
-          token: ${{ github.token }}
-          persist-credentials: false
-
-      - name: Require the pinned commit and nonempty source files
+      - name: Prepare the locked sources (explicit public download)
         working-directory: ${{ env.SITE }}
-        shell: bash
-        run: |
-          [[ "$(git -C "$TFG_CORPORA" rev-parse HEAD)" == "${TFG_CORPORA_REF,,}" ]] || {
-            echo "::error::Source gate: checked-out commit does not match TFG_CORPORA_REF."
-            exit 1
-          }
-          python - <<'PY'
-          import os
-          from pathlib import Path
-          import sys
-          import yaml
+        run: python tools/source_inputs.py --fetch
 
-          root = Path(os.environ["TFG_CORPORA"])
-          manifest = yaml.safe_load(Path("tools/manifest.yaml").read_text(encoding="utf-8"))
-          required = {entry["source"] for entry in manifest["snippets"]}
-          if not required:
-              sys.exit("::error::Source gate: the snippet manifest declares no source files.")
-          missing = sorted(rel for rel in required
-                           if not (root / rel).is_file() or (root / rel).stat().st_size == 0)
-          for rel in missing:
-              print(f"::error::Source gate: missing or empty corpus file: {rel}")
-          if missing:
-              sys.exit(1)
-          print(f"Source gate: {len(required)} required files present at the pinned commit.")
-          PY
+      - name: Check the locked sources without network
+        working-directory: ${{ env.SITE }}
+        run: python tools/source_inputs.py --check
 
       - name: Install axe-core and a headless browser
         working-directory: ${{ env.SITE }}

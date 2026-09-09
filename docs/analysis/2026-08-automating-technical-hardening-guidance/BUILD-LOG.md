@@ -8,12 +8,13 @@ subsequent sessions.
 unsupported traceability claims; Git history is unchanged. The 15 criteria and
 open questions are maintained as analysis content and verified structurally.
 The snippet manifest now contains 32 JSON-only extracts from published OSCAL
-examples, whose source corpus remains required. Historical check totals below
+examples resolved through the repository's source lock. Historical check totals below
 describe earlier versions of the harness, not current strict verification.
 Four known assessment-plan schema defects remain: missing associated-activity
 `subjects` in Maester and ScubaGear, and activity-title line breaks in Windows
-Server 2019 and 2022. CI also still requires an authorized source repository and
-full commit SHA through `TFG_CORPORA_REPOSITORY` and `TFG_CORPORA_REF`.
+Server 2019 and 2022. CI uses the 24 committed example files and a hash-verified
+public AWS archive pinned in `tools/source-lock.json`; no personal corpus folder
+or source-repository variables are required.
 
 ---
 

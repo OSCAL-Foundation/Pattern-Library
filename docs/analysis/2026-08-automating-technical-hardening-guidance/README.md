@@ -62,12 +62,13 @@ review and verification items:
 - Schema, external-link and browser checks need their dependencies and network
    access; offline skips are not strict passes.
 - Four known published assessment-plan schema defects remain, detailed below.
-- CI still needs an authorized OSCAL source repository and pinned commit
-   configured through its mandatory Actions-variable gate.
+- Full checks require the repository-defined sources: committed examples and
+   the verified public AWS cache. Prepare the cache explicitly before working
+   offline; CI prepares it before corpus-dependent checks.
 
 The 15 evaluation criteria and the open questions are maintained as analysis
 content and verified structurally. They are not reproduced or attributed text.
-Published OSCAL example evidence still requires the source corpus.
+Published OSCAL example evidence is checked against the locked source inputs.
 
 `BUILD-LOG.md` records every phase, every decision, and the open items for each
 review gate.
@@ -119,12 +120,14 @@ Run these commands from this analysis directory. CI uses Python 3.12, Node.js
 ```sh
 pip install pyyaml pillow 'jsonschema[format]' regex
 node tools/bannercheck.js
-test -f tools/test_verify.py && python -m unittest discover -s tools -p test_verify.py -v
+test -f tools/test_verify.py && python -m unittest discover -s tools -p 'test_*.py' -v
 python tools/verify.py --data --css --quotes --bundle --source --pages --offline
 ```
 
 This subset checks local content, CSS, absence of quotation and attribution hooks,
-bundled data, source-code sanity and page rendering without a corpus. `--pages` runs
+bundled data, source-code sanity and page rendering without preparing the public
+source cache. Unit discovery includes verifier and source-resolver tests.
+`--pages` runs
 [tools/pagecheck.js](tools/pagecheck.js); it can also be run directly with Node.
 `--example` is not corpus-independent: it invokes the artifact inventory
 generator, so it remains in the full pass below.
@@ -135,27 +138,76 @@ enforce timestamps and URIs, and `regex` supports Unicode patterns in the NIST s
 `compliance-trestle` is not used.
 Install dependencies before disconnecting from the network.
 
-### Offline and strict passes
+### Repository-defined sources
 
-For the full offline pass, provide the original corpus separately:
+[tools/source-lock.json](tools/source-lock.json) defines the source inventory;
+[tools/source_inputs.py](tools/source_inputs.py) resolves it without environment
+overrides or implicit downloads. No personal corpus folder, second repository
+checkout, source-repository Actions variables, or private corpus upload is
+required.
+
+| Source | Authoritative input | JSON files |
+|---|---|---:|
+| IBM | Committed [examples/component-first/](examples/component-first/) | 6 |
+| Easy Dynamics | Committed [examples/assessment-first/](examples/assessment-first/) | 18 |
+| AWS | Public [awslabs/oscal-content-for-aws-services](https://github.com/awslabs/oscal-content-for-aws-services/tree/4a1779ffb556c4ab8fb3dad94a19d4d198116803), revision `4a1779ffb556c4ab8fb3dad94a19d4d198116803` | 231 |
+
+The committed local examples are the source of truth. Their inventory, byte
+sizes and SHA-256 fingerprints must match [data/examples.json](data/examples.json).
+Missing, extra or changed JSON inputs fail validation; regenerating the index
+is not a way to bless an unexpected local change. Restore the committed files
+and index unless changing the inputs is an explicitly reviewed change.
+
+Fetch once while online, before the full offline pass or regeneration:
 
 ```sh
-export TFG_CORPORA=/absolute/path/to/tfg-automated-assessments
+python tools/source_inputs.py --fetch
+python tools/source_inputs.py --check
+```
+
+Only explicit `--fetch` may download or repair the public AWS cache. The pinned
+codeload archive is authenticated against the lock's byte size and SHA-256
+before extraction. The cache is rooted at
+`.cache/oscal-sources/aws/4a1779ffb556c4ab8fb3dad94a19d4d198116803/` within this
+analysis directory, with the authenticated archive retained as
+`.source-archive.tar.gz` alongside the selected JSON, LICENSE and NOTICE files.
+The cache is ignored by Git; it is not a committed source copy or a runtime
+download dependency. The resolver does not upload or read a private/local
+corpus outside this repository.
+
+`--check` is offline: it revalidates the local fingerprints, retained archive
+and complete cached inventory. Missing or corrupt cached inputs fail; they are
+never counted as an empty corpus, skipped, or fetched implicitly. Run `--fetch`
+explicitly again to repair the public cache or prepare a changed pin. A valid
+cache is reused without downloading.
+
+Changing an input pin is an explicit tracked change to the source lock, not a
+branch update or a machine-specific override. Update the archive URL, digest,
+size, inventory and pinned link metadata together, and regenerate affected
+provenance, example/link indexes and generated outputs, including the bundle.
+Intentional local input changes likewise require reviewed updates to the
+committed examples and their fingerprint index, and to the lock if inventory
+counts change. Do not change published inputs merely to make checks pass.
+
+### Offline and strict passes
+
+After source preparation and dependency installation, run offline:
+
+```sh
+python tools/source_inputs.py --check
 python tools/verify.py --all --offline
 ```
 
-`TFG_CORPORA` overrides `corpora_root` in
-[tools/manifest.yaml](tools/manifest.yaml). Preserve the original directory
-layout and complete corpus, not just the files linked from the site.
 `--offline` prevents verifier network access; it does not replace or waive
 source checks. Network-dependent checks report `SKIP`, separately from `PASS`
 and `FAIL`. **An offline pass is not proof of strict verification.**
 
-With the same corpus configured and network access available, run every check
+With the same locked inputs and network access available, run every check
 with every skip treated as a failure:
 
 ```sh
 npm install --no-save axe-core puppeteer
+python tools/source_inputs.py --check
 python tools/verify.py --all --strict
 ```
 
@@ -174,6 +226,12 @@ The full `--all` pass retains extraction, corpus statistics, source inventory,
 scenario, example, schema and conformance checks alongside structural checks.
 Individual flags select checks for diagnosis; they do not replace the full pass.
 
+In VS Code, run **analysis 2026-08: prepare sources** once while online before
+**analysis 2026-08: verify** or **analysis 2026-08: regenerate**. Preparation is
+deliberately not an automatic dependency. Both later tasks begin with
+`--check` and never fetch inputs; **verify** runs `--all --offline`.
+Use the strict command above when network-dependent verification is required.
+
 ### Source blockers
 
 The published assessment plans contain four known schema failures: the Maester
@@ -181,36 +239,31 @@ and ScubaGear plans omit required `subjects` on associated activities;
 Windows Server 2019 and 2022 activity titles
 contain line breaks rejected by OSCAL 1.2.1. The verifier reports these failures.
 Original source files and provenance hashes must not be edited to bypass them.
+Source preparation does not resolve or suppress these defects. No validation
+exceptions or edits to the original inputs have been applied.
 
-### Required CI source configuration
+### CI source preparation
 
 The [verification workflow](../../../.github/workflows/verify-2026-08-hardening-guidance.yml)
-requires two repository **Actions variables**:
-
-| Variable | Required value |
-|---|---|
-| `TFG_CORPORA_REPOSITORY` | `owner/repository` containing the authorized, complete original corpus in the expected layout |
-| `TFG_CORPORA_REF` | The full 40-character commit SHA of that corpus snapshot; not a branch or tag |
-
-The former hard-coded `OSCAL-Foundation/tfg-automated-assessments` repository
-does not exist. There is no default replacement. The configured repository must
-be public or otherwise readable with the workflow's read-only `github.token`
-(`contents: read`). Checkout does not persist credentials. **Cross-repository
-private-repository authentication is not configured**; no additional secret is
-assumed. Possessing a local corpus does not authorize publishing or uploading it.
-
-Both jobs run banner tests, verifier unit tests and the corpus-independent
-offline subset before the source configuration gate. Missing or invalid
-variables fail that gate explicitly. Checkout failure is fatal. The next gate
-checks the resolved commit and every manifest source for a nonempty file; an
-empty or `.git`-only directory cannot qualify. The later `--all` pass verifies
-the remaining corpus content, and strict verification cannot pass without it.
+runs banner tests, all verifier/source-resolver unit tests and the
+corpus-independent offline subset in both jobs before source preparation.
+Each job then runs `python tools/source_inputs.py --fetch` followed by
+`python tools/source_inputs.py --check` before corpus-dependent phases.
+Downloads and dependency installation precede `--all --offline`; the verifier
+itself does not access the network in that pass. Source preparation or integrity
+failure stops the job, with no fallback to an unpinned checkout or missing inputs.
+The strict pass retains schema, external-link, browser and accessibility checks,
+and treats every skip as a failure.
 
 After the full offline pass, CI regenerates outputs in dependency order and
-requires a byte-identical Git diff, including
-[assets/bundle.js](assets/bundle.js), data, diagrams and generated pages.
-**An authorized, readable full-corpus repository and pinned commit remain
-external prerequisites; unconfigured source checks fail rather than skip.**
+requires a byte-identical Git diff. Its generation sanity step rechecks sources
+offline and runs [tools/copy_examples.py](tools/copy_examples.py) before
+[tools/oscal_artifacts.py](tools/oscal_artifacts.py). The existing data diff
+covers [data/examples.json](data/examples.json), alongside provenance and other
+data, [assets/bundle.js](assets/bundle.js), diagrams and generated pages.
+The Pages-build job, publication workflow and organization Pages settings are
+unchanged. No private corpus upload, additional credential or runtime network
+change is part of this source preparation.
 
 ## How the content is produced
 
@@ -221,21 +274,24 @@ analysis, and is regenerated and diffed on every build to detect hand edits.
 Every figure is recomputed from the corpora.
 
 ```
+python tools/source_inputs.py --check # require prepared inputs; never fetch here
 python tools/extract.py          # rebuild data/snippets and data/provenance.json
 python tools/pattern_examples.py # write the two rules in all three shapes
+python tools/copy_examples.py    # rebuild data/examples.json from verified inputs
 python tools/oscal_artifacts.py  # inventory what the three groups have published
 python tools/sources_files.py    # rebuild data/source-files.json from sources/
 python tools/diagrams.py         # rebuild every published SVG in assets/diagrams
 python tools/approach_pages.py   # rebuild the three approach pages
 python tools/scenario_page.py    # rebuild the worked scenario page
 python tools/bundle.py           # rebuild the offline fallback
-python tools/verify.py --all     # prove the site says what the files say
+python tools/verify.py --all --offline # verify offline; run strict separately
 ```
 
 The workflow runs generators in the listed dependency order. The bundle runs
-last to mirror all preceding output. Four generators accept `--check` to compare
+last to mirror all preceding output. Five generators accept `--check` to compare
 without writing and exit non-zero for stale committed files:
-`pattern_examples.py`, `oscal_artifacts.py`, `sources_files.py`, and `bundle.py`.
+`pattern_examples.py`, `copy_examples.py`, `oscal_artifacts.py`, `sources_files.py`,
+and `bundle.py`.
 `approach_pages.py` records generated-page hashes and refuses to overwrite
 hand-edited pages. Editing a generated page instead of source data stops the
 build rather than losing the edit.
@@ -273,6 +329,7 @@ data/
   six-questions.json the six questions and the answer matrix, the central claim set
   pattern-examples.json  the two rules, written in all three shapes. Ours
   oscal-artifacts.json   what each of the three groups has published, counted
+   examples.json      committed local fingerprints and pinned public links
    criteria.json      the 15 evaluation criteria, maintained as analysis content
   sources.json       the guidance read as input, one row per benchmark
   source-files.json  every file under sources/, generated, with size and type
@@ -284,9 +341,12 @@ data/
   corpus-stats.json  every figure cited, each with its derivation
   provenance.json    generated
 tools/
+   source-lock.json    tracked local inventories and pinned public archive metadata
+   source_inputs.py   explicit public fetch and offline input integrity checks
   manifest.yaml      the declarative extract manifest
   extract.py         builds data/snippets and data/provenance.json
   pattern_examples.py  builds data/pattern-examples.json, the site's own encodings
+   copy_examples.py   builds data/examples.json from verified source inputs
   oscal_artifacts.py   builds data/oscal-artifacts.json from the three corpora
   sources_files.py   builds data/source-files.json from sources/
   diagrams.py        builds the published SVGs in assets/diagrams from data/
@@ -299,12 +359,15 @@ tools/
   axe_run.mjs        serves the site and runs axe-core over every page
 ```
 
-Eight tools are generators. Do not hand-edit generated files:
+Nine tools run in the regeneration pipeline. Do not hand-edit generated files:
 `data/snippets/*.json` and `data/provenance.json`,
-`data/pattern-examples.json`, `data/oscal-artifacts.json`,
+`data/pattern-examples.json`, `data/examples.json`, `data/oscal-artifacts.json`,
 `data/source-files.json`, `assets/diagrams/*.svg`, the
-three approach pages, and `assets/bundle.js`. The workflow regenerates the files
+three approach pages, `scenario.html`, and `assets/bundle.js`. The workflow regenerates the files
 and fails on differences from committed versions.
+The local files under `examples/` are authoritative inputs, not disposable
+generator output; their committed fingerprints must already pass source checks
+before regeneration.
 
 `tools/diagrams.py` builds 19 diagrams and writes 9. The remaining 10 appeared
 only in a removed component gallery, including the base layer map and three
@@ -373,8 +436,11 @@ review, and update their structural checks when the agreed structure changes.
 
 Adding an approach requires data changes and a page, not a site rewrite.
 
-1. **Add the corpus.** Put the published files where `corpora_root` in
-   `tools/manifest.yaml` can reach them.
+1. **Define the source inputs.** Extend [tools/source-lock.json](tools/source-lock.json)
+   and [tools/source_inputs.py](tools/source_inputs.py) together, with tests,
+   to authorize the new local inventory or pinned public archive. Record
+   fingerprints and publisher terms; never rely on a personal folder or upload
+   a private corpus. Prepare public inputs explicitly and check them offline.
 2. **Declare the extracts.** Add manifest entries with a source file, an RFC 6901
    pointer, and the illustrated question. Run `python tools/extract.py`.
 3. **Add the approach to `data/six-questions.json`.** Add an `approaches` entry
@@ -411,9 +477,13 @@ from files rather than hand-authored descriptions. Keep the OSCAL corpus outside
 CC BY 4.0 applies to analysis-authored text, diagrams, and encodings. See
 `LICENSE`.
 
-The licence does not cover source material. The three OSCAL corpora belong to
-the publishers and are not redistributed; only extracts at declared pointers
-are included, with provenance in `data/provenance.json`. Under `sources/`, DISA
+The licence does not cover source material. The OSCAL corpora belong to their
+publishers. The 6 IBM and 18 Easy Dynamics JSON files already committed under
+`examples/` are source inputs; AWS documents are linked at the pinned public
+revision and cached only for build-time verification. Extracts retain declared
+pointers and provenance in `data/provenance.json`. Source preparation does not
+authorize additional redistribution or uploading a private corpus.
+Under `sources/`, DISA
 material is a work of the United States Government. CIS Benchmarks are included
 on the basis of publisher participation in the review, not a grant under the
 Agreed Terms of Use. Each CIS file states the basis for inclusion.

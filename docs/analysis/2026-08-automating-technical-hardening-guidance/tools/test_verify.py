@@ -36,17 +36,18 @@ class VerifierTests(unittest.TestCase):
             with self.subTest(source=source.name):
                 compile(source.read_text(), str(source), "exec")
 
-    def test_source_path_honors_corpus_override_and_globs(self):
+    def test_source_path_uses_repository_examples_not_environment(self):
         with patch.dict(os.environ, {"TFG_CORPORA": "/tmp/test-corpus"}):
             self.assertEqual(extract.source_path("IBM", "*.json"),
-                             "/tmp/test-corpus/IBM/*.json")
+                             str(Path(verify.SITE_ROOT) / "examples/component-first/*.json"))
 
     def test_extraction_reads_declared_json_pointer(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "sample.json").write_text('{"rule": "value"}')
             json_entry = {"id": "sample", "source": "sample.json", "pointer": "/rule"}
-            self.assertEqual(extract.extract_one(json_entry, directory)["content"], '"value"')
+            with patch.object(extract, "source_path", return_value=str(root / "sample.json")):
+                self.assertEqual(extract.extract_one(json_entry)["content"], '"value"')
 
     def test_manifest_and_committed_snippets_are_oscal_json_only(self):
         entries = extract.load_manifest()["snippets"]
@@ -108,6 +109,23 @@ class VerifierTests(unittest.TestCase):
         stored = Path(bundle.OUT).read_text().split("window.TFGBundle = ", 1)[1]
         self.assertEqual(json.loads(stored.rsplit(";", 1)[0]), payload)
         self.assertEqual(len(payload["data/provenance.json"]["snippets"]), 32)
+
+    def test_provenance_and_public_file_links_match_the_source_lock(self):
+        import source_inputs
+
+        with open(Path(verify.DATA) / "provenance.json", encoding="utf-8") as stream:
+            provenance = json.load(stream)
+        self.assertEqual(provenance["source_lock"], "tools/source-lock.json")
+        self.assertEqual(provenance["source_inputs"], source_inputs.source_metadata())
+        base = source_inputs.public_file_base("catalog-first")
+        with open(Path(verify.DATA) / "examples.json", encoding="utf-8") as stream:
+            self.assertEqual(json.load(stream)["link_only"]["catalog-first"], base)
+        with open(Path(verify.DATA) / "oscal-artifacts.json", encoding="utf-8") as stream:
+            publishers = json.load(stream)["publishers"]
+        aws = next(p for p in publishers if p["key"] == "catalog-first")
+        self.assertTrue(aws["files"])
+        self.assertTrue(all(f["href_external"] and f["href"].startswith(base)
+                            for f in aws["files"]))
 
     def test_question_validation_covers_every_slot(self):
         with tempfile.TemporaryDirectory() as directory:

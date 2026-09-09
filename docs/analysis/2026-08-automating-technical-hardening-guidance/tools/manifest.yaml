@@ -8,7 +8,7 @@
 #   slot       1 | 2 | 3 | 4 | 5 | 6a | 6b | meta
 #   approach   assessment-first | catalog-first | component-first | schema
 #   title      short human label shown in the block header
-#   source     path relative to the corpora root
+#   source     original source name resolved through tools/source-lock.json
 #   pointer    RFC 6901 JSON pointer, or "$" for the whole document
 #   language   json (default for every entry)
 #   trim       optional. RFC 6901 pointers, relative to the extracted node,
@@ -16,12 +16,8 @@
 #   max_prose  optional int. Any string value longer than this is cut and
 #              suffixed with " [truncated]". Never silent.
 
-# Where the corpora are read from. Relative to this file's directory.
-#
-# TFG_CORPORA overrides it and is how this is normally set: the site sits under
-# docs/analysis/ in a repository the corpora are not a sibling of, so the path
-# below only resolves in the standalone layout the site was built in.
-corpora_root: "../../tfg-automated-assessments"
+# Source roots are committed in tools/source-lock.json. Prepare the pinned
+# public cache with tools/source_inputs.py --fetch; extraction never downloads.
 
 snippets:
 

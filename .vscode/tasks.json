@@ -36,13 +36,22 @@
       "problemMatcher": []
     },
     {
-      "label": "analysis 2026-08: verify",
-      "detail": "Recompute every figure and extract from its published source.",
+      "label": "analysis 2026-08: prepare sources",
+      "detail": "Explicitly fetch or repair the pinned public AWS cache and check committed examples. Run once before offline verification or regeneration.",
       "type": "shell",
-      "command": "python3 tools/verify.py --all",
+      "command": "python3 tools/source_inputs.py --fetch",
       "options": {
-        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
-        "env": { "TFG_CORPORA": "${input:corporaPath}" }
+        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "analysis 2026-08: verify",
+      "detail": "Check locked inputs and recompute every figure and extract offline. Run prepare sources explicitly first; this task never fetches inputs.",
+      "type": "shell",
+      "command": "python3 tools/source_inputs.py --check && python3 tools/verify.py --all --offline",
+      "options": {
+        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance"
       },
       "problemMatcher": {
         "owner": "verify",
@@ -52,23 +61,16 @@
     },
     {
       "label": "analysis 2026-08: regenerate",
-      "detail": "Run every generator. A generated file that differs afterwards was hand-edited.",
+      "detail": "Check locked inputs and run every generator. Run prepare sources explicitly first; this task never fetches inputs.",
       "type": "shell",
-      "command": "for g in extract pattern_examples oscal_artifacts sources_files diagrams approach_pages scenario_page bundle; do echo \"-- $g\"; python3 tools/$g.py || exit 1; done",
+      "command": "python3 tools/source_inputs.py --check && for g in extract pattern_examples copy_examples oscal_artifacts sources_files diagrams approach_pages scenario_page bundle; do echo \"-- $g\"; python3 tools/$g.py || exit 1; done",
       "options": {
-        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
-        "env": { "TFG_CORPORA": "${input:corporaPath}" }
+        "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance"
       },
       "problemMatcher": []
     }
   ],
   "inputs": [
-    {
-      "id": "corporaPath",
-      "type": "promptString",
-      "description": "Path to the tfg-automated-assessments corpora checkout",
-      "default": "${env:HOME}/pagesource/tfg-automated-assessments"
-    },
     {
       "id": "terminateServe",
       "type": "command",
