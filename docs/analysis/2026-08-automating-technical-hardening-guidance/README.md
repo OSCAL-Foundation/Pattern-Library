@@ -245,7 +245,7 @@ exceptions or edits to the original inputs have been applied.
 ### CI source preparation
 
 The [verification workflow](../../../.github/workflows/verify-2026-08-hardening-guidance.yml)
-runs banner tests, all verifier/source-resolver unit tests and the
+runs banner tests, all verifier/source-resolver/workflow unit tests and the
 corpus-independent offline subset in both jobs before source preparation.
 Each job then runs `python tools/source_inputs.py --fetch` followed by
 `python tools/source_inputs.py --check` before corpus-dependent phases.
@@ -253,10 +253,13 @@ Downloads and dependency installation precede `--all --offline`; the verifier
 itself does not access the network in that pass. Source preparation or integrity
 failure stops the job, with no fallback to an unpinned checkout or missing inputs.
 The strict pass retains schema, external-link, browser and accessibility checks,
-and treats every skip as a failure.
+and treats every skip as a failure. After browser dependencies are installed, a
+separate strict accessibility audit runs even if another check fails. Audit
+errors and violations fail the job; they are not suppressed.
 
 After the full offline pass, CI regenerates outputs in dependency order and
-requires a byte-identical Git diff. Its generation sanity step rechecks sources
+requires no changes in the generated-output paths, including additions,
+deletions and untracked files. Its generation sanity step rechecks sources
 offline and runs [tools/copy_examples.py](tools/copy_examples.py) before
 [tools/oscal_artifacts.py](tools/oscal_artifacts.py). The existing data diff
 covers [data/examples.json](data/examples.json), alongside provenance and other

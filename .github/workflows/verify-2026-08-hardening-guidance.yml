@@ -75,10 +75,12 @@ jobs:
         working-directory: ${{ env.SITE }}
         run: node tools/bannercheck.js
 
-      - name: Run verifier and source-resolver unit tests
+      - name: Run verifier, source-resolver and workflow unit tests
         working-directory: ${{ env.SITE }}
         run: |
-          [[ -f tools/test_verify.py ]] || { echo "::error::Missing tools/test_verify.py regression tests"; exit 1; }
+          for suite in tools/test_verify.py tools/test_source_inputs.py tools/test_workflow.py; do
+            [[ -f "$suite" ]] || { echo "::error::Missing $suite regression tests"; exit 1; }
+          done
           python -m unittest discover -s tools -p 'test_*.py' -v
 
       - name: Run corpus-independent structural checks without network
@@ -105,7 +107,9 @@ jobs:
 
       - name: Confirm the generated files are byte-identical to their generators
         working-directory: ${{ env.SITE }}
+        shell: bash
         run: |
+          set -euo pipefail
           # A generated file that has been hand-edited is the one failure this
           # repository cannot detect by reading. Regenerate and diff.
           python tools/source_inputs.py --check
@@ -118,11 +122,16 @@ jobs:
           python tools/approach_pages.py
           python tools/scenario_page.py
           python tools/bundle.py
-          git diff --exit-code -- data assets/diagrams assets/bundle.js \
-            assessment-first.html catalog-first.html component-first.html \
-            scenario.html \
-            || { echo "::error::a generated file differs from its generator."\
-                 "Run the generators and commit the result."; exit 1; }
+          outputs=(data assets/diagrams assets/bundle.js
+            assessment-first.html catalog-first.html component-first.html scenario.html)
+          # git diff alone misses newly generated, untracked files.
+          changes=$(git status --porcelain --untracked-files=all -- "${outputs[@]}")
+          if [[ -n "$changes" ]]; then
+            printf '%s\n' "$changes"
+            git diff --stat -- "${outputs[@]}"
+            echo "::error::Generated files differ. Run the generators and commit the results, including additions and deletions."
+            exit 1
+          fi
 
   strict:
     name: strict, the checks that need network
@@ -151,10 +160,12 @@ jobs:
         working-directory: ${{ env.SITE }}
         run: node tools/bannercheck.js
 
-      - name: Run verifier and source-resolver unit tests
+      - name: Run verifier, source-resolver and workflow unit tests
         working-directory: ${{ env.SITE }}
         run: |
-          [[ -f tools/test_verify.py ]] || { echo "::error::Missing tools/test_verify.py regression tests"; exit 1; }
+          for suite in tools/test_verify.py tools/test_source_inputs.py tools/test_workflow.py; do
+            [[ -f "$suite" ]] || { echo "::error::Missing $suite regression tests"; exit 1; }
+          done
           python -m unittest discover -s tools -p 'test_*.py' -v
 
       - name: Run corpus-independent structural checks without network
@@ -170,17 +181,18 @@ jobs:
         run: python tools/source_inputs.py --check
 
       - name: Install axe-core and a headless browser
+        id: browser_deps
         working-directory: ${{ env.SITE }}
-        run: npm install --no-save axe-core puppeteer
+        run: npm install --no-save --package-lock=false axe-core puppeteer
 
       - name: Every check, with a skip counted as a failure
         working-directory: ${{ env.SITE }}
         run: python tools/verify.py --all --strict
 
-      - name: Publish the accessibility report
-        if: always()
+      - name: Run accessibility audit even after other check failures
+        if: ${{ !cancelled() && steps.browser_deps.outcome == 'success' }}
         working-directory: ${{ env.SITE }}
-        run: node tools/axe_run.mjs || true
+        run: python tools/verify.py --a11y --strict
 
   pages-build:
     name: the site serves and opens from a folder
