@@ -57,6 +57,10 @@
   --focus:          #2958BC;
   --shadow:         0 1px 2px rgb(18 22 28 / 8%), 0 4px 12px rgb(18 22 28 / 6%);
 
+  --wip-bg:         #FFEB00;
+  --wip-fg:         #12161C;
+  --wip-hover:      #E7D414;
+
   /* --- media-type icon ----------------------------------------------------
      A PDF badge is red because a reader expects it to be, and expectation is
      worth something on an icon that has to be recognised at 27px. It is the
@@ -231,6 +235,9 @@
 }
 
 [data-theme="dark"] {
+  --wip-bg:         #FFEB00;
+  --wip-fg:         #12161C;
+  --wip-hover:      #E7D414;
   --bg:             #12161C;
   --bg-subtle:      #1A1F27;
   --bg-inset:       #222833;
@@ -369,7 +376,7 @@ body {
 .wip-banner {
   display: flex; align-items: center; justify-content: center; gap: 0.75rem;
   min-height: 2.25rem; padding: 0.125rem 3rem;
-  position: relative; background: #FFEB00; color: #12161C;
+  position: relative; background: var(--wip-bg); color: var(--wip-fg);
   font-size: 0.875rem; font-weight: 650; line-height: 1.4;
   text-align: center;
 }
@@ -377,13 +384,12 @@ body {
   position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);
   display: inline-flex; align-items: center; justify-content: center;
   width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 3px;
-  background: transparent; color: #12161C; cursor: pointer;
+  background: transparent; color: var(--wip-fg); cursor: pointer;
   font: inherit; font-size: 1.5rem; line-height: 1;
 }
-.wip-banner__dismiss:hover { background: #12161C1A; }
-.wip-banner__dismiss:focus-visible { outline: 2px solid #12161C; outline-offset: 0; }
+.wip-banner__dismiss:hover { background: var(--wip-hover); }
+.wip-banner__dismiss:focus-visible { outline: 2px solid var(--wip-fg); outline-offset: 0; }
 .wip-banner[hidden], .wip-banner__dismiss[hidden] { display: none; }
-@media print { .wip-banner__dismiss { display: none; } }
 
 .site-header {
   border-bottom: 1px solid var(--border);
@@ -830,6 +836,7 @@ code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
 .filelink--icon .micon { width: 1.9em; height: 1.9em; vertical-align: 0; }
 
 @media print {
+  .wip-banner__dismiss { display: none; }
   .micon { display: none; }
   /* On paper an icon cannot be clicked. The icon-only links print what they
      stand for instead of a glyph that leads nowhere. */

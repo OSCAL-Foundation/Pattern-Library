@@ -1,11 +1,11 @@
 {
   "note": "The shared oscal-metadata:metadata assembly. Every OSCAL document, a catalog among them, is required to carry a title, a last-modified timestamp, a version and the OSCAL version it conforms to. That is what makes a published guide citable as a document rather than as a copy.",
-  "model": "shared",
+  "model": "assessment-plan",
   "definition": "oscal-ap-oscal-metadata:metadata",
-  "schema_id": "http://csrc.nist.gov/ns/oscal/1.1.3/oscal-ap-schema.json",
-  "oscal_version": "1.1.3",
-  "fetched_at": "2026-08-21",
-  "provenance": "Read from the assessment-plan schema in the offline OSCAL reference copy. metadata is one assembly shared by all seven models, so the catalog carries this same definition; the catalog schema file itself could not be opened through the sync layer.",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ap-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-09-09",
+  "provenance": "Extracted from https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/oscal_assessment-plan_schema.json at definitions/oscal-ap-oscal-metadata:metadata.",
   "constraints": [
     "required == [\"title\",\"last-modified\",\"version\",\"oscal-version\"]"
   ],
@@ -18,7 +18,7 @@
       "title": {
         "title": "Document Title",
         "description": "A name given to the document, which may be used by a tool for display and navigation.",
-        "type": "string"
+        "$ref": "#/definitions/MarkupLineDatatype"
       },
       "published": {
         "$ref": "#/definitions/oscal-ap-oscal-metadata:published"
@@ -43,7 +43,7 @@
             "title": {
               "title": "Document Title",
               "description": "A name given to the document revision, which may be used by a tool for display and navigation.",
-              "type": "string"
+              "$ref": "#/definitions/MarkupLineDatatype"
             },
             "published": {
               "$ref": "#/definitions/oscal-ap-oscal-metadata:published"
@@ -118,7 +118,7 @@
             "title": {
               "title": "Role Title",
               "description": "A name given to the role, which may be used by a tool for display and navigation.",
-              "type": "string"
+              "$ref": "#/definitions/MarkupLineDatatype"
             },
             "short-name": {
               "title": "Role Short Name",
@@ -128,7 +128,7 @@
             "description": {
               "title": "Role Description",
               "description": "A summary of the role's purpose and associated responsibilities.",
-              "type": "string"
+              "$ref": "#/definitions/MarkupMultilineDatatype"
             },
             "props": {
               "type": "array",
@@ -171,7 +171,7 @@
             "title": {
               "title": "Location Title",
               "description": "A name given to the location, which may be used by a tool for display and navigation.",
-              "type": "string"
+              "$ref": "#/definitions/MarkupLineDatatype"
             },
             "address": {
               "$ref": "#/definitions/oscal-ap-oscal-metadata:address"
@@ -230,130 +230,238 @@
           "title": "Party",
           "description": "An organization or person, which may be associated with roles or other concepts within the current or linked OSCAL document.",
           "type": "object",
-          "properties": {
-            "uuid": {
-              "title": "Party Universally Unique Identifier",
-              "description": "A unique identifier for the party.",
-              "$ref": "#/definitions/UUIDDatatype"
-            },
-            "type": {
-              "title": "Party Type",
-              "description": "A category describing the kind of party the object describes.",
-              "allOf": [
-                {
+          "anyOf": [
+            {
+              "properties": {
+                "uuid": {
+                  "title": "Party Universally Unique Identifier",
+                  "description": "A unique identifier for the party.",
+                  "$ref": "#/definitions/UUIDDatatype"
+                },
+                "type": {
+                  "title": "Party Type",
+                  "description": "A category describing the kind of party the object describes.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/StringDatatype"
+                    },
+                    {
+                      "enum": [
+                        "person",
+                        "organization"
+                      ]
+                    }
+                  ]
+                },
+                "name": {
+                  "title": "Party Name",
+                  "description": "The full name of the party. This is typically the legal name associated with the party.",
                   "$ref": "#/definitions/StringDatatype"
                 },
-                {
-                  "enum": [
-                    "person",
-                    "organization"
-                  ]
-                }
-              ]
-            },
-            "name": {
-              "title": "Party Name",
-              "description": "The full name of the party. This is typically the legal name associated with the party.",
-              "$ref": "#/definitions/StringDatatype"
-            },
-            "short-name": {
-              "title": "Party Short Name",
-              "description": "A short common name, abbreviation, or acronym for the party.",
-              "$ref": "#/definitions/StringDatatype"
-            },
-            "external-ids": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "title": "Party External Identifier",
-                "description": "An identifier for a person or organization using a designated scheme. e.g. an Open Researcher and Contributor ID (ORCID).",
-                "type": "object",
-                "properties": {
-                  "scheme": {
-                    "title": "External Identifier Schema",
-                    "description": "Indicates the type of external identifier.",
-                    "anyOf": [
-                      {
-                        "$ref": "#/definitions/URIDatatype"
-                      },
-                      {
-                        "enum": [
-                          "http://orcid.org/"
+                "short-name": {
+                  "title": "Party Short Name",
+                  "description": "A short common name, abbreviation, or acronym for the party.",
+                  "$ref": "#/definitions/StringDatatype"
+                },
+                "external-ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "title": "Party External Identifier",
+                    "description": "An identifier for a person or organization using a designated scheme. e.g. an Open Researcher and Contributor ID (ORCID).",
+                    "type": "object",
+                    "properties": {
+                      "scheme": {
+                        "title": "External Identifier Schema",
+                        "description": "Indicates the type of external identifier.",
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/URIDatatype"
+                          },
+                          {
+                            "enum": [
+                              "http://orcid.org/"
+                            ]
+                          }
                         ]
+                      },
+                      "id": {
+                        "$ref": "#/definitions/StringDatatype"
                       }
-                    ]
-                  },
-                  "id": {
-                    "$ref": "#/definitions/StringDatatype"
+                    },
+                    "required": [
+                      "id",
+                      "scheme"
+                    ],
+                    "additionalProperties": false
                   }
                 },
-                "required": [
-                  "id",
-                  "scheme"
-                ],
-                "additionalProperties": false
-              }
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:link"
+                  }
+                },
+                "email-addresses": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:email-address"
+                  }
+                },
+                "telephone-numbers": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:telephone-number"
+                  }
+                },
+                "addresses": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:address"
+                  }
+                },
+                "member-of-organizations": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "title": "Organizational Affiliation",
+                    "description": "A reference to another party by UUID, typically an organization, that this subject is associated with.",
+                    "$ref": "#/definitions/UUIDDatatype"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ap-oscal-metadata:remarks"
+                }
+              },
+              "additionalProperties": false
             },
-            "props": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/oscal-ap-oscal-metadata:property"
-              }
-            },
-            "links": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/oscal-ap-oscal-metadata:link"
-              }
-            },
-            "email-addresses": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/oscal-ap-oscal-metadata:email-address"
-              }
-            },
-            "telephone-numbers": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/oscal-ap-oscal-metadata:telephone-number"
-              }
-            },
-            "addresses": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/oscal-ap-oscal-metadata:address"
-              }
-            },
-            "location-uuids": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/definitions/oscal-ap-oscal-metadata:location-uuid"
-              }
-            },
-            "member-of-organizations": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "title": "Organizational Affiliation",
-                "description": "A reference to another party by UUID, typically an organization, that this subject is associated with.",
-                "$ref": "#/definitions/UUIDDatatype"
-              }
-            },
-            "remarks": {
-              "$ref": "#/definitions/oscal-ap-oscal-metadata:remarks"
+            {
+              "properties": {
+                "uuid": {
+                  "title": "Party Universally Unique Identifier",
+                  "description": "A unique identifier for the party.",
+                  "$ref": "#/definitions/UUIDDatatype"
+                },
+                "type": {
+                  "title": "Party Type",
+                  "description": "A category describing the kind of party the object describes.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/StringDatatype"
+                    },
+                    {
+                      "enum": [
+                        "person",
+                        "organization"
+                      ]
+                    }
+                  ]
+                },
+                "name": {
+                  "title": "Party Name",
+                  "description": "The full name of the party. This is typically the legal name associated with the party.",
+                  "$ref": "#/definitions/StringDatatype"
+                },
+                "short-name": {
+                  "title": "Party Short Name",
+                  "description": "A short common name, abbreviation, or acronym for the party.",
+                  "$ref": "#/definitions/StringDatatype"
+                },
+                "external-ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "title": "Party External Identifier",
+                    "description": "An identifier for a person or organization using a designated scheme. e.g. an Open Researcher and Contributor ID (ORCID).",
+                    "type": "object",
+                    "properties": {
+                      "scheme": {
+                        "title": "External Identifier Schema",
+                        "description": "Indicates the type of external identifier.",
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/URIDatatype"
+                          },
+                          {
+                            "enum": [
+                              "http://orcid.org/"
+                            ]
+                          }
+                        ]
+                      },
+                      "id": {
+                        "$ref": "#/definitions/StringDatatype"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "scheme"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "props": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:property"
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:link"
+                  }
+                },
+                "email-addresses": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:email-address"
+                  }
+                },
+                "telephone-numbers": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:telephone-number"
+                  }
+                },
+                "location-uuids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/definitions/oscal-ap-oscal-metadata:location-uuid"
+                  }
+                },
+                "member-of-organizations": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "title": "Organizational Affiliation",
+                    "description": "A reference to another party by UUID, typically an organization, that this subject is associated with.",
+                    "$ref": "#/definitions/UUIDDatatype"
+                  }
+                },
+                "remarks": {
+                  "$ref": "#/definitions/oscal-ap-oscal-metadata:remarks"
+                }
+              },
+              "additionalProperties": false
             }
-          },
-          "required": [
-            "uuid",
-            "type"
-          ],
-          "additionalProperties": false
+          ]
         }
       },
       "responsible-parties": {

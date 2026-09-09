@@ -109,64 +109,106 @@ serves over HTTP, so published pages do not display the notice.
 
 ## Verifying it
 
-Install dependencies and run verification:
+Run these commands from this analysis directory. CI uses Python 3.12, Node.js
+20 and the DejaVu fonts (`fonts-dejavu-core` on Ubuntu).
 
-```
-pip install pyyaml pillow
-python tools/verify.py --all
-```
-
-Pillow is required: `verify.py` imports `svgrender`, which imports Pillow at
-module scope to rasterise diagrams for `--diagrams`.
-
-Verification reads corpora from `TFG_CORPORA`, falling back to `corpora_root`
-in `tools/manifest.yaml` when the environment variable is unset. The site resides
-under `docs/analysis/`, not beside the corpora. Set `TFG_CORPORA`:
-
-```
-export TFG_CORPORA=/path/to/tfg-automated-assessments
+```sh
+pip install pyyaml pillow 'jsonschema[format]' regex
+node tools/bannercheck.js
+test -f tools/test_verify.py && python -m unittest discover -s tools -p test_verify.py -v
+python tools/verify.py --data --css --quotes --bundle --source --pages --offline
 ```
 
-Eighteen checks report `PASS`, `FAIL`, or `SKIP`. A skipped check reports the
-reason and command separately from passed checks. **A skip is never counted as
-a pass.**
+This subset checks local content, CSS, retained but unrendered attribution, bundled data,
+source-code sanity and page rendering without a corpus. `--pages` runs
+[tools/pagecheck.js](tools/pagecheck.js); it can also be run directly with Node.
+`--example` is not corpus-independent: it invokes the artifact inventory
+generator, so it remains in the full pass below.
 
-```
-python tools/verify.py --snippets      re-extract every extract and diff
-python tools/verify.py --schema        every OSCAL constraint the argument rests on
-python tools/verify.py --conformance   labelled conformant validates, proposed fails
-python tools/verify.py --example       our own encodings, and what must hold across them
-python tools/verify.py --quotes        no page quotes anyone or names anyone
-python tools/verify.py --criteria      the fifteen are the group's, verbatim
-python tools/verify.py --stats         recompute every cited figure from source
-python tools/verify.py --sources       the guidance read as input, recomputed
-python tools/verify.py --matrix        every matrix cell resolves and is classified
-python tools/verify.py --diagrams      structure, colour, geometry, join literals
-python tools/verify.py --css           colour lives only in the token block
-python tools/verify.py --links         every internal link, anchor and path
-python tools/verify.py --budget        equal budget across the three approach pages
-python tools/verify.py --a11y          contrast, then axe-core over every page
-python tools/verify.py --bundle        the offline fallback matches data/
-python tools/verify.py --questions     the reproduced material matches its source
-python tools/verify.py --data          internal consistency of data/
-python tools/verify.py --pages         run each page and inspect what it rendered
+Pillow is required at import time by [tools/svgrender.py](tools/svgrender.py).
+Formal OSCAL validation uses `jsonschema[format]` and `regex`; format dependencies
+enforce timestamps and URIs, and `regex` supports Unicode patterns in the NIST schemas.
+`compliance-trestle` is not used.
+Install dependencies before disconnecting from the network.
+
+### Offline and strict passes
+
+For the full offline pass, provide the original corpus separately:
+
+```sh
+export TFG_CORPORA=/absolute/path/to/tfg-automated-assessments
+python tools/verify.py --all --offline
 ```
 
-`node tools/pagecheck.js` runs behind `--pages` and can be run alone, including
-against one page: `node tools/pagecheck.js six-questions.html`.
+`TFG_CORPORA` overrides `corpora_root` in
+[tools/manifest.yaml](tools/manifest.yaml). Preserve the original directory
+layout and complete corpus, not just the files linked from the site.
+`--offline` prevents verifier network access; it does not replace or waive
+source checks. Network-dependent checks report `SKIP`, separately from `PASS`
+and `FAIL`. **An offline pass is not proof of strict verification.**
 
-**In CI**, `--strict` treats every skip as a failure on a runner with network
-access and validators. See `.github/workflows/verify-2026-08-hardening-guidance.yml`
-at the repository root.
+With the same corpus configured and network access available, run every check
+with every skip treated as a failure:
 
-### What needs network
+```sh
+npm install --no-save axe-core puppeteer
+python tools/verify.py --all --strict
+```
 
-| Check | Needs | Command |
-|---|---|---|
-| `--schema`, second half | The published NIST 1.2.1 schemas | `curl` the schema, compare each stored fragment |
-| `--conformance` | An OSCAL validator | `pip install compliance-trestle` |
-| `--a11y`, second half | axe-core and a headless browser | `npm install --no-save axe-core puppeteer` |
-| `--links`, external half | External link targets | `curl -o /dev/null -w '%{http_code}'` per link |
+| Check | Additional requirement for strict verification |
+|---|---|
+| `--schema`, `--conformance` | Published NIST OSCAL 1.2.1 schemas; `jsonschema` and `regex` installed above |
+| `--a11y` | axe-core and Puppeteer's headless browser |
+| `--links` | Reachable external link targets |
+| `--criteria`, `--questions` | Original pre-read and position-paper DOCX documents in the corpus root |
+
+Schema downloads use the pinned NIST 1.2.1 release assets, not generated-file
+paths absent from the source tag. Refresh full schema evidence explicitly with
+`python tools/schema_evidence.py assessment-subject by-component metadata`, then
+regenerate the bundle. Do not rewrite published OSCAL examples to make validation pass.
+
+The full `--all` pass retains extraction, corpus statistics, source inventory,
+scenario, example, schema and conformance checks alongside structural checks.
+Individual flags select checks for diagnosis; they do not replace the full pass.
+
+### Source blockers
+
+Strict verification requires the original pre-read and position-paper DOCX files,
+which are absent from the available local corpus. The published assessment plans
+also contain four schema failures: the Maester and ScubaGear plans omit required
+`subjects` on associated activities; Windows Server 2019 and 2022 activity titles
+contain line breaks rejected by OSCAL 1.2.1. The verifier reports these failures.
+Original source files and provenance hashes must not be edited to bypass them.
+
+### Required CI source configuration
+
+The [verification workflow](../../../.github/workflows/verify-2026-08-hardening-guidance.yml)
+requires two repository **Actions variables**:
+
+| Variable | Required value |
+|---|---|
+| `TFG_CORPORA_REPOSITORY` | `owner/repository` containing the authorized, complete original corpus in the expected layout |
+| `TFG_CORPORA_REF` | The full 40-character commit SHA of that corpus snapshot; not a branch or tag |
+
+The former hard-coded `OSCAL-Foundation/tfg-automated-assessments` repository
+does not exist. There is no default replacement. The configured repository must
+be public or otherwise readable with the workflow's read-only `github.token`
+(`contents: read`). Checkout does not persist credentials. **Cross-repository
+private-repository authentication is not configured**; no additional secret is
+assumed. Possessing a local corpus does not authorize publishing or uploading it.
+
+Both jobs run banner tests, verifier unit tests and the corpus-independent
+offline subset before the source configuration gate. Missing or invalid
+variables fail that gate explicitly. Checkout failure is fatal. The next gate
+checks the resolved commit and every manifest source for a nonempty file; an
+empty or `.git`-only directory cannot qualify. The later `--all` pass verifies
+the remaining corpus content, and strict verification cannot pass without it.
+
+After the full offline pass, CI regenerates outputs in dependency order and
+requires a byte-identical Git diff, including
+[assets/bundle.js](assets/bundle.js), data, diagrams and generated pages.
+**An authorized, readable full-corpus repository and pinned commit remain
+external prerequisites; unconfigured source checks fail rather than skip.**
 
 ## How the content is produced
 

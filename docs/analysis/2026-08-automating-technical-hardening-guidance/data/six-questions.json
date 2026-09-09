@@ -47,7 +47,7 @@
     {
       "number": "1",
       "key": "rule",
-      "name": "The rule",
+      "name": "What the rule requires",
       "question": "What condition must hold, and where is the requirement defined?",
       "why_separate": "A technology-specific requirement defines one testable condition. Under pre-read settled item 7, the rule definition declares parameter options and a default.",
       "optional": false,

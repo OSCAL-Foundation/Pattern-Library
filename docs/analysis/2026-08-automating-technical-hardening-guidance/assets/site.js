@@ -555,6 +555,9 @@
     body.appendChild(bar);
 
     var pre = document.createElement("pre");
+    pre.setAttribute("tabindex", "0");
+    pre.setAttribute("role", "region");
+    pre.setAttribute("aria-label", b.title || "JSON example");
     var code = document.createElement("code");
     code.innerHTML = litLines(b);
     pre.appendChild(code);
@@ -682,6 +685,9 @@
       body.appendChild(bar);
 
       var pre = document.createElement("pre");
+      pre.setAttribute("tabindex", "0");
+      pre.setAttribute("role", "region");
+      pre.setAttribute("aria-label", s.title || "Source extract");
       var code = document.createElement("code");
       code.innerHTML = window.TFGHighlight.highlight(s.content, s.language);
       pre.appendChild(code);

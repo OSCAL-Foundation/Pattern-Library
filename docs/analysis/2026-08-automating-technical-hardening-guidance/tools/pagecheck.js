@@ -564,6 +564,12 @@ async function checkPage(file) {
         unwired.length === 0, JSON.stringify(unwired));
 
   /* Every snippet named on the page exists and rendered. */
+  doc.querySelectorAll(".snippet__body pre").forEach((pre, index) => {
+    check(`${name}: scrollable extract ${index + 1} is keyboard accessible`,
+          pre.getAttribute("tabindex") === "0"
+          && pre.getAttribute("role") === "region"
+          && Boolean(pre.getAttribute("aria-label")));
+  });
   const snippets = doc.querySelectorAll("[data-snippet]");
   snippets.forEach((s) => {
     const id = s.getAttribute("data-snippet");

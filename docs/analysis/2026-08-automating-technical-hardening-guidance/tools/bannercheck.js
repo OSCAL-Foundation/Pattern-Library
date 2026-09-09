@@ -177,7 +177,9 @@ test("missing banner is harmless and does not fetch status", async () => {
 test("compact styling hides ineligible banners without layout space", () => {
   const css = read(path.join(analysis, "assets/site.css"));
   assert.match(css, /\.wip-banner\[hidden\].*display: none/);
-  assert.match(css, /background: #FFEB00; color: #12161C/);
+  assert.match(css, /background: var\(--wip-bg\); color: var\(--wip-fg\)/);
+  assert.match(css, /--wip-bg:\s*#FFEB00/);
+  assert.match(css, /--wip-fg:\s*#12161C/);
   assert.match(css, /min-height: 2\.25rem/);
 });
 

@@ -194,6 +194,11 @@ def corpora_root() -> str:
     )
 
 
+def source_path(*parts: str) -> str:
+    """Resolve a source file or glob against the configured corpus directory."""
+    return os.path.join(corpora_root(), *parts)
+
+
 def extract_one(entry: dict, corpora_root: str) -> dict:
     sid = entry["id"]
     src_rel = entry["source"]
