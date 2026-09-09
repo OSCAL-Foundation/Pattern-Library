@@ -35,7 +35,7 @@ TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.dirname(TOOLS_DIR)
 DATA = os.path.join(SITE_ROOT, "data")
 
-#  The pre-read's option-letter order, A then B then C, which is the order the
+#  The option-letter order, A then B then C, which is the order the
 #  rest of the site uses: assets/site.js orders every JS-rendered block by it
 #  and tools/pagecheck.js asserts it.
 #

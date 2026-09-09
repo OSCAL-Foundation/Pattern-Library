@@ -11,10 +11,10 @@ Usage:
     python tools/verify.py --css        colour lives only in the token block
     python tools/verify.py --a11y       contrast, and the two palette rules
     python tools/verify.py --diagrams   structure, colour, geometry, grayscale
-    python tools/verify.py --quotes     retained provenance is not rendered
-    python tools/verify.py --criteria   fifteen source criteria and valid mappings
+    python tools/verify.py --quotes     no quotation hooks or background attribution
+    python tools/verify.py --criteria   fifteen analysis criteria and valid mappings
     python tools/verify.py --matrix     every answer-matrix cell resolves
-    python tools/verify.py --questions  source wording and stable question identifiers
+    python tools/verify.py --questions  editorial questions and stable identifiers
     python tools/verify.py --appendix   equal counts and every denominator
     python tools/verify.py --links      every internal href and anchor resolves
     python tools/verify.py --pages      run each page and inspect the result
@@ -156,10 +156,9 @@ def walk_keys(node, wanted: str, count: int = 0) -> int:
 def check_snippets() -> None:
     print("\n[snippets] re-extract and diff")
     entries = ex.load_manifest()["snippets"]
-    supported = {"json", "markdown", "text"}
-    check("the manifest declares JSON or text extracts",
-          bool(entries) and all(e.get("language", "json") in supported
-                                for e in entries))
+    check("the manifest references only OSCAL JSON examples",
+          bool(entries) and all(e.get("language", "json") == "json"
+                                and e["source"].endswith(".json") for e in entries))
     drift = []
     for entry in entries:
         sid = entry["id"]
@@ -893,20 +892,6 @@ def check_stats() -> None:
     extra = set(actual) - set(declared)
     check("no recomputed stat is missing from corpus-stats.json", not extra, str(sorted(extra)))
 
-    # Preserve the position paper's cited figures separately from corpus counts.
-    scale = doc.get("cited_from_position_paper", {})
-    values = {k: scale.get(k) for k in
-              ("regulatory_controls", "benchmark_requirements", "combined")}
-    valid = all(type(v) is int and v > 0 for v in values.values())
-    check("the position paper declares three positive integer counts", valid, str(values))
-    if valid:
-        check("the cited combined scale is the sum of its parts",
-              values["combined"] == values["regulatory_controls"]
-              + values["benchmark_requirements"], str(values))
-    check("cited scale is separate from recomputed statistics",
-          not (set(values) & set(declared)))
-    check("the scale retains its source attribution", bool(scale.get("source")))
-
     #  A derivation is the sentence that tells a reader how to reproduce the
     #  figure, and being prose, nothing checked it. Six of them went on saying
     #  the corpus held fourteen plans for as long as it held fifteen, and one
@@ -1576,9 +1561,11 @@ DATA_QUOTE = re.compile(
 PRE_BLOCK = re.compile(r"<pre\b", re.I)
 LONG_DASH = re.compile("[—–]")
 
-QUOTE_KEYS = {"quote", "quotes", "settled_quote", "supporting_quotes"}
-PREREAD = "Hardening-Guidance-Options-Comparison.docx"
-POSITION_PAPER = "Technology_Specific_Hardening_Guidance_in_OSCAL.docx"
+EDITORIAL_REFERENCE_KEYS = {
+    "quote", "quotes", "quote_id", "settled_quote", "supporting_quotes",
+    "advocate", "speaker", "source_document", "source_status", "raised_by", "verbatim",
+}
+BACKGROUND_FORMAT = re.compile(r"\.(?:docx|pptx)\b", re.IGNORECASE)
 
 
 def _pages() -> list[str]:
@@ -1586,61 +1573,36 @@ def _pages() -> list[str]:
     return sorted(glob.glob(os.path.join(SITE_ROOT, "*.html")))
 
 
-def _collect_quote_refs(node, out: set) -> None:
+def editorial_reference_paths(node, path: str = "$") -> list[str]:
+    """Find background attribution in editorial data, not in OSCAL evidence."""
+    found = []
     if isinstance(node, dict):
-        for k, v in node.items():
-            if k in QUOTE_KEYS:
-                if isinstance(v, str):
-                    out.add(v)
-                elif isinstance(v, list):
-                    out.update(x for x in v if isinstance(x, str))
-            _collect_quote_refs(v, out)
+        for key, value in node.items():
+            child = f"{path}/{key}"
+            if key in EDITORIAL_REFERENCE_KEYS:
+                found.append(child)
+            found.extend(editorial_reference_paths(value, child))
     elif isinstance(node, list):
-        for v in node:
-            _collect_quote_refs(v, out)
+        for index, value in enumerate(node):
+            found.extend(editorial_reference_paths(value, f"{path}/{index}"))
+    elif isinstance(node, str) and BACKGROUND_FORMAT.search(node):
+        found.append(path)
+    return found
 
 
 def _check_editorial_data() -> None:
-    """Keep source attribution without feeding quotations to rendered pages."""
-    archive = json.load(open(os.path.join(DATA, "quotes.json"), encoding="utf-8"))
-    ids = {q["id"] for q in archive["quotes"]}
-    check("data/quotes.json is retained as provenance", bool(ids))
-    check("the quotation archive is explicitly not rendered",
-          "no longer rendered" in archive.get("note", "").lower())
-    for blob in sorted(glob.glob(os.path.join(DATA, "*.json"))):
-        if os.path.basename(blob) == "quotes.json":
-            continue
-        node = json.load(open(blob, encoding="utf-8"))
-        refs: set[str] = set()
-        _collect_quote_refs(node, refs)
-        if refs:
-            check(f"{os.path.basename(blob)}: quotation references resolve",
-                  refs <= ids, str(sorted(refs - ids)))
-            check(f"{os.path.basename(blob)}: retained references are not rendered",
-                  "not rendered" in node.get("note", "").lower())
-
-
-def _docx_or_skip(rel: str, what: str):
-    import zipfile
-    from xml.etree import ElementTree as ET
-
-    path = ex.source_path(rel)
-    if not os.path.isfile(path):
-        skip(what, f"source document is missing: {path}",
-             "set TFG_CORPORA to the original source corpus")
-        return None
-    with zipfile.ZipFile(path) as doc:
-        root = ET.fromstring(doc.read("word/document.xml"))
-    ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
-    return "\n".join("".join(p.itertext()) for p in root.findall(".//w:p", ns))
+    """Criteria and questions are analysis content, not document reproductions."""
+    for name in ("criteria.json", "questions.json", "views.json", "glossary.json",
+                 "six-questions.json"):
+        with open(os.path.join(DATA, name), encoding="utf-8") as stream:
+            found = editorial_reference_paths(json.load(stream))
+        check(f"{name}: no background document attribution", not found, str(found))
 
 
 def check_quotes() -> None:
-    """Provenance stays archived; pages carry no quotation hooks or names."""
-    print("\n[quotes] retained provenance is not rendered")
+    """Keep editorial pages free of quotation hooks and background attribution."""
+    print("\n[quotes] no background attribution or quotation hooks")
     _check_editorial_data()
-    archive = json.load(open(os.path.join(DATA, "quotes.json"), encoding="utf-8"))
-    people = {q["speaker"] for q in archive["quotes"] if q.get("speaker")}
     pages = _pages()
     check("there are pages to check", bool(pages))
     for path in pages:
@@ -1650,8 +1612,8 @@ def check_quotes() -> None:
               str(len(BLOCKQUOTE.findall(html))))
         check(f"{name}: carries no quotation or attribution hook", not DATA_QUOTE.search(html),
               str(DATA_QUOTE.findall(html)[:3]))
-        check(f"{name}: names no person from the quotation archive",
-              not any(person in html for person in people))
+        background = BACKGROUND_FORMAT.search(html)
+        check(f"{name}: no background document reference", background is None)
         check(f"{name}: no hand-typed code block", not PRE_BLOCK.search(html))
         check(f"{name}: uses no long dash", not LONG_DASH.search(html),
               str(LONG_DASH.findall(html)[:3]))
@@ -1662,14 +1624,12 @@ def check_quotes() -> None:
 # --------------------------------------------------------------------------- #
 
 def check_criteria() -> None:
-    """Preserve the working group's criteria verbatim and validate mappings."""
-    print("\n[criteria] source wording and question mappings")
+    """Validate the analysis criteria and their question mappings."""
+    print("\n[criteria] analysis criteria and question mappings")
     crit = json.load(open(os.path.join(DATA, "criteria.json"), encoding="utf-8"))
     anat = json.load(open(os.path.join(DATA, "six-questions.json"), encoding="utf-8"))
     slots = {s["number"] for s in anat["slots"]}
-    pre = _docx_or_skip(PREREAD, "criteria match the pre-read")
-    check("criteria retain source attribution", PREREAD in crit.get("source", ""))
-    check("criteria are labelled unchanged", "unchanged" in crit.get("source_status", ""))
+    check("criteria carry no background attribution", not editorial_reference_paths(crit))
     rows = crit["criteria"]
     check("exactly fifteen criteria in criteria.json", len(rows) == 15, str(len(rows)))
     check("numbered 1 to 15 with no gap and no repeat",
@@ -1678,12 +1638,6 @@ def check_criteria() -> None:
     check("criterion names are nonempty and unique",
           all(names) and len(names) == len(set(names)))
     for c in rows:
-        if pre is not None:
-            check(f"criterion {c['number']}: question matches the source",
-                  c["question"] in pre, c["question"])
-            check(f"criterion {c['number']}: name matches the source", c["name"] in pre)
-            check(f"criterion {c['number']}: attribution matches the source",
-                  bool(c.get("raised_by")) and all(w in pre for w in c["raised_by"]))
         question = c.get("question", "")
         check(f"criterion {c['number']}: asks a meaningful question",
               isinstance(question, str) and len(question.split()) >= 4
@@ -2089,18 +2043,12 @@ def _words(text: str) -> int:
 def check_questions() -> None:
     """Four sections of editorial questions, with stable ids and reasoning."""
     print("\n[questions] editorial content and stable question identifiers")
-    q = json.load(open(os.path.join(DATA, "questions.json"), encoding="utf-8"))
-    paper = _docx_or_skip(POSITION_PAPER, "reproduced questions match the position paper")
-    proposal_path = ex.source_path("IBM", "Automated-assessment.md")
-    proposal = _text(proposal_path) if os.path.isfile(proposal_path) else None
-    if proposal is None:
-        skip("reproduced questions match the component proposal",
-             f"source document is missing: {proposal_path}")
-
+    with open(os.path.join(DATA, "questions.json"), encoding="utf-8") as stream:
+        q = json.load(stream)
+    with open(os.path.join(DATA, "six-questions.json"), encoding="utf-8") as stream:
+        approaches = [a["key"] for a in json.load(stream)["approaches"]]
+    check("questions carry no background attribution", not editorial_reference_paths(q))
     secs = q["sections"]
-    approaches = [a["key"] for a in json.load(
-        open(os.path.join(DATA, "six-questions.json"),
-             encoding="utf-8"))["approaches"]]
     check("four sections: one across the three, then one each",
           [s["key"] for s in secs] == ["all"] + approaches,
           str([s["key"] for s in secs]))
@@ -2108,7 +2056,6 @@ def check_questions() -> None:
         check(f"{s['key']}: is labelled and introduced",
               bool(s.get("label")) and len(s.get("intro", "").split()) >= 8)
         check(f"{s['key']}: carries at least one question", bool(s["questions"]))
-
     every = [x for s in secs for x in s["questions"]]
     check("no question appears twice", len(every) == len({x["id"] for x in every}),
           str(len(every)))
@@ -2121,28 +2068,18 @@ def check_questions() -> None:
         check(f"{where}: asks a meaningful question",
               isinstance(question, str) and len(question.split()) >= 4
               and any(ch.isalpha() for ch in question))
-        if x.get("verbatim"):
-            source = paper if x["verbatim"].startswith("the position paper") else proposal
-            if source is not None:
-                check(f"{where}: reproduced wording matches the source",
-                      " ".join(question.split()) in " ".join(source.split()), question)
-        else:
-            check(f"{where}: is asked as a question",
-                  isinstance(question, str) and question.rstrip().endswith("?"))
+        is_question = isinstance(question, str) and question.rstrip().endswith("?")
+        check(f"{where}: is asked as a question", is_question)
         check(f"{where}: says why it is open, in a paragraph",
               isinstance(reason, str) and 20 <= len(reason.split()) <= 90,
               f"{len(reason.split()) if isinstance(reason, str) else 0} words")
-
-    # Historical-looking ids are stable site anchors, not source attributions.
-    # Removing their metadata must not delete the questions themselves.
+    # IDs remain stable so existing deep links continue to resolve.
     required = {
         "all": {"xccdf", "rule-metadata", "remediation"},
-        "catalog-first": {"one-ssp", "requirement-level", "control-type",
-                          "paper-cat-1", "paper-cat-2"},
-        "component-first": {"which-cdef-maps", "proposal-1", "proposal-2",
-                            "proposal-3", "proposal-4", "paper-comp-1",
-                            "paper-comp-2", "paper-comp-3", "paper-comp-4",
-                            "paper-comp-5"},
+        "catalog-first": {"one-ssp", "requirement-level", "control-type", "paper-cat-1", "paper-cat-2"},
+        "component-first": {"which-cdef-maps", "proposal-1", "proposal-2", "proposal-3",
+                            "proposal-4", "paper-comp-1", "paper-comp-2", "paper-comp-3",
+                            "paper-comp-4", "paper-comp-5"},
         "assessment-first": {"paper-ap-1"},
     }
     for key, expected in required.items():
@@ -3125,8 +3062,6 @@ def check_tradeoffs() -> None:
     approaches = {a["key"] for a in sq["approaches"]}
     stats = json.load(open(os.path.join(DATA, "corpus-stats.json"), encoding="utf-8"))
     stat_keys = {x["key"] for x in stats["stats"]}
-    scale_keys = {k for k, v in stats["cited_from_position_paper"].items()
-                  if type(v) is int}
 
     check("the block covers every approach and nothing else",
           set(tr["approaches"]) == approaches,
@@ -3157,14 +3092,12 @@ def check_tradeoffs() -> None:
             for frag in e.get("schema_evidence", []):
                 check(f"{where}: rests on a schema fragment that exists",
                       os.path.isfile(os.path.join(EVIDENCE, f"{frag}.json")), frag)
-            # Recomputed figures and editorial scale examples stay distinct.
-            # A key that is neither renders an empty span on the page.
+            # Only recomputed statistics may feed a figure on the page.
             for k in re.findall(r'data-stat="([^"]+)"', e["body"]):
                 check(f"{where}: data-stat {k} is a real statistic",
                       k in stat_keys, k)
-            for k in re.findall(r'data-cited="([^"]+)"', e["body"]):
-                check(f"{where}: data-cited {k} is a declared illustrative scale",
-                    k in scale_keys, k)
+            check(f"{where}: uses no external scale citation",
+                  'data-cited=' not in e["body"])
 
     #  The counts are no longer held equal, so what is checked is length rather
     #  than shape: an approach can have four risks where another has three, and

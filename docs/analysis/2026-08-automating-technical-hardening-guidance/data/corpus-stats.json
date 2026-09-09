@@ -422,12 +422,5 @@
       "label": "assessment plans using step-type at all",
       "derivation": "count of Easy Dynamics assessment plan files whose text contains the key \"step-type\""
     }
-  ],
-  "cited_from_position_paper": {
-    "note": "These three figures are NOT computed from the corpora. They come from Technology_Specific_Hardening_Guidance_in_OSCAL.docx, an Easy Dynamics position paper, and must be attributed as such at every appearance per editorial rule 10.",
-    "regulatory_controls": 304,
-    "benchmark_requirements": 563,
-    "combined": 867,
-    "source": "Technology_Specific_Hardening_Guidance_in_OSCAL.docx, Easy Dynamics position paper"
-  }
+  ]
 }

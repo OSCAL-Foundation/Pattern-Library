@@ -1,6 +1,6 @@
 {
-  "note": "Three interpretations of a hardening rule, ordered by OSCAL layer rather than rank. The analysis uses a working definition without selecting an interpretation. Each view links to a stakeholder glossary term. The advocate and quote fields retain provenance and are not rendered, following the Gate 7 decision.",
-  "why_this_matters": "Pre-read criterion 3 identifies the absence of an OSCAL requirement-level field. The gap affects every approach; model placement has become a proxy for whether authors treat guidance as requirements, capabilities or assessment procedures.",
+  "note": "Three editorial interpretations of a hardening rule, ordered by OSCAL layer rather than rank. The analysis uses a working definition without selecting an interpretation. Each view links to a stakeholder glossary term.",
+  "why_this_matters": "OSCAL has no dedicated core requirement-level field distinguishing shall, should and may. The gap affects every approach; model placement alone cannot establish whether guidance expresses requirements, capabilities or assessment procedures.",
   "views": [
     {
       "key": "requirement",
@@ -9,12 +9,7 @@
       "stakeholder": "publisher",
       "implies_layer": "Control",
       "implies_model": "catalog",
-      "aligned_approach": "catalog-first",
-      "advocate": "Fritz Kunstler, AWS",
-      "quote": "fritz-standard-setter",
-      "supporting_quotes": [
-        "fritz-catalogs-for-requirements"
-      ]
+      "aligned_approach": "catalog-first"
     },
     {
       "key": "capability",
@@ -23,13 +18,7 @@
       "stakeholder": "implementer",
       "implies_layer": "Implementation",
       "implies_model": "component-definition",
-      "aligned_approach": "component-first",
-      "advocate": "Anca Sailer and Vikas Agarwal, IBM",
-      "quote": "deck-may-be-configured",
-      "supporting_quotes": [
-        "fritz-possible-state",
-        "vikas-cdef-automation"
-      ]
+      "aligned_approach": "component-first"
     },
     {
       "key": "procedure",
@@ -38,17 +27,11 @@
       "stakeholder": "assessor",
       "implies_layer": "Assessment",
       "implies_model": "assessment-plan",
-      "aligned_approach": "assessment-first",
-      "advocate": "Easy Dynamics",
-      "quote": "pranav-assessment-start",
-      "supporting_quotes": [
-        "dave-as-intended"
-      ]
+      "aligned_approach": "assessment-first"
     }
   ],
   "crux": {
-    "quote": "brian-not-normative",
-    "note": "Brian Ruf's objection applies to any option, not only to the one it was raised against."
+    "note": "Model placement alone does not establish whether guidance is binding. Every approach needs a way to distinguish requirements from optional configurations or assessment procedures."
   },
   "automation_argument": {
     "claim": "The automation argument treats applying and verifying hardening guidance as operational work, not just a finer-grained form of regulatory control. Automation coverage varies across the published guides.",

@@ -9,7 +9,7 @@
  *   copy to clipboard
  *   glossary cards, keyboard reachable, Escape to dismiss
  *   answer strips, from data/six-questions.json
- *   quotes, from data/quotes.json
+ *   editorial open questions, from data/questions.json
  *   tab groups
  *   matrix cell expansion
  *
@@ -712,10 +712,8 @@
      different header.                                                        */
 
 
-  /* Quotations were removed from the whole site at Gate 7. Characterizations
-     now trace to a JSON pointer into a shipped file, or to a cited source
-     document named without a speaker. data/quotes.json is retained as
-     provenance and is not read by anything here.                            */
+    /* Characterizations trace to OSCAL JSON pointers or published schema
+      fragments. Criteria and open questions are editorial analysis content. */
 
   /* ---------------------------------------------------------- answer strip
      <div class="slot-strip" data-strip="catalog-first" data-size="lg"></div> */
@@ -961,10 +959,8 @@
      that repeats once per approach is a loop over one list in one order, so
      equal budget is a property of the code rather than a thing to remember. */
 
-  /* The order the working group's pre-read puts the three in. The site no
-     longer shows the letters, but the order is still theirs rather than ours,
-     which is the point. One list, read by every renderer, so no component can
-     order the three differently from another. */
+    /* Option-letter order: A, B, C. One list, read by every renderer, so no
+      component can order the three differently from another. */
   var OPTION_ORDER = ["catalog-first", "component-first", "assessment-first"];
 
   function el(tag, cls, text) {
@@ -975,7 +971,7 @@
   }
 
   function approachOrder(sixQuestions) {
-    /* The pre-read's order, stated on every page that uses it.
+    /* The option-letter order used throughout the site.
        Ordering here rather than trusting the file's order means a reordered
        data file cannot quietly reorder the site. */
     return OPTION_ORDER.map(function (k) {
@@ -1268,17 +1264,9 @@
   /* --- a criterion, verbatim: <p data-criterion="3"></p> ----------------- */
 
 
-  /* ------------------------------------- one criterion, quoted verbatim:
-     <p data-criterion="3"></p>
-
-     data/criteria.json holds the questions, reproduced from the pre-read's
-     section 6 unchanged. The table that answered them per approach lived on the
-     comparison page and went with it; one page still quotes a single criterion,
-     which is why the reproduction is still here. What follows was read out
-     of the published files. Nothing here authors a criterion and nothing here
-     scores one: a cell either points at a file, says the files are silent, or
-     hands the question back to the record. The three states are declared in
-     the data file so a fourth cannot be invented in markup. */
+    /* data/criteria.json holds editorial evaluation criteria. Answers are
+      grounded in OSCAL examples and schema evidence, with unresolved questions
+      stated explicitly rather than scored by the runtime. */
 
   var fillSeq = 0;
 
@@ -1449,83 +1437,6 @@
 
 
 
-
-
-  /* ============================================================ questions.html
-     Everything below renders from data/questions.json. The eleven register
-     items, the ten position-paper questions and the two sides of the
-     mapping-item question are all reproduced from source documents, so they
-     live in data where tools/verify.py --questions can read the documents and
-     assert that the reproduction is faithful. None of it is written into
-     markup. */
-
-  function sourceLine(text) {
-    var p = el("p", "small muted");
-    p.appendChild(el("span", "path", text));
-    return p;
-  }
-
-  /* --- the evidence register: <div data-register></div> ------------------- */
-
-  function registerStateEl(reg, key) {
-    var st = reg.states.filter(function (s) { return s.key === key; })[0];
-    var span = el("span", "register__state register__state--" + key,
-      st ? st.label : key);
-    if (st) span.title = st.meaning;
-    return span;
-  }
-
-
-  /* --- one register item, inline: <div data-register-item="8"></div> ------ */
-
-
-  /* --- a framed question: <div data-question="requirement-level"></div> --- */
-
-  function framedById(q, id) {
-    return q.framed.filter(function (f) { return f.id === id; })[0];
-  }
-
-
-  /* --- the two sides, at one width: <div data-question-sides="..."></div> -
-     Plan section 4.7 requires the case and the counter-argument at the same
-     length. They are laid out in two columns of equal width so that neither
-     can look longer than the other, and tools/verify.py --questions holds
-     their word counts inside the same fifteen per cent the approach pages
-     use for their two boxes. */
-
-
-  /* --- one field of a framed question: <p data-question-part="..."></p> --- */
-
-
-  /* --- the position paper's questions: <div data-position-questions></div> */
-
-
-  /* --- the proposal's own questions: <div data-proposal-questions></div> -- */
-
-
-  /* --- the prior question: <div data-xccdf></div> ------------------------- */
-
-
-  /* --- capability: <div data-discussion2></div> --------------------------- */
-
-  function renderDiscussion2(node) {
-    load("questions.json").then(function (d) {
-      var x = d.discussion_2;
-      node.textContent = "";
-      x.sentences.forEach(function (s) { node.appendChild(el("p", null, s)); });
-      var p = el("p");
-      var a = el("a", null, x.link_text);
-      a.href = x.url;
-      a.rel = "noopener";
-      p.appendChild(a);
-      node.appendChild(p);
-    }).catch(function () { fail(node, "questions.json could not be loaded."); });
-  }
-
-  /* --- what would settle this: <div data-settle></div> -------------------- */
-
-
-  /* --- how to contribute: <div data-contribute></div> --------------------- */
 
 
   /* =============================================================== index.html
@@ -2013,15 +1924,8 @@
      Four sections, one across all three approaches and one per approach, each
      a list of single-line questions that open into the reasoning behind them.
 
-     The page was twelve sections of prose: a reproduced evidence register, six
-     questions each with its own headings and sub-headings, two reproduced
-     lists, and blocks on what would settle the disagreement and how to
-     contribute. A reader looking for what is unresolved read an essay. This is
-     the same content as a list you can scan and open.
-
-     A question reproduced from a source document keeps that document's
-     wording, including its errors, and says where it came from. Rewriting
-     someone else's question is a way of answering it. */
+      Questions and explanations are editorial analysis content in
+      data/questions.json. Stable ids keep each question addressable. */
   function renderOpenQuestions(node) {
     load("questions.json").then(function (d) {
       node.textContent = "";
@@ -2043,14 +1947,9 @@
           det.id = "q-" + q.id;
           var sum = document.createElement("summary");
           sum.appendChild(el("span", "oq__q", q.q));
-          if (q.verbatim) sum.appendChild(el("span", "oq__src", "as asked"));
           det.appendChild(sum);
           var body = el("div", "oq__why");
           body.appendChild(el("p", null, q.why));
-          if (q.verbatim) {
-            body.appendChild(el("p", "oq__from",
-              "Reproduced from " + q.verbatim + ", in its own words."));
-          }
           det.appendChild(body);
           wrap.appendChild(det);
         });
@@ -2093,7 +1992,6 @@
       b.setAttribute("aria-describedby", "dfn-card");
     });
     document.querySelectorAll("[data-question-list]").forEach(renderQuestionList);
-    document.querySelectorAll("[data-discussion2]").forEach(renderDiscussion2);
     document.querySelectorAll("[data-approach-cards]").forEach(renderApproachCards);
     document.querySelectorAll("[data-sources]").forEach(renderSources);
     document.querySelectorAll("[data-answers-legend]").forEach(renderAnswersLegend);

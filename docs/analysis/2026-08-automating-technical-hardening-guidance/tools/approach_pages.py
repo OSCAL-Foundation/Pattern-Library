@@ -25,7 +25,7 @@ What a page supplies:
 Gate 7 removed quotations and proponent attribution from the whole site. No
 personal name and no proponent organization appears on any page. An approach is
 named by its structural name. Characterizations trace to a JSON pointer into a
-shipped file, or to a cited source document.
+shipped OSCAL file or a published OSCAL schema fragment.
 
 Usage:
     python tools/approach_pages.py
@@ -159,8 +159,8 @@ NAV = [("index.html", "Start here"),
 #  Tradeoffs open the page. They used to be section 6, two boxes at the foot,
 #  which meant a reader met a thousand words of description before being told
 #  what the thing is good and bad at. The section that carried them is gone
-#  rather than duplicated, and what the pre-read recorded and the two papers do
-#  not is carried inside the new block as one line per approach.
+#  rather than duplicated; each approach's tradeoffs come from the same
+#  editorial data structure.
 #  No figures on these pages. The site describes one scenario, on the page built
 #  for it, and every count belongs there: a number quoted here would be a second
 #  scenario, implied and unstated. What an approach page carries is the shape of
@@ -652,8 +652,6 @@ def run(outdir: str, quiet: bool = False, force: bool = False) -> dict[str, int]
     tradeoffs = load("tradeoffs.json")
     stakeholders = load("stakeholders.json")
     joins = load("joins.json")
-    people = sorted({q["speaker"] for q in load("quotes.json")["quotes"]
-                     if q.get("speaker")})
 
     nav = "\n".join(f'        <li><a href="./{h}">{t}</a></li>' for h, t in NAV)
     counts, files = {}, {}
@@ -664,14 +662,9 @@ def run(outdir: str, quiet: bool = False, force: bool = False) -> dict[str, int]
                      joins)
         text = re.sub(r"<[^>]+>", " ", main)
 
-        #  Gate 7: no quotations anywhere, and no personal name. The name list
-        #  is taken from quotes.json, which is retained as provenance precisely
-        #  so that this check knows who must not appear.
+        #  Approach prose carries no quotation hooks or proponent attribution.
         if "blockquote" in main or "data-quote" in main:
             raise AssertionError(f"{key}: the site carries no quotations")
-        named = [n for n in people if n in text]
-        if named:
-            raise AssertionError(f"{key}: names a person: {named}")
         for org in ("Easy Dynamics", "IBM"):
             #  File paths carry the organization and are provenance. Prose must
             #  not. A path is always inside a snippet header, which is rendered

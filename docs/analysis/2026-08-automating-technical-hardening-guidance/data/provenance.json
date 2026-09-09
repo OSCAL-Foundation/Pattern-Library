@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-22T18:46:12+00:00",
+  "generated_at": "2026-09-09T20:12:50+00:00",
   "corpora_root": "../../tfg-automated-assessments",
-  "snippet_count": 34,
+  "snippet_count": 32,
   "snippets": [
     {
       "id": "ez-stig-activity-v259312",
@@ -340,32 +340,6 @@
       "sha256_of_source_file": "d5049e46d7a1251932be3e74c1f9bace606ac9b5f5542249ccb884171394a6e7",
       "sha256_of_content": "3b3b0c533e8fe9ebc892b5cdf0003bb265591ae3486e5d6317aa847480d88541",
       "extracted_at": "2026-08-20T22:38:41+00:00"
-    },
-    {
-      "id": "ibm-rules-md",
-      "slot": "meta",
-      "approach": "component-first",
-      "title": "IBM's proposed rule and check assemblies",
-      "source": "IBM/Automated-assessment.md",
-      "pointer": "$",
-      "language": "markdown",
-      "bytes": 14934,
-      "sha256_of_source_file": "630c45450f3cea476cd9a7df7da1f49e22f854832907521656191714eb9bd57c",
-      "sha256_of_content": "799c42a95dae88268f20e09566342953a98c580bdda0cadf5197ebf4026d5e31",
-      "extracted_at": "2026-08-22T16:15:34+00:00"
-    },
-    {
-      "id": "ibm-open-questions",
-      "slot": "meta",
-      "approach": "component-first",
-      "title": "IBM's open questions",
-      "source": "IBM/Automated-assessment.md",
-      "pointer": "$",
-      "language": "markdown",
-      "bytes": 410,
-      "sha256_of_source_file": "630c45450f3cea476cd9a7df7da1f49e22f854832907521656191714eb9bd57c",
-      "sha256_of_content": "0a03c3d3f2910ae28141c1a2de1771455102cf284bfb78a790e88a82f3765eaa",
-      "extracted_at": "2026-08-22T16:15:34+00:00"
     },
     {
       "id": "ibm-cos-component",

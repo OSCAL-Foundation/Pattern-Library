@@ -1,5 +1,5 @@
 {
-  "note": "The six questions and answer matrix summarise the published evidence. tools/verify.py --matrix checks each cell against the published files. Notes cite source documents, not speakers; personal names and proponent organisations are not rendered.",
+  "note": "The six questions and answer matrix compare OSCAL JSON examples, including content using proposed assemblies. tools/verify.py --matrix checks each cell against the example files. Notes describe supported capabilities and unresolved questions.",
   "approaches": [
     {
       "key": "catalog-first",
@@ -49,7 +49,7 @@
       "key": "rule",
       "name": "What the rule requires",
       "question": "What condition must hold, and where is the requirement defined?",
-      "why_separate": "A technology-specific requirement defines one testable condition. Under pre-read settled item 7, the rule definition declares parameter options and a default.",
+      "why_separate": "A technology-specific requirement defines one testable condition. Parameter options and defaults belong with that definition where the selected model supports them.",
       "optional": false,
       "short": "Rule"
     },
@@ -103,7 +103,7 @@
       "key": "check",
       "name": "How the rule is tested",
       "question": "Which executable or procedure tests the rule?",
-      "why_separate": "A rule may have several checks, one per tool. Pre-read settled item 4 keeps executables outside OSCAL and references them. Settled item 5 separates rules from checks.",
+      "why_separate": "A rule may have several checks, one per tool. The examples separate rule definitions from checks and reference external executables rather than embedding code in OSCAL.",
       "optional": false,
       "short": "Check"
     },
@@ -115,7 +115,7 @@
       "why_separate": "The subject identifies the assessed host, inventory item, component or account. Criterion 8 addresses response fidelity.",
       "optional": false,
       "not_established": true,
-      "not_established_note": "Evidence register item 8: authoritative semantics for assessment platform versus asset versus component were to be posted to the NIST OSCAL team on 17 July. No response is in the record.",
+      "not_established_note": "The examples use assessment platforms, assets and components differently. A consistent distinction between the subject being assessed and the resources performing the assessment is not established here.",
       "short": "Subject"
     },
     {
@@ -126,7 +126,7 @@
       "why_separate": "The runner may be a validation component, assessment platform, tool or person. The method prop identifies examine, interview or test.",
       "optional": false,
       "not_established": true,
-      "not_established_note": "Same as question 4. Three approaches use six different subsets of assessment-assets, assessment-platforms, uses-components, validation components, origin actors, task-level props and the method prop.",
+      "not_established_note": "The same distinction remains open in question 4. The approaches use different combinations of assessment-assets, assessment-platforms, uses-components, validation components, origin actors, task-level props and the method prop.",
       "short": "Runner"
     },
     {
@@ -180,8 +180,7 @@
       "approach": "component-first",
       "state": "filled",
       "snippet_ids": [
-        "ibm-cos-component",
-        "ibm-rules-md"
+        "ibm-cos-component"
       ],
       "note": "The proposed rules assembly sits on the component alongside control-implementations.",
       "mechanisms": [
@@ -444,7 +443,7 @@
         "ibm-ap-task-subjects",
         "ibm-ar-observation"
       ],
-      "note": "The proposed schema records four open questions about runners, including how an assessment asset links to a task.",
+      "note": "The examples leave runner associations unresolved, including how an assessment asset links to a task or an observation.",
       "mechanisms": [
         "assembly",
         "proposed"
@@ -602,7 +601,7 @@
       "approach": "catalog-first",
       "state": "empty-absent",
       "snippet_ids": [],
-      "note": "The repository documentation lists compliance validation automation as a future consideration; no assessment results are published.",
+      "note": "No assessment results are published in the catalog-first OSCAL corpus.",
       "mechanisms": [
         "assembly"
       ],

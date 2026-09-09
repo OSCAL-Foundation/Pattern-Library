@@ -52,12 +52,12 @@ field names.
 ## The request that has not been sent
 
 Recorded here so that when it goes out, what was asked is on the record too. The
-norm is the pre-read's own: correct anything about your approach that is wrong.
+request is to correct anything about your approach that is wrong.
 
 > This site describes three published bodies of OSCAL content, including yours.
-> Everything on it is extracted from your published files at declared pointers
-> and can be re-derived with one command, but three things are judgements the
-> build cannot check, and they are the three worth your time.
+> Its extracts come from published OSCAL files at declared pointers and can be
+> re-derived. Encodings, criteria and open questions are maintained as analysis
+> content. Three judgements need review beyond the structural checks.
 >
 > First, section 7 of your approach's page states the case for it as its
 > proponents would state it. If that is not the case you would make, that is the

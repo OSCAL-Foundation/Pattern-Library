@@ -131,8 +131,6 @@ jobs:
           root = Path(os.environ["TFG_CORPORA"])
           manifest = yaml.safe_load(Path("tools/manifest.yaml").read_text(encoding="utf-8"))
           required = {entry["source"] for entry in manifest["snippets"]}
-          required.update({"Hardening-Guidance-Options-Comparison.docx",
-                           "Technology_Specific_Hardening_Guidance_in_OSCAL.docx"})
           if not required:
               sys.exit("::error::Source gate: the snippet manifest declares no source files.")
           missing = sorted(rel for rel in required
@@ -248,8 +246,6 @@ jobs:
           root = Path(os.environ["TFG_CORPORA"])
           manifest = yaml.safe_load(Path("tools/manifest.yaml").read_text(encoding="utf-8"))
           required = {entry["source"] for entry in manifest["snippets"]}
-          required.update({"Hardening-Guidance-Options-Comparison.docx",
-                           "Technology_Specific_Hardening_Guidance_in_OSCAL.docx"})
           if not required:
               sys.exit("::error::Source gate: the snippet manifest declares no source files.")
           missing = sorted(rel for rel in required

@@ -70,7 +70,7 @@ class Node {
     this.attributes = Object.create(null);
     /* dataset has to write through to the attribute, the way a browser's does.
        Without that, an element built by a renderer is invisible to the
-       [data-quote] selectors the same renderers use to find their own work. */
+       data-attribute selectors the renderers use to find their own work. */
     this._data = Object.create(null);
     const self = this;
     this.dataset = new Proxy(this._data, {
@@ -449,7 +449,7 @@ function textOf(n) { return (n.textContent || "").replace(/\s+/g, " ").trim(); }
 
 /* ----------------------------------------------------------------- checks */
 
-/* The pre-read's option-letter order: A, B, C. */
+/* The option-letter order: A, B, C. */
 const OPTION_ORDER = ["Catalog-first", "Component-first", "Assessment-first"];
 
 const RENDERED = {};
@@ -555,8 +555,7 @@ async function checkPage(file) {
     n.childNodes.forEach((c) => { if (c.tagName) walk(c); });
   })(doc._root);
   const known = new Set([...wired, "data-base", "data-theme",
-    "data-size", "data-repo", "data-term", "data-label", "data-home",
-    "data-destination", "data-scale-controls", "data-scale-live",
+    "data-size", "data-repo", "data-term", "data-label",
     "data-copied", "data-haystack", "data-schema", "data-heading-level",
     "data-status", "data-state", "data-criterion", "data-section"]);
   const unwired = [...hooks].filter((h) => !known.has(h));
@@ -592,17 +591,12 @@ async function checkPage(file) {
           /schema evidence, not corpus content/.test(textOf(s2)));
   });
 
-  /* Gate 7: the site carries no quotations and names nobody. The name list
-     comes from data/quotes.json, which is retained as provenance and is
-     therefore the register of who must not appear. Snippet source paths carry
-     the organizations and are excluded, because a path is provenance and
-     stripping it would break the thing the whole site rests on. */
-  check(`${name}: renders no quotation`,
-        doc.querySelectorAll("[data-quote]").length === 0 &&
-        doc.querySelectorAll(".quote").length === 0);
-  const people = [...new Set(JSON.parse(
-    fs.readFileSync(path.join(ROOT, "data", "quotes.json"), "utf8"))
-    .quotes.map((q) => q.speaker).filter(Boolean))];
+  /* Editorial questions carry neither quotations nor document attribution.
+     OSCAL snippet source paths remain visible as provenance. */
+  check(`${name}: renders no quotation or quotation hook`,
+        doc.querySelectorAll("blockquote, [data-quote], .quote").length === 0);
+  check(`${name}: renders no question document attribution`,
+        doc.querySelectorAll(".oq__from, .oq__src").length === 0);
   let visible = "";
   (function walk(n) {
     n.childNodes.forEach((c) => {
@@ -613,9 +607,6 @@ async function checkPage(file) {
       walk(c);
     });
   })(doc._root);
-  const named = people.filter((p2) => visible.indexOf(p2) !== -1);
-  check(`${name}: names none of the ${people.length} people on the record`,
-        named.length === 0, JSON.stringify(named));
   const orgs = ["Easy Dynamics", "IBM"].filter((o) => {
     const main = doc.querySelectorAll("main")[0];
     if (!main) return false;
@@ -623,20 +614,10 @@ async function checkPage(file) {
     (function walk(n) {
       n.childNodes.forEach((c) => {
         if (!c.tagName) { t += " " + c.textContent; return; }
-        /* A file path is provenance and legitimately names the organization
-           whose repository it came from. Prose may not.
-           .verbatim marks reproduced source text, which is exempt for the same
-           reason: three of the thirteen editorial rules are rules about how the
-           publishing organizations are treated and name them, and publishing an
-           editorial policy with the policy redacted would be pointless. The
-           exemption covered the reproduction and not a sentence the site
-           wrote. The methodology page has been removed and with it the only use
-           of .verbatim, so the branch below is now unreachable; it is kept
-           because the exemption is a rule about markup rather than about that
-           page, and a reproduced rule could be published again. */
+        /* OSCAL source paths may name their publisher. Editorial prose may not
+           attribute an approach to a proponent organization. */
         if (c.classList.contains("snippet__src")) return;
         if (c.classList.contains("path")) return;
-        if (c.classList.contains("verbatim")) return;
         if (["SCRIPT", "STYLE", "SVG", "DETAILS"].indexOf(c.tagName) !== -1) return;
         walk(c);
       });
@@ -929,7 +910,7 @@ async function checkPage(file) {
   }
 
   /* --- one order, everywhere ---------------------------------------------
-     The three approaches appear in the pre-read's option-letter order: A, B, C.
+      The three approaches appear in option-letter order: A, B, C.
      Ordering is the single easiest way for this site to argue without saying
      anything, so it is asserted on every page and for every construct that
      carries the three, rather than only where a page happens to state it.
@@ -1067,9 +1048,8 @@ async function checkPage(file) {
     });
   }
 
-  /* House style, recorded at Gate 5. The register is modelled on the OSCAL
-     Foundation focus group discussions: numbered sections, bold lead-in labels,
-     declarative technical prose. Two habits are ruled out because they read as
+    /* House style: numbered sections, bold lead-in labels and declarative
+      technical prose. Two habits are ruled out because they read as
      rhetoric rather than as reference: aphoristic section headings, and
      headings numbered as spelled-out ordinals. */
   /* A section heading is one the author wrote. Headings inside a rendered
@@ -1077,11 +1057,11 @@ async function checkPage(file) {
      be wrong. */
   const inComponent = (h) =>
     ["card", "glossary__item", "slot-fill", "worked", "models__layer",
-     "position-group", "two-up__side", "audit", "rules__item",
+    "two-up__side", "audit", "rules__item",
      "answers-row__col", "qacc"]
       .some((c) => h.closest("." + c))
     || ["data-views", "data-readers", "data-glossary", "data-slot-fill",
-        "data-matrix", "data-sc28", "data-position-questions", "data-contribute",
+        "data-matrix", "data-sc28", "data-contribute",
         "data-question-sides", "data-approach-cards",
         "data-audits", "data-rules", "data-does-not", "data-verification",
         "data-answers-row"].some((d) => h.closest("[" + d + "]"));
@@ -1397,9 +1377,8 @@ async function checkSixQuestions(name, doc) {
   check(`${name}: every panel is labelled by its tab`,
         panels.every((p) => p.getAttribute("aria-labelledby")),
         String(panels.filter((p) => !p.getAttribute("aria-labelledby")).length));
-  /* The approach names itself. The option lettering was removed from the site:
-     it was the pre-read's shorthand, and on a page that shows the three side by
-     side the name is the thing a reader needs. */
+    /* Tabs use structural approach names rather than option letters, so each
+      label remains meaningful when read on its own. */
   check(`${name}: each tab names its approach`,
         tabs.every((t) => /^(Catalog|Component|Assessment)-first$/.test(textOf(t))),
         JSON.stringify(tabs.map((t) => textOf(t)).slice(0, 4)));

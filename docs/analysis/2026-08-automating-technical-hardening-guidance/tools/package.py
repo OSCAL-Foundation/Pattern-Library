@@ -5,17 +5,9 @@ The rule is one sentence. A file ships if the browser asks for it. Everything
 else in this repository is input to the build or evidence for the harness, and
 neither of those is part of a static site.
 
-Two of the excluded files matter more than the rest. data/quotes.json holds 37
-quotations attributed to nine named people at AWS, IBM, NIST and elsewhere, and
-data/criteria.json attributes criteria to named individuals. No page fetches
-either. Publishing them would put attributed words of named third parties into a
-public repository, which is the opposite of what removing company references
-from the pages was for. They stay in the working repository as the evidence the
-site's claims rest on.
-
 assets/bundle.js mirrors all of data/, so it is rebuilt here over the shipped
-subset rather than copied. Copying it would have shipped those quotations inside
-a script tag.
+subset rather than copied. This keeps the folder-based fallback aligned with
+the files included in the package.
 """
 import json, os, re, shutil, subprocess, sys
 

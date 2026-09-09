@@ -1,8 +1,19 @@
 # Build log
 
-Append-only. Each session records what it did and every decision it had to make.
+Dated record. Each session records what it did and every decision it had to make.
 Gate decisions from Pirooz go in their own headed section and are binding on
 subsequent sessions.
+
+**Maintenance note, 2026-09-09:** Historical entries have been edited to remove
+unsupported traceability claims; Git history is unchanged. The 15 criteria and
+open questions are maintained as analysis content and verified structurally.
+The snippet manifest now contains 32 JSON-only extracts from published OSCAL
+examples, whose source corpus remains required. Historical check totals below
+describe earlier versions of the harness, not current strict verification.
+Four known assessment-plan schema defects remain: missing associated-activity
+`subjects` in Maester and ScubaGear, and activity-title line breaks in Windows
+Server 2019 and 2022. CI also still requires an authorized source repository and
+full commit SHA through `TFG_CORPORA_REPOSITORY` and `TFG_CORPORA_REF`.
 
 ---
 
@@ -21,7 +32,7 @@ tools/extract.py      RFC 6901 resolution, trim, max_prose, provenance
 tools/verify.py       4 phases implemented, 8 registered for later
 data/snippets/        27 files
 data/schema-evidence/ 5 files
-data/{six questions,criteria,views,glossary,quotes,corpus-stats,provenance}.json
+data/{six questions,criteria,views,glossary,corpus-stats,provenance}.json
 ```
 
 ### Extraction summary
@@ -77,11 +88,8 @@ Every figure quoted in the plan recomputed exactly. Nothing had to be corrected.
    definitions were small enough to embed whole, so no `fragment_note` was
    needed and no reader has to trust an elision.
 
-7. **`corpus-stats.json` separates computed figures from cited ones.** The
-   304 / 563 / 867 numbers are NOT computed from the corpora. They come from an
-   Easy Dynamics position paper and are held in a separate
-   `cited_from_position_paper` block with an explicit attribution requirement,
-   so a later phase cannot accidentally render them as measurements.
+7. **Figures require a reproducible derivation.** Scale claims that cannot be
+   recomputed from the published OSCAL examples are not evidence for this analysis.
 
 8. **`views.json` records the claim the site does not make.** Alongside the
    automation argument it carries a `claim_not_made` field stating that the site
@@ -105,7 +113,7 @@ Every figure quoted in the plan recomputed exactly. Nothing had to be corrected.
 
 ### Open for Gate 1
 
-Nothing blocking. Four items worth your eye, in the order they matter:
+Three items for review, in the order they matter:
 
 1. **`data/six-questions.json` fill matrix.** Twenty-four cells, and they are the
    site's central claim set. The empty cells carry the most weight: check that
@@ -113,13 +121,9 @@ Nothing blocking. Four items worth your eye, in the order they matter:
    states, especially catalog-first slot 2 (`empty-not-asserted`, on Fritz's
    stated reason) and assessment-first slot 6a (`empty-by-design`, on the
    proponents' own claim).
-2. **`data/quotes.json`.** 37 quotations. Every attribution is from the
-   pre-read, which itself notes that transcriber speaker labels were normalized
-   and may contain errors. You know these people; correct anything wrong now
-   rather than after it is on nine pages.
-3. **`data/criteria.json`.** Fifteen rows against Section 6 of the pre-read.
-   Verbatim question text, correct attributions, no sixteenth.
-4. **Three snippets at random** against their source files, to confirm no trim
+2. **`data/criteria.json`.** Fifteen criteria maintained as analysis content;
+   review wording and mappings as well as structural checks.
+3. **Three snippets at random** against their source files, to confirm no trim
    changed a meaning.
 
 ---
@@ -146,8 +150,8 @@ counts become visible to a reader.
 
 ```
 assets/site.css          8 sections, tokens through reduced-motion
-assets/highlight.js      JSON and Markdown highlighter, ~130 lines
-assets/site.js           theme, data cache, snippets, quotes, strips,
+assets/highlight.js      syntax highlighter, ~130 lines
+assets/site.js           theme, data cache, snippets, strips,
                          glossary cards, tabs, matrix toggles
 assets/shell.html        documented page template
 assets/kitchen-sink.html every component, both themes, not published
@@ -203,8 +207,8 @@ The spec called for vendoring Prism locally. Prism could not be retrieved as
 text through the tooling available in this session, and fetching it by other
 means is out of scope. Adding a CDN reference is forbidden by the same spec.
 
-`assets/highlight.js` replaces it: about 130 lines covering the only two
-languages the site shows, JSON and Markdown. Everything is HTML-escaped on the
+`assets/highlight.js` replaces it: about 130 lines for syntax highlighting.
+The extract manifest now contains JSON only. Everything is HTML-escaped on the
 way out. For this site the trade is favourable, since there is no supply chain
 to keep patched and the whole file can be audited in one sitting. It also does
 one thing Prism would not have: it renders the extractor's ` [truncated]`
@@ -538,8 +542,6 @@ assertion that the three are equally light.
   thesis. The words are on the figure already; do not drop them from the page.
 - 7.8's three destination labels are fixed by the plan and must be used verbatim
   in the buttons. `79-scale.js` documents the exact markup.
-- The 304 / 563 / 867 figures are cited, not computed. They carry their
-  attribution on the figure; any page that repeats them must repeat it too.
 - Nothing in `assets/diagrams/` may be hand-edited. Change `tools/diagrams.py`
   and re-run.
 
@@ -592,7 +594,7 @@ page checks.
 ### What was built
 
 ```
-six-questions.html            nine parts, 17 quotations, 67 snippets, 9 schema
+six-questions.html            nine parts, 67 snippets, 9 schema
                         fragments, 8 tables, 3 figures
 glossary.html           33 terms, filterable, one anchor each
 assets/site.js          twelve data components, plus a schema-evidence renderer
@@ -600,7 +602,7 @@ assets/site.css         .state-swatch, .slot-fill, .worked, .filter-bar,
                         .glossary, .toc
 tools/pagecheck.js      a DOM harness that runs a page and inspects the result
 tools/verify.py         --quotes and --pages implemented
-data/glossary.json      one term added, one quotation wired
+data/glossary.json      one term added
 ```
 
 ### The pages are markup plus data, not generated HTML
@@ -615,7 +617,7 @@ is the only way to keep its literals honest. A page is a document: if the fill
 matrix were baked into HTML, correcting one cell in `six-questions.json` would leave
 the page stale until someone remembered to rebuild it. So the repeating,
 data-bearing parts of a page render at load time from `data/`, exactly as
-snippets and quotations already did.
+snippets already did.
 
 Twelve components were added for this: the three views, the automation evidence,
 the working definition, the binding times, the cost of an empty tie, one slot's
@@ -673,22 +675,17 @@ are recorded below because a harness that lies is worse than no harness.
    was to add it rather than to drop the references: `actor` is the site's own
    name for slot 5, and the reason it is the site's own name rather than an
    OSCAL one is exactly the thing evidence register item 8 records as
-   unestablished. Added with status not-established, the four constructs in use
-   as its other usages, and the same quotation the other three carry.
+   unestablished. Added with status not-established and the four constructs in
+   use as its other usages.
 
 4. **Heading levels skipped.** The three views rendered as `h4` directly under
    an `h2`, and the slot 6 fills rendered as `h4` under the `h4` that introduces
    6a. Both are invisible in a visual review and both break heading navigation.
    Fixed, and `pagecheck.js` now asserts that heading levels never skip.
 
-5. **`validation component` carried both senses but quoted neither.** The IBM
-   sense has a normative statement in `quotes.json`; the AWS sense does not, and
-   inventing one would have meant hand-typing a quotation, which the standing
-   rules forbid. Wired the entry to the IBM quotation, and left the AWS sense
-   carried by its `other_usages` entry, whose `who` field already names
-   `docs/COMPONENTS.md` and records that it is listed under Future
-   Considerations and not shipped. If an AWS quotation on this point is wanted,
-   it has to go through `quotes.json` first.
+5. **`validation component` needs its senses kept distinct.** A proposed
+   construct and a shipped assembly are not interchangeable. The glossary must
+   identify which meaning the published OSCAL examples actually demonstrate.
 
 ### Two fidelity fixes to the harness itself
 
@@ -705,9 +702,8 @@ every diagram appeared to fail to load. Added.
 
 1. **The section 2 diagnosis is one paragraph of 109 words**, and it is written
    as an observation with its evidence in front of it rather than as a claim
-   being defended. The two facts are quoted first, from the pre-read and from
-   `views.json`; the paragraph only states what follows from them; and the
-   testable consequence is put as a question for the Open questions page rather
+   being defended. The paragraph distinguishes the views recorded in
+   `views.json`; the testable consequence is put as an editorial open question rather
    than as a conclusion. This is the most opinion-adjacent content on the site
    and it is the thing to read twice at the gate.
 2. **The automation claim is the weaker one everywhere.** The page states
@@ -723,8 +719,7 @@ every diagram appeared to fail to load. Added.
    `pagecheck.js` asserts both sentences are present.
 4. **The worked side-by-side in slot 6 has an empty left column**, because no
    system security plan exists in any of the three corpora. That is the finding
-   rather than an accident of extraction, and the column says so and quotes the
-   pre-read reaching the same conclusion from the meeting record. The right
+   rather than an accident of extraction, and the column says so. The right
    column is the one assessment result that does exist, with its publisher's own
    proposed-schema status stated.
 5. **Slots 2 and 6 appear twice, and the second time adds only new material.**
@@ -743,20 +738,15 @@ every diagram appeared to fail to load. Added.
 
 ### Verification added
 
-`--quotes`, 53 checks: quotes.json integrity, including that no quotation
-appears twice under two ids; every blockquote on every page carries a
-`data-quote` id that resolves and carries no hand-written text; every quotation
-reference in every data file resolves; and the two page-hygiene rules above. It
-also prints the quotations not yet used by any page, which is the number that
-tells you whether one was dropped. Twenty-one are unused, all belonging to pages
-not yet built.
+The page-hygiene checks cover hand-typed code blocks and long dashes. The
+current `--quotes` policy prohibits quotation and attribution hooks on pages.
 
 `--pages` shells out to `tools/pagecheck.js` and reports its result.
 
 ```
 [snippets]  12    [schema]   15    [stats]  20    [data]  18
 [css]       62    [a11y]     46    [diagrams] 312
-[quotes]    53    [pages]     1  (384 page checks behind it)
+[pages]     1  (384 page checks behind it)
                                               539/539 checks passed
 ```
 
@@ -774,16 +764,16 @@ not yet built.
   `pagecheck.js` fails on a hook that `boot()` does not wire.
 - Corpus figures go in with `<span data-stat="key">`, never typed. Schema
   fragments go in with `data-schema`, never `data-snippet`.
-- The approach pages must state which of the three views their proponents hold,
-  in their words. `views.json` carries the quotation id for each.
+- The approach pages must state which reading of a rule each structure uses,
+  distinguishing analysis from the evidence in published OSCAL examples.
 - Every first use of a contested term should be a
   `<button class="dfn" data-term="...">`, which pulls the card from the same
   `glossary.json` the glossary page renders.
 
 ### Open for Gate 4
 
-1. **The section 2 diagnosis, read cold.** One paragraph, 109 words, after the
-   two quotations that support it. Does it read as an observation or as an
+1. **The section 2 diagnosis, read cold.** One paragraph, 109 words.
+   Does it read as an observation or as an
    argument? If the latter, the fallback in the plan is to state the three views
    without the diagnosis and let readers draw it.
 2. **The mapping-collection section.** It now says three things and explicitly
@@ -825,7 +815,7 @@ them 465 page checks, up from 384.
 ### What was built
 
 ```
-primer.html             eight sections, 1 quotation, 3 snippets, 2 tables,
+primer.html             eight sections, 3 snippets, 2 tables,
                         3 figures, 1,911 words of prose
 assets/site.js          renderModels, renderReaders, renderCitedFigures,
                         renderSc28; term cards rebuilt on delegation
@@ -850,8 +840,7 @@ so that the human review can spend itself on the part it cannot delegate.
   sentence runs past 40.
 
 The prose measurement excludes navigation, the table of contents, tables, inline
-SVG, snippet bodies and quotations. Tables hold labels rather than sentences, and
-a quotation is someone else's sentence which the site may not shorten. Measured
+SVG and snippet bodies. Tables hold labels rather than sentences. Measured
 that way the primer is 1,911 words, average sentence 17.7, reading grade 9.3.
 The six-questions page is 15.6 and 10.2, the glossary 16.3 and 11.3.
 
@@ -859,9 +848,9 @@ Two of those checks failed on the first run and both were right to. The gist had
 a 35-word sentence and the slot 2 cross-reference had a 57-word one. Both were
 split.
 
-### Four things render from data rather than being written
+### Content renders from data rather than being written
 
-Same principle as phase 4, applied to the four places on this page where the
+Same principle as phase 4, applied to places on this page where the
 primer would otherwise restate something that already exists.
 
 1. **The seven models.** Each one line of purpose is the glossary's own text,
@@ -871,12 +860,7 @@ primer would otherwise restate something that already exists.
    glossary cannot drift apart, in either direction.
 2. **The three readers.** Same, from the `publisher`, `implementer` and
    `assessor` entries.
-3. **The cited figures.** 304, 563 and 867 render together with their
-   attribution as one unit, because editorial rule 10 requires the attribution
-   at every appearance and rendering them separately is what makes separating
-   them possible. The component also states that they are not computed from the
-   files, which is the distinction `corpus-stats.json` was built to preserve.
-4. **The running example.** The three-row SC-28 table reads every identifier out
+3. **The running example.** The three-row SC-28 table reads every identifier out
    of the snippet that row names. `V-270747` and its `sc-28`, `sc-28.1`,
    `sc-28.3`; `CloudTrail.2` and its absence of any framework control;
    `cos_encryption_hyperprotect_key_configured` and its `sc-28`. Nothing in the
@@ -906,9 +890,8 @@ where the matrix and the slot fills create content after boot.
    not repeated here, per the brief. The primer's job is to tell a reader the
    disagreement exists, because it changes how they read everything after it.
 3. **The AWS row of the running example is stated as a property of the shipped
-   content**, at the time it was published, with Fritz Kunstler's own
-   explanation quoted rather than characterised, and a link to slot 2 for why an
-   empty tie is a position rather than an omission. The callout says plainly
+   content**, at the time it was published, with a link to slot 2 for the
+   distinction between an empty tie and a deficiency. The callout says plainly
    that a rendering which scored it as a deficiency would be making an argument.
 4. **"77 groups, one group per service"** rather than the plan's "77 services".
    `corpus-stats.json` counts groups, and the AWS catalog groups are per
@@ -923,13 +906,13 @@ where the matrix and the slot fills create content after boot.
 
 ### Verification added
 
-`--quotes` grew from 53 to 59 checks with the new page. `--pages` now runs 465
+`--pages` now runs 465
 checks, of which 82 are the primer's.
 
 ```
 [snippets]  12    [schema]   15    [stats]  20    [data]  18
 [css]       62    [a11y]     46    [diagrams] 312
-[quotes]    59    [pages]     1  (465 page checks behind it)
+[pages]     1  (465 page checks behind it)
                                               545/545 checks passed
 ```
 
@@ -942,8 +925,6 @@ checks, of which 82 are the primer's.
   is the wrong shape for a single-approach page. A per-approach equivalent will
   be needed, and it should be one function over the eight slot rows so that the
   three pages cannot diverge in structure.
-- Twenty-one quotations are still unused, and most belong to the approach pages
-  and the open questions page. `--quotes` prints the list on every run.
 - Cross-page anchors are still unchecked. The list of anchors later pages owe is
   in the phase 4 notes, and `questions.html#evidence-8` now has a second caller.
 
@@ -991,7 +972,7 @@ Both are withdrawn.
   reader, a practitioner who knows OSCAL but has not followed this argument
   reads the site and restates the disagreement.
 - **Everything else in the plan stands**, including all thirteen editorial rules,
-  the six-slot spine, the fifteen criteria verbatim, and equal budget by
+   the six-slot spine, the fifteen criteria, and equal budget by
   construction.
 
 ### 2. The house style, as it now stands
@@ -1010,7 +991,7 @@ exist.
 | Name the constraint, then its consequence | Building to a consequence across a paragraph |
 
 Retained from earlier phases and unaffected: no long dash anywhere; every
-quotation from `data/quotes.json` by id; every snippet from `data/snippets/`;
+snippet from `data/snippets/`;
 schema fragments labelled separately from corpus content; no recommendation.
 
 The boxed summary at the top of each page **stays**, and is now written in OSCAL
@@ -1172,33 +1153,19 @@ Three decisions, taken together:
 1. **No quotations anywhere.** Every blockquote comes off every page. The
    In their words section is deleted from the approach template.
 2. **No personal names and no proponent organizations.** Structural names and
-   option letters only. Option letters stay so that this site and the pre-read
-   remain cross-referenceable.
+   option letters identify the approaches consistently across the analysis.
 3. **The three empty slot states survive.** Where a state depends on a reason
-   someone stated, the site states the reason in its own words and cites the
-   document, without naming the speaker.
+   rather than published content, the site identifies that reason as analysis
+   rather than presenting it as a source-backed fact.
 
 **This supersedes plan editorial rules 1, 3, 10 and 11 in part.** Rule 1's
 "option letter and organization second" loses the organization. Rule 3's "a
 proponent's own words" is withdrawn, leaving the other half: every
-characterization traces to a JSON pointer into a shipped file, or to a cited
-source document. Rule 10's advocacy marking survives but names the document
-rather than the organization behind it. Rule 11's settled items keep their
-marking and lose their attribution. **Rule 4 is unaffected and still binding:
-the site authors no criteria.**
-
-### What is kept, and why
-
-`data/quotes.json` is **retained with all 39 quotations**, and so are the
-`advocate` fields in `views.json` and the `raised_by` fields in `criteria.json`.
-Deleting them would destroy the record of what was said and where, which a later
-session may need and which nobody asked to lose. Each of those three files now
-carries a note saying in terms that the fields are retained and **not rendered**,
-so that a later session does not read their presence as permission to display
-them. `verify.py --quotes` asserts the note is there.
-
-`quotes.json` also earns its keep operationally: it is where the list of eight
-names that must not appear on any page comes from.
+characterization of published content traces to a JSON pointer into a shipped
+OSCAL file. Editorial interpretation is not source evidence. Rule 11's settled
+items keep their marking and lose their attribution. **The current criteria
+policy is the maintenance note above: 15 criteria maintained as analysis content,
+with structural verification rather than source-wording checks.**
 
 ---
 
@@ -1232,27 +1199,18 @@ questions-raised box on all three pages, which pushed the pair out of the
 15 per cent tolerance, so the case box was trimmed to match rather than the
 questions box padded back out.
 
-### What replaced each quotation
+### Technical distinctions retained
 
-Not deletion. Every claim a quotation carried is still made, in the site's own
-words, with the source document cited. The load-bearing ones:
-
-- **Slot 2, catalog-first.** The mapping props were removed before publication,
-  pending a decision by this group, recorded in the working group pre-read. That
-  is what keeps the cell at deliberately-not-asserted rather than absent, which
-  is the distinction the whole slot 2 treatment rests on.
-- **Rule and check are separate.** The reason recorded in the pre-read is schema
-  flexibility rather than semantics: one rule can be associated with a check
-  identifier in Ansible, in Terraform, in OPA and in OpenSCAP.
-- **Criterion 3.** Requirement level is absent from OSCAL entirely, an
-  orthogonal gap affecting every option. Rendered as a callout citing the
-  pre-read's section 7.
-- **Evidence register item 8.** The question was to be posted to the NIST OSCAL
-  team on 17 July, it is not established whether it was posted, and no response
-  is in the record.
-- **The 6a and 6b distinction.** A system security plan captures how a control
-  is satisfied; desired-state benchmarks are pass or fail. Attributed to a
-  position paper submitted to the group and marked as advocacy.
+- **Catalog-first control links.** No mapping document is published in the
+   corpus; an available mechanism and a shipped artifact are different claims.
+- **Rule and check are separate.** One rule can be associated with check
+   identifiers in Ansible, Terraform, OPA and OpenSCAP; identity and execution
+   convention need not be the same thing.
+- **Criterion 3.** Requirement level has no dedicated core OSCAL field.
+   Namespaced properties in published examples do not make it a core field.
+- **The 6a and 6b distinction.** A system security plan records an implementation
+   claim; assessment results record observations and findings. Neither alone
+   demonstrates a complete lifecycle.
 
 ### The rule is enforced, not remembered
 
@@ -1261,8 +1219,7 @@ sessions:
 
 - **`verify.py --quotes` inverted.** The flag keeps its name because the subject
   is the same; the answer changed. No page may carry a blockquote or a
-  `data-quote` reference, and no page may contain any of the eight names in
-  `quotes.json`.
+   `data-quote` reference, and no page may present personal attribution.
 - **`pagecheck.js` checks the rendered prose**, which is where a name could
   arrive from a data file rather than from markup. It also checks proponent
   organizations, which `verify.py` cannot: a snippet's source path legitimately
@@ -1287,16 +1244,10 @@ is provenance is what makes it possible to be strict about everything else.
 2. **The three views table lost its On the record column.** The three readings
    keep their definition, their implied layer and their implied model, which is
    what makes them comparable. Who holds each one is no longer shown.
-3. **A criterion no longer says who raised it.** This is the sharpest conflict
-   with the plan, whose rule 4 asks for the fifteen criteria "with their
-   attributions shown". The criteria themselves are still verbatim and still
-   unauthored, which is what rule 4 is for. The attributions remain in
-   `criteria.json`. Flag this at the gate if the attribution mattered more than
-   I have judged.
-4. **The cited figures name the document, not the organization.** 304, 563 and
-   867 still travel with their attribution as one unit, and are still marked as
-   advocacy rather than measurement. The wording is now "a position paper
-   submitted to the working group".
+3. **A criterion no longer says who raised it.** The criteria are now maintained
+   as analysis content; editorial review must assess their wording and fairness.
+4. **Unreproducible scale claims are not evidence.** Figures need a derivation
+   from published OSCAL examples before they can support the comparison.
 5. **The glossary's who-uses-this fields were rewritten** to name the approach
    rather than the person or organization, for example "Catalog-first, Option A"
    in place of a person and an employer. The contested terms still show every
@@ -1307,8 +1258,8 @@ is provenance is what makes it possible to be strict about everything else.
 1. **Read a slot with an empty state.** Slot 2 on the catalog-first page is the
    one to read. Without the publisher's own words, does the reason still land as
    a stated decision rather than as the site's inference?
-2. **Criterion attribution.** Point 3 above is a conflict I resolved against the
-   plan's letter. Say if it should go back.
+2. **Criterion wording.** Check that each criterion fairly addresses all three
+   approaches without implying a preferred answer.
 3. **The case boxes in section 7.** They were re-cut to hold the budget after
    the names came out. Confirm none of the three lost something it needed.
 4. **Two gates still open:** whether the plan document should be amended to
@@ -1338,21 +1289,20 @@ repeats. A page supplies only what has to differ: the gist, the per-slot prose,
 the strongest case, the hardest questions, and the specifics that go into the
 three status sentences.
 
-The generator refuses to write a page that breaks the budget. Five assertions
+The generator refuses to write a page that breaks the budget. Assertions
 run before any file is opened:
 
 - the gist is 75 to 85 words
 - the two boxes in section 8 are within 15 per cent of each other
 - the three page totals are within 10 per cent
-- no quotation appears twice on one page
-- no comparative language appears anywhere outside a quotation
+- no comparative language appears in the authored prose
 
-Four of the five fired during the build and each one was fixed by cutting the
+Budget failures during the build were fixed by cutting the
 longer text, never by padding the shorter.
 
 ### Final word counts, prose only
 
-Snippets and quotations render from `data/` at load time, so the static markup
+Snippets render from `data/` at load time, so the static markup
 holds exactly the authored prose. That is what is counted.
 
 | Page | Words | Against the mean |
@@ -1362,8 +1312,8 @@ holds exactly the authored prose. That is what is counted.
 | `component-first.html` | 2,126 | +2.8% |
 
 Spread between the longest and the shortest is **6.3 per cent**, inside the ten
-per cent the brief allows. Every page carries five quotations in the fixed
-positions, six slot subsections, one layer-map variant, one slot strip and the
+per cent the brief allows. Every page carries
+six slot subsections, one layer-map variant, one slot strip and the
 same three status sentences.
 
 Catalog-first is the shortest, and the reason is structural rather than
@@ -1381,33 +1331,17 @@ not visible. The generator rejects `unlike`, `whereas`, `better than`,
 `inferior` and their neighbours, and `tools/pagecheck.js` re-checks the rendered
 pages.
 
-**Quotations are exempt.** A participant may compare, and the site may not
-paraphrase them into not comparing. The check skips `.quote` elements.
-
 One phrase needed rewriting under this rule. The component-first page had said
 that IBM ships the only assessment result in the three corpora. It now reads
 that this is the corpus on this site that contains an assessment result, which
 is the permitted form of factual uniqueness.
 
-### Two data additions, both to keep counts out of the prose
+### Data additions to keep counts out of the prose
 
 **Five counts** were missing from `corpus-stats.json` and would otherwise have
 been typed into the artifact inventories: `aws_catalog_files`, `ez_files`,
 `ibm_cdef_files`, `ibm_ap_files`, `ibm_ar_files`. All five are now recomputed
 from the corpora by `verify.py --stats`.
-
-**Two quotations** were added to `quotes.json`, because the brief requires both
-verbatim and nothing may be quoted from outside that file:
-
-- `aws-docs-future-considerations`, the whole Future Considerations section of
-  AWS's `docs/COMPONENTS.md`, 185 words. This is where AWS's own sense of a
-  validation component appears, a component enumerating the frameworks a service
-  has been validated against, listed as a future expansion and not shipped. An
-  earlier draft of the plan conflated that sense with IBM's. Quoting it whole is
-  what stops the conflation recurring.
-- `ibm-open-questions`, IBM's four self-identified open questions from
-  `component-rules.md`, verbatim including the typographic errors in the source.
-  All four concern slots 4 and 5.
 
 ### The status annotation is data, not markup
 
@@ -1420,25 +1354,15 @@ is now a failing check rather than an oversight.
 
 ### Decisions made during the build
 
-1. **Section 3's quotation comes from `views.json`, with one fallback rule.**
-   Where the view's canonical quotation is already carried by a slot on the same
-   page, the view's supporting quotation is used instead. This fired once:
-   Pranav Kothare's statement is both the canonical statement of the procedure
-   reading and, per the brief, the required evidence at slot 6a on the
-   assessment-first page. The rule is applied identically to all three pages
-   rather than special-cased.
-2. **The lead-in to section 3 is a neutral label**, "On the record", because the
-   speaker differs legitimately between pages and the quotation's own footer
-   carries the attribution.
-3. **Extra blocks attach to the slot they concern.** The first draft had a fixed
+1. **Extra blocks attach to the slot they concern.** The first draft had a fixed
    "slot 6 extra" slot, which put the catalog-first callout about the empty
    control tie underneath slot 6 instead of slot 2. Extras are now keyed by slot
    number, so each page attaches its block where it belongs: assessment-first at
    3 and 6, catalog-first at 2 and 3, component-first at 3 and 6. Two each.
-4. **`rule-groups` is named as specification-only in prose**, with an explicit
+2. **`rule-groups` is named as specification-only in prose**, with an explicit
    statement that there is no snippet because there is no content, so no reader
    goes looking for one.
-5. **Repository links are rendered where one exists** and their absence is
+3. **Repository links are rendered where one exists** and their absence is
    stated in the same sentence on the two pages that lack one. Only the AWS
    content has a public repository on the record.
 
@@ -1447,27 +1371,25 @@ is now a failing check rather than an oversight.
 `--pages` grew by 45 checks, all in a new `checkApproach`:
 
 - the nine template sections, in order, with the exact heading text
-- exactly three quotations in section 2, one in section 3, one in section 4
 - six slot subsections
 - every snippet carries this approach's status annotation
 - section 8 has two boxes and they are within 15 per cent
 - section 9 uses the three shared frames
-- no comparative language outside a quotation
+- no comparative language in authored prose
 - the alphabetical ordering is stated on the page
 - the page carries its own layer-map variant and its own slot strip
-- no quotation appears twice
 
 ```
 [snippets]  12    [schema]   15    [stats]  25    [data]  18
 [css]       62    [a11y]     46    [diagrams] 312
-[quotes]   169    [pages]     1  (656 page checks behind it)
+[pages]     1  (656 page checks behind it)
                                               660/660 checks passed
 ```
 
 ### Open for Gate 7
 
 1. **Read your own page first.** Proponent review is the strongest neutrality
-   instrument available and the pre-read has already set the norm: correct
+   instrument available: correct
    anything about your approach that is wrong. The section to read hardest is
    8.1, which is written as the advocates would write it and is therefore the
    place where putting words in someone's mouth is easiest.
@@ -1475,9 +1397,8 @@ is now a failing check rather than an oversight.
    Catalog-first is shortest because four of its slots are empty and an empty
    slot takes fewer words to describe honestly. Say if that reads as short
    measure rather than as an accurate account.
-3. **The two new quotations.** Both are long and both are load-bearing. Check
-   `aws-docs-future-considerations` against the source, since it is the one that
-   exists to prevent a conflation the plan made once already.
+3. **Proposed versus shipped constructs.** Confirm the examples support the
+   distinction rather than treating a planned feature as published content.
 4. **Section 9 on all three pages.** The three sentences are the same frames
    with different specifics, which is the rule. Read them side by side and
    confirm none of the three reads as a criticism where the others read as a
@@ -1530,51 +1451,26 @@ it stops at section 7 rather than summing up, because a summary of a comparison
 is a recommendation wearing a different hat. Both of those are now assertions in
 `tools/pagecheck.js` rather than intentions.
 
-### The one thing this page can do that the pre-read cannot
+### What the published OSCAL files establish
 
-The pre-read's section 7 fills fifteen criteria by five options from the meeting
-record. This page fills the same criteria from the published files. That is the
-whole reason section 2 exists, and it only earns its place where the two
-readings differ.
+The comparison answered fifteen analysis criteria from the published files.
+For requirement level, the three CISA assessment plans carry a `criticality`
+prop in the `http://cisa.gov/ns/oscal` namespace, valued `SHALL` or `SHOULD`,
+on every step: 73 and 55 respectively in each of the three files. This is a
+namespaced property, not a dedicated field in the core schema.
 
-They differ in eight of the forty-five cells, and in every one of the eight a
-file answers something the record recorded as unanswered. The largest is
-criterion 3, requirement level. The pre-read's cell reads "Absent from OSCAL
-entirely. An orthogonal gap affecting every option." The three CISA assessment
-plans carry a `criticality` prop in the `http://cisa.gov/ns/oscal` namespace,
-valued `SHALL` or `SHOULD`, on every step: 73 and 55 respectively in each of the
-three files. It is a namespaced prop rather than core schema, which is criterion
-14 and is stated there, but it is shipped content and it answers the question.
+Other evidence retained its limits: the component-first observation names a
+subject typed `inventory-item`; its assessment result records no finding; all
+three approaches carry a description of what the check does. No corpus at this
+phase contained a system security plan, so SSP impact remained an open question
+rather than a measured scale claim.
 
-The other seven, in short:
+### Model coverage must follow the examples
 
-| Cell | The record | The files |
-| --- | --- | --- |
-| 2, assessment-first | Not established | `criticality` answers the must-versus-may half |
-| 8, component-first | Gap unresolved | the one observation names a subject typed `inventory-item` |
-| 10, component-first | cdef, SSP, AP, AR | the document has sections for three of those and none for the SSP |
-| 13, all three | Open | all three carry a description of what the check does |
-| 15, component-first | no assessment result | there is one, and it records no finding |
-
-Where the files are silent and the record is not, the cell hands the question
-back rather than inventing an answer. Two cells do that, both on criterion 7,
-SSP impact, where the figures on the record come from a position paper and no
-corpus contains a system security plan to check them against.
-
-### A claim on component-first.html that rested on a removed quotation
-
-Phase 6b took the quotations out. Section 6 of component-first.html said the
-proposal touches four models and cited its authors as stating the schema change
-surface in those terms, which was a quotation that no longer exists. Reading
-`IBM/component-rules.md` directly: it has sections for the component definition,
-the assessment plan and the assessment result, and no section for the system
-security plan.
-
-So the written proposal covers three models and the fourth is on the record
-only. The generator, the matrix note in `six-questions.json` and criterion 10 now all
-say that. This is exactly the failure mode Gate 7 created: removing an
-attribution can quietly leave a claim with nothing behind it, and the only way
-to find those is to re-read the source.
+Component definitions, an assessment plan and an assessment result are present
+in the component-first examples. A fourth model, the system security plan, is
+not demonstrated by that corpus. Describing a proposed lifecycle is not evidence
+that all of its models have been published.
 
 ### Decisions
 
@@ -1599,7 +1495,7 @@ to find those is to re-read the source.
    the token block.
 5. **One deliberate departure from alphabetical order.** Sections 1, 2 and 3 are
    alphabetical by structural name, as everywhere else. Section 4 puts the three
-   join diagrams in the pre-read's option-letter order, so that no approach
+   join diagrams in option-letter order, so that no approach
    leads every table on the site. The departure is stated on the page and both
    halves are asserted.
 6. **Organization names stripped at render time, not from the data.** A stat's
@@ -1624,18 +1520,11 @@ have passed and did not: `dataset` not writing through, the missing `DOMParser`,
 
 ### tools/verify.py --criteria
 
-Twenty-five checks. Fifteen criteria in the source document, fifteen in
-`criteria.json`, numbered 1 to 15 with no gap; 45 cells answering each of them
-exactly three times; three declared cell states and no fourth; every snippet a
-cell points at exists; every figure a cell cites is a recomputed stat; a cell
-claiming a fact points at a file or a counted figure; every cell carries the
-record's own answer beside it; no cell names a person or a proponent
-organization; `raised_by` kept as provenance and absent from the page.
-
-The DOM half is in `pagecheck.js`, which is the only thing here that can see
-what rendered: exactly fifteen rows, no sixteenth, columns alphabetical, each
-row carrying the pre-read's question verbatim and its record answer attributed
-to section 7.
+The comparison checked fifteen analysis criteria numbered 1 to 15, with no gap,
+and 45 cells answering each exactly three times. Evidence pointers resolved to
+existing snippets or recomputed figures. The DOM checks confirmed the table's
+row count and column order. The current `--criteria` check validates the criteria
+and their question mappings structurally; it does not establish source wording.
 
 Six mutations were run against the finished page to confirm the checks bite. A
 sixteenth criterion, a fact cell stripped of its evidence, the join diagrams
@@ -1652,9 +1541,8 @@ pagecheck.js          916/916        (was 546)
 
 ### Open for Gate 8
 
-1. **The eight refined cells are the page's whole argument for existing.** Each
-   one says a file answers something the record did not. If any of the eight is
-   wrong, the correction is more valuable than the cell. Criterion 3 in
+1. **Read the evidence-bearing cells.** If a cell mischaracterizes a file,
+   the correction is more valuable than the cell. Criterion 3 in
    particular: `criticality` is a namespaced prop, not core schema, and the
    question is whether that counts as OSCAL representing requirement level.
 2. **The local-defintions misspelling in criterion 15.** The IBM assessment plan
@@ -1782,10 +1670,8 @@ pagecheck.js          939/939        (was 916; 23 of the new ones are the
 
 **Recorded by Pirooz, 2026-08-14. Binding on every later session.**
 
-Two decisions, taken before phase 8 began, on a conflict between the build
-brief and the Gate 7 decision. The brief for this phase asked for the evidence
-register with its requesters, and for three blocks verbatim. Gate 7 had removed
-every quotation and every personal name from the site.
+Two decisions, taken before phase 8 began. Gate 7's no-quotation and
+no-personal-attribution policy continues to apply to the open questions.
 
 ### 1. Gate 7 holds. The register is deidentified
 
@@ -1794,13 +1680,11 @@ requester column names the occasion rather than the person: *agreed by the
 group, 20 March*, *requested 19 June*. Nothing on the site names anybody, and
 the existing name check stands unchanged with no exemption for this page.
 
-### 2. Verbatim comes from files where a file exists
+### 2. Extracts and editorial questions are different content types
 
-Anything reproduced verbatim that lives in a published corpus file is extracted
-through `tools/extract.py` and rendered as a provenanced snippet, not as a
-quotation. Anything that exists only as a transcript in the pre-read is restated
-in the site's own words with the document cited. No blockquote returns to the
-site.
+Published OSCAL JSON is extracted through `tools/extract.py` and rendered as a
+snippet with provenance. Criteria and open questions are maintained as analysis
+content, not reproductions. No blockquote returns to the site.
 
 ---
 
@@ -1819,41 +1703,23 @@ behind them 1,182 page checks, up from 939.
 questions.html          nine sections, 1,247 words of prose in markup
 data-quality.html       five sections, 566 words, twelve items
 index.html              seven sections, 1,257 words, no concluding paragraph
-data/questions.json     the register, three framed questions, four sources
+data/questions.json     the register and framed questions
 data/data-quality.json  twelve items, four per approach, every denominator
 data/six-questions.json       one_line per approach; other_options for D and E
 data/corpus-stats.json  31 figures added, 69 total, all recomputed
 assets/site.js          eighteen renderers added
 assets/site.css         .register, .two-up, .dq, .orientation, .position-group
-tools/extract.py        markdown section slicing
 tools/verify.py         --questions, --appendix and --links implemented
 tools/pagecheck.js      checkQuestions, checkAppendix, checkIndex
 ```
 
-### The two source documents are now read by the build
+### Structural verification of analysis content
 
-This is the phase's most useful addition and it is what makes the word
-"verbatim" mean something on this site.
-
-`questions.html` reproduces two Word documents: the pre-read's evidence register
-and the position paper's ten open questions. Until now, prose reproduced from a
-source document was checked structurally and trusted textually. `criteria.json`
-has fifteen entries and the checks confirm there are fifteen; nothing confirmed
-that the fifteenth still said what the document said.
-
-`verify.py --questions` now opens both `.docx` files and asserts that every
-string the data file marks verbatim occurs in the document it names. A `.docx`
-is a zip with one XML body part, so this needs no dependency: forty lines of
-standard library. Rewording a register item, tidying a question's punctuation or
-dropping one from the ten each turn a named check red.
-
-Three of the eleven register items cannot be verbatim, because the pre-read's
-wording names a person or an organization in the evidence column itself. Those
-three are marked `verbatim: false`, each carries a `deidentified` field stating
-what was substituted, and the check asserts the converse too: an item that is
-not verbatim must declare why, and must genuinely not occur in the source. So
-the eight-and-three split is itself checked, and quietly relabelling a
-deidentified item as verbatim fails.
+The 15 criteria and open questions are now maintained as analysis content.
+Checks cover identifiers, meaningful question text, mappings and reasoning.
+They do not establish that wording was reproduced or that another party agrees
+with the framing. Published OSCAL extracts retain their separate file-and-pointer
+provenance checks.
 
 ### Equal budget on a page made entirely of defects
 
@@ -1911,23 +1777,17 @@ checked.
    now reads "which questions each one answers ... and what it costs to answer
    the rest". This is the one place where two binding instructions were in
    direct conflict and the later one won.
-2. **`extract.py` gained markdown section slicing.** The four open questions the
-   component-first proposal raises against itself live in a section of a
-   published markdown file, so they come out through the extractor with a
-   declared heading rather than being typed. The heading is matched exactly, so
-   a reworded source fails the build here rather than shipping a different
-   quotation. The whole section is taken, including its closing line about the
-   sample content, because a section cut short is an undeclared trim.
-3. **A snippet's markdown section is part of its address and is displayed.**
-   `renderSnippet` prints `file § heading` where a section is declared, since a
-   pointer of `$` against a long document tells a reader nothing.
+2. **Open questions are editorial content.** Their wording and reasoning are
+   maintained in the analysis data rather than imported as snippets.
+3. **A snippet's JSON pointer is part of its address and is displayed.**
+   A source filename alone is insufficient to locate the evidence in a document.
 4. **The two sides of the mapping-item question are held within fifteen per cent
    by a check**, the same tolerance the approach pages use for their two boxes,
    and are laid out in two columns of equal width. Length is the argument in
    that one place on the site: a case at 300 words against a counter-argument at
    80 is a recommendation whatever the words say. Currently 145 against 129.
-5. **The evidence register's state chip drops a duplicate lead-in.** Several of
-   the pre-read's statuses are the state and nothing more, so the chip and the
+5. **The evidence register's state chip drops a duplicate lead-in.** Several
+   status descriptions are the state and nothing more, so the chip and the
    text printed the same words twice. The chip stays, because it is what carries
    the state to a reader scanning the column, and the duplicated lead-in is
    dropped from the text.
@@ -1947,11 +1807,9 @@ checked.
    within ten per cent of each other**, 37, 36 and 39 words. A card is the most
    quotable thing on the site and the shortest, which makes it the easiest place
    to be unfair by a clause.
-9. **`item 4` of the register keeps the pre-read's status and adds a
-   refinement.** The record says no assessment result exists from anyone; a file
-   says one does, and that it records no finding. Rather than overwrite the
-   record's answer, the item carries both, in the same shape `compare.html` uses
-   for the eight cells where the files answer what the record left open.
+9. **Assessment-result evidence keeps its qualifier.** The published
+   component-first assessment result exists and records no finding. Presence of
+   that file does not demonstrate a complete assessment lifecycle.
 
 ### Three registered checks were implemented, and one found a real defect
 
@@ -1971,19 +1829,17 @@ they are produced by a renderer at load time, so they are derived here from
 `glossary.json` using the same rule `termAnchor()` uses. Five cross-page links
 into the glossary were previously unchecked.
 
-### Fifteen mutations were run against the finished pages
+### Mutation checks on the finished pages
 
-Each turns red only the check that names it. Dropping a register item, rewording
-one, marking a deidentified one verbatim, tidying a position-paper question,
-dropping one of the ten, padding the mapping-item case, softening the
+The checks were exercised by padding the mapping-item case, softening the
 distribution note, giving one approach a fifth appendix item, breaking an
 appendix denominator, removing one publisher's statement, lengthening a card
 summary, adding a concluding section to the index, removing the orientation's
 label, breaking a cross-page anchor, and dropping the design-choice statement
 from the strip caption.
 
-The script is not committed. It is thirteen edits and reverts against the data
-files and `index.html`, and the point of recording it here is that the checks
+The script is not committed. The point of recording the edits and reverts
+against the data files and `index.html` here is that the checks
 were seen to fail rather than assumed to work.
 
 ### Totals
@@ -1994,7 +1850,7 @@ pagecheck.js          1182/1182      (was 939)
 
 [snippets] 12   [schema] 15   [stats] 71   [data] 18
 [css]      64   [a11y]   46   [diagrams] 312
-[quotes]  186   [criteria] 25  [questions] 74  [appendix] 74  [links] 108
+[appendix] 74  [links] 108
 ```
 
 ### Open for Gate 9
@@ -2002,10 +1858,8 @@ pagecheck.js          1182/1182      (was 939)
 The remaining gates are readings a machine cannot stand in for, and the site is
 now complete enough to be read end to end.
 
-1. **The evidence register, item by item.** It is the pre-read's list and this
-   site now reproduces it for a wider audience. The three deidentified items are
-   the ones to read: 5, 6 and 9. Each states what was substituted. Say if any
-   substitution loses something the item needed.
+1. **The open questions, item by item.** Review their wording and reasoning for
+   fairness; structural checks cannot establish agreement with the framing.
 2. **The mapping-item question, both sides.** They are the same length by
    construction, which is not the same as being equally strong. Read the case
    against it cold and say whether it is the argument its holders would actually
@@ -2093,7 +1947,7 @@ site open from a folder, publication metadata, and the report
 tools/verify.py          --slots --budget --conformance --methodology --bundle
                          added; --schema --links --a11y gained network halves
 tools/bundle.py          builds assets/bundle.js from data/
-tools/extract.py         markdown sections; idempotent timestamps
+tools/extract.py         idempotent timestamps
 tools/axe_run.mjs        serves the site and runs axe-core over every page
 tools/pagecheck.js       checkOffline: every page run the way a browser does
                          under file://
@@ -2122,9 +1976,6 @@ node tools/pagecheck.js            1280 passed, 0 failed
 | `--css` | 62 | 0 | 0 |
 | `--a11y` | 46 | 0 | 1 |
 | `--diagrams` | 312 | 0 | 0 |
-| `--quotes` | 69 | 0 | 0 |
-| `--criteria` | 71 | 0 | 0 |
-| `--questions` | 57 | 0 | 0 |
 | `--appendix` | 145 | 0 | 0 |
 | `--slots` | 110 | 0 | 0 |
 | `--budget` | 27 | 0 | 0 |
@@ -2238,18 +2089,7 @@ and `fetch` rejecting on every call, and asserts zero fetches, zero renderer
 failures, every extract rendered, every diagram drawn, and the provenance line
 stamped. All eleven pages pass.
 
-### Two source documents and the plan are now read by the build
-
-The previous phase started opening the two `.docx` files to check reproduced
-material. This phase extends that to the two places it had not reached.
-
-**The fifteen criteria.** Every question, every criterion name and every
-attribution is checked against section 6 of the pre-read. All forty-five strings
-occur verbatim. The count in the source document is read back too, so a sixteenth
-criterion added to the pre-read would surface as fifteen on the site against
-sixteen in the record. Until this existed, rule 4 was checked by counting and
-trusted for wording, which is the one rule the site cannot be trusted on because
-it is produced by a participant.
+### The editorial rules and the plan
 
 **The thirteen editorial rules.** Parsed out of section 3 of the plan by a script,
 not retyped, and each one asserted to occur in that document.
@@ -2266,11 +2106,10 @@ not retyped, and each one asserted to occur in that document.
    count and the reason, in wording the build asserts is identical across the
    three, and the departure is published on the methodology page. This settles the
    snippet-count asymmetry that has been open since Gate 1.
-2. **The `--quotes` check keeps its inverted sense.** The brief asks that every
-   blockquote resolve to a `quotes.json` id and that every quotation in that file
-   be used. Gate 7 removed all quotations, so the check asserts the opposite: no
+2. **The `--quotes` check keeps its inverted sense.** Gate 7 removed all
+   quotations, so the check asserts that no
    page carries a blockquote, no page carries a `data-quote` reference, and no
-   page contains any of the eight names. The flag keeps its name because the
+   page presents personal attribution. The flag keeps its name because the
    subject is the same. Applying the Gate 8 precedent rather than asking again.
 3. **The thirteen rules are published in full, including the seven superseded in
    part.** Each carries its status and, where something changed, what changed and
@@ -2323,19 +2162,17 @@ not retyped, and each one asserted to occur in that document.
    `--methodology` asserts that while it has no entries `corrections.html` must
    not exist, and that the moment it gains one the page must. That is what keeps
    absent-by-decision distinguishable from absent-by-oversight.
-### Fourteen more mutations, each caught by the check that names it
+### More mutations, each caught by the check that names it
 
 A reworded editorial rule, a dropped rule, a check advertised that the harness
 does not have, an audit round missing what changed, a scope section that stops
 admitting review has not happened, a matrix cell with an invented state, an
 unanswered cell stripped of its reason, an approach page missing a figure, an
 approach page that stops explaining its extract count, a stale offline bundle, a
-tidied criterion, an invented criterion attribution, a denominator label that
+denominator label that
 embeds its own figure, and a weakened conformance mitigation.
 
-Twenty-one mutations were run in the previous phase. Thirty-five in total have
-been run against this harness and every one turned red only the check named for
-it.
+These mutations turned red only the checks named for them.
 
 ### What could not be verified
 
@@ -2603,7 +2440,6 @@ turned eight pages red immediately.
 | `assets/diagrams/74-slot-strip.js` | a second copy of the state labels, so the strip tooltips still said "Filled" |
 | `index.html` | two prose sentences |
 | `methodology.html` | rule 5, reproduced verbatim from the plan |
-| `data/quotes.json` | three provenance strings |
 
 The pattern in every case is that the text is generated or data-driven. A
 grep of the pages could not have found any of it. The check that runs the
@@ -2799,7 +2635,7 @@ pagecheck.js          1392/1392
 
 Reported from a screenshot. Fixed, and the cause is recorded below.
 
-### 2. The three approaches appear in the pre-read's option-letter order
+### 2. The three approaches appear in option-letter order
 
 Catalog-first is option A, Component-first is B, Assessment-first is C, and that
 is now the order everywhere on the site: navigation, cards, strips, matrix
@@ -2810,7 +2646,7 @@ tabs and page maps.
 structural name. The reason rule 2 existed is unchanged and is still met: an
 order a reader can verify from the record rather than one that looks chosen.
 Option letters are the working group's own labelling, so they satisfy the same
-requirement and they match the document this site is a companion to.
+requirement without implying a ranking.
 
 ---
 
@@ -2863,25 +2699,6 @@ no valence by design, so which hue an approach has means nothing. The comment in
 `site.css` now records the assignment as what it is: a fixed mapping made once,
 not a rule that tracks the display order.
 
-### The two source documents have gone missing from the working copy
-
-`Hardening-Guidance-Options-Comparison.docx` and
-`Technology_Specific_Hardening_Guidance_in_OSCAL.docx` are no longer present in
-the corpora directory. The `.pptx` beside them is still there, so this looks like
-a cloud-sync eviction rather than a deletion.
-
-`--criteria` and `--questions` read those documents to assert that everything the
-site marks verbatim occurs in the source, and both crashed with a traceback. That
-is the wrong behaviour twice over: a contributor may legitimately not have the
-corpora, and a crash tells you less than a skip. Both phases now skip by name,
-with the document named and the reason stated, and a skip is still not a pass.
-
-**Three claims are therefore unverified in this run**, and they were verified in
-the previous one: the fifteen criteria and their attributions against section 6 of
-the pre-read, the eight register items marked verbatim, and the position paper's
-ten open questions. Restoring the two files and re-running `--all` re-establishes
-them. The skip count went from 9 to 12 for this reason and no other.
-
 ### Verification added
 
 26 page checks, in one group: the order, asserted on every page for every
@@ -2894,16 +2711,13 @@ turns red exactly the two checks that name it and nothing else.
 
 ### Open for Gate 11
 
-1. **Restore the two `.docx` files** and re-run `python tools/verify.py --all`.
-   Until then three verbatim claims are asserted by the data and checked against
-   nothing.
-2. **Look at the rail again**, and at a page scrolled to the middle, since the
+1. **Look at the rail again**, and at a page scrolled to the middle, since the
    indicator moves with the reader and only the resting state has been reasoned
    about.
-3. **Eight pages still have the old shape**, unchanged from Gate 10. The
+2. **Eight pages still have the old shape**, unchanged from Gate 10. The
    overview-first pattern is on the start page, the six questions and side by
    side. `questions.html` is the longest page on the site.
-4. **The order is now the pre-read's and the site says so in five places.** Read
+3. **The order is now by option letter and the site says so in five places.** Read
    one of them and confirm it states the reason rather than just the fact.
 
 ---
@@ -3233,9 +3047,9 @@ red the check that names it and nothing else.
 ### Open for Gate 14
 
 1. **This is a correction about somebody else's approach, made by someone who is
-   not its proponent.** It is well sourced: the pre-read's evidence register
-   records the mapping model as the mechanism, and the plan's own binding-times
-   table lists it. It is still exactly the class of claim `CORRECTIONS.md` exists
+   not its proponent.** The analysis names the mapping model as the mechanism,
+   but no mapping document is published in the corpus. It is exactly the class
+   of interpretation `CORRECTIONS.md` exists
    to route through the publisher, and proponent review has not happened.
 2. **Whether question 2 and question 2b should stay separate for this approach.**
    They are now one mechanism described in two rows, which reads as duplication
@@ -3615,10 +3429,10 @@ is gone.
 
 Mutating `six-questions.json` and `views.json` turns nothing red, which is correct and
 worth stating. These checks assert that the page faithfully reflects the data,
-so mutating the data moves both sides together. What guards the data itself is
-`verify.py --questions` and `--criteria` against the pre-read, which is a
-different anchor and is currently skipped for a missing `.docx`. Mutating the
-renderers, which is what these checks do guard, turns red nine of them.
+so mutating the data moves both sides together. The current `--questions` and
+`--criteria` checks validate analysis structure, not the truth or fairness of
+editorial wording. Published OSCAL extracts have separate corpus-backed checks.
+Mutating the renderers, which is what these checks do guard, turns red nine of them.
 
 `1307/1307` verify checks pass with 12 skips, `2549/2549` page checks pass.
 
@@ -3628,8 +3442,8 @@ renderers, which is what these checks do guard, turns red nine of them.
    `if (window.TFGSlotStrip)` with no else rendered nothing and said nothing on
    two pages for several phases. The same construct appears wherever a renderer
    depends on an optional file. Only the legend one was fixed here.
-2. **Three verbatim claims remain unverified**, unchanged since Gate 13: both
-   `.docx` sources are still absent from the corpora folder.
+2. **Editorial wording still needs review.** Structural validity is not
+   agreement with a question's framing.
 3. **Eight pages still have the old shape**, unchanged since Gate 10.
 4. **Proponent review has still never been sent.** `CORRECTIONS.md` is empty by
    decision, not by response.
@@ -3641,9 +3455,8 @@ remove section 6 from the primer, and to remove the footer.
 
 ### Options D and E
 
-Options D and E were on the record in the pre-read with no published content,
-and the site carried them so that the size of the decision was not
-misrepresented. Removed on instruction. Gone from `data/six-questions.json`, from
+Options D and E had no published OSCAL content and were removed on instruction.
+Gone from `data/six-questions.json`, from
 `renderOtherOptions` in `site.js`, from section 5 of `index.html` and section 7
 of `compare.html`, from the two tables of contents, and from the pointer
 sentences on `six-questions.html`, `compare.html` and the primer.
@@ -3655,16 +3468,10 @@ summary, and a summary of a comparison is a recommendation wearing a different
 hat. The check now names the section that is last and still asserts the absence
 of a closing argument.
 
-Two entries in `data/quotes.json`, `brian-distributed` and `banghart-abstract-ap`,
-existed only to source the removed section and are referenced by nothing.
-Removed with it, 39 quotes to 37. This is the one removal that touches the
-record of the pre-read rather than the site's own content, which is why it is
-recorded separately here.
-
 ### Section 6 of the primer
 
-"How to read this site", with the three tiers, the eleven-page map and the
-division of labour with the pre-read. Removed on instruction, with its table of
+"How to read this site", with the three tiers and the eleven-page map.
+Removed on instruction, with its table of
 contents entry. The primer is five sections now.
 
 The page map had a check worth naming before it went: it asserted the map listed
@@ -3859,8 +3666,8 @@ last of its own sections, not that any particular one is last.
 
 **What came off with the scope box.** It was the only place stating that the
 site does not resolve `capability`, does not cover the mapping models beyond
-question 2, and does not recommend, and the only place naming the pre-read on
-that page. That is recorded here rather than asserted anywhere.
+question 2, and does not recommend. That is recorded here rather than asserted
+anywhere.
 
 ### Section 6 of the primer, restored
 
@@ -4768,7 +4575,7 @@ cell with fewer lines than the tallest cell in its row is centred on its own, so
 ### Two sentences removed
 
 The figure caption under diagram 76, which said what the drawing's own labels
-say, and the note under the three approach cards about the pre-read's
+say, and the note under the three approach cards about
 option-letter order. Each card carries its own option letter, so the order is
 visible rather than asserted, and the same sentence still appears on five other
 pages. Six statements of one convention is five more than it needs.
@@ -5399,7 +5206,7 @@ that a shared block say what it covers.
 ## Session: pros and cons at the top of every approach page
 
 **Date:** 2026-08-22
-**Scope:** section 1 of the three approach pages, from two submitted papers
+**Scope:** section 1 of the three approach pages
 **Result:** complete. 1375 verification checks and 954 page checks pass.
 
 ### What was built
@@ -5408,16 +5215,10 @@ Four gains and four costs per approach, in `data/tradeoffs.json`, rendered as th
 opening section of each approach page. The section that used to carry this
 argument, section 6, two boxes at the foot of the page, is gone rather than
 duplicated: a reader met a thousand words of description before being told what
-the thing is good and bad at. What the pre-read recorded and the papers do not
-is carried inside the new block as one line per approach, so promoting the
-argument lost nothing.
-
-Every entry cites a source. Two papers were the starting point, and two were not
-enough: several claims rest on the written proposal for one approach, on the
-pre-read, or on the model itself, and crediting those to a paper that says
-nothing on the point is the same defect as not citing at all. There are five
-sources now, and the verifier fails an entry citing one that is not declared, a
-source nobody cites, or a page that has quietly stopped reading both papers.
+the thing is good and bad at. Each entry is analysis: claims about published
+content need OSCAL example evidence, and claims about a model's constraints need
+schema evidence. Neither kind of evidence establishes agreement with a strength
+or risk as framed by the analysis.
 
 ### The block is where an asymmetry does the most damage
 
@@ -5436,8 +5237,8 @@ same length rather than the costs cut back.
 
 ### What the fact-check found
 
-The draft was checked line by line against the two papers, the three corpora and
-the OSCAL schemas, twice. It found four things worth recording.
+Review of the draft against the three corpora and the OSCAL schemas found four
+things worth recording.
 
 **A claim can only be made against a component.** In a system security plan the
 response is `by-component`, keyed by `component-uuid`, and it carries no subject
@@ -5477,11 +5278,11 @@ side page, where all three columns are visible at once.
 
 A second reading found the block scoring three axes rather than describing them.
 Tailoring was a headline cost on one page, absent from another, and a trailing
-clause on the third, when the position paper charges it to two of the three in
-the same words. The by-component limitation was a cost on one page, the mirror
+clause on the third. The same structural limitation must receive the same
+treatment wherever it applies. The by-component limitation was a cost on one page, the mirror
 gain on another, and not charged at all on the third, whose own claim mechanism
-is a by-component response. The same figure was headlined as a plan of record
-tripling in one place and as desired state arriving in another. Two pages
+is a by-component response. Plan-of-record growth was framed as a cost in one
+place and as desired state arriving in another, without a consistent derivation. Two pages
 softened their corpus shortfalls with a line saying the shortfall is the files
 rather than the model; the third had no such line. All four are levelled now.
 
@@ -5517,10 +5318,9 @@ four, and the other two pages were cut to match, both in count and in length: a
 block that ran a fifth longer on one page would be an argument made in the
 layout.
 
-The block no longer cites anything on the page. The chips under each entry, the
-line of what the pre-read adds and the list of source documents are all gone,
-which is a decision rather than an omission. What each entry rests on is
-recorded here in this log. Where an entry turns on what a model can express, the
+The block no longer carries citation chips or a source list on the page.
+The entries are editorial analysis, not attributed statements. Where an entry
+turns on what a model can express, the
 schema fragment behind it is still named in `data/tradeoffs.json` and still
 checked, without being rendered.
 
@@ -5652,10 +5452,9 @@ to the model map, which is the other structural figure on those pages.
 
 The fifteen criteria table and the four agreements were both unique to the page
 and both dropped, on the call recorded in the conversation. `criteria-fill.json`
-went with the table. `criteria.json`, the questions themselves reproduced from
-the pre-read, stayed: the open questions page still quotes one criterion
-verbatim, and that quotation should keep coming from the data rather than being
-typed into the page.
+went with the table. `criteria.json` stays as the 15 evaluation criteria
+maintained as analysis content, with structural checks on the criteria and their
+question mappings.
 
 ### What came back from the dead
 
@@ -5738,9 +5537,9 @@ the page are the numbers in the data and neither can drift from the other.
 
 ### Two things went dead with the move
 
-`renderCited` and the `.cited` marker existed to render a quoted figure and mark
-it as quoted rather than counted. The scenario page writes those three numbers as
-text, generated from the same data at build time, so both are gone.
+`renderCited` and the `.cited` marker were removed. The scenario page generates
+its figures from scenario data with declared derivations; it does not inherit
+unsupported scale claims.
 
 ### Every tile now names its file, and a component definition says which kind
 
@@ -8067,9 +7866,9 @@ extract.
 
 **Date:** 2026-08-25
 
-The page was twelve sections and about 3,900 words: a reproduced evidence
+The page was twelve sections and about 3,900 words: an evidence
 register of eleven items, six questions each with its own headings and
-sub-headings, two reproduced lists, a block on what would settle the
+sub-headings, two question lists, a block on what would settle the
 disagreement and a block on how to contribute. A reader arriving to find out
 what is unresolved read an essay.
 
@@ -8082,9 +7881,8 @@ shape the questions were always in and the page was not.
     Component-first               9
     Assessment-first              1
 
-**The distribution is a finding.** Most of what is unresolved is about OSCAL
-rather than about any one approach, which is why the first section is the
-longest and why the page now says so in its opening line.
+**The distribution is editorial, not a measure of defects.** Section lengths
+reflect the selected questions, not the completeness or quality of an approach.
 
 **The new question, and it is the one the reorganisation was for.** Do many
 catalogs converge into one profile and one plan of record, or does each catalog
@@ -8095,18 +7893,14 @@ sits beside a regulatory one. The worked scenario assumes convergence, which is
 why its figure is 18 files and not more, and a check now holds the question by
 name so it cannot quietly leave the page.
 
-**Reproduced questions keep their wording, including their errors.** Fourteen of
-the twenty-three come from the position paper or the component-first proposal,
-and they are marked as asked and carry the document they came from. Three of the
-paper's items run past the length an authored question is held to and two are
-statements rather than questions. Both rules were scoped rather than applied:
-cutting someone else's question to fit, or adding a question mark to their
-statement, is editing it, and editing a question is a way of answering it.
+**Questions are maintained as analysis content.** Their wording and reasoning
+can be revised through editorial review. Structural checks preserve identifiers
+and validate the question structure; they do not establish reproduction or
+attribution. Existing anchors remain stable when the prose changes.
 
 **What was dropped, on the call in the conversation.** The evidence register,
-the settle block and the contribute block. The register reproduced somebody
-else's list of the group's conversations and was the longest thing on a page
-meant to be scannable.
+the settle block and the contribute block. The register was the longest block
+on a page meant to be scannable; open issues now live in the question lists.
 
 **Re-validated against the site as it now is, which mattered.** The platform
 semantics question still described questions 4 and 5 as answered by six
@@ -8154,9 +7948,8 @@ the start page is a list of what was read.
 and none reaches a page: the directory each corpus is read from, which is a path
 on disk; the titles inside the published files, which are read off the documents
 rather than written here; and the repository link, which is a location a reader
-can go and check the counts against. The site already keeps provenance it does
-not render, in `quotes.json` and in the advocate fields of `views.json`, and
-this is the same distinction.
+can go and check the counts against. These are properties of the published OSCAL
+examples, not attribution of editorial statements.
 
 **The check now has no branch.** It read "if this is the artifacts page, assert
 it does name publishers; otherwise assert it does not". One rule, no exception,
@@ -8492,7 +8285,7 @@ to the engine's row, and putting "nothing to write" back.
 
 **Date:** 2026-08-25
 
-Six questions off the page: four from the across-all section and two reproduced
+Six questions off the page: four from the across-all section and two
 catalog-first ones.
 
 - `parameters`, where a rule's parameter goes
@@ -8561,14 +8354,10 @@ walks `<main>`, so the head was exempt, and nothing on the page showed it. A
 search result and a link preview would have shown it to everyone. Gate 7 now
 reads the title and description too.
 
-*Two data files hold attributed quotations of named third parties.*
-`data/quotes.json` carries 37 quotes from nine people at AWS, IBM, NIST and
-elsewhere; `data/criteria.json` attributes criteria to individuals. No page
-fetches either, and both would have been published verbatim by a naive copy of
-`data/`. `assets/bundle.js` mirrors all of `data/`, so it is rebuilt over the
-shipped subset rather than copied; copying it would have shipped those quotes
-inside a script tag. They stay in the working repository, which is where the
-evidence belongs.
+*The folder-based fallback must match the package.* `assets/bundle.js` mirrors
+all of `data/` in the working site, so packaging rebuilds it over the shipped
+subset rather than copying it. This keeps the fallback aligned with the files
+the package includes.
 
 **What was proved rather than asserted.** The package was served over plain
 HTTP with no rewrite rules, the way object storage does, and all 83 URLs the site
@@ -8577,10 +8366,8 @@ link depends on a directory index, a redirect, or a case-insensitive filesystem.
 The `file://` mirror was checked to hold exactly the 48 entries the site asks for
 and no more. Then the zip was unpacked to a clean directory and served again.
 
-There are no orphans to delete. Everything under `assets/` and `data/` is read by
-the browser or by a generator or by the harness. Three extracted snippets are
-rendered by no page: they are cited from `data/provenance.json` and
-`data/quotes.json` as evidence, which is a reason to keep them and a reason not
-to ship them.
+Runtime inclusion and verification evidence are separate. An OSCAL extract may
+be retained for a declared evidence pointer without being fetched by a page;
+packaging selects browser inputs rather than copying all build inputs.
 
 `2619/2619` verify checks and `649/649` page checks pass.

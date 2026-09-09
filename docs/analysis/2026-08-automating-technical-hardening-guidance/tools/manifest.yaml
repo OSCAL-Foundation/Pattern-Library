@@ -1,4 +1,4 @@
-# Snippet manifest: the declarative source of truth for every code block on the site.
+# Snippet manifest: the declarative source of truth for 32 OSCAL JSON snippets.
 #
 # Every pointer below was resolved against the corpora on 2026-08-12 and is
 # asserted by tools/verify.py. Nothing on the site is hand-typed.
@@ -10,11 +10,7 @@
 #   title      short human label shown in the block header
 #   source     path relative to the corpora root
 #   pointer    RFC 6901 JSON pointer, or "$" for the whole document
-#   language   json | markdown | text   (defaults to json)
-#   section    optional, markdown and text only. A heading, matched exactly.
-#              The whole section is taken, from its heading to the next heading
-#              of the same or a higher level. Never a partial section, because a
-#              section cut short is an undeclared trim.
+#   language   json (default for every entry)
 #   trim       optional. RFC 6901 pointers, relative to the extracted node,
 #              whose values are replaced by the string "..."
 #   max_prose  optional int. Any string value longer than this is cut and
@@ -238,28 +234,6 @@ snippets:
   # ---------------------------------------------------------------- #
   # Component-first  (Option B, IBM)                                  #
   # ---------------------------------------------------------------- #
-
-  - id: ibm-rules-md
-    slot: meta
-    approach: component-first
-    title: "IBM's proposed rule and check assemblies"
-    source: "IBM/Automated-assessment.md"
-    pointer: "$"
-    language: markdown
-
-  # The four open questions the proposal raises against itself. Sliced from the
-  # same file as ibm-rules-md so that "verbatim" is produced rather than
-  # asserted, including the source's own typographic errors. Gate 7 removed
-  # every quotation from the site; this is a snippet from a published file at a
-  # declared location, which is what the standing rules require instead.
-  - id: ibm-open-questions
-    slot: meta
-    approach: component-first
-    title: "IBM's open questions"
-    source: "IBM/Automated-assessment.md"
-    pointer: "$"
-    language: markdown
-    section: "Open questions?"
 
   - id: ibm-cos-component
     slot: "1"

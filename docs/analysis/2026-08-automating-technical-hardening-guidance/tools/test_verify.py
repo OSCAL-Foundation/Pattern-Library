@@ -41,15 +41,25 @@ class VerifierTests(unittest.TestCase):
             self.assertEqual(extract.source_path("IBM", "*.json"),
                              "/tmp/test-corpus/IBM/*.json")
 
-    def test_extraction_accepts_json_and_markdown(self):
+    def test_extraction_reads_declared_json_pointer(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "sample.json").write_text('{"rule": "value"}')
-            (root / "sample.md").write_text("# Rules\nKeep source wording.\n")
             json_entry = {"id": "sample", "source": "sample.json", "pointer": "/rule"}
-            markdown = {"id": "sample-md", "source": "sample.md", "language": "markdown"}
             self.assertEqual(extract.extract_one(json_entry, directory)["content"], '"value"')
-            self.assertIn("Keep source wording.", extract.extract_one(markdown, directory)["content"])
+
+    def test_manifest_and_committed_snippets_are_oscal_json_only(self):
+        entries = extract.load_manifest()["snippets"]
+        self.assertEqual(len(entries), 32)
+        self.assertTrue(all(e.get("language", "json") == "json"
+                            and e["source"].endswith(".json") for e in entries))
+        self.assertEqual({e["id"] for e in entries},
+                         {p.stem for p in Path(verify.SNIPPETS).glob("*.json")})
+        for path in Path(verify.SNIPPETS).glob("*.json"):
+            record = json.loads(path.read_text())
+            self.assertEqual(record["language"], "json")
+            self.assertTrue(record["source"].endswith(".json"))
+            json.loads(record["content"])
 
     def test_offline_never_probes_network(self):
         with patch.object(verify, "OFFLINE", True), patch("urllib.request.urlopen") as request:
@@ -67,7 +77,7 @@ class VerifierTests(unittest.TestCase):
             self.assertTrue(url.startswith(
                 "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"))
 
-    def test_archived_provenance_is_retained_not_rendered(self):
+    def test_background_attribution_is_absent(self):
         self.assertEqual(self.run_checks(verify.check_quotes), [])
 
     def test_banner_tokens_and_layout_contract(self):
@@ -77,10 +87,27 @@ class VerifierTests(unittest.TestCase):
         self.assertEqual(self.run_checks(verify.check_slots, verify.check_stakeholders,
                                          verify.check_tradeoffs), [])
 
-    def test_archive_missing_cannot_pass(self):
-        with tempfile.TemporaryDirectory() as directory, patch.object(verify, "DATA", directory):
-            with self.assertRaises(FileNotFoundError):
-                verify._check_editorial_data()
+    def test_editorial_checks_need_no_external_files_even_in_strict_mode(self):
+        with patch.object(verify, "STRICT", True), patch.object(
+                extract, "source_path", side_effect=AssertionError("unexpected external source lookup")):
+            self.assertEqual(self.run_checks(verify.check_quotes, verify.check_criteria,
+                                             verify.check_questions), [])
+        self.assertEqual(verify._SKIPS, [])
+
+    def test_background_attribution_is_rejected_in_editorial_data(self):
+        node = {"sections": [{"verbatim": "background", "source_document": "draft"}]}
+        self.assertEqual(verify.editorial_reference_paths(node),
+                         ["$/sections/0/verbatim", "$/sections/0/source_document"])
+        self.assertEqual(verify.editorial_reference_paths(
+            {"snippet_ids": ["aws-acm2-control"], "id": "paper-cat-1"}), [])
+
+    def test_bundle_contains_only_current_sources(self):
+        import bundle
+
+        payload = bundle.collect()
+        stored = Path(bundle.OUT).read_text().split("window.TFGBundle = ", 1)[1]
+        self.assertEqual(json.loads(stored.rsplit(";", 1)[0]), payload)
+        self.assertEqual(len(payload["data/provenance.json"]["snippets"]), 32)
 
     def test_question_validation_covers_every_slot(self):
         with tempfile.TemporaryDirectory() as directory:

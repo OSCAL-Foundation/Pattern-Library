@@ -51,19 +51,23 @@ implied recommendation. Costs are stated for readers to evaluate.
 
 ## Status
 
-Ready to publish, not published. Eight pages, all built: `index.html`,
+Active analysis with eight built pages: `index.html`,
 `six-questions.html`, the three approach pages, `scenario.html`, `questions.html`
-and `oscal-artifacts.html`. Remaining review and verification items:
+and `oscal-artifacts.html`. Strict verification is not fully passing. Remaining
+review and verification items:
 
 - **Proponent review has not happened.** No correction requests have been sent
    to the publishers; no corrections have been received, and no publisher has
    declined review. The site states the review status.
-- Four checks require network access, skip locally, and run in CI.
-- The verbatim portions of `--criteria` and `--questions` skip when the pre-read
-   and position paper are absent. The two Word documents reside outside the site
-   and are absent from the corpora repository checked out by the workflow, so the
-   verbatim checks skip in CI and locally. Place both documents at the corpora
-   directory root to enable the checks.
+- Schema, external-link and browser checks need their dependencies and network
+   access; offline skips are not strict passes.
+- Four known published assessment-plan schema defects remain, detailed below.
+- CI still needs an authorized OSCAL source repository and pinned commit
+   configured through its mandatory Actions-variable gate.
+
+The 15 evaluation criteria and the open questions are maintained as analysis
+content and verified structurally. They are not reproduced or attributed text.
+Published OSCAL example evidence still requires the source corpus.
 
 `BUILD-LOG.md` records every phase, every decision, and the open items for each
 review gate.
@@ -119,8 +123,8 @@ test -f tools/test_verify.py && python -m unittest discover -s tools -p test_ver
 python tools/verify.py --data --css --quotes --bundle --source --pages --offline
 ```
 
-This subset checks local content, CSS, retained but unrendered attribution, bundled data,
-source-code sanity and page rendering without a corpus. `--pages` runs
+This subset checks local content, CSS, absence of quotation and attribution hooks,
+bundled data, source-code sanity and page rendering without a corpus. `--pages` runs
 [tools/pagecheck.js](tools/pagecheck.js); it can also be run directly with Node.
 `--example` is not corpus-independent: it invokes the artifact inventory
 generator, so it remains in the full pass below.
@@ -160,7 +164,6 @@ python tools/verify.py --all --strict
 | `--schema`, `--conformance` | Published NIST OSCAL 1.2.1 schemas; `jsonschema` and `regex` installed above |
 | `--a11y` | axe-core and Puppeteer's headless browser |
 | `--links` | Reachable external link targets |
-| `--criteria`, `--questions` | Original pre-read and position-paper DOCX documents in the corpus root |
 
 Schema downloads use the pinned NIST 1.2.1 release assets, not generated-file
 paths absent from the source tag. Refresh full schema evidence explicitly with
@@ -173,10 +176,9 @@ Individual flags select checks for diagnosis; they do not replace the full pass.
 
 ### Source blockers
 
-Strict verification requires the original pre-read and position-paper DOCX files,
-which are absent from the available local corpus. The published assessment plans
-also contain four schema failures: the Maester and ScubaGear plans omit required
-`subjects` on associated activities; Windows Server 2019 and 2022 activity titles
+The published assessment plans contain four known schema failures: the Maester
+and ScubaGear plans omit required `subjects` on associated activities;
+Windows Server 2019 and 2022 activity titles
 contain line breaks rejected by OSCAL 1.2.1. The verifier reports these failures.
 Original source files and provenance hashes must not be edited to bypass them.
 
@@ -212,9 +214,8 @@ external prerequisites; unconfigured source checks fail rather than skip.**
 
 ## How the content is produced
 
-The site generates content rather than transcribing or duplicating source
-material. Labels distinguish two content types. An **extract** comes from a
-published file at a declared JSON pointer and is re-derived on every build. An
+Published evidence and authored analysis are distinguished. An **extract** comes
+from a published file at a declared JSON pointer and is re-derived on every build. An
 **encoding** comes from generator-held data, is labelled as authored for the
 analysis, and is regenerated and diffed on every build to detect hand edits.
 Every figure is recomputed from the corpora.
@@ -239,9 +240,9 @@ without writing and exit non-zero for stale committed files:
 hand-edited pages. Editing a generated page instead of source data stops the
 build rather than losing the edit.
 
-`tools/manifest.yaml` is the declarative source of truth for the extracts. Each
-of the 29 entries names a source file, an RFC 6901 pointer, the illustrated
-question, and any trimming applied. Trimming is declared and marked in rendered
+`tools/manifest.yaml` declares 32 snippets, all JSON. Each entry names a published
+OSCAL JSON source file, an RFC 6901 pointer, the illustrated question, and any
+trimming applied. Trimming is declared and marked in rendered
 output; there is no silent truncation.
 `data/provenance.json` records the SHA-256 of both the source file and the
 extracted content.
@@ -249,18 +250,17 @@ extracted content.
 `tools/pattern_examples.py` is the source of truth for encodings. Two rules, one
 binary and one carrying a value, demonstrate parameter placement. The generator
 encodes the rules for each of seven question rows in each approach's structure.
-A composite shows one rule's complete chain in three panes. Unanswered questions,
-such as assessment-first's 6a, receive no encoding. `--example` checks the same
+A composite shows one rule's complete chain in three panes. Unanswered questions
+receive no encoding. `--example` checks the same
 constraints as extracts: published identifiers, approach namespaces where
 required rather than invented namespaces, no named parties, and identical
 rule order across columns.
 
-`verify.py` asserts facts against the corpora and recomputes cited figures.
-When source documents are available, verification checks verbatim material
-against the named sources: fifteen criteria and attributions against the
-pre-read, eleven evidence-register items, and ten open questions from the
-position paper. Missing documents produce named skips, not passes. The former
-`--methodology` phase checked editorial rules against the development plan.
+`verify.py` asserts OSCAL example facts against the corpora and recomputes cited
+figures. The 15 criteria and open questions are analysis content: `--criteria`
+and `--questions` check structure, identifiers, question mappings and reasoning,
+not attribution or text reproduction. The former `--methodology` phase checked
+editorial rules against the development plan.
 Removal of the methodology page also removed the check; editorial rules are no
 longer machine-checked by that phase.
 
@@ -268,21 +268,19 @@ longer machine-checked by that phase.
 
 ```
 data/
-  snippets/          29 files, one per extract, never edited by hand
+   snippets/          32 JSON files, one per extract, never edited by hand
   schema-evidence/   8 verbatim OSCAL 1.2.1 schema fragments with their constraints
   six-questions.json the six questions and the answer matrix, the central claim set
   pattern-examples.json  the two rules, written in all three shapes. Ours
   oscal-artifacts.json   what each of the three groups has published, counted
-  criteria.json      the fifteen evaluation criteria, verbatim from the pre-read
-  criteria-fill.json the forty-five cells, answered from the files
+   criteria.json      the 15 evaluation criteria, maintained as analysis content
   sources.json       the guidance read as input, one row per benchmark
   source-files.json  every file under sources/, generated, with size and type
   views.json         the three views of what a rule is
   glossary.json      the vocabulary, including the terms the group has not
                      settled. Rendered as term cards in place; there is no
                      glossary page
-  questions.json     the evidence register, the open questions, and their sources
-  quotes.json        the record of what was said. Retained, and never rendered
+   questions.json     editorial open questions and their reasoning, in four sections
   corpus-stats.json  every figure cited, each with its derivation
   provenance.json    generated
 tools/
@@ -304,7 +302,7 @@ tools/
 Eight tools are generators. Do not hand-edit generated files:
 `data/snippets/*.json` and `data/provenance.json`,
 `data/pattern-examples.json`, `data/oscal-artifacts.json`,
-`data/source-files.json`, `assets/diagrams/*.svg`, `data/criteria-fill.json`, the
+`data/source-files.json`, `assets/diagrams/*.svg`, the
 three approach pages, and `assets/bundle.js`. The workflow regenerates the files
 and fails on differences from committed versions.
 
@@ -320,16 +318,16 @@ Thirteen rules govern every page, as recorded in section 3 of the development
 plan, `TFG-Rules-and-Checks-Site-Plan.md`. A later decision partly superseded
 seven rules. The rules also appeared on the removed methodology page. Key rules:
 
-- **The site authors no evaluation criteria.** The fifteen criteria come from
-   the pre-read unchanged. Every build checks arithmetic; builds with access to
-   the pre-read also check wording.
+- **The 15 criteria and open questions are maintained as analysis content.**
+   Checks validate structure and mappings; editorial review assesses the wording
+   and whether the questions fairly address each approach.
 - **The site carries no quotations and names nobody.** Every characterization
-   traces to a JSON pointer in a published file or a source document. Use
+   of published content traces to an OSCAL example at a declared JSON pointer.
+   Editorial questions and modelling choices are identified as analysis. Use
    structural names and option letters only. `tools/pagecheck.js` checks rendered
    prose per page, exempting file paths as provenance.
-   **`oscal-artifacts.html` is exempt by name** and must name publishers to
-   identify document provenance. The inventory states no position. All other
-   pages follow the rule.
+   Guidance publishers and source paths remain identified for provenance;
+   the artifact inventory describes published content, not proponent positions.
 - **Equal budget is enforced by construction.** One generator writes the three
    approach pages and rejects word-count differences above ten per cent.
 - **Non-verbal encoding counts as editorializing.** Badges, hollow cells, and
@@ -339,12 +337,9 @@ seven rules. The rules also appeared on the removed methodology page. Key rules:
 - **Every figure carries its denominator**, and every figure is recomputed from
   the corpora on every build.
 
-Rule 5, requiring equal extract counts on approach pages, could not be met.
-Unanswered questions provide no extract; an answer using one construct needs one
-extract, while an answer using three constructs needs three. The counts are 1,
-1, and 2. Each page discloses the count and reason with otherwise identical
-wording, including a warning that extract counts do not measure documentation
-quality. Each page states the departure from the rule.
+Equal budgets apply to the authored comparison, not to the volume of evidence
+a publisher happens to supply. Published extracts are selected to support claims;
+extract counts do not measure documentation quality or rank the approaches.
 
 ## Contributing a correction
 
@@ -371,8 +366,8 @@ passing check with an unrepresentative extract indicates a manifest-pointer
 selection defect. Encoding defects belong in `tools/pattern_examples.py`, not
 the manifest; run `python tools/verify.py --example` to check encodings.
 
-Editorial rule 4 forbids authoring evaluation criteria for the site. Submit a
-sixteenth criterion to the working group before inclusion in the analysis.
+Submit changes to the 15 evaluation criteria or open questions for analysis
+review, and update their structural checks when the agreed structure changes.
 
 ## Adding a fourth approach
 
@@ -404,7 +399,7 @@ Adding an approach requires data changes and a page, not a site rewrite.
 
 Checks identify omissions: `--matrix` rejects unclassified cells, `--example`
 rejects columns with mismatched rules, `--budget` rejects unequal pages, and
-`--criteria` requires answers to all fifteen criteria for the added approach.
+`--criteria` validates the 15 criteria and their mappings to question rows.
 
 Add a fourth entry to `PUBLISHERS` in `tools/oscal_artifacts.py`, naming the
 corpus directory and option letter. The inventory derives the remaining content
