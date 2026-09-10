@@ -61,7 +61,9 @@ review and verification items:
    declined review. The site states the review status.
 - Schema, external-link and browser checks need their dependencies and network
    access; offline skips are not strict passes.
-- Four known published assessment-plan schema defects remain, detailed below.
+- The examples are curated: four published assessment-plan schema defects were
+   repaired in the committed copies on 2026-09-10, detailed below and in
+   `BUILD-LOG.md`.
 - Full checks require the repository-defined sources: committed examples and
    the verified public AWS cache. Prepare the cache explicitly before working
    offline; CI prepares it before corpus-dependent checks.
@@ -232,15 +234,20 @@ deliberately not an automatic dependency. Both later tasks begin with
 `--check` and never fetch inputs; **verify** runs `--all --offline`.
 Use the strict command above when network-dependent verification is required.
 
-### Source blockers
+### Curated examples
 
-The published assessment plans contain four known schema failures: the Maester
-and ScubaGear plans omit required `subjects` on associated activities;
-Windows Server 2019 and 2022 activity titles
-contain line breaks rejected by OSCAL 1.2.1. The verifier reports these failures.
-Original source files and provenance hashes must not be edited to bypass them.
-Source preparation does not resolve or suppress these defects. No validation
-exceptions or edits to the original inputs have been applied.
+The files under `examples/` are curated OSCAL examples, not verbatim copies of
+what each publisher released. `data/examples.json` records the path, byte count
+and SHA-256 of every file, `tools/source-lock.json` records how many files each
+set holds, and every build re-verifies both before any check that reads them, so
+an unnoticed edit fails the build. A deliberate repair, replacement or addition
+is accepted by running `python tools/copy_examples.py --rebaseline` after
+updating `expected_files` in the lock, and recording what changed and why in
+`BUILD-LOG.md`.
+
+Every assessment-first example validates against the NIST OSCAL 1.2.1 JSON
+schemas under `--conformance`. The 2026-09-10 entry in `BUILD-LOG.md` lists the
+repairs that made that true, and what each one changed.
 
 ### CI source preparation
 

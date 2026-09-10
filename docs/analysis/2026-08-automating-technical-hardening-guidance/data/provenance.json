@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T21:30:26+00:00",
+  "generated_at": "2026-09-10T14:51:40+00:00",
   "source_lock": "tools/source-lock.json",
   "source_inputs": {
     "version": 1,
@@ -16,7 +16,7 @@
         "approach": "assessment-first",
         "prefix": "Easy Dynamics",
         "directory": "examples/assessment-first",
-        "expected_files": 18
+        "expected_files": 19
       },
       {
         "key": "aws",
@@ -96,9 +96,9 @@
       "pointer": "/assessment-plan/local-definitions/activities/0/props",
       "language": "json",
       "bytes": 270,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "c3298e80edbf681c6da3e2965d161f81804db9d940539e41f77a19cf21e544e0",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-cisa-assessment-assets",
@@ -109,9 +109,9 @@
       "pointer": "/assessment-plan/assessment-assets",
       "language": "json",
       "bytes": 928,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "60c8183fb14d09b5f27513b84f394bf8a48670eadaf2f73fd834bc7300011240",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-cisa-context-step",
@@ -122,9 +122,9 @@
       "pointer": "/assessment-plan/local-definitions/activities/0/steps/10",
       "language": "json",
       "bytes": 1828,
-      "sha256_of_source_file": "49d218b196333445dd67178dd58aba441fc596a28d2221c1c724d8eba460ee57",
+      "sha256_of_source_file": "0dac47d1c7ba18908c0bd48a8c4676e3c862a8b99dcbb14dc5eb73123b753653",
       "sha256_of_content": "ec5873d16ce6100d9be8cce518945b3aee95c50d2ae1ace4e298b860f8433b8f",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-stig-related-controls",
@@ -148,9 +148,9 @@
       "pointer": "/assessment-plan/local-definitions/activities/0/steps/0/reviewed-controls",
       "language": "json",
       "bytes": 197,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "52c2919dc4f34fd2fbc5907450582b436e7e929a031c2bdb5a9c83d4ae18b30d",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-subjects-includeall",
@@ -174,9 +174,9 @@
       "pointer": "/assessment-plan/assessment-subjects",
       "language": "json",
       "bytes": 277,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "01c9afa2b4ee716f8534f4a2f12777d7202d741c06a7d5182619ca8f3afbc3fe",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-cisa-task-timing",
@@ -186,10 +186,10 @@
       "source": "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json",
       "pointer": "/assessment-plan/tasks/0",
       "language": "json",
-      "bytes": 1084,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
-      "sha256_of_content": "c07765f9cca980bb8a30cfec768b885b607686df348a53618ab6099994e9a6e7",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "bytes": 2946,
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
+      "sha256_of_content": "e5939a58c062351efa21b423729e40beeb72d3e13dd32757af065e4709dfbd60",
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-stig-import-ssp",

@@ -8,6 +8,6 @@
   "section": null,
   "language": "json",
   "content": "{\n  \"components\": [\n    {\n      \"uuid\": \"abe8d6c2-8508-4d22-aa2b-5e001ff3c6f7\",\n      \"type\": \"software\",\n      \"title\": \"ScubaGear Plugin\",\n      \"description\": \"CLI plugin on Comply0 platform for verifying M365 configuration settings using CISA ScubaGear.\",\n      \"props\": [\n        {\n          \"name\": \"context\",\n          \"value\": \"{\\\"plugin-path\\\":\\\"Comply0.Kansa.Extensions.ScubaGear.dll\\\",\\\"script-path\\\":\\\"Resources\\\\\\\\Invoke-ScubaGear.ps1\\\",\\\"app-id\\\":\\\"c4d39d69-aea7-4acc-af2c-45c502d3a308\\\",\\\"opa-path\\\":\\\"/usr/local/bin\\\"}\",\n          \"ns\": \"http://comply0.com/ns/oscal\"\n        }\n      ],\n      \"status\": {\n        \"state\": \"operational\"\n      }\n    }\n  ],\n  \"assessment-platforms\": [\n    {\n      \"uuid\": \"15000cf8-2f2a-4417-8b93-60a1f209ee95\",\n      \"title\": \"Comply0 cATO Agent\",\n      \"uses-components\": [\n        {\n          \"component-uuid\": \"abe8d6c2-8508-4d22-aa2b-5e001ff3c6f7\"\n        }\n      ]\n    }\n  ]\n}",
-  "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
-  "extracted_at": "2026-08-22T17:17:36+00:00"
+  "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
+  "extracted_at": "2026-09-10T14:51:40+00:00"
 }

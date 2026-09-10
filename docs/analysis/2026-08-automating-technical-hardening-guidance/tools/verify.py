@@ -92,6 +92,13 @@ STRICT = False
 OFFLINE = False
 SCENARIO_FIGURES: set = set()
 
+# Hosts whose edge returns 403 to every non-browser client, so a 403 there says
+# nothing about the page. Each entry records when a person last opened the
+# link. Only 403 is excused; any other status still fails.
+BOT_BLOCKING_HOSTS: dict[str, str] = {
+    "www.cisa.gov": "2026-09-10",
+}
+
 
 def skip(name: str, reason: str, command: str = "") -> bool:
     if STRICT:
@@ -3332,6 +3339,12 @@ def check_links() -> None:
                 code = exc.code
         except Exception as exc:                     # noqa: BLE001
             code = str(exc)[:60]
+        host = urllib.parse.urlsplit(u).hostname or ""
+        if code == 403 and host in BOT_BLOCKING_HOSTS:
+            print(f"        {host} answers 403 to automated clients; "
+                  f"opened by hand {BOT_BLOCKING_HOSTS[host]}")
+            check(f"external link is reachable: {u[:60]}", True)
+            continue
         check(f"external link is reachable: {u[:60]}",
               isinstance(code, int) and code < 400, f"got {code}")
 
@@ -4822,15 +4835,21 @@ def check_sources() -> None:
                if not os.path.isfile(os.path.join(SITE_ROOT, "examples",
                                                   f["path"].replace("/", os.sep)))]
     check("every indexed example is on disk", not missing, str(missing[:3]))
+    #  Reference documents more than one example set resolves, such as the
+    #  catalog an SSP imports, sit at the examples root and are indexed apart
+    #  from the per-approach sets.
+    shared = {f["path"] for f in examples.get("shared", [])}
+    check("shared reference documents sit at the examples root",
+          all("/" not in p for p in shared), str(sorted(shared)[:3]))
     on_disk = {os.path.relpath(p, os.path.join(SITE_ROOT, "examples")).replace(os.sep, "/")
                for p in glob.glob(os.path.join(SITE_ROOT, "examples", "**", "*.json"),
                                   recursive=True) if os.path.isfile(p)}
-    check("every local JSON example is indexed", on_disk == indexed,
-          str(sorted(on_disk ^ indexed)[:4]))
+    check("every local JSON example is indexed", on_disk == indexed | shared,
+          str(sorted(on_disk ^ (indexed | shared))[:4]))
     bad = []
-    for f in examples["files"]:
+    for f in examples["files"] + examples.get("shared", []):
         full = os.path.join(SITE_ROOT, "examples", f["path"])
-        if f["path"].split("/", 1)[0] != f["approach"]:
+        if "approach" in f and f["path"].split("/", 1)[0] != f["approach"]:
             bad.append(f["path"] + ": approach")
         if not os.path.isfile(full):
             continue

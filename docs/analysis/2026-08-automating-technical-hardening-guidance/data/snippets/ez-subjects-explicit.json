@@ -8,6 +8,6 @@
   "section": null,
   "language": "json",
   "content": "[\n  {\n    \"type\": \"inventory-item\",\n    \"description\": \"The M365 tenant instance being assessed. Assume it's defined in SSP.\",\n    \"include-subjects\": [\n      {\n        \"subject-uuid\": \"791778c1-234b-4e30-8490-07ad2e6fec92\",\n        \"type\": \"inventory-item\"\n      }\n    ]\n  }\n]",
-  "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
-  "extracted_at": "2026-08-22T17:17:36+00:00"
+  "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
+  "extracted_at": "2026-09-10T14:51:40+00:00"
 }

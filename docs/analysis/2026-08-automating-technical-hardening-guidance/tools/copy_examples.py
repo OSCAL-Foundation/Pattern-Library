@@ -2,13 +2,16 @@
 """Validate and index the committed OSCAL examples without copying them.
 
 The filename is retained for compatibility. IBM and Easy Dynamics resolve to
-the complete originals already in examples/; source and destination are the
-same files. No original is written, copied, fetched, or replaced.
+the curated example sets already in examples/; source and destination are the
+same files. Nothing is fetched or copied.
 
-data/examples.json is the trust baseline, not an output to recreate from changed
-files. Every path, byte count and SHA-256 must match before the index can be
-refreshed. Missing or changed originals require restoring the committed files
-and index, never generating new fingerprints to accept edits.
+data/examples.json is the trust baseline. A standard run and --check verify
+every path, byte count and SHA-256 against it and refuse to record new
+fingerprints, so an unnoticed edit to an example fails the build. The examples
+are curated, not verbatim third-party originals: when one is deliberately
+repaired, replaced or added, run --rebaseline to record the new fingerprints,
+then update expected_files in tools/source-lock.json if the count changed, and
+say what changed and why in BUILD-LOG.md.
 
 Catalog-first remains link-only, at the revision pinned in the source lock.
 A standard run refreshes the index note, pinned links and record ordering;
@@ -23,6 +26,7 @@ have to be reconstructed from filenames.
 Usage:
     python tools/copy_examples.py
     python tools/copy_examples.py --check
+    python tools/copy_examples.py --rebaseline
 """
 
 from __future__ import annotations
@@ -69,14 +73,17 @@ def sha(path: str) -> str:
     return h.hexdigest()
 
 
-def wanted() -> list[tuple[str, str, str]]:
-    """(approach, verified local path, examples-relative path) for each original."""
+def wanted(verify: bool = True) -> list[tuple[str, str, str]]:
+    """(approach, local path, examples-relative path) for each example file."""
     out = []
     for key, rel in sorted(SOURCES.items()):
-        base = source_inputs.source_path(rel)
-        if base != os.path.join(DEST, key):
-            raise source_inputs.SourceInputError(
-                f"{rel} must resolve to committed examples/{key}, not {base}")
+        if verify:
+            base = source_inputs.source_path(rel)
+            if base != os.path.join(DEST, key):
+                raise source_inputs.SourceInputError(
+                    f"{rel} must resolve to committed examples/{key}, not {base}")
+        else:
+            base = os.path.join(DEST, key)
         for dirpath, _dirs, names in os.walk(base):
             for name in sorted(names):
                 if not name.lower().endswith(".json"):
@@ -85,6 +92,45 @@ def wanted() -> list[tuple[str, str, str]]:
                 sub = os.path.relpath(src, base).replace(os.sep, "/")
                 out.append((key, src, f"{key}/{sub}"))
     return sorted(out, key=lambda t: t[2])
+
+
+NOTE = ("The curated OSCAL examples committed in this repository, indexed by "
+        "tools/copy_examples.py with the path, byte count and SHA-256 of each. "
+        "Every build re-verifies the files against this index, so an edit is "
+        "only accepted through an explicit --rebaseline run recorded in "
+        "BUILD-LOG.md. Catalog-first is not here: it is published in a public "
+        "repository and linked at the locked revision instead.")
+
+
+def fingerprints(verify: bool) -> list[dict]:
+    return [{"approach": key, "path": rel, "bytes": os.path.getsize(src),
+             "sha256": sha(src)} for key, src, rel in wanted(verify)]
+
+
+def shared() -> list[dict]:
+    """Reference documents at the examples root, resolved by more than one set."""
+    out = []
+    for name in sorted(os.listdir(DEST)):
+        path = os.path.join(DEST, name)
+        if name.lower().endswith(".json") and os.path.isfile(path):
+            out.append({"path": name, "bytes": os.path.getsize(path), "sha256": sha(path)})
+    return out
+
+
+def rebaseline() -> dict:
+    """Record the current files as the new baseline; the lock count must agree."""
+    files = fingerprints(verify=False)
+    counts = {}
+    for row in files:
+        counts[row["approach"]] = counts.get(row["approach"], 0) + 1
+    for source in source_inputs.source_metadata()["sources"]:
+        if "expected_files" in source and counts.get(source["approach"], 0) != source["expected_files"]:
+            raise source_inputs.SourceInputError(
+                f"examples/{source['approach']} holds {counts.get(source['approach'], 0)} JSON files "
+                f"but tools/source-lock.json expects {source['expected_files']}; "
+                "update expected_files deliberately before rebaselining.")
+    return {"note": NOTE, "link_only": LINK_ONLY, "cis_derived": CIS_DERIVED,
+            "shared": shared(), "files": files}
 
 
 def build() -> dict:
@@ -105,27 +151,23 @@ def build() -> dict:
     if baseline.get("cis_derived") != CIS_DERIVED:
         raise source_inputs.SourceInputError(
             "data/examples.json cis_derived differs; restore the committed licensing metadata.")
-    files = []
-    for key, src, rel in wanted():
-        files.append({
-            "approach": key,
-            "path": rel,
-            "bytes": os.path.getsize(src),
-            "sha256": sha(src),
-        })
+    files = fingerprints(verify=True)
     if files != sorted(baseline["files"], key=lambda row: row["path"]):
         raise source_inputs.SourceInputError(
             "Committed example inventory differs from data/examples.json "
-            "(paths, sizes or SHA-256). Restore the committed examples/index; "
-            "refusing to record new fingerprints.")
+            "(paths, sizes or SHA-256). Restore the committed examples/index, "
+            "or run --rebaseline for a deliberate change; refusing to record "
+            "new fingerprints implicitly.")
+    reference = shared()
+    if reference != baseline.get("shared", []):
+        raise source_inputs.SourceInputError(
+            "Shared reference documents at examples/ differ from data/examples.json; "
+            "restore them or run --rebaseline for a deliberate change.")
     return {
-        "note": ("The complete original OSCAL examples committed in this repository, "
-                 "validated and indexed by tools/copy_examples.py against the "
-                 "existing paths, byte counts and SHA-256 fingerprints. Originals "
-                 "are never rewritten. Catalog-first is not here: it is published "
-                 "in a public repository and linked at the locked revision instead."),
+        "note": NOTE,
         "link_only": LINK_ONLY,
         "cis_derived": CIS_DERIVED,
+        "shared": reference,
         "files": files,
     }
 
@@ -133,7 +175,7 @@ def build() -> dict:
 def main() -> int:
     check = "--check" in sys.argv
     try:
-        doc = build()
+        doc = rebaseline() if "--rebaseline" in sys.argv else build()
         if check:
             with open(OUT, encoding="utf-8") as fh:
                 have = json.load(fh)
@@ -150,8 +192,9 @@ def main() -> int:
         print(f"Example validation/indexing failed: {error}", file=sys.stderr)
         return 1
     total = sum(f["bytes"] for f in doc["files"])
-    print(f"data/examples.json refreshed: {len(doc['files'])} verified files, "
-          f"{total / 1e6:.1f} MB; originals unchanged")
+    verb = "rebaselined" if "--rebaseline" in sys.argv else "refreshed"
+    print(f"data/examples.json {verb}: {len(doc['files'])} files, "
+          f"{total / 1e6:.1f} MB; examples/ not written")
     return 0
 
 

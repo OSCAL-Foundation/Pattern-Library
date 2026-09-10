@@ -13,7 +13,7 @@
       "approach": "assessment-first",
       "prefix": "Easy Dynamics",
       "directory": "examples/assessment-first",
-      "expected_files": 18
+      "expected_files": 19
     },
     {
       "key": "aws",

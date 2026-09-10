@@ -98,7 +98,7 @@ class SourceInputsTests(unittest.TestCase):
         self.assertEqual((ibm["key"], ibm["prefix"], ibm["directory"], ibm["expected_files"]),
                          ("ibm", "IBM", "examples/component-first", 6))
         self.assertEqual((easy["key"], easy["prefix"], easy["directory"], easy["expected_files"]),
-                         ("easy-dynamics", "Easy Dynamics", "examples/assessment-first", 18))
+                         ("easy-dynamics", "Easy Dynamics", "examples/assessment-first", 19))
         self.assertEqual(aws["prefix"], "AWS/oscal-content-for-aws-services-main")
         self.assertEqual(aws["directory"], f".cache/oscal-sources/aws/{REVISION}")
         self.assertEqual(aws["repository"], REPOSITORY)

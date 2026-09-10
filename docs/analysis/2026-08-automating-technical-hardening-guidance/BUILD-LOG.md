@@ -10,11 +10,12 @@ open questions are maintained as analysis content and verified structurally.
 The snippet manifest now contains 32 JSON-only extracts from published OSCAL
 examples resolved through the repository's source lock. Historical check totals below
 describe earlier versions of the harness, not current strict verification.
-Four known assessment-plan schema defects remain: missing associated-activity
-`subjects` in Maester and ScubaGear, and activity-title line breaks in Windows
-Server 2019 and 2022. CI uses the 24 committed example files and a hash-verified
-public AWS archive pinned in `tools/source-lock.json`; no personal corpus folder
-or source-repository variables are required.
+The four assessment-plan schema defects recorded here until 2026-09-10 (missing
+associated-activity `subjects` in Maester and ScubaGear, activity-title line
+breaks in Windows Server 2019 and 2022) were repaired in the committed examples
+on that date; see the final entry. CI uses the committed example files and a
+hash-verified public AWS archive pinned in `tools/source-lock.json`; no personal
+corpus folder or source-repository variables are required.
 
 ---
 
@@ -8372,3 +8373,73 @@ be retained for a declared evidence pointer without being fetched by a page;
 packaging selects browser inputs rather than copying all build inputs.
 
 `2619/2619` verify checks and `649/649` page checks pass.
+
+## Session: the examples become curated, and validate
+
+### Gate decision: the examples are curated, not verbatim
+
+**Date:** 2026-09-10
+
+Pirooz: the repository does not need verbatim copies of what each publisher
+released. Example files may be repaired, replaced or added. The fingerprint index
+stays, so an edit is still something the build notices; what changes is that a
+deliberate edit has a sanctioned path, `copy_examples.py --rebaseline`, and a
+place to be recorded, which is this log.
+
+### The four schema defects repaired, and the SSP chain made local
+
+**Date:** 2026-09-10
+**Scope:** examples/assessment-first, the example index and lock, three corpus
+figures, the link check
+**Result:** every assessment-first example validates against NIST OSCAL 1.2.1;
+`--all --offline` 2717/2717.
+
+**What changed in the examples, file by file.**
+
+*`CISA BOD 25-01/ap-cisa-scuba-maester.json`* and *`ap-cisa-scuba-scubagear.json`*:
+each of the seven `associated-activities` under `tasks/0` gained a `subjects`
+block naming the same inventory item the task already assesses,
+`791778c1-234b-4e30-8490-07ad2e6fec92`, as `include-subjects`. Maester's
+task-level subject, which had been written as a bare `subject-uuid` and failed
+the schema's `anyOf`, was rewritten in the same `include-subjects` shape. The
+schema requires `subjects` on every associated activity; both `oscal-cli` 3.1.0
+and the verifier reported the same seven paths per file.
+
+*`DISA/.../win2019.json`* and *`win2022.json`*: one STIG rule in each
+(V-205665, V-254418) carried a line break inside its title, and the two step
+titles derived from it inherited the break. The break was removed from the six
+titles. Descriptions, which may contain line breaks, were not touched.
+
+*`CISA BOD 25-01/sample-ssp.json`*, new: the system security plan the three
+SCuBA plans import. Their shared back-matter resource `080172e1-…` used to point
+at `./ssp.xml`, `./ssp.json` and `./ssp.yaml`, none of which existed, so
+`oscal-cli` in its default mode stopped at the import and never reached the
+schema. All three plans now point at `./sample-ssp.json`.
+
+*`examples/NIST_SP-800-53_rev5_catalog.json`*, new, at the examples root: the
+SSP's `import-profile` used to resolve through a profile on registry.oscal.io
+whose own catalog link returned 404. The SSP now imports the local catalog
+directly, so the whole chain, plan to SSP to catalog, resolves from this
+repository. The catalog is indexed under a new `shared` list in
+`data/examples.json`, because it belongs to no single approach.
+
+**What moved with them.** The Easy Dynamics set is 19 files, so
+`tools/source-lock.json` says 19 and the index was rebaselined. Six snippets
+re-extracted; five changed only their source hash, and `ez-cisa-task-timing`
+now shows the task with its subjects, which is what a reader should see. Three
+corpus figures moved: `cisa_files` 5 to 6, `ez_ssp_files` 0 to 1,
+`ez_subjects_inventory_item` 11 to 26. `oscal-artifacts.json` gained an SSP row.
+
+**One check loosened, narrowly.** cisa.gov answers 403 to every non-browser
+client, including GitHub's runners, so the link to BOD 25-01 failed the
+reachability check although the page is live. `verify.py` now carries a short
+list of hosts known to block automated clients, with the date a person last
+opened the link; a 403 from a listed host passes and says why. Any other status,
+or a 403 from any other host, still fails.
+
+**What still fails under `oscal-cli` with constraints on.** The SCuBA plans
+report Metaschema constraint findings the JSON schema does not express:
+`oscal-activity-type-cardinality` on every activity, duplicate links within a
+step, and prop names outside the allowed set. These are the publisher's
+modelling choices, they do not affect the verifier's checks, and they are left
+as they are.

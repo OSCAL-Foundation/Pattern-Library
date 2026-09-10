@@ -115,7 +115,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       }
                     ]
                   }
@@ -165,11 +167,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2.12",
-                        "statement-ids": ["ac-2.12_smt"]
+                        "statement-ids": [
+                          "ac-2.12_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-2.13",
-                        "statement-ids": ["ac-2.13_smt"]
+                        "statement-ids": [
+                          "ac-2.13_smt"
+                        ]
                       }
                     ]
                   }
@@ -219,7 +225,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2.12",
-                        "statement-ids": ["ac-2.12_smt"]
+                        "statement-ids": [
+                          "ac-2.12_smt"
+                        ]
                       }
                     ]
                   }
@@ -284,11 +292,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2.12",
-                        "statement-ids": ["ac-2.12_smt"]
+                        "statement-ids": [
+                          "ac-2.12_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-2.13",
-                        "statement-ids": ["ac-2.13_smt"]
+                        "statement-ids": [
+                          "ac-2.13_smt"
+                        ]
                       }
                     ]
                   }
@@ -343,19 +355,28 @@
                     "include-controls": [
                       {
                         "control-id": "ia-2.1",
-                        "statement-ids": ["ia-2.1_smt"]
+                        "statement-ids": [
+                          "ia-2.1_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-2.2",
-                        "statement-ids": ["ia-2.2_smt"]
+                        "statement-ids": [
+                          "ia-2.2_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-5",
-                        "statement-ids": ["ia-5_smt.c", "ia-5_smt.g"]
+                        "statement-ids": [
+                          "ia-5_smt.c",
+                          "ia-5_smt.g"
+                        ]
                       },
                       {
                         "control-id": "ia-2.8",
-                        "statement-ids": ["ia-2.8_smt"]
+                        "statement-ids": [
+                          "ia-2.8_smt"
+                        ]
                       }
                     ]
                   }
@@ -415,11 +436,15 @@
                     "include-controls": [
                       {
                         "control-id": "ia-2.1",
-                        "statement-ids": ["ia-2.1_smt"]
+                        "statement-ids": [
+                          "ia-2.1_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-2.2",
-                        "statement-ids": ["ia-2.2_smt"]
+                        "statement-ids": [
+                          "ia-2.2_smt"
+                        ]
                       }
                     ]
                   }
@@ -479,23 +504,34 @@
                     "include-controls": [
                       {
                         "control-id": "ia-2.1",
-                        "statement-ids": ["ia-2.1_smt"]
+                        "statement-ids": [
+                          "ia-2.1_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-2.2",
-                        "statement-ids": ["ia-2.2_smt"]
+                        "statement-ids": [
+                          "ia-2.2_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-5",
-                        "statement-ids": ["ia-5_smt.c", "ia-5_smt.g"]
+                        "statement-ids": [
+                          "ia-5_smt.c",
+                          "ia-5_smt.g"
+                        ]
                       },
                       {
                         "control-id": "ia-2.8",
-                        "statement-ids": ["ia-2.8_smt"]
+                        "statement-ids": [
+                          "ia-2.8_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-2.13",
-                        "statement-ids": ["ia-2.13_smt"]
+                        "statement-ids": [
+                          "ia-2.13_smt"
+                        ]
                       }
                     ]
                   }
@@ -535,7 +571,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       }
                     ]
                   }
@@ -590,11 +628,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt.b"]
+                        "statement-ids": [
+                          "cm-7_smt.b"
+                        ]
                       },
                       {
                         "control-id": "ia-5",
-                        "statement-ids": ["ia-5_smt.c"]
+                        "statement-ids": [
+                          "ia-5_smt.c"
+                        ]
                       }
                     ]
                   }
@@ -659,15 +701,22 @@
                     "include-controls": [
                       {
                         "control-id": "ia-2.1",
-                        "statement-ids": ["ia-2.1_smt"]
+                        "statement-ids": [
+                          "ia-2.1_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-5",
-                        "statement-ids": ["ia-5_smt.c", "ia-5_smt.g"]
+                        "statement-ids": [
+                          "ia-5_smt.c",
+                          "ia-5_smt.g"
+                        ]
                       },
                       {
                         "control-id": "ia-2.8",
-                        "statement-ids": ["ia-2.8_smt"]
+                        "statement-ids": [
+                          "ia-2.8_smt"
+                        ]
                       }
                     ]
                   }
@@ -722,11 +771,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-20",
-                        "statement-ids": ["ac-20_smt.b"]
+                        "statement-ids": [
+                          "ac-20_smt.b"
+                        ]
                       },
                       {
                         "control-id": "ia-3",
-                        "statement-ids": ["ia-3_smt"]
+                        "statement-ids": [
+                          "ia-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -791,11 +844,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-20",
-                        "statement-ids": ["ac-20_smt.b"]
+                        "statement-ids": [
+                          "ac-20_smt.b"
+                        ]
                       },
                       {
                         "control-id": "ia-3",
-                        "statement-ids": ["ia-3_smt"]
+                        "statement-ids": [
+                          "ia-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -900,7 +957,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       }
                     ]
                   }
@@ -965,7 +1024,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-4",
-                        "statement-ids": ["au-4_smt"]
+                        "statement-ids": [
+                          "au-4_smt"
+                        ]
                       }
                     ]
                   }
@@ -1020,11 +1081,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.10",
-                        "statement-ids": ["ac-6.10_smt"]
+                        "statement-ids": [
+                          "ac-6.10_smt"
+                        ]
                       },
                       {
                         "control-id": "cm-5",
-                        "statement-ids": ["cm-5_smt"]
+                        "statement-ids": [
+                          "cm-5_smt"
+                        ]
                       }
                     ]
                   }
@@ -1079,11 +1144,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.10",
-                        "statement-ids": ["ac-6.10_smt"]
+                        "statement-ids": [
+                          "ac-6.10_smt"
+                        ]
                       },
                       {
                         "control-id": "cm-5",
-                        "statement-ids": ["cm-5_smt"]
+                        "statement-ids": [
+                          "cm-5_smt"
+                        ]
                       }
                     ]
                   }
@@ -1153,7 +1222,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-4",
-                        "statement-ids": ["cm-4_smt"]
+                        "statement-ids": [
+                          "cm-4_smt"
+                        ]
                       }
                     ]
                   }
@@ -1208,7 +1279,9 @@
                     "include-controls": [
                       {
                         "control-id": "ia-5.1",
-                        "statement-ids": ["ia-5.1_smt"]
+                        "statement-ids": [
+                          "ia-5.1_smt"
+                        ]
                       }
                     ]
                   }
@@ -1258,7 +1331,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.5",
-                        "statement-ids": ["ac-6.5_smt"]
+                        "statement-ids": [
+                          "ac-6.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -1323,7 +1398,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-5",
-                        "statement-ids": ["ac-5_smt"]
+                        "statement-ids": [
+                          "ac-5_smt"
+                        ]
                       }
                     ]
                   }
@@ -1373,7 +1450,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.5",
-                        "statement-ids": ["ac-6.5_smt"]
+                        "statement-ids": [
+                          "ac-6.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -1423,7 +1502,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2",
-                        "statement-ids": ["ac-2_smt"]
+                        "statement-ids": [
+                          "ac-2_smt"
+                        ]
                       }
                     ]
                   }
@@ -1468,7 +1549,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2",
-                        "statement-ids": ["ac-2_smt"]
+                        "statement-ids": [
+                          "ac-2_smt"
+                        ]
                       }
                     ]
                   }
@@ -1518,7 +1601,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.1",
-                        "statement-ids": ["ac-6.1_smt"]
+                        "statement-ids": [
+                          "ac-6.1_smt"
+                        ]
                       }
                     ]
                   }
@@ -1568,7 +1653,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2.1",
-                        "statement-ids": ["ac-2.1_smt"]
+                        "statement-ids": [
+                          "ac-2.1_smt"
+                        ]
                       }
                     ]
                   }
@@ -1623,7 +1710,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.9",
-                        "statement-ids": ["ac-6.9_smt"]
+                        "statement-ids": [
+                          "ac-6.9_smt"
+                        ]
                       }
                     ]
                   }
@@ -1718,7 +1807,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.9",
-                        "statement-ids": ["ac-6.9_smt"]
+                        "statement-ids": [
+                          "ac-6.9_smt"
+                        ]
                       }
                     ]
                   }
@@ -1792,15 +1883,21 @@
                     "include-controls": [
                       {
                         "control-id": "cm-6",
-                        "statement-ids": ["cm-6_smt.a"]
+                        "statement-ids": [
+                          "cm-6_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -1860,15 +1957,21 @@
                     "include-controls": [
                       {
                         "control-id": "cm-6",
-                        "statement-ids": ["cm-6_smt.a"]
+                        "statement-ids": [
+                          "cm-6_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -1928,15 +2031,21 @@
                     "include-controls": [
                       {
                         "control-id": "cm-6",
-                        "statement-ids": ["cm-6_smt.a"]
+                        "statement-ids": [
+                          "cm-6_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -1991,15 +2100,21 @@
                     "include-controls": [
                       {
                         "control-id": "cm-6",
-                        "statement-ids": ["cm-6_smt.a"]
+                        "statement-ids": [
+                          "cm-6_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -2089,15 +2204,21 @@
                     "include-controls": [
                       {
                         "control-id": "cm-6",
-                        "statement-ids": ["cm-6_smt.a"]
+                        "statement-ids": [
+                          "cm-6_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -2157,7 +2278,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -2217,7 +2340,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -2287,7 +2412,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -2352,7 +2479,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -2407,7 +2536,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -2467,7 +2598,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -2522,11 +2655,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -2566,7 +2703,9 @@
                     "include-controls": [
                       {
                         "control-id": "at-2",
-                        "statement-ids": ["at-2_smt.b"]
+                        "statement-ids": [
+                          "at-2_smt.b"
+                        ]
                       }
                     ]
                   }
@@ -2621,7 +2760,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -2681,7 +2822,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-19",
-                        "statement-ids": ["ac-19_smt.a"]
+                        "statement-ids": [
+                          "ac-19_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -2731,7 +2874,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-4.5",
-                        "statement-ids": ["si-4.5_smt"]
+                        "statement-ids": [
+                          "si-4.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -2781,7 +2926,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-4.5",
-                        "statement-ids": ["si-4.5_smt"]
+                        "statement-ids": [
+                          "si-4.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -2831,7 +2978,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-12",
-                        "statement-ids": ["au-12_smt"]
+                        "statement-ids": [
+                          "au-12_smt"
+                        ]
                       }
                     ]
                   }
@@ -2891,7 +3040,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-11",
-                        "statement-ids": ["au-11_smt"]
+                        "statement-ids": [
+                          "au-11_smt"
+                        ]
                       }
                     ]
                   }
@@ -2965,7 +3116,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-4",
-                        "statement-ids": ["ac-4_smt"]
+                        "statement-ids": [
+                          "ac-4_smt"
+                        ]
                       }
                     ]
                   }
@@ -3015,7 +3168,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2",
-                        "statement-ids": ["ac-2_smt.d"]
+                        "statement-ids": [
+                          "ac-2_smt.d"
+                        ]
                       }
                     ]
                   }
@@ -3075,7 +3230,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-8",
-                        "statement-ids": ["sc-8_smt"]
+                        "statement-ids": [
+                          "sc-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -3135,7 +3292,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -3195,7 +3354,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -3245,7 +3406,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-4.5",
-                        "statement-ids": ["si-4.5_smt"]
+                        "statement-ids": [
+                          "si-4.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -3295,7 +3458,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-4.5",
-                        "statement-ids": ["si-4.5_smt"]
+                        "statement-ids": [
+                          "si-4.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -3335,7 +3500,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       }
                     ]
                   }
@@ -3385,11 +3552,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt.a"]
+                        "statement-ids": [
+                          "sc-7.10_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -3439,11 +3610,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt.a"]
+                        "statement-ids": [
+                          "sc-7.10_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -3488,7 +3663,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -3543,7 +3720,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -3608,7 +3787,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -3663,7 +3844,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -3728,7 +3911,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -3778,7 +3963,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -3838,7 +4025,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -3888,7 +4077,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -3938,7 +4129,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -3993,7 +4186,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -4043,7 +4238,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -4103,7 +4300,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -4153,7 +4352,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -4203,7 +4404,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4253,11 +4456,15 @@
                     "include-controls": [
                       {
                         "control-id": "at-2",
-                        "statement-ids": ["at-2_smt.b"]
+                        "statement-ids": [
+                          "at-2_smt.b"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4307,7 +4514,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4347,7 +4556,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-4",
-                        "statement-ids": ["ac-4_smt"]
+                        "statement-ids": [
+                          "ac-4_smt"
+                        ]
                       }
                     ]
                   }
@@ -4387,7 +4598,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-4",
-                        "statement-ids": ["ac-4_smt"]
+                        "statement-ids": [
+                          "ac-4_smt"
+                        ]
                       }
                     ]
                   }
@@ -4477,7 +4690,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-12",
-                        "statement-ids": ["au-12_smt.c"]
+                        "statement-ids": [
+                          "au-12_smt.c"
+                        ]
                       }
                     ]
                   }
@@ -4522,7 +4737,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4567,7 +4784,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4612,7 +4831,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4662,7 +4883,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -4712,7 +4935,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -4762,7 +4987,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -4812,11 +5039,15 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       },
                       {
                         "control-id": "au-12",
-                        "statement-ids": ["au-12_smt.c"]
+                        "statement-ids": [
+                          "au-12_smt.c"
+                        ]
                       }
                     ]
                   }
@@ -4891,7 +5122,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-4.5",
-                        "statement-ids": ["si-4.5_smt"]
+                        "statement-ids": [
+                          "si-4.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -4941,7 +5174,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-4.12",
-                        "statement-ids": ["si-4.12_smt"]
+                        "statement-ids": [
+                          "si-4.12_smt"
+                        ]
                       }
                     ]
                   }
@@ -4991,7 +5226,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-12",
-                        "statement-ids": ["au-12_smt"]
+                        "statement-ids": [
+                          "au-12_smt"
+                        ]
                       }
                     ]
                   }
@@ -5051,7 +5288,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-11",
-                        "statement-ids": ["au-11_smt"]
+                        "statement-ids": [
+                          "au-11_smt"
+                        ]
                       }
                     ]
                   }
@@ -5110,11 +5349,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt.a"]
+                        "statement-ids": [
+                          "sc-7.10_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -5179,11 +5422,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-6",
-                        "statement-ids": ["ac-6_smt"]
+                        "statement-ids": [
+                          "ac-6_smt"
+                        ]
                       }
                     ]
                   }
@@ -5253,11 +5500,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-6",
-                        "statement-ids": ["ac-6_smt"]
+                        "statement-ids": [
+                          "ac-6_smt"
+                        ]
                       }
                     ]
                   }
@@ -5307,11 +5558,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-4",
-                        "statement-ids": ["ac-4_smt"]
+                        "statement-ids": [
+                          "ac-4_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-6.5",
-                        "statement-ids": ["ac-6.5_smt"]
+                        "statement-ids": [
+                          "ac-6.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -5361,11 +5616,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-4",
-                        "statement-ids": ["ac-4_smt"]
+                        "statement-ids": [
+                          "ac-4_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-6.5",
-                        "statement-ids": ["ac-6.5_smt"]
+                        "statement-ids": [
+                          "ac-6.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -5420,11 +5679,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-5",
-                        "statement-ids": ["ia-5_smt.g"]
+                        "statement-ids": [
+                          "ia-5_smt.g"
+                        ]
                       }
                     ]
                   }
@@ -5484,11 +5747,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt"]
+                        "statement-ids": [
+                          "si-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -5553,11 +5820,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-21",
-                        "statement-ids": ["ac-21_smt.b"]
+                        "statement-ids": [
+                          "ac-21_smt.b"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt.a"]
+                        "statement-ids": [
+                          "sc-7.10_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -5621,7 +5892,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.10",
-                        "statement-ids": ["ac-6.10_smt"]
+                        "statement-ids": [
+                          "ac-6.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -5661,7 +5934,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6.10",
-                        "statement-ids": ["ac-6.10_smt"]
+                        "statement-ids": [
+                          "ac-6.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -5711,7 +5986,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -5761,7 +6038,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -5816,11 +6095,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.5",
-                        "statement-ids": ["sc-7.5_smt"]
+                        "statement-ids": [
+                          "sc-7.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -5860,11 +6143,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.5",
-                        "statement-ids": ["sc-7.5_smt"]
+                        "statement-ids": [
+                          "sc-7.5_smt"
+                        ]
                       }
                     ]
                   }
@@ -5933,15 +6220,21 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2",
-                        "statement-ids": ["ac-2_smt"]
+                        "statement-ids": [
+                          "ac-2_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-8",
-                        "statement-ids": ["ia-8_smt"]
+                        "statement-ids": [
+                          "ia-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -6001,15 +6294,21 @@
                     "include-controls": [
                       {
                         "control-id": "ac-2",
-                        "statement-ids": ["ac-2_smt"]
+                        "statement-ids": [
+                          "ac-2_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "ia-8",
-                        "statement-ids": ["ia-8_smt"]
+                        "statement-ids": [
+                          "ia-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -6079,11 +6378,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-6.10",
-                        "statement-ids": ["ac-6.10_smt"]
+                        "statement-ids": [
+                          "ac-6.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -6148,7 +6451,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6",
-                        "statement-ids": ["ac-6_smt"]
+                        "statement-ids": [
+                          "ac-6_smt"
+                        ]
                       }
                     ]
                   }
@@ -6203,7 +6508,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6",
-                        "statement-ids": ["ac-6_smt"]
+                        "statement-ids": [
+                          "ac-6_smt"
+                        ]
                       }
                     ]
                   }
@@ -6263,11 +6570,15 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       },
                       {
                         "control-id": "ac-21",
-                        "statement-ids": ["ac-21_smt.b"]
+                        "statement-ids": [
+                          "ac-21_smt.b"
+                        ]
                       }
                     ]
                   }
@@ -6322,7 +6633,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-6",
-                        "statement-ids": ["ac-6_smt"]
+                        "statement-ids": [
+                          "ac-6_smt"
+                        ]
                       }
                     ]
                   }
@@ -6377,7 +6690,9 @@
                     "include-controls": [
                       {
                         "control-id": "ia-11",
-                        "statement-ids": ["ia-11_smt"]
+                        "statement-ids": [
+                          "ia-11_smt"
+                        ]
                       }
                     ]
                   }
@@ -6431,7 +6746,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-17",
-                        "statement-ids": ["ac-17_smt.a"]
+                        "statement-ids": [
+                          "ac-17_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -6481,7 +6798,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-15",
-                        "statement-ids": ["sc-15_smt.a"]
+                        "statement-ids": [
+                          "sc-15_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -6521,7 +6840,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-15",
-                        "statement-ids": ["sc-15_smt.a"]
+                        "statement-ids": [
+                          "sc-15_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -6561,7 +6882,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -6601,7 +6924,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-15",
-                        "statement-ids": ["sc-15_smt.a"]
+                        "statement-ids": [
+                          "sc-15_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -6641,7 +6966,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       }
                     ]
                   }
@@ -6686,7 +7013,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-21",
-                        "statement-ids": ["ac-21_smt.a"]
+                        "statement-ids": [
+                          "ac-21_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -6741,7 +7070,9 @@
                     "include-controls": [
                       {
                         "control-id": "ac-3",
-                        "statement-ids": ["ac-3_smt"]
+                        "statement-ids": [
+                          "ac-3_smt"
+                        ]
                       }
                     ]
                   }
@@ -6791,11 +7122,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       }
                     ]
                   }
@@ -6845,11 +7180,15 @@
                     "include-controls": [
                       {
                         "control-id": "cm-7",
-                        "statement-ids": ["cm-7_smt"]
+                        "statement-ids": [
+                          "cm-7_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt.a"]
+                        "statement-ids": [
+                          "sc-7.10_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -6904,15 +7243,21 @@
                     "include-controls": [
                       {
                         "control-id": "si-8",
-                        "statement-ids": ["si-8_smt"]
+                        "statement-ids": [
+                          "si-8_smt"
+                        ]
                       },
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt.a"]
+                        "statement-ids": [
+                          "sc-7.10_smt.a"
+                        ]
                       },
                       {
                         "control-id": "ac-4",
-                        "statement-ids": ["ac-4_smt"]
+                        "statement-ids": [
+                          "ac-4_smt"
+                        ]
                       }
                     ]
                   }
@@ -6957,7 +7302,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-11",
-                        "statement-ids": ["cm-11_smt"]
+                        "statement-ids": [
+                          "cm-11_smt"
+                        ]
                       }
                     ]
                   }
@@ -7007,7 +7354,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-11",
-                        "statement-ids": ["cm-11_smt"]
+                        "statement-ids": [
+                          "cm-11_smt"
+                        ]
                       }
                     ]
                   }
@@ -7067,7 +7416,9 @@
                     "include-controls": [
                       {
                         "control-id": "cm-11",
-                        "statement-ids": ["cm-11_smt"]
+                        "statement-ids": [
+                          "cm-11_smt"
+                        ]
                       }
                     ]
                   }
@@ -7117,7 +7468,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -7172,7 +7525,9 @@
                     "include-controls": [
                       {
                         "control-id": "sc-7.10",
-                        "statement-ids": ["sc-7.10_smt"]
+                        "statement-ids": [
+                          "sc-7.10_smt"
+                        ]
                       }
                     ]
                   }
@@ -7222,7 +7577,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -7272,7 +7629,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -7342,7 +7701,9 @@
                     "include-controls": [
                       {
                         "control-id": "si-3",
-                        "statement-ids": ["si-3_smt.a"]
+                        "statement-ids": [
+                          "si-3_smt.a"
+                        ]
                       }
                     ]
                   }
@@ -7417,7 +7778,9 @@
                     "include-controls": [
                       {
                         "control-id": "au-12",
-                        "statement-ids": ["au-12_smt.c"]
+                        "statement-ids": [
+                          "au-12_smt.c"
+                        ]
                       }
                     ]
                   }
@@ -7500,31 +7863,113 @@
         },
         "subjects": [
           {
-            "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
-            "type": "inventory-item"
+            "type": "inventory-item",
+            "include-subjects": [
+              {
+                "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                "type": "inventory-item"
+              }
+            ]
           }
         ],
         "associated-activities": [
           {
-            "activity-uuid": "760fe3fc-45af-4c62-b095-265a56a1dedf"
+            "activity-uuid": "760fe3fc-45af-4c62-b095-265a56a1dedf",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "4e391cf6-5549-46f3-b3d7-aad12cd5a226"
+            "activity-uuid": "4e391cf6-5549-46f3-b3d7-aad12cd5a226",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "2c69fb5c-056f-4788-be36-723b939a4766"
+            "activity-uuid": "2c69fb5c-056f-4788-be36-723b939a4766",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "04319877-e72d-4967-b968-4852e6738113"
+            "activity-uuid": "04319877-e72d-4967-b968-4852e6738113",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "53852402-8cd6-4e1c-a559-f31bb004a66e"
+            "activity-uuid": "53852402-8cd6-4e1c-a559-f31bb004a66e",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "c98b996e-8dae-40ef-8b40-100ffbe9e5e3"
+            "activity-uuid": "c98b996e-8dae-40ef-8b40-100ffbe9e5e3",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "5f62a033-3847-43ec-bafd-3dc1a7621029"
+            "activity-uuid": "5f62a033-3847-43ec-bafd-3dc1a7621029",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -7542,19 +7987,11 @@
           "uuid": "080172e1-3306-4f73-99b6-c1facbc21077",
           "rlinks": [
             {
-              "href": "./ssp.xml",
-              "media-type": "application/xml"
-            },
-            {
-              "href": "./ssp.json",
-              "media-type": "application/json"
-            },
-            {
-              "href": "./ssp.yaml",
-              "media-type": "application/yaml"
+              "href": "./sample-ssp.json",
+              "media-type": "application/oscal+json"
             }
           ],
-          "title": "\\[System Name\\] SSP"
+          "title": "Sample ScubaGear System Security Plan"
         },
         {
           "props": [
