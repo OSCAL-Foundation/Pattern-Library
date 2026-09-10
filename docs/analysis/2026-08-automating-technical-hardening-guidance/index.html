@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Automating Technical Hardening Guidance with OSCAL</title>
-<meta name="description" content="Where does a technical hardening requirement live in OSCAL, and how does an automated check attach to it? Three published approaches, six questions, and the JSON each one ships.">
+<meta name="description" content="Technical hardening requirements and automated checks in OSCAL: three published approaches, six questions, and published JSON.">
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="Automating Technical Hardening Guidance with OSCAL">
-<meta property="og:description" content="Where does a technical hardening requirement live in OSCAL, and how does an automated check attach to it? Three published approaches, six questions, and the JSON each one ships.">
+<meta property="og:description" content="Technical hardening requirements and automated checks in OSCAL: three published approaches, six questions, and published JSON.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Automating Technical Hardening Guidance with OSCAL">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Automating Technical Hardening Guidance with OSCAL">
-<meta name="twitter:description" content="Where does a technical hardening requirement live in OSCAL, and how does an automated check attach to it? Three published approaches, six questions, and the JSON each one ships.">
+<meta name="twitter:description" content="Technical hardening requirements and automated checks in OSCAL: three published approaches, six questions, and published JSON.">
 <link rel="stylesheet" href="./assets/site.css">
 <script>
   /* Set the theme before first paint so the page never flashes the wrong one. */
@@ -28,6 +28,11 @@
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
+
+<aside class="wip-banner" aria-label="Analysis status" hidden>
+  <span>Work in progress</span>
+  <button type="button" class="wip-banner__dismiss" aria-label="Dismiss work in progress notice" hidden><span aria-hidden="true">×</span></button>
+</aside>
 
 <header class="site-header">
   <div class="site-header__inner">
@@ -51,12 +56,12 @@
 <main id="main">
 
 <h1>Automating Technical Hardening Guidance with OSCAL</h1>
-<p class="lede">Where does technical hardening guidance live in OSCAL, and
-   how does it inform an automated check. This analysis breaks down three approaches
-  and the parties involved. <b>The following hardening guides were considered during this analysis:</b> </p>
+<p class="lede">The analysis compares three approaches to representing technical
+   hardening guidance and informing automated checks in OSCAL, including the
+   roles of the parties involved. <b>Hardening guides considered:</b></p>
 
 <div data-sources>
-  <p class="small muted">The table of guidance read as input loads from
+  <p class="small muted">The guidance inventory loads from
      data/sources.json.</p>
 </div>
 
@@ -66,7 +71,7 @@
     <li><a href="#paths">1. One recommendation, three paths</a></li>
     <li><a href="#two-paths">2. Implementation and assessment layers are both viable for a hardening recommendation</a></li>
     <li><a href="#six-questions">3. The six questions evaluated for each option</a></li>
-    <li><a href="#approaches">4. The three approaches and the answers we have</a></li>
+    <li><a href="#approaches">4. The three approaches and available answers</a></li>
     <li><a href="#satisfaction">5. Why question 6 splits: a claim is not a result</a></li>
   </ol>
 </nav>
@@ -77,15 +82,13 @@
 <h2>1. One recommendation, three paths</h2>
 
 <div class="tier2">
-  <p>Hardening guidance is written by one party, applied by a second and checked
-     by a third, and one recommendation goes down all three paths rather than
-     along one of them. What each party needs from it differs, and where the
-     recommendation is written decides how much of that need it can meet.</p>
-  <p>The three paths start from the same place and none of them passes through
-     another. The assessor's in particular can be run independently of the
-     implementer's: an assessor takes the recommendation and brings their own
-     means of checking it, so nothing the implementer produced has to exist
-     first.</p>
+  <p>A guidance author writes a hardening recommendation, an implementer applies
+    the recommendation, and an assessor checks implementation. The
+    recommendation serves all three roles. Placement in OSCAL determines how
+    well the recommendation meets each role's needs.</p>
+  <p>The three paths start from the same recommendation without passing through
+    another path. An assessor can use the recommendation and independent
+    checking methods without waiting for implementer-produced artifacts.</p>
 </div>
 
 <figure>
@@ -101,16 +104,18 @@
 <h2>2. Implementation and assessment layers are both viable for a hardening recommendation</h2>
 
 <div class="tier2">
-  <p>A recommendation results in a rule that can be introduced in two OSCAL layers. Each
-     option below answers where the rule is written, where the check is written, and where the response is recorded.</p>
+  <p>A rule derived from a recommendation can be introduced in either of two
+     OSCAL layers. Each option identifies the locations of the rule, check, and
+     response.</p>
 </div>
 
 <div class="pillars">
   <div class="pillar">
     <span class="pillar__label">Implementation Layer</span>
-    <p class="pillar__title">Shift left, so implementers can use it</p>
-    <p>The rule and its check are written where the implementer can reach them. Both options record the response in the system security
-       plan, and they differ in which model holds the rule.</p>
+     <p class="pillar__title">Provide rules and checks to implementers</p>
+     <p>Rules and checks are available to implementers. Catalog-first and
+       component-first record responses in the system security plan but place
+       rules in different models.</p>
 
     <div class="option">
       <span class="option__label">Catalog-first &nbsp;<b>Rule in Catalog</b></span>
@@ -143,18 +148,18 @@
       <span class="slot-chip slot-3"><span class="slot-chip__n"></span><span class="slot-chip__name">Check</span></span>
       <span class="slot-chip slot-5"><span class="slot-chip__n"></span><span class="slot-chip__name">Runner</span></span>
       <p class="pillar__title">The check and runner</p>
-      <p>A rule names a check with a runner executing the check. The same automation can serve
-         an implementer analysing an environment and recording its state, or an
-         assessor producing a result. </p>
+      <p>A rule names a check; a runner executes the check. The same automation
+        can serve an implementer analysing and recording an environment's state
+        or an assessor producing a result.</p>
     </div>
   </div>
 
   <div class="pillar">
     <span class="pillar__label">Assessment Layer</span>
     <p class="pillar__title">Write the rule and the check in the assessment</p>
-    <p>The assessment plan holds the check, and the rule is written into the same
-       plan as an activity and a step in plain English. The response is recorded as
-       an assessment result rather than in the system security plan.</p>
+     <p>The assessment plan holds the check and records the rule as an activity
+       and a step in prose. The response is recorded as an assessment result
+       rather than in the system security plan.</p>
 
     <div class="option">
       <span class="option__label">Assessment-first &nbsp;<b>Assessment plan and assessment results</b></span>
@@ -166,7 +171,7 @@
         <li class="chain__row slot-6"><span class="chain__label">Response</span>
           <span class="chain__where">assessment results</span></li>
       </ul>
-      <p class="option__eg">Assessors may automate assessments of environments directly or assessment of security packages.  In either case, assessors do not rely on system owner defined hardening guidance to conduct assessments. They will bring their own assessment capabilities, independent of any features available through the system</p>
+      <p class="option__eg">Assessors may automate direct assessments of environments or assessments of security packages. Assessors do not rely on system-owner-defined hardening guidance and use assessment capabilities independent of system features.</p>
     </div>
   </div>
 </div>
@@ -178,7 +183,7 @@
 <h2>3. The six questions evaluated for each option</h2>
 
 <div class="tier2">
-  <p>The same six criteria considered:</p>
+  <p>Each approach is evaluated against the same six questions:</p>
 </div>
 
 <dl data-question-list>
@@ -189,12 +194,12 @@
 <!-- ==================================================================== 4 -->
 
 <section id="approaches" class="wide">
-<h2>4. The three approaches and the answers we have</h2>
+<h2>4. The three approaches and available answers</h2>
 
 <div class="tier2">
-  <p>Six questions are evaluated. <strong>They are numbered 1 to 6</strong>, and they 
-    factor not just where the rule and check reside, but how they are executed, when 
-    they are executed and the subjects that are being evaluated.  The <strong>"first"</strong> indicates which OSCAL model the rule appears in first.</p>
+  <p><strong>Questions 1 to 6</strong> cover rule and check placement, check
+  execution, timing, and assessment subjects. The label
+  <strong>"first"</strong> names the OSCAL model where the rule first appears.</p>
 </div>
 
 <div data-approach-cards>
@@ -206,8 +211,8 @@
 </div>
 
 <div class="tier2">
-  <p>The <a href="./six-questions.html">six questions</a> page puts all three
-     against each question in turn, with the encoding each one would use.</p>
+  <p>The <a href="./six-questions.html">six questions</a> page compares the
+     encodings each approach would use to answer each question.</p>
 </div>
 </section>
 
@@ -215,12 +220,12 @@
 <h2>5. Why question 6 splits: a claim is not a result</h2>
 
 <div class="tier2">
-  <p>Question 6 is broken in two, 6a and 6b. Asking whether a
-     rule is satisfied turns out to be two questions answered by two stakeholders. An implementor uses a system
-     security plan to capture <strong><em>how</em></strong> a control is satisfied, in narrative, as
-     standing design intent, asserted by the system owner. An assessment result
-     captures <strong><em>whether</em></strong> it was satisfied, at a point in time, on a named
-     subject, asserted by the assessor.</p>
+  <p>Question 6 has two parts, 6a and 6b, answered by different stakeholders. An
+     implementer uses a system security plan to describe
+     <strong><em>how</em></strong> a control is satisfied: standing design intent
+     asserted by the system owner. An assessment result records
+     <strong><em>whether</em></strong> the control was satisfied at a point in
+     time on a named subject, as asserted by the assessor.</p>
 </div>
 
 <figure>
@@ -236,8 +241,8 @@
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>This site makes no recommendation.</strong> It states three approaches in the
-       terms their proponents use and shows the content each one ships.</p>
+    <p><strong>No recommendation is made.</strong> The analysis compares three
+       approaches and the published OSCAL content.</p>
   </div>
 </footer>
 

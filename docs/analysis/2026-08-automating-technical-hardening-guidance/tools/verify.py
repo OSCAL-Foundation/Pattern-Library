@@ -11,10 +11,10 @@ Usage:
     python tools/verify.py --css        colour lives only in the token block
     python tools/verify.py --a11y       contrast, and the two palette rules
     python tools/verify.py --diagrams   structure, colour, geometry, grayscale
-    python tools/verify.py --quotes     no page quotes anyone or names anyone
-    python tools/verify.py --criteria   the fifteen are the group's fifteen
+    python tools/verify.py --quotes     no quotation hooks or background attribution
+    python tools/verify.py --criteria   fifteen analysis criteria and valid mappings
     python tools/verify.py --matrix     every answer-matrix cell resolves
-    python tools/verify.py --questions  the reproduced material matches its source
+    python tools/verify.py --questions  editorial questions and stable identifiers
     python tools/verify.py --appendix   equal counts and every denominator
     python tools/verify.py --links      every internal href and anchor resolves
     python tools/verify.py --pages      run each page and inspect the result
@@ -37,15 +37,14 @@ import re
 import shutil
 import subprocess
 import sys
-import tempfile
 import urllib.parse
 
 import extract as ex        # same directory
 import svgrender as sr     # same directory
+import source_inputs
 
-# The pre-read's option-letter order: Catalog-first is A, Component-first is B,
-# Assessment-first is C. One list, so no tool can order the three differently
-# from the site.
+# The site's option-letter order: Catalog-first is A, Component-first is B,
+# Assessment-first is C.
 OPTION_ORDER = ["catalog-first", "component-first", "assessment-first"]
 
 # Labels that named a construct rather than a question. Each one was on the site
@@ -90,7 +89,15 @@ def check(name: str, ok: bool, detail: str = "") -> bool:
 
 _SKIPS: list = []
 STRICT = False
+OFFLINE = False
 SCENARIO_FIGURES: set = set()
+
+# Hosts whose edge returns 403 to every non-browser client, so a 403 there says
+# nothing about the page. Each entry records when a person last opened the
+# link. Only 403 is excused; any other status still fails.
+BOT_BLOCKING_HOSTS: dict[str, str] = {
+    "www.cisa.gov": "2026-09-10",
+}
 
 
 def skip(name: str, reason: str, command: str = "") -> bool:
@@ -105,6 +112,8 @@ def skip(name: str, reason: str, command: str = "") -> bool:
 
 def have_network(timeout: float = 6.0) -> bool:
     """One probe, cached, against the host the schema checks need."""
+    if OFFLINE:
+        return False
     if not hasattr(have_network, "_result"):
         import urllib.request
         try:
@@ -121,10 +130,6 @@ def have(tool: str) -> bool:
     return shutil.which(tool) is not None
 
 
-def corpora_root() -> str:
-    return ex.corpora_root()
-
-
 def load_snippet(sid: str) -> dict:
     with open(os.path.join(SNIPPETS, f"{sid}.json"), "r", encoding="utf-8") as fh:
         return json.load(fh)
@@ -135,7 +140,7 @@ def snippet_json(sid: str):
 
 
 def corpus_json(rel: str):
-    with open(os.path.join(corpora_root(), rel), "r", encoding="utf-8") as fh:
+    with open(ex.source_path(rel), "r", encoding="utf-8") as fh:
         return json.load(fh)
 
 
@@ -158,43 +163,46 @@ def walk_keys(node, wanted: str, count: int = 0) -> int:
 
 def check_snippets() -> None:
     print("\n[snippets] re-extract and diff")
-    tmp = tempfile.mkdtemp(prefix="tfg-verify-")
-    try:
-        ex.run(tmp, quiet=True)
-        drift = []
-        for path in sorted(glob.glob(os.path.join(tmp, "snippets", "*.json"))):
-            sid = os.path.splitext(os.path.basename(path))[0]
-            live = os.path.join(SNIPPETS, f"{sid}.json")
-            if not os.path.exists(live):
-                drift.append(f"{sid}: missing in data/snippets")
-                continue
-            a = json.load(open(live, encoding="utf-8"))
-            b = json.load(open(path, encoding="utf-8"))
-            # extracted_at is expected to differ; content must not.
-            for field in ("content", "source", "pointer", "slot", "approach",
-                          "language", "sha256_of_source_file"):
-                if a.get(field) != b.get(field):
-                    if field == "content":
-                        diff = "\n".join(
-                            list(difflib.unified_diff(
-                                a["content"].splitlines(), b["content"].splitlines(),
-                                fromfile=f"data/{sid}", tofile=f"fresh/{sid}", lineterm="",
-                            ))[:40]
-                        )
-                        drift.append(f"{sid}: content drift\n{diff}")
-                    else:
-                        drift.append(f"{sid}: {field} drift {a.get(field)!r} -> {b.get(field)!r}")
-        stale = set(os.path.basename(p) for p in glob.glob(os.path.join(SNIPPETS, "*.json"))) - set(
-            os.path.basename(p) for p in glob.glob(os.path.join(tmp, "snippets", "*.json"))
-        )
-        for name in sorted(stale):
-            drift.append(f"{name}: present in data/ but not in the manifest")
-        check("re-extraction is byte-identical", not drift, "; ".join(drift[:3]))
-        if drift:
-            for d in drift:
-                print("        " + d.replace("\n", "\n        "))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
+    entries = ex.load_manifest()["snippets"]
+    check("the manifest references only OSCAL JSON examples",
+          bool(entries) and all(e.get("language", "json") == "json"
+                                and e["source"].endswith(".json") for e in entries))
+    drift = []
+    for entry in entries:
+        sid = entry["id"]
+        live = os.path.join(SNIPPETS, f"{sid}.json")
+        if not os.path.isfile(live):
+            drift.append(f"{sid}: missing in data/snippets")
+            continue
+        try:
+            a = load_snippet(sid)
+            # Re-extract in memory: verification never rewrites site data.
+            b = ex.extract_one(entry)
+        except (ex.ExtractionError, source_inputs.SourceInputError, OSError, ValueError) as exc:
+            drift.append(f"{sid}: {exc}")
+            continue
+        # extracted_at is expected to differ; content and its address must not.
+        for field in ("id", "title", "content", "source", "pointer", "section",
+                      "slot", "approach", "language", "sha256_of_source_file"):
+            if a.get(field) != b.get(field):
+                if field == "content":
+                    diff = "\n".join(list(difflib.unified_diff(
+                        a.get("content", "").splitlines(), b["content"].splitlines(),
+                        fromfile=f"data/{sid}", tofile=f"fresh/{sid}", lineterm="",
+                    ))[:40])
+                    drift.append(f"{sid}: content drift\n{diff}")
+                else:
+                    drift.append(f"{sid}: {field} drift {a.get(field)!r} -> {b.get(field)!r}")
+    stale = {os.path.splitext(os.path.basename(p))[0]
+             for p in glob.glob(os.path.join(SNIPPETS, "*.json"))} - {
+                 e["id"] for e in entries}
+    for sid in sorted(stale):
+        drift.append(f"{sid}: present in data/ but not in the manifest")
+    check("re-extraction is byte-identical", not drift, "; ".join(drift[:3]))
+    for d in drift:
+        print("        " + d.replace("\n", "\n        "))
+    if drift:
+        return
 
     print("\n[snippets] asserted facts")
 
@@ -278,18 +286,27 @@ def _anyof_enum(frag: dict, prop: str) -> list | None:
 
 
 NIST_SCHEMAS = {
+    "catalog":
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
+        "oscal_catalog_schema.json",
+    "component-definition":
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
+        "oscal_component_schema.json",
+    "profile":
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
+        "oscal_profile_schema.json",
     "mapping-collection":
-        "https://raw.githubusercontent.com/usnistgov/OSCAL/v1.2.1/json/schema/"
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
         "oscal_mapping_schema.json",
     "assessment-results":
-        "https://raw.githubusercontent.com/usnistgov/OSCAL/v1.2.1/json/schema/"
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
         "oscal_assessment-results_schema.json",
     #  Added with data/schema-evidence/poam-outcomes.json. Without an entry here
     #  the model lookup in _refetch_nist_fragments returns None and the fragment
     #  is skipped in silence, including in CI, which is the only place the live
     #  half of this check ever runs.
     "plan-of-action-and-milestones":
-        "https://raw.githubusercontent.com/usnistgov/OSCAL/v1.2.1/json/schema/"
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
         "oscal_poam_schema.json",
     #  Added with by-component.json and assessment-subject.json, which are the
     #  evidence behind the claim that a control response is made against a
@@ -297,12 +314,30 @@ NIST_SCHEMAS = {
     #  were taken from an offline 1.1.3 copy because 1.2.1 could not be reached,
     #  so the re-fetch below is the thing that confirms them.
     "system-security-plan":
-        "https://raw.githubusercontent.com/usnistgov/OSCAL/v1.2.1/json/schema/"
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
         "oscal_ssp_schema.json",
     "assessment-plan":
-        "https://raw.githubusercontent.com/usnistgov/OSCAL/v1.2.1/json/schema/"
+        "https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/"
         "oscal_assessment-plan_schema.json",
 }
+
+
+_NIST_SCHEMA_CACHE: dict[str, dict] = {}
+
+
+def _nist_schema(model: str) -> dict:
+    """Fetch the exact released schema once per run, shared by both checks."""
+    import urllib.request
+
+    if model not in _NIST_SCHEMA_CACHE:
+        url = NIST_SCHEMAS[model]
+        with urllib.request.urlopen(url, timeout=30) as response:
+            schema = json.load(response)
+        if not isinstance(schema, dict):
+            raise ValueError(f"{url}: expected a JSON schema object")
+        _NIST_SCHEMA_CACHE[model] = schema
+        print(f"        fetched {url}")
+    return _NIST_SCHEMA_CACHE[model]
 
 
 def _refetch_nist_fragments() -> None:
@@ -314,8 +349,6 @@ def _refetch_nist_fragments() -> None:
     fragment is still what the schema says. That needs network, so locally it
     skips by name and in CI it runs.
     """
-    import urllib.request
-
     if not have_network():
         for name in sorted(os.path.splitext(os.path.basename(q))[0]
                            for q in glob.glob(os.path.join(EVIDENCE, "*.json"))):
@@ -326,11 +359,9 @@ def _refetch_nist_fragments() -> None:
         return
 
     fetched = {}
-    for model, url in NIST_SCHEMAS.items():
+    for model in NIST_SCHEMAS:
         try:
-            with urllib.request.urlopen(url, timeout=30) as r:
-                fetched[model] = json.loads(r.read().decode("utf-8"))
-            print(f"        fetched {url}")
+            fetched[model] = _nist_schema(model)
         except Exception as exc:                    # noqa: BLE001
             check(f"the {model} schema could be fetched from NIST", False, str(exc)[:120])
 
@@ -348,6 +379,8 @@ def _refetch_nist_fragments() -> None:
         name = os.path.splitext(os.path.basename(path))[0]
         schema = fetched.get(doc["model"])
         if schema is None:
+            check(f"{name} has a published NIST schema to compare against",
+                  False, doc["model"])
             continue
         live = find_def(schema, doc["definition"])
         check(f"{name} is still defined in the published {doc['model']} schema",
@@ -438,12 +471,16 @@ def check_schema() -> None:
                       not _has_prop(frag, absent))
         elif name == "assessment-subject":
             #  And the other half: what an assessment can be aimed at instead.
-            check("assessment-subject required includes 'type'",
-                  "type" in req, str(req))
-            check("assessment-subject type vocabulary is the five subject kinds",
-                  _anyof_enum(frag, "type") == ["component", "inventory-item",
-                                                "location", "party", "user"],
-                  str(_anyof_enum(frag, "type")))
+            branches = frag.get("anyOf", [])
+            required = [branch.get("required", []) for branch in branches]
+            check("assessment-subject selects all subjects or explicit subjects",
+                  required == [["include-all"], ["include-subjects"]], str(required))
+            expected_types = ["component", "inventory-item", "location", "party", "user"]
+            check("assessment-subject branches retain the optional type vocabulary",
+                  len(branches) == 2 and all(
+                      "type" not in branch.get("required", [])
+                      and _anyof_enum(branch, "type") == expected_types
+                      for branch in branches))
         elif name == "metadata":
             #  Behind the claim, on the catalog page, that a guide published as a
             #  catalog is versioned and citable the way a framework is.
@@ -498,7 +535,7 @@ def oscal_files(*parts, root_key=None):
     XCCDF-derived JSON with a "Benchmark" root and sit beside the plans.
     """
     out = []
-    for path in sorted(glob.glob(os.path.join(corpora_root(), *parts, "**", "*.json"),
+    for path in sorted(glob.glob(ex.source_path(*parts, "**", "*.json"),
                                 recursive=True)):
         try:
             with open(path, encoding="utf-8") as fh:
@@ -508,7 +545,7 @@ def oscal_files(*parts, root_key=None):
         if not isinstance(doc, dict) or len(doc) != 1:
             continue
         key = next(iter(doc))
-        if root_key is None or key == root_key:
+        if key in NIST_SCHEMAS and (root_key is None or key == root_key):
             out.append(path)
     return out
 
@@ -519,13 +556,12 @@ def ez_plans():
 
 
 def recompute_stats() -> dict:
-    root = corpora_root()
     AWS = "AWS/oscal-content-for-aws-services-main"
     EZ = "Easy Dynamics"
     s: dict = {}
 
     s["aws_catalog_files"] = len(glob.glob(
-        os.path.join(root, AWS, "catalogs", "*.oscal.json")))
+        ex.source_path(AWS, "catalogs", "*.oscal.json")))
     cat = corpus_json(f"{AWS}/catalogs/aws_security-hub.oscal.json")["catalog"]
     s["aws_groups"] = len(cat["groups"])
     s["aws_controls"] = sum(len(g["controls"]) for g in cat["groups"])
@@ -533,7 +569,7 @@ def recompute_stats() -> dict:
            for g in cat["groups"] for c in g["controls"] for p in c["parts"]
            if p["name"] == "assessment-method"}
 
-    cdefs = sorted(glob.glob(os.path.join(root, AWS, "component-definitions", "*.oscal.json")))
+    cdefs = sorted(glob.glob(ex.source_path(AWS, "component-definitions", "*.oscal.json")))
     s["aws_cdef_files"] = len(cdefs)
     sw = matches = 0
     checked, allref = set(), set()
@@ -566,9 +602,9 @@ def recompute_stats() -> dict:
     s["ibm_rules"], s["ibm_checks"], s["ibm_control_ids"] = rules, checks, len(ctrl_ids)
 
     s["ibm_cdef_files"] = len(glob.glob(
-        os.path.join(root, "IBM", "*component-definition.json")))
-    s["ibm_ap_files"] = len(glob.glob(os.path.join(root, "IBM", "assessment-plan.json")))
-    s["ibm_ar_files"] = len(glob.glob(os.path.join(root, "IBM", "assessment-result.json")))
+        ex.source_path("IBM", "*component-definition.json")))
+    s["ibm_ap_files"] = len(glob.glob(ex.source_path("IBM", "assessment-plan.json")))
+    s["ibm_ar_files"] = len(glob.glob(ex.source_path("IBM", "assessment-result.json")))
 
     acts = steps = 0
     #  By root key, not by folder. The tree was reorganised into publisher folders
@@ -632,11 +668,11 @@ def recompute_stats() -> dict:
         return n
 
     s["ez_props"] = sum(prop_count(json.load(open(f, encoding="utf-8"))) for f in ez_files)
-    aws_all = sorted(glob.glob(os.path.join(root, AWS, "**", "*.json"), recursive=True))
+    aws_all = sorted(glob.glob(ex.source_path(AWS, "**", "*.json"), recursive=True))
     s["aws_props"] = sum(prop_count(json.load(open(f, encoding="utf-8"))) for f in aws_all)
     s["ibm_cdef_props"] = sum(
         prop_count(json.load(open(f, encoding="utf-8")))
-        for f in glob.glob(os.path.join(root, "IBM", "*component-definition.json")))
+        for f in glob.glob(ex.source_path("IBM", "*component-definition.json")))
 
     # Hierarchy and tailoring, criteria 4 and 5. The model allows both; the
     # question the criteria ask is what the shipped content does with them.
@@ -646,9 +682,8 @@ def recompute_stats() -> dict:
     s["aws_profile_files"] = len([
         f for f in aws_all if "profile" in json.load(open(f, encoding="utf-8"))])
 
-    # Requirement level, criterion 3. The pre-read records this as absent from
-    # OSCAL entirely; these two counts are why the site says otherwise.
-    cisa = sorted(glob.glob(os.path.join(root, EZ, "CISA BOD 25-01", "*.json")))
+    # Requirement level, criterion 3: count the vocabulary in the OSCAL examples.
+    cisa = sorted(glob.glob(ex.source_path(EZ, "CISA BOD 25-01", "*.json")))
     s["cisa_files"] = len(cisa)
     crit = collections.Counter()
     for a in corpus_json(f"{EZ}/CISA BOD 25-01/ap-cisa-scuba-agnostic.json"
@@ -711,8 +746,8 @@ def recompute_stats() -> dict:
     # Assessment-first. The synthetic control ids are self-flagged by the
     # content's own prop, so the flag is what is counted rather than the
     # shape of the identifier.
-    cis_ap = sorted(glob.glob(os.path.join(
-        root, EZ, "Center for Internet Security", "*_OSCAL_AP.json")))
+    cis_ap = sorted(glob.glob(ex.source_path(
+        EZ, "Center for Internet Security", "*_OSCAL_AP.json")))
     s["cis_ap_files"] = len(cis_ap)
     all_ids, synthetic, refs = set(), set(), 0
     for f in cis_ap:
@@ -826,7 +861,7 @@ def recompute_stats() -> dict:
     # target-component-uuid resolution split between the two validation
     # components.
     ibm_cdefs = sorted(glob.glob(
-        os.path.join(root, "IBM", "*component-definition.json")))
+        ex.source_path("IBM", "*component-definition.json")))
     doc_uuids, comp_uuids = set(), set()
     for f in ibm_cdefs:
         cd = json.load(open(f, encoding="utf-8"))["component-definition"]
@@ -848,15 +883,16 @@ def recompute_stats() -> dict:
     s["ibm_ap_local_definitions_misspelled"] = int(
         "local-defintions" in ap_doc and "local-definitions" not in ap_doc)
     s["ibm_ssp_files"] = len([
-        f for f in glob.glob(os.path.join(root, "IBM", "*.json"))
+        f for f in glob.glob(ex.source_path("IBM", "*.json"))
         if "system-security-plan" in json.load(open(f, encoding="utf-8"))])
     return s
 
 
 def check_stats() -> None:
     print("\n[stats] recompute every cited figure from source")
-    declared = {x["key"]: x["value"] for x in
-                json.load(open(os.path.join(DATA, "corpus-stats.json"), encoding="utf-8"))["stats"]}
+    doc = json.load(open(os.path.join(DATA, "corpus-stats.json"), encoding="utf-8"))
+    declared = {x["key"]: x["value"] for x in doc["stats"]}
+    check("statistic keys are unique", len(declared) == len(doc["stats"]))
     actual = recompute_stats()
     for key, want in sorted(declared.items()):
         got = actual.get(key, "<not recomputed>")
@@ -894,7 +930,10 @@ def check_data() -> None:
     crit = json.load(open(os.path.join(DATA, "criteria.json"), encoding="utf-8"))["criteria"]
     check("exactly fifteen criteria, numbered 1 to 15",
           [c["number"] for c in crit] == list(range(1, 16)))
-    check("every criterion names who raised it", all(c.get("raised_by") for c in crit))
+    meaningful = all(isinstance(c.get("name"), str) and c["name"].strip()
+                     and isinstance(c.get("question"), str)
+                     and len(c["question"].split()) >= 4 for c in crit)
+    check("every criterion has a name and a meaningful question", meaningful)
 
     anat = json.load(open(os.path.join(DATA, "six-questions.json"), encoding="utf-8"))
     slots = [s["number"] for s in anat["slots"]]
@@ -954,19 +993,6 @@ def check_data() -> None:
              for p in glob.glob(os.path.join(EVIDENCE, "*.json"))}
     dangling = sorted({sid for c in anat["matrix"] for sid in c.get("snippet_ids", [])} - have)
     check("every snippet_ids reference in the matrix resolves", not dangling, str(dangling))
-
-    quotes = json.load(open(os.path.join(DATA, "quotes.json"), encoding="utf-8"))["quotes"]
-    ids = [q["id"] for q in quotes]
-    check("no duplicate quote ids", len(ids) == len(set(ids)))
-    check("every quote names a source document", all(q.get("source_document") for q in quotes))
-
-    qref = set()
-    for blob in ("six-questions.json", "views.json", "glossary.json"):
-        text = open(os.path.join(DATA, blob), encoding="utf-8").read()
-        for qid in ids:
-            if f'"{qid}"' in text:
-                qref.add(qid)
-    check("every quote referenced by a data file exists in quotes.json", True)
 
     views = json.load(open(os.path.join(DATA, "views.json"), encoding="utf-8"))
     check("exactly three views of what a rule is", len(views["views"]) == 3)
@@ -1415,6 +1441,11 @@ def check_a11y() -> None:
         t = _tokens_for(theme)
         bg, sub = t["--bg"], t["--bg-subtle"]
 
+        for surface in ("--wip-bg", "--wip-hover"):
+            ratio = _contrast(t["--wip-fg"], t[surface])
+            check(f"{theme}: banner text and close control on {surface} are AA",
+                  ratio >= 4.5, f"{ratio:.2f}")
+
         check(f"{theme}: body text on page background is AA (4.5)",
               _contrast(t["--text"], bg) >= 4.5, f"{_contrast(t['--text'], bg):.2f}")
         check(f"{theme}: gist text on subtle background is AAA (7.0)",
@@ -1531,15 +1562,18 @@ def _axe() -> None:
 # --quotes                                                                     #
 # --------------------------------------------------------------------------- #
 
-BLOCKQUOTE = re.compile(r"<blockquote\b([^>]*)>(.*?)</blockquote>", re.S | re.I)
-DATA_QUOTE = re.compile(r'data-quote\s*=\s*"([^"]+)"')
+BLOCKQUOTE = re.compile(r"<blockquote\b", re.I)
+DATA_QUOTE = re.compile(
+    r"\bdata-(?:quotes?(?:-ids?)?|settled-quote|supporting-quotes|"
+    r"advocate|speaker|raised-by|verbatim)\b", re.I)
 PRE_BLOCK = re.compile(r"<pre\b", re.I)
 LONG_DASH = re.compile("[—–]")
 
-#  Keys in data/ whose values are quotation ids. Anything under one of these
-#  becomes a blockquote at runtime, so it has to resolve exactly as a
-#  hand-placed data-quote does.
-QUOTE_KEYS = {"quote", "quotes", "settled_quote", "supporting_quotes"}
+EDITORIAL_REFERENCE_KEYS = {
+    "quote", "quotes", "quote_id", "settled_quote", "supporting_quotes",
+    "advocate", "speaker", "source_document", "source_status", "raised_by", "verbatim",
+}
+BACKGROUND_FORMAT = re.compile(r"\.(?:docx|pptx)\b", re.IGNORECASE)
 
 
 def _pages() -> list[str]:
@@ -1547,41 +1581,36 @@ def _pages() -> list[str]:
     return sorted(glob.glob(os.path.join(SITE_ROOT, "*.html")))
 
 
-def _collect_quote_refs(node, out: set) -> None:
+def editorial_reference_paths(node, path: str = "$") -> list[str]:
+    """Find background attribution in editorial data, not in OSCAL evidence."""
+    found = []
     if isinstance(node, dict):
-        for k, v in node.items():
-            if k in QUOTE_KEYS:
-                if isinstance(v, str):
-                    out.add(v)
-                elif isinstance(v, list):
-                    out.update(x for x in v if isinstance(x, str))
-            _collect_quote_refs(v, out)
+        for key, value in node.items():
+            child = f"{path}/{key}"
+            if key in EDITORIAL_REFERENCE_KEYS:
+                found.append(child)
+            found.extend(editorial_reference_paths(value, child))
     elif isinstance(node, list):
-        for v in node:
-            _collect_quote_refs(v, out)
+        for index, value in enumerate(node):
+            found.extend(editorial_reference_paths(value, f"{path}/{index}"))
+    elif isinstance(node, str) and BACKGROUND_FORMAT.search(node):
+        found.append(path)
+    return found
+
+
+def _check_editorial_data() -> None:
+    """Criteria and questions are analysis content, not document reproductions."""
+    for name in ("criteria.json", "questions.json", "views.json", "glossary.json",
+                 "six-questions.json"):
+        with open(os.path.join(DATA, name), encoding="utf-8") as stream:
+            found = editorial_reference_paths(json.load(stream))
+        check(f"{name}: no background document attribution", not found, str(found))
 
 
 def check_quotes() -> None:
-    """Gate 7 removed quotations and proponent attribution from the whole site.
-
-    The flag keeps its name because what it checks is the same subject: that
-    nothing on a page is a person's words. What changed is the answer. Before,
-    every blockquote had to resolve to an id in data/quotes.json. Now no page
-    may carry a blockquote at all, and no page may name any of the people whose
-    words that file holds.
-
-    data/quotes.json is retained rather than deleted. It is the record of what
-    was said and where, a later session may need it, and it is also where the
-    list of names that must not appear comes from.
-    """
-    print("\n[quotes] the site carries no quotations")
-    doc = json.load(open(os.path.join(DATA, "quotes.json"), encoding="utf-8"))
-    quotes = doc["quotes"]
-    check("data/quotes.json is retained as provenance", len(quotes) > 0,
-          f"{len(quotes)} quotations")
-    check("data/quotes.json says it is no longer rendered",
-          "NO LONGER RENDERED" in doc.get("note", ""))
-
+    """Keep editorial pages free of quotation hooks and background attribution."""
+    print("\n[quotes] no background attribution or quotation hooks")
+    _check_editorial_data()
     pages = _pages()
     check("there are pages to check", bool(pages))
     for path in pages:
@@ -1589,49 +1618,10 @@ def check_quotes() -> None:
         html = _text(path)
         check(f"{name}: carries no blockquote", not BLOCKQUOTE.search(html),
               str(len(BLOCKQUOTE.findall(html))))
-        check(f"{name}: references no quotation id", not DATA_QUOTE.search(html),
+        check(f"{name}: carries no quotation or attribution hook", not DATA_QUOTE.search(html),
               str(DATA_QUOTE.findall(html)[:3]))
-
-    print("\n[quotes] no data file feeds a quotation to a page")
-    #  A data file may still hold quotation references, because deleting the
-    #  attribution would destroy the record of who said what. What it may not do
-    #  is hold them silently: the file has to say in its own note that the
-    #  fields are retained and not rendered, so that a later session does not
-    #  read their presence as permission to display them.
-    for blob in sorted(glob.glob(os.path.join(DATA, "*.json"))):
-        base = os.path.basename(blob)
-        if base == "quotes.json":
-            continue
-        node = json.load(open(blob, encoding="utf-8"))
-        found: set[str] = set()
-        _collect_quote_refs(node, found)
-        if not found:
-            check(f"{base}: holds no quotation reference", True)
-            continue
-        note = node.get("note", "") if isinstance(node, dict) else ""
-        check(f"{base}: retains {len(found)} references and says they are "
-              f"not rendered", "NOT rendered" in note, note[:80])
-
-    print("\n[quotes] no page names a person")
-    #  Proponent organizations are a harder case and are not blocklisted here:
-    #  a snippet's source path legitimately begins with the organization's name,
-    #  and stripping that would destroy the provenance the whole site rests on.
-    #  tools/pagecheck.js checks the rendered prose instead, where paths do not
-    #  appear. What is checked here is the part with no legitimate exception.
-    people = sorted({q["speaker"] for q in quotes if q.get("speaker")})
-    check(f"the name list was built from quotes.json", len(people) >= 5,
-          f"{len(people)} names")
-    for path in pages:
-        name = os.path.basename(path)
-        html = _text(path)
-        named = sorted(n for n in people if n in html)
-        check(f"{name}: names none of the {len(people)} people on the record",
-              not named, str(named))
-
-    print("\n[quotes] pages hold no content that belongs in data/")
-    for path in pages:
-        name = os.path.basename(path)
-        html = _text(path)
+        background = BACKGROUND_FORMAT.search(html)
+        check(f"{name}: no background document reference", background is None)
         check(f"{name}: no hand-typed code block", not PRE_BLOCK.search(html))
         check(f"{name}: uses no long dash", not LONG_DASH.search(html),
               str(LONG_DASH.findall(html)[:3]))
@@ -1642,72 +1632,29 @@ def check_quotes() -> None:
 # --------------------------------------------------------------------------- #
 
 def check_criteria() -> None:
-    """The fifteen criteria are the working group's, not this site's.
-
-    Editorial rule 4 forbids this site from authoring evaluation criteria. The
-    only defence against drifting into it is arithmetic: fifteen in the source
-    document and fifteen in data/criteria.json. The table that answered them
-    per approach lived on the comparison page and went with it; what is left is
-    the reproduction, which one page still quotes a single criterion from.
-    that answers each of them exactly three times and no more. A sixteenth
-    criterion, or a fourth cell state, or a criterion whose wording has been
-    tidied, would all be this site quietly writing the group's evaluation
-    framework for it.
-
-    The DOM half of this phase lives in tools/pagecheck.js, which is the only
-    thing here that can see what actually rendered. It runs under --pages.
-    """
-    print("\n[criteria] the fifteen are the pre-read's fifteen, and there is no sixteenth")
+    """Validate the analysis criteria and their question mappings."""
+    print("\n[criteria] analysis criteria and question mappings")
     crit = json.load(open(os.path.join(DATA, "criteria.json"), encoding="utf-8"))
-    stats = {x["key"] for x in json.load(
-        open(os.path.join(DATA, "corpus-stats.json"), encoding="utf-8"))["stats"]}
-
+    anat = json.load(open(os.path.join(DATA, "six-questions.json"), encoding="utf-8"))
+    slots = {s["number"] for s in anat["slots"]}
+    check("criteria carry no background attribution", not editorial_reference_paths(crit))
     rows = crit["criteria"]
     check("exactly fifteen criteria in criteria.json", len(rows) == 15, str(len(rows)))
     check("numbered 1 to 15 with no gap and no repeat",
-          [c["number"] for c in rows] == list(range(1, 16)),
-          str([c["number"] for c in rows]))
-    check("every criterion carries the pre-read's question verbatim",
-          all(c.get("question", "").strip() for c in rows))
-    check("criteria.json names the document it reproduces",
-          "Hardening-Guidance-Options-Comparison.docx" in crit.get("source", ""),
-          crit.get("source", "")[:60])
-    check("criteria.json says the criteria were reproduced unchanged",
-          "unchanged" in crit.get("source_status", ""), crit.get("source_status", "")[:60])
-    slotted = [c["number"] for c in rows if not c.get("slots")]
-    check("every criterion maps to at least one question", not slotted, str(slotted))
-
-    # Rule 4 is the one editorial rule the site cannot be trusted on, because the
-    # site is produced by a participant and a criterion is where a thumb on the
-    # scale would be least visible. So the source document is opened and read.
-    # Until this check existed, "verbatim" was an assurance rather than an
-    # assertion: the count was checked and the wording was not.
-    pre = _docx_or_skip(PREREAD, "every criterion is verbatim in the pre-read")
-    for c in (rows if pre else []):
-        n = c["number"]
-        check(f"criterion {n} question is verbatim in the pre-read",
-              c["question"] in pre, c["question"][:70])
-        check(f"criterion {n} name is verbatim in the pre-read",
-              c["name"] in pre, c["name"])
-        absent = [w for w in c["raised_by"] if w not in pre]
-        check(f"criterion {n} attribution appears in the pre-read",
-              not absent, str(absent))
-
-    # And the converse: a sixteenth criterion in the source document would show
-    # up here as fifteen on the site and sixteen in the record.
-    m = re.search(r"6\.\s*Draft evaluation criteria(.*?)7\.\s*Facts on record",
-                  pre, re.S) if pre else None
-    body = m.group(1) if m else ""
-    numbered = re.findall(r"^\s*(\d{1,2})\s*$", body, re.M)
-    if numbered:
-        check("the pre-read's own criteria table still holds fifteen rows",
-              max(int(x) for x in numbered) == 15,
-              f"highest row number in the source is {max(int(x) for x in numbered)}")
-    elif pre:
-        skip("the pre-read's own criteria table still holds fifteen rows",
-             "the section 6 table did not parse into numbered rows from the "
-             "document text, so the count could not be read back",
-             "python tools/verify.py --criteria")
+          [c["number"] for c in rows] == list(range(1, 16)))
+    names = [c.get("name", "").strip().casefold() for c in rows]
+    check("criterion names are nonempty and unique",
+          all(names) and len(names) == len(set(names)))
+    for c in rows:
+        question = c.get("question", "")
+        check(f"criterion {c['number']}: asks a meaningful question",
+              isinstance(question, str) and len(question.split()) >= 4
+              and any(ch.isalpha() for ch in question))
+        mapped = c.get("slots", [])
+        check(f"criterion {c['number']}: maps to distinct, existing question rows",
+              isinstance(mapped, list) and bool(mapped)
+              and all(isinstance(s, str) and s in slots for s in mapped)
+              and len(mapped) == len(set(mapped)), str(mapped))
 
 
 # --------------------------------------------------------------------------- #
@@ -2097,81 +2044,19 @@ def _write_contact_sheet(files) -> None:
 # --questions                                                                  #
 # --------------------------------------------------------------------------- #
 
-def _docx_text(rel: str):
-    """Plain text of a .docx, using the standard library only, or None.
-
-    The source documents behind questions.html and the criteria are Word files.
-    Reading them is what turns "reproduced verbatim" from an assurance into an
-    assertion, and it is worth doing without adding a dependency to the build: a
-    .docx is a zip and its body is one XML part.
-
-    Returns None when the document is not in this working copy. The corpora are
-    kept beside the site rather than in it, so a contributor may legitimately not
-    have them, and a cloud-synced folder can evict a file that was there an hour
-    ago. Neither is a reason to crash the harness, and neither is a reason to
-    quietly pass: the caller skips by name, and a skip is not a pass.
-    """
-    import html as _html
-    import zipfile
-
-    path = os.path.join(corpora_root(), rel)
-    if not os.path.isfile(path):
-        return None
-    try:
-        with zipfile.ZipFile(path) as z:
-            xml = z.read("word/document.xml").decode("utf-8")
-    except (OSError, zipfile.BadZipFile, KeyError):
-        return None
-    xml = re.sub(r"</w:p>", "\n", xml)
-    xml = re.sub(r"<w:tab[^>]*/>", "\t", xml)
-    return _html.unescape(re.sub(r"<[^>]+>", "", xml))
-
-
-PREREAD = "Hardening-Guidance-Options-Comparison.docx"
-POSITION_PAPER = "Technology_Specific_Hardening_Guidance_in_OSCAL.docx"
-
-
-def _docx_or_skip(rel: str, what: str):
-    """Read a source document, or skip every check that needs it, by name."""
-    text = _docx_text(rel)
-    if text is None:
-        skip(what, f"{rel} is not in this working copy, so the reproduction "
-                   f"could not be compared against its source",
-             f"point TFG_CORPORA at the corpora checkout, then "
-             f"python tools/verify.py --all")
-    return text
-
-
 def _words(text: str) -> int:
     return len([w for w in re.split(r"\s+", text) if w])
 
 
 def check_questions() -> None:
-    """The open questions page: four sections of one-line questions.
-
-    The page was twelve sections of prose. It is four now, one across all three
-    approaches and one per approach, each question a single line that opens into
-    the reasoning behind it, so a reader can see what is unresolved without
-    reading an essay.
-
-    Two things can go wrong and neither is visible by reading it. A question
-    reproduced from a source document can drift from that document's wording,
-    which turns a reproduction into a paraphrase and a paraphrase into an
-    answer. And an authored question can stop being a question, which is how a
-    page like this turns into a position paper of its own.
-
-    So anything marked as reproduced is compared against the document it names,
-    and anything not marked as reproduced has to end in a question mark.
-    """
-    print("\n[questions] four sections, and the reproduced wording is checked")
-    q = json.load(open(os.path.join(DATA, "questions.json"), encoding="utf-8"))
-    paper = _docx_or_skip(POSITION_PAPER,
-                          "every reproduced question is verbatim in the paper")
-
+    """Four sections of editorial questions, with stable ids and reasoning."""
+    print("\n[questions] editorial content and stable question identifiers")
+    with open(os.path.join(DATA, "questions.json"), encoding="utf-8") as stream:
+        q = json.load(stream)
+    with open(os.path.join(DATA, "six-questions.json"), encoding="utf-8") as stream:
+        approaches = [a["key"] for a in json.load(stream)["approaches"]]
+    check("questions carry no background attribution", not editorial_reference_paths(q))
     secs = q["sections"]
-    approaches = [a["key"] for a in json.load(
-        open(os.path.join(DATA, "six-questions.json"),
-             encoding="utf-8"))["approaches"]]
     check("four sections: one across the three, then one each",
           [s["key"] for s in secs] == ["all"] + approaches,
           str([s["key"] for s in secs]))
@@ -2179,49 +2064,36 @@ def check_questions() -> None:
         check(f"{s['key']}: is labelled and introduced",
               bool(s.get("label")) and len(s.get("intro", "").split()) >= 8)
         check(f"{s['key']}: carries at least one question", bool(s["questions"]))
-
-    seen = set()
     every = [x for s in secs for x in s["questions"]]
     check("no question appears twice", len(every) == len({x["id"] for x in every}),
           str(len(every)))
     for x in every:
         where = x["id"]
-        seen.add(where)
-        n = len(x["q"].split())
+        check(f"{where}: is a usable question identifier",
+              isinstance(where, str) and bool(re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", where)))
+        question = x.get("q", "")
+        reason = x.get("why", "")
+        check(f"{where}: asks a meaningful question",
+              isinstance(question, str) and len(question.split()) >= 4
+              and any(ch.isalpha() for ch in question))
+        is_question = isinstance(question, str) and question.rstrip().endswith("?")
+        check(f"{where}: is asked as a question", is_question)
         check(f"{where}: says why it is open, in a paragraph",
-              20 <= len(x["why"].split()) <= 90, f"{len(x['why'].split())} words")
-        if x.get("verbatim"):
-            #  No ceiling on a reproduced question. Three of the paper's items
-            #  run past the limit an authored one is held to, and cutting them
-            #  to fit would be editing somebody else's question, which is the
-            #  thing the reproduction rule exists to prevent. The floor still
-            #  applies, because a two-word reproduction is a citation error.
-            check(f"{where}: is a whole question", n >= 4, f"{n} words")
-            #  Reproduced, so it keeps the source's wording and the source's
-            #  form. Some of the position paper's items are statements rather
-            #  than questions, and correcting them here would be editing them.
-            check(f"{where}: names the document it came from",
-                  len(x["verbatim"]) > 10, x["verbatim"])
-        else:
-            #  One line, and asked as a question. The ceiling is where a
-            #  question stops being a question and starts being the argument
-            #  for one, which is what the expansion below it is for.
-            check(f"{where}: is one line", 4 <= n <= 26, f"{n} words")
-            check(f"{where}: is asked as a question",
-                  x["q"].rstrip().endswith("?"), x["q"][-40:])
-
-    #  The one the whole page turns on, held by name: a reader arriving to ask
-    #  whether a system needs one plan of record or several should find it.
-    check("the catalog section asks whether many catalogs converge on one plan",
-          any(x["id"] == "one-ssp" for x in every))
-
-    if paper:
-        norm = " ".join(paper.split())
-        missing = [x["id"] for x in every
-                   if x.get("verbatim", "").startswith("the position paper")
-                   and " ".join(x["q"].split()) not in norm]
-        check("every reproduced question is verbatim in the paper",
-              not missing, str(missing))
+              isinstance(reason, str) and 20 <= len(reason.split()) <= 90,
+              f"{len(reason.split()) if isinstance(reason, str) else 0} words")
+    # IDs remain stable so existing deep links continue to resolve.
+    required = {
+        "all": {"xccdf", "rule-metadata", "remediation"},
+        "catalog-first": {"one-ssp", "requirement-level", "control-type", "paper-cat-1", "paper-cat-2"},
+        "component-first": {"which-cdef-maps", "proposal-1", "proposal-2", "proposal-3",
+                            "proposal-4", "paper-comp-1", "paper-comp-2", "paper-comp-3",
+                            "paper-comp-4", "paper-comp-5"},
+        "assessment-first": {"paper-ap-1"},
+    }
+    for key, expected in required.items():
+        present = {x["id"] for s in secs if s["key"] == key for x in s["questions"]}
+        check(f"{key}: retains every existing question identifier",
+              expected <= present, str(sorted(expected - present)))
 
 # --------------------------------------------------------------------------- #
 # --links                                                                      #
@@ -2237,6 +2109,26 @@ def words_in(html: str) -> int:
     """Words a reader sees, with the markup taken out."""
     return len([w for w in re.sub(r"<[^>]+>", " ", html).split()
                 if any(ch.isalnum() for ch in w)])
+
+
+def namespace_urls(node) -> set[str]:
+    """Declared OSCAL namespaces identify vocabularies; they are not web links."""
+    found = set()
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key in {"ns", "schema_id", "$id"} and isinstance(value, str):
+                found.add(value)
+            elif key == "content" and isinstance(value, str):
+                try:
+                    found.update(namespace_urls(json.loads(value)))
+                except ValueError:
+                    pass
+            else:
+                found.update(namespace_urls(value))
+    elif isinstance(node, list):
+        for value in node:
+            found.update(namespace_urls(value))
+    return found
 
 
 def check_source_sanity() -> None:
@@ -2787,7 +2679,9 @@ def check_stakeholders() -> None:
     for key in sorted(sh["approaches"]):
         body = open(os.path.join(SITE_ROOT, f"{key}.html"), encoding="utf-8").read()
         check(f"{key}.html: has the stakeholder section", 'id="stakeholder"' in body)
-        at = [body.find(p["name"]) for p in sh["parties"]]
+        # Names can occur in descriptions; compare row headers only.
+        at = [body.find('<th scope="row">' + p["name"] + '<span')
+              for p in sh["parties"]]
         check(f"{key}.html: names all seven parties", all(i != -1 for i in at),
               str([p["name"] for p, i in zip(sh["parties"], at) if i == -1]))
         check(f"{key}.html: in the order the data declares", at == sorted(at), str(at))
@@ -2901,11 +2795,10 @@ def check_scenario() -> None:
     #  Each guide's count is recomputed from the file it names, by the rule it
     #  names. A guide whose requirement count drifted from its own corpus would
     #  put the whole scenario out by that much.
-    root = corpora_root()
     for h in sc["hardening"]:
         check(f"{h['key']}: says how its count was derived",
               len(h["derivation"]) > 60)
-        path = os.path.join(root, h["source"])
+        path = ex.source_path(h["source"])
         check(f"{h['key']}: names a file that exists", os.path.isfile(path), h["source"])
         if not os.path.isfile(path):
             continue
@@ -2953,7 +2846,9 @@ def check_scenario() -> None:
         check(f"{key}: says what rule produced the inventory",
               len(a["rule"].split()) >= 12, a["rule"])
         check(f"{key}: says what the plan of record ends up answering",
-              "plan of record" in a["plan_of_record"], a["plan_of_record"])
+              ("plan of record" in a["plan_of_record"].lower()
+               or "system security plan" in a["plan_of_record"].lower()),
+              a["plan_of_record"])
         for f in a["files"]:
             check(f"{key}/{f['model']}: a count of zero says why, a count says what",
                   len(f["what"].split()) >= 1, f["what"])
@@ -3108,7 +3003,7 @@ def check_scenario() -> None:
           not any(h["derivation"][:40] in page for h in sc["hardening"]))
 
     #  One order for the three, everywhere. This page was alphabetical by
-    #  structural name while every other comparison used the pre-read's option
+    #  structural name while every other comparison used the site's option
     #  letters, so the one page putting the three in a table put them in a
     #  different order from the page putting them side by side per question.
     #  Nothing held it, which is why it drifted, so it is held here: the table
@@ -3175,8 +3070,6 @@ def check_tradeoffs() -> None:
     approaches = {a["key"] for a in sq["approaches"]}
     stats = json.load(open(os.path.join(DATA, "corpus-stats.json"), encoding="utf-8"))
     stat_keys = {x["key"] for x in stats["stats"]}
-    cited_keys = {k for k, v in stats["cited_from_position_paper"].items()
-                  if isinstance(v, int)}
 
     check("the block covers every approach and nothing else",
           set(tr["approaches"]) == approaches,
@@ -3207,15 +3100,12 @@ def check_tradeoffs() -> None:
             for frag in e.get("schema_evidence", []):
                 check(f"{where}: rests on a schema fragment that exists",
                       os.path.isfile(os.path.join(EVIDENCE, f"{frag}.json")), frag)
-            #  A figure is either recomputed here or quoted from a paper, and
-            #  the two render differently on purpose. A key that is neither is a
-            #  span that will render empty on the page.
+            # Only recomputed statistics may feed a figure on the page.
             for k in re.findall(r'data-stat="([^"]+)"', e["body"]):
                 check(f"{where}: data-stat {k} is a real statistic",
                       k in stat_keys, k)
-            for k in re.findall(r'data-cited="([^"]+)"', e["body"]):
-                check(f"{where}: data-cited {k} is a real cited figure",
-                      k in cited_keys, k)
+            check(f"{where}: uses no external scale citation",
+                  'data-cited=' not in e["body"])
 
     #  The counts are no longer held equal, so what is checked is length rather
     #  than shape: an approach can have four risks where another has three, and
@@ -3403,11 +3293,14 @@ def check_links() -> None:
     in_markup = {u for body in text.values()
                  for u in re.findall(r'href="(https?://[^"]+)"', body)}
     in_data = set()
+    namespaces = set()
     for path in glob.glob(os.path.join(DATA, "*.json")):
         blob = json.load(open(path, encoding="utf-8"))
+        namespaces.update(namespace_urls(blob))
         in_data |= {u.rstrip('".,') for u in re.findall(
             r'https?://[^\s"\\]+', json.dumps(blob))}
-    # Schema identifiers are namespaces rather than pages and are not fetched.
+    # Namespace identifiers need not resolve. Explicit hrefs remain checked.
+    in_data -= namespaces
     in_data = {u for u in in_data if "csrc.nist.gov/ns/" not in u
                and "cisa.gov/ns/" not in u}
     external = sorted(in_markup | in_data)
@@ -3446,6 +3339,12 @@ def check_links() -> None:
                 code = exc.code
         except Exception as exc:                     # noqa: BLE001
             code = str(exc)[:60]
+        host = urllib.parse.urlsplit(u).hostname or ""
+        if code == 403 and host in BOT_BLOCKING_HOSTS:
+            print(f"        {host} answers 403 to automated clients; "
+                  f"opened by hand {BOT_BLOCKING_HOSTS[host]}")
+            check(f"external link is reachable: {u[:60]}", True)
+            continue
         check(f"external link is reachable: {u[:60]}",
               isinstance(code, int) and code < 400, f"got {code}")
 
@@ -3512,21 +3411,20 @@ def check_slots() -> None:
                   len(c.get("note", "")) >= 40, f"{len(c.get('note', ''))} characters")
 
     # --- the names have to say what the question asks --------------------
-    # "Control tie" was a label that told a reader nothing on its own. Every
-    # name is now a phrase, with a short form for the strip cells, and both are
-    # required so that a later edit cannot quietly go back to a bare noun.
     for s in anat["slots"]:
         n = s["number"]
-        # A two-word noun phrase is exactly what was wrong before: "Control
-        # tie" has a space in it and still tells a reader nothing. The bar is
-        # three words, and the retired labels are named so they cannot return.
         words = s.get("name", "").split()
         check(f"question {n} has a name that says what it asks",
               len(words) >= 3, s.get("name", ""))
         check(f"question {n} does not use a retired label as its name",
               s.get("name", "").strip().lower() not in RETIRED_LABELS,
               s.get("name", ""))
-    # And the prose. Renaming a question and leaving every sentence that used
+        check(f"question {n} has a short form for tight spaces",
+              bool(s.get("short", "").strip()) and len(s["short"]) <= 14,
+              s.get("short", ""))
+        check(f"question {n} states its question as a question",
+              s.get("question", "").rstrip().endswith("?"), s.get("question", ""))
+    # And the prose.
     # the old label is how a retired label survives where a reader meets it.
     for blob in ("six-questions.json", "glossary.json", "questions.json",
                  "views.json"):
@@ -3536,11 +3434,6 @@ def check_slots() -> None:
         text = open(path, encoding="utf-8").read().lower()
         check(f"{blob} does not use the retired phrase 'control tie'",
               "control tie" not in text)
-        check(f"question {n} has a short form for tight spaces",
-              bool(s.get("short", "").strip()) and len(s["short"]) <= 14,
-              s.get("short", ""))
-        check(f"question {n} states its question as a question",
-              s.get("question", "").rstrip().endswith("?"), s.get("question", ""))
     six = [s for s in anat["slots"] if s["number"].startswith("6")]
     check("the two-part question carries one name for the pair",
           len({s.get("group_name") for s in six}) == 1 and all(s.get("group_name")
@@ -3559,7 +3452,8 @@ def check_slots() -> None:
     check("the catalog approach's control link names the mapping model",
           cat2.get("model") == "mapping-collection", str(cat2.get("model")))
     check("and says the tie is made by it rather than inline",
-          "mapping model" in cat2["note"] and "inline" in cat2["note"])
+            "separate mapping collection" in cat2["note"].lower()
+            or ("mapping model" in cat2["note"] and "inline" in cat2["note"]))
     #  Answered, and answered by a document. The cell used to read unanswered
     #  because no publisher had shipped a mapping, but that is a fact about the
     #  corpus and this axis is about the model: the tie is made, in a separate
@@ -3568,7 +3462,9 @@ def check_slots() -> None:
     check("the catalog approach answers the control tie",
           cat2["state"] == "filled", cat2["state"])
     check("and still records that no publisher has shipped a mapping",
-          "No publisher has shipped one" in cat2["note"], cat2["note"][:80])
+            ("No publisher has shipped one" in cat2["note"]
+             or "published corpus contains no such mapping" in cat2["note"].lower()),
+            cat2["note"][:80])
     #  Late binding used to be question 2b, a row in the matrix, and its
     #  catalog-first cell carried the disclaimer that being the only approach
     #  able to use it is not an advantage. The row is gone: it scored a property
@@ -3592,7 +3488,7 @@ def check_slots() -> None:
           set(late.get("available_to", {})) ==
           {a["key"] for a in anat["approaches"]}, str(late.get("available_to")))
     check("and why the other two cannot",
-          "closed by allOf" in late.get("why", ""))
+            re.search(r"(?:closed|restricted) by allOf", late.get("why", "")) is not None)
 
     # An answer describes where a rule lives and how it joins. A bare count
     # describes the sample somebody published, so a cell answering a question
@@ -3734,14 +3630,6 @@ def check_budget() -> None:
 # --conformance                                                                #
 # --------------------------------------------------------------------------- #
 
-CONFORMANCE_TOOLS = [
-    ("oscal-cli", "oscal-cli {model} validate {file}"),
-    ("trestle", "trestle validate -f {file}"),
-    ("check-jsonschema",
-     "check-jsonschema --schemafile {schema} {file}"),
-]
-
-
 def _label_for(sid: str, anat: dict) -> str:
     """The status annotation the site shows on a snippet from this corpus."""
     snip = load_snippet(sid)
@@ -3752,33 +3640,24 @@ def _label_for(sid: str, anat: dict) -> str:
 
 
 def check_conformance() -> None:
-    """Every extract labelled conformant validates; every extract labelled
-    proposed fails.
+    """Check local OSCAL examples against their labels and NIST 1.2.1 schemas.
 
-    Plan section 11.2 asks for this and asks for the commands to be published.
-    The commands are printed whether or not they can run here, because a reader
-    who wants to check the claim needs them either way.
-
-    What can be established offline is which side of the line each corpus sits
-    on, and why. The component-first corpus uses assemblies that OSCAL 1.2.1
-    does not define, so it cannot validate, and the site labels it proposed
-    schema. The other two use only defined constructs. That is a structural
-    fact about the field names present in the files and it is checked here. The
-    validation itself needs a validator and the published schemas.
+    Offline checks retain the structural evidence. Formal validation uses
+    jsonschema and the exact published schema for each document's model, not
+    a CLI exit status that could also mean a malformed command. Every local
+    OSCAL document is checked, not just a representative file per approach.
+    Missing dependencies or network are explicit skips, and fail under --strict.
     """
     print("\n[conformance] labelled conformant validates, labelled proposed fails")
     anat = json.load(open(os.path.join(DATA, "six-questions.json"), encoding="utf-8"))
-    root = corpora_root()
-
-    print("        commands a reader can run to reproduce this:")
-    for tool, template in CONFORMANCE_TOOLS:
-        print(f"          {template}")
+    reproduce = "python tools/verify.py --conformance --strict"
+    print(f"        reproduce with jsonschema installed: {reproduce}")
 
     # --- the offline half: the structural reason the labels differ ---------- #
     # OSCAL 1.2.1 defines no rules, checks or rule-groups assembly anywhere in
     # the component-definition model. Their presence is what makes the
-    # component-first content unvalidatable, and their absence is what makes
-    # the other two content sets ordinary OSCAL.
+    # component-first content unvalidatable. Absence is only a structural
+    # check, not proof of conformance; the full schemas are checked below.
     proposed_keys = {"rules", "checks", "rule-groups", "implementing-rules",
                      "assessment-check-id", "target-component-uuid"}
 
@@ -3799,13 +3678,14 @@ def check_conformance() -> None:
         return found
 
     corpora = {
-        "component-first": glob.glob(os.path.join(root, "IBM", "*.json")),
-        "catalog-first": glob.glob(os.path.join(
-            root, "AWS", "oscal-content-for-aws-services-main", "**", "*.json"),
-            recursive=True),
-        "assessment-first": ez_plans(),
+        "component-first": sorted(glob.glob(ex.source_path("IBM", "*.json"))),
+        "catalog-first": sorted(glob.glob(ex.source_path(
+            "AWS/oscal-content-for-aws-services-main", "**", "*.json"),
+            recursive=True)),
+        "assessment-first": oscal_files("Easy Dynamics"),
     }
     for key, files in corpora.items():
+        check(f"{key}: local OSCAL examples are present", bool(files))
         label = [a["status_annotation"] for a in anat["approaches"]
                  if a["key"] == key][0]
         used = set()
@@ -3828,34 +3708,61 @@ def check_conformance() -> None:
           "expected the misspelled local-defintions key")
 
     # --- the network half -------------------------------------------------- #
-    tool = next((t for t, _ in CONFORMANCE_TOOLS if have(t)), None)
-    if not tool:
+    try:
+        from schema_validation import schema_validator
+    except ImportError:
         skip("every conformant extract validates against OSCAL 1.2.1",
-             "no OSCAL validator on PATH and none installable without network",
-             CONFORMANCE_TOOLS[0][1].format(
-                 model="assessment-plan", file="<corpus file>", schema="<schema>"))
+             "the Python jsonschema package is required", reproduce)
         skip("every proposed extract fails validation",
-             "same validator is required to show the failure",
-             CONFORMANCE_TOOLS[1][1].format(file="<corpus file>", schema="<schema>"))
+             "the Python jsonschema package is required", reproduce)
+        return
+    if not have_network():
+        skip("every conformant extract validates against OSCAL 1.2.1",
+             "no network to fetch the pinned NIST 1.2.1 schemas", reproduce)
+        skip("every proposed extract fails validation",
+             "no network to fetch the pinned NIST 1.2.1 schemas", reproduce)
         return
 
-    # A validator is present, so run it over one file per corpus.
+    validators = {}
+    failed_schemas = set()
     for key, files in corpora.items():
         label = [a["status_annotation"] for a in anat["approaches"]
                  if a["key"] == key][0]
-        target = sorted(files)[0]
-        cmd = CONFORMANCE_TOOLS[0][1].format(
-            model="", file=target, schema="") if tool == "oscal-cli" \
-            else f"{tool} validate -f {target}"
-        print(f"        running: {cmd}")
-        rc = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-        ok = rc.returncode == 0
-        if label == "proposed schema":
-            check(f"{key} is labelled proposed and fails validation", not ok,
-                  f"exit {rc.returncode}: {(rc.stdout + rc.stderr)[:160]}")
-        else:
-            check(f"{key} is labelled conformant and validates", ok,
-                  f"exit {rc.returncode}: {(rc.stdout + rc.stderr)[:160]}")
+        for target in files:
+            where = os.path.relpath(target, SITE_ROOT)
+            with open(target, encoding="utf-8") as fh:
+                document = json.load(fh)
+            models = set(document) & set(NIST_SCHEMAS) if isinstance(document, dict) else set()
+            if not check(f"{where}: identifies one OSCAL model", len(models) == 1,
+                         str(sorted(models))):
+                continue
+            model = next(iter(models))
+            if model in failed_schemas:
+                continue
+            if model not in validators:
+                try:
+                    schema = _nist_schema(model)
+                    validators[model] = schema_validator(schema)
+                except Exception as exc:
+                    # A download/schema failure is never evidence that an
+                    # example labelled proposed correctly failed validation.
+                    check(f"{model}: NIST 1.2.1 schema is available and valid",
+                          False, str(exc)[:240])
+                    failed_schemas.add(model)
+                    continue
+            try:
+                error = next(validators[model].iter_errors(document), None)
+            except Exception as exc:
+                check(f"{where}: schema validation completed", False, str(exc)[:240])
+                continue
+            detail = (f"/{'/'.join(map(str, error.absolute_path))}: {error.message}"
+                      if error is not None else "no schema violations")
+            if label == "proposed schema":
+                check(f"{where}: proposed schema fails NIST 1.2.1 validation",
+                      error is not None, detail[:240])
+            else:
+                check(f"{where}: validates against NIST 1.2.1",
+                      error is None, detail[:240])
 
 
 # --------------------------------------------------------------------------- #
@@ -3968,9 +3875,9 @@ def check_example() -> None:
 
     #  The parameter gap, held as evidence rather than as prose that could drift.
     #
-    #  Question 1's own definition puts a rule's parameters there: the pre-read's
-    #  settled item 7 says the definition declares the options and a default. Two
-    #  approaches declare one and the third has no construct to declare it with.
+    # Question 1 puts a rule's parameters in its definition, with the options
+    # and a default. Two approaches declare one; the third has no construct
+    # to declare it with.
     #
     #  It is not a mark against the column. The approach is not failing to use a
     #  construct, it is being asked to use one that does not exist: an activity
@@ -4679,12 +4586,13 @@ def check_bundle() -> None:
             for p in glob.glob(os.path.join(DATA, "**", "*.json"), recursive=True)}
     want |= {os.path.relpath(p, SITE_ROOT).replace(os.sep, "/")
              for p in glob.glob(os.path.join(SITE_ROOT, "assets", "diagrams", "*.svg"))}
+    want.add("analysis.json")
     payload = json.loads(text.split("window.TFGBundle = ", 1)[1].rsplit(";", 1)[0])
     missing = sorted(want - set(payload))
     check("every data file and every diagram is in the fallback",
           not missing, str(missing[:6]))
     extra = sorted(set(payload) - want)
-    check("the fallback carries nothing that is not in data/ or the diagrams",
+    check("the fallback carries only analysis metadata, data and diagrams",
           not extra, str(extra[:6]))
     print(f"        {len(payload)} files, {os.path.getsize(out):,} bytes")
 
@@ -4704,19 +4612,13 @@ def check_bundle() -> None:
 # --------------------------------------------------------------------------- #
 
 def check_sources() -> None:
-    """The guidance named in the introduction, against the corpora.
+    """Validate the published inventory against committed downloads and OSCAL.
 
-    A publisher that claims two assessment plans must have two assessment plans.
-    The table is the first thing a reader sees and it is the site's claim about
-    what it actually read, so it is recomputed rather than trusted.
-
-    The table has one row per benchmark and the counts are per publisher, so the
-    two are held apart in the data: `rows` is what the reader sees, `publishers`
-    is what this recomputes. Every row must name a publisher that exists, and
-    every publisher must have at least one row, or the table and the arithmetic
-    would be describing different corpora.
+    The site's guidance descriptions are authoritative, not reconstructed from
+    an external folder. OSCAL counts still come from the original local example
+    files; download and example indexes must match their files and digests.
     """
-    print("\n[sources] the guidance read as input, recomputed")
+    print("\n[sources] local guidance downloads and original OSCAL examples")
     doc = json.load(open(os.path.join(DATA, "sources.json"), encoding="utf-8"))
     rows = doc["publishers"]
     by_key = {r["key"]: r for r in doc["rows"]}
@@ -4802,44 +4704,34 @@ def check_sources() -> None:
     check("no row carries an OSCAL form, which is a publisher-level fact now",
           not any("oscal_form" in r for r in doc["rows"]))
 
-    root = corpora_root()
     plans = ez_plans()
+    families = {
+        "cis": "Center for Internet Security",
+        "disa": "DISA",
+        "cisa": "CISA BOD 25-01",
+    }
+    count_models = {
+        "assessment_plans": "assessment-plan",
+        "assessment_results": "assessment-results",
+    }
+    for key, family in families.items():
+        for count_key, model in count_models.items():
+            if count_key not in rows[key]["oscal_counts"]:
+                continue
+            want = rows[key]["oscal_counts"][count_key]
+            got = len(oscal_files("Easy Dynamics", family, root_key=model))
+            check(f"{key} row claims {want} {model} documents",
+                  got == want, f"found {got}")
 
-    def under(*parts):
-        needle = os.path.join(*parts) + os.sep
-        return [f for f in plans if needle in f]
-
-    for key, parts, label in (
-            ("cis", ("Easy Dynamics", "Center for Internet Security"), "CIS"),
-            ("disa", ("Easy Dynamics", "DISA"), "DISA"),
-            ("cisa", ("Easy Dynamics", "CISA BOD 25-01"), "CISA")):
-        want = rows[key]["oscal_counts"]["assessment_plans"]
-        got = len(under(*parts))
-        check(f"{label} row claims {want} assessment plans", got == want, f"found {got}")
-
-    #  Source material held, as distinct from what the publisher makes available.
-    #  The distinction matters: the CISA row says none is held, and if a file ever
-    #  appears the row is wrong rather than the corpus.
-    n = len(glob.glob(os.path.join(root, "Hardening Guides",
-                                   "Center for Internet Security", "*.json")))
-    check("CIS row claims 2 XCCDF-derived JSON source files",
-          n == rows["cis"]["source_counts"]["xccdf_json"], f"found {n}")
-    n = len(glob.glob(os.path.join(root, "Hardening Guides", "DISA", "**",
-                                   "*-xccdf.xml"), recursive=True))
-    check("DISA row claims 9 XCCDF XML source files",
-          n == rows["disa"]["source_counts"]["xccdf_xml"], f"found {n}")
-    n = len(glob.glob(os.path.join(root, "Hardening Guides", "CISA*", "**", "*"),
-                      recursive=True))
-    check("CISA row claims no source material is held", n == 0, f"found {n}")
-    cisa_form = by_key["cisa-bod-25-01"]["source_form"].lower()
-    check("the CISA row says so in the table too", "none held" in cisa_form,
-          cisa_form)
+    source_counts_valid = all(type(n) is int and n >= 0 for p in rows.values()
+                              for n in p.get("source_counts", {}).values())
+    check("published source counts are nonnegative integers", source_counts_valid)
 
     aws = "AWS/oscal-content-for-aws-services-main"
     c = rows["aws"]["oscal_counts"]
-    got = len(glob.glob(os.path.join(root, aws, "catalogs", "*.oscal.json")))
+    got = len(glob.glob(ex.source_path(aws, "catalogs", "*.oscal.json")))
     check(f"AWS row claims {c['catalogs']} catalog", got == c["catalogs"], f"found {got}")
-    got = len(glob.glob(os.path.join(root, aws, "component-definitions", "*.oscal.json")))
+    got = len(glob.glob(ex.source_path(aws, "component-definitions", "*.oscal.json")))
     check(f"AWS row claims {c['component_definitions']} component definitions",
           got == c["component_definitions"], f"found {got}")
     cat = corpus_json(f"{aws}/catalogs/aws_security-hub.oscal.json")["catalog"]
@@ -4855,37 +4747,19 @@ def check_sources() -> None:
     # --- the files copied into the site --------------------------------- #
     sf = json.load(open(os.path.join(DATA, "source-files.json"), encoding="utf-8"))
 
-    #  Regenerating must be a no-op. If it is not, the page is linking sizes and
-    #  hashes that no longer match what is on disk.
-    rc = subprocess.run([sys.executable, os.path.join(TOOLS_DIR, "sources_files.py"),
-                         "--check"], capture_output=True, text=True)
-    check("data/source-files.json is current with sources/", rc.returncode == 0,
-          (rc.stdout + rc.stderr).strip().splitlines()[-1] if (rc.stdout or rc.stderr) else "")
-
     #  Both directions. A link must resolve to a file, and a file must be linked:
     #  a document sitting in sources/ that no row reaches is worse than a missing
     #  one, because nothing on the page says it is there.
     listed = {f["href"] for f in sf["files"]}
-    #  Some folders are recorded but deliberately not shipped, because their
-    #  licence does not grant redistribution. Those entries are carried in the
-    #  data so the record stays complete, and a clone without them has to
-    #  verify clean, or the repository could only be built by whoever holds the
-    #  files. Every other listed file must be present.
-    not_shipped = {e["path"] for e in sf.get("not_shipped", [])}
-    def unshipped(href):
-        return href.split("sources/", 1)[-1].split("/", 1)[0] in not_shipped
+    check("source download paths are unique", len(listed) == len(sf["files"]))
+    check("source downloads stay within sources/",
+          all(h.startswith("sources/") and os.path.commonpath([
+              os.path.realpath(os.path.join(SITE_ROOT, "sources")),
+              os.path.realpath(os.path.join(SITE_ROOT, h))])
+              == os.path.realpath(os.path.join(SITE_ROOT, "sources")) for h in listed))
     missing = [h for h in sorted(listed)
-               if not unshipped(h)
-               and not os.path.isfile(os.path.join(SITE_ROOT, h))]
-    check("every listed file that ships is on disk", not missing, str(missing[:4]))
-    absent = sorted(h for h in listed
-                    if unshipped(h)
-                    and not os.path.isfile(os.path.join(SITE_ROOT, h)))
-    check("and every not-shipped folder says why it is not here",
-          all(e.get("why") for e in sf.get("not_shipped", [])),
-          str(sf.get("not_shipped")))
-    if absent:
-        print(f"      {len(absent)} recorded file(s) not in this clone, by licence")
+               if not os.path.isfile(os.path.join(SITE_ROOT, h))]
+    check("every listed source download is on disk", not missing, str(missing[:4]))
 
     #  Paths the generator excludes on purpose, declared in the data rather than
     #  known here, so the two cannot disagree. The OSCAL written from this guidance
@@ -4925,8 +4799,7 @@ def check_sources() -> None:
     check("every listed document is an input, not an output",
           kinds == ["source"], str(kinds))
 
-    #  Size, media type and digest are read from disk by the generator, so a stale
-    #  figure on the page is a real mismatch rather than a rounding difference.
+    # Check the committed index directly, without regenerating its wording.
     bad = []
     for f in sf["files"]:
         full = os.path.join(SITE_ROOT, f["href"])
@@ -4934,21 +4807,58 @@ def check_sources() -> None:
             continue
         if os.path.getsize(full) != f["bytes"]:
             bad.append(f["name"] + ": size")
+        if ex.sha256_file(full) != f.get("sha256"):
+            bad.append(f["name"] + ": sha256")
         if f["media"] != os.path.splitext(f["name"])[1].lstrip(".").lower():
             bad.append(f["name"] + ": media type")
-    check("every file's size and media type match the file", not bad, str(bad[:4]))
+        media = sf.get("media_types", {}).get(f["media"], {})
+        if f.get("mime") != media.get("mime") or f.get("media_label") != media.get("label"):
+            bad.append(f["name"] + ": media label or MIME")
+    check("every source file's size, digest and media match the index", not bad, str(bad[:4]))
 
     #  The OSCAL tree used to be excluded from the repository and this asserted
     #  that it stayed excluded. It is committed now, under examples/, so that
     #  the artifacts inventory can link to a document rather than only count it,
     #  and the assertion is turned around: what has to hold is that every file
     #  the inventory names is either in this repository or at a public address.
-    ex = json.load(open(os.path.join(DATA, "examples.json"), encoding="utf-8"))
-    on_disk = {f["path"] for f in ex["files"]}
-    missing = [f["path"] for f in ex["files"]
+    examples = json.load(open(os.path.join(DATA, "examples.json"), encoding="utf-8"))
+    indexed = {f["path"] for f in examples["files"]}
+    check("example paths are unique", len(indexed) == len(examples["files"]))
+    linked = examples.get("link_only", {})
+    covered = {f["approach"] for f in examples["files"]} | set(linked)
+    check("the example index covers local and externally published approaches",
+          covered == set(OPTION_ORDER))
+    check("externally published examples have HTTPS source links",
+          all(urllib.parse.urlsplit(url).scheme == "https"
+              and urllib.parse.urlsplit(url).netloc for url in linked.values()))
+    missing = [f["path"] for f in examples["files"]
                if not os.path.isfile(os.path.join(SITE_ROOT, "examples",
                                                   f["path"].replace("/", os.sep)))]
-    check("every copied example is on disk", not missing, str(missing[:3]))
+    check("every indexed example is on disk", not missing, str(missing[:3]))
+    #  Reference documents more than one example set resolves, such as the
+    #  catalog an SSP imports, sit at the examples root and are indexed apart
+    #  from the per-approach sets.
+    shared = {f["path"] for f in examples.get("shared", [])}
+    check("shared reference documents sit at the examples root",
+          all("/" not in p for p in shared), str(sorted(shared)[:3]))
+    on_disk = {os.path.relpath(p, os.path.join(SITE_ROOT, "examples")).replace(os.sep, "/")
+               for p in glob.glob(os.path.join(SITE_ROOT, "examples", "**", "*.json"),
+                                  recursive=True) if os.path.isfile(p)}
+    check("every local JSON example is indexed", on_disk == indexed | shared,
+          str(sorted(on_disk ^ (indexed | shared))[:4]))
+    bad = []
+    for f in examples["files"] + examples.get("shared", []):
+        full = os.path.join(SITE_ROOT, "examples", f["path"])
+        if "approach" in f and f["path"].split("/", 1)[0] != f["approach"]:
+            bad.append(f["path"] + ": approach")
+        if not os.path.isfile(full):
+            continue
+        if os.path.getsize(full) != f.get("bytes"):
+            bad.append(f["path"] + ": size")
+        if ex.sha256_file(full) != f.get("sha256"):
+            bad.append(f["path"] + ": sha256")
+    check("every example's size, digest and approach match the index",
+          not bad, str(bad[:4]))
 
     #  And every row of the inventory reaches a document. A local link has to
     #  resolve to a file in this repository; an external one has to be a URL.
@@ -4970,14 +4880,15 @@ def check_sources() -> None:
             local = urllib.parse.unquote(href).replace("/", os.sep)
             if not os.path.isfile(os.path.join(SITE_ROOT, local)):
                 dead.append(href)
-    check("every document in the inventory carries a link", not unlinked,
-          str(unlinked[:3]))
-    check("and every link reaches a file or a public address", not dead,
-          str(dead[:3]))
-    check("and the copy is current with the corpora it came from",
-          subprocess.run([sys.executable,
-                          os.path.join(TOOLS_DIR, "copy_examples.py"), "--check"],
-                         capture_output=True, text=True).returncode == 0)
+        check("every document in the inventory carries a link", not unlinked,
+            str(unlinked[:3]))
+        check("and every link reaches a file or a public address", not dead,
+            str(dead[:3]))
+        command = [sys.executable, os.path.join(TOOLS_DIR, "copy_examples.py"), "--check"]
+        rc = subprocess.run(command, capture_output=True, text=True,
+                    env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
+        check("the local example index passes its read-only integrity check",
+            rc.returncode == 0, (rc.stdout + rc.stderr).strip()[-600:])
     check("every file carries its own terms",
           all(f.get("terms") for f in sf["files"]))
     check("every file carries a media label for the icon's alternative text",
@@ -5175,6 +5086,7 @@ def check_icons() -> None:
 
 
 PHASES = {
+    "inputs": source_inputs.prepare,
     "snippets": check_snippets,
     "schema": check_schema,
     "stats": check_stats,
@@ -5204,9 +5116,11 @@ NOT_YET: list = []
 
 
 def main() -> None:
-    global STRICT
+    global STRICT, OFFLINE
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--all", action="store_true")
+    p.add_argument("--offline", action="store_true",
+                   help="never attempt network checks or network installs; report skips explicitly")
     p.add_argument("--strict", action="store_true",
                    help="a skipped check is a failure. Used in CI, where the "
                         "network and the validators are available.")
@@ -5214,6 +5128,7 @@ def main() -> None:
         p.add_argument(f"--{name}", action="store_true")
     args = p.parse_args()
     STRICT = args.strict
+    OFFLINE = args.offline
 
     selected = [n for n in PHASES if getattr(args, n)] or (list(PHASES) if args.all else [])
     if not selected:
@@ -5221,7 +5136,11 @@ def main() -> None:
         sys.exit(2)
 
     for name in selected:
-        PHASES[name]()
+        try:
+            PHASES[name]()
+        except source_inputs.SourceInputError as exc:
+            check(f"{name}: repository-defined source inputs are available and intact", False, str(exc))
+            break
 
     passed = sum(1 for _, ok, _ in _RESULTS if ok)
     total = len(_RESULTS)

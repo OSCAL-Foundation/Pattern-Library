@@ -57,6 +57,10 @@
   --focus:          #2958BC;
   --shadow:         0 1px 2px rgb(18 22 28 / 8%), 0 4px 12px rgb(18 22 28 / 6%);
 
+  --wip-bg:         #FFEB00;
+  --wip-fg:         #12161C;
+  --wip-hover:      #E7D414;
+
   /* --- media-type icon ----------------------------------------------------
      A PDF badge is red because a reader expects it to be, and expectation is
      worth something on an icon that has to be recognised at 27px. It is the
@@ -162,8 +166,8 @@
         equal-luminance property; verify.py --diagrams asserts that every
         approach outline also carries a marker and a label.
      Assignment is a fixed mapping, made once when the palette was built and
-     deliberately not changed when the display order moved to the pre-read's
-     option letters. A hue that changed hands would invalidate every published
+    deliberately not changed when the display order moved to option-letter
+    order. A hue that changed hands would invalidate every published
      figure and every association a reader had already formed, and it would buy
      nothing: the three are equal-lightness and carry no valence, so which hue an
      approach has means nothing. */
@@ -231,6 +235,9 @@
 }
 
 [data-theme="dark"] {
+  --wip-bg:         #FFEB00;
+  --wip-fg:         #12161C;
+  --wip-hover:      #E7D414;
   --bg:             #12161C;
   --bg-subtle:      #1A1F27;
   --bg-inset:       #222833;
@@ -364,6 +371,25 @@ body {
   z-index: 100; transition: top 120ms ease;
 }
 .skip-link:focus { top: var(--s2); }
+
+/* Compact notice for active analyses without a recorded decision. */
+.wip-banner {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  min-height: 2.25rem; padding: 0.125rem 3rem;
+  position: relative; background: var(--wip-bg); color: var(--wip-fg);
+  font-size: 0.875rem; font-weight: 650; line-height: 1.4;
+  text-align: center;
+}
+.wip-banner__dismiss {
+  position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 3px;
+  background: transparent; color: var(--wip-fg); cursor: pointer;
+  font: inherit; font-size: 1.5rem; line-height: 1;
+}
+.wip-banner__dismiss:hover { background: var(--wip-hover); }
+.wip-banner__dismiss:focus-visible { outline: 2px solid var(--wip-fg); outline-offset: 0; }
+.wip-banner[hidden], .wip-banner__dismiss[hidden] { display: none; }
 
 .site-header {
   border-bottom: 1px solid var(--border);
@@ -810,6 +836,7 @@ code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
 .filelink--icon .micon { width: 1.9em; height: 1.9em; vertical-align: 0; }
 
 @media print {
+  .wip-banner__dismiss { display: none; }
   .micon { display: none; }
   /* On paper an icon cannot be clicked. The icon-only links print what they
      stand for instead of a glyph that leads nowhere. */
@@ -968,7 +995,6 @@ code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
 /* --- .criteria-table ----------------------------------------------------- */
 .table-wrap { overflow-x: auto; margin-block: var(--s5); }
 .criteria-table { font-size: var(--fs-sm); min-width: 720px; }
-.criteria-table.register { min-width: 640px; }
 .criteria-table th, .criteria-table td {
   border: 1px solid var(--border); padding: var(--s2) var(--s3);
   text-align: left; vertical-align: top;
@@ -1147,7 +1173,7 @@ code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
 .carrier code.carrier__assembly.is-proposed,
 .carrier code.carrier__prop { border-width: 2px; background: var(--bg); }
 /* A proposed assembly is marked where it is named, so a reader does not have to
-   hold the proposal in their head to know which half of a pair is not OSCAL. */
+  infer which half of a pair is outside the core OSCAL schema. */
 .carrier code.carrier__assembly.is-proposed {
   border-style: dashed; border-color: var(--slot-2-border); color: var(--slot-2-fg);
 }
@@ -1551,9 +1577,7 @@ code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
 .tabs__panel[hidden] { display: none; }
 .tabs__tab .criteria-table__who { text-transform: none; letter-spacing: 0; }
 
-/* An artifact answering a question the record left open is the one finding
-   this table can produce that the pre-read's own section 7 cannot, so it is
-   marked rather than left for the reader to spot by comparison. *//* --- .diagram-row : three diagrams at one size, for one comparison --------
+/* --- .diagram-row : three diagrams at one size, for one comparison --------
    Every diagram carries the 720px readability floor, and three floors are
    2160px, which no viewport supplies. So the desktop row is one shared
    horizontal scroller holding three equal 720px panes: the panes really are
@@ -1577,27 +1601,13 @@ code, kbd, pre, samp { font-family: var(--font-mono); font-size: var(--fs-sm); }
    reason the min-width exists; changing one number without the other breaks
    the guarantee, and verify.py --diagrams re-derives it. */
 .diagram { overflow-x: auto; margin-block: var(--s5); }
-.diagram > svg { min-width: 720px; width: 100%; height: auto; display: block; }/* The scale figure's three destinations. Buttons are .btn; this is the group. *//* --- figures ------------------------------------------------------------- */
+.diagram > svg { min-width: 720px; width: 100%; height: auto; display: block; }/* --- figures ------------------------------------------------------------- */
 figure { margin: var(--s5) 0; }
 figure svg { width: 100%; height: auto; }
 figcaption {
   font-size: var(--fs-sm); color: var(--text-muted);
   margin-top: var(--s2); max-width: var(--measure);
 }
-
-/* --- .register : the evidence register and the settle table --------------
-   Same dense table treatment as .criteria-table. The state chip carries its
-   meaning by a written label rather than by colour, because the three states
-   are not a scale and rendering them as one would be an argument. */
-.register__state {
-  display: inline-block; padding: 0.1em 0.5em; margin-right: var(--s2);
-  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  background: var(--bg-inset); color: var(--text-muted);
-  font-size: var(--fs-xs); font-weight: 650; white-space: nowrap;
-}
-.register__state--partial         { border-style: dashed; }
-.register__state--not-established { border-style: dotted; }
-.register caption { text-align: left; padding-bottom: var(--s3); }
 
 /* --- .approach-card : the three cards ------------------------------------
    The one-line summaries are within ten per cent of each other in length, which

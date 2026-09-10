@@ -1,6 +1,6 @@
 {
   "note": "Every figure the site cites, with the derivation that tools/verify.py --stats recomputes from the source corpora. A mismatch is a hard failure.",
-  "generated_from": "tfg-automated-assessments",
+  "generated_from": "repository-defined inputs in tools/source-lock.json",
   "stats": [
     {
       "key": "aws_groups",
@@ -184,8 +184,8 @@
     },
     {
       "key": "cisa_files",
-      "value": 5,
-      "label": "CISA BOD 25-01 assessment plan files",
+      "value": 6,
+      "label": "CISA BOD 25-01 files: four assessment plans, one assessment result and the sample SSP they import",
       "derivation": "count of Easy Dynamics/CISA BOD 25-01/*.json"
     },
     {
@@ -208,8 +208,8 @@
     },
     {
       "key": "ez_subjects_inventory_item",
-      "value": 11,
-      "label": "assessment-subject blocks typed inventory-item across the Easy Dynamics corpus",
+      "value": 26,
+      "label": "assessment-subject blocks typed inventory-item across the Easy Dynamics corpus, including the one on each CISA associated activity",
       "derivation": "same walk, where type is inventory-item"
     },
     {
@@ -298,8 +298,8 @@
     },
     {
       "key": "ez_ssp_files",
-      "value": 0,
-      "label": "system security plans in the corpus",
+      "value": 1,
+      "label": "system security plans in the corpus: the sample SSP the CISA plans import",
       "derivation": "count of files in Easy Dynamics/** whose root element is system-security-plan"
     },
     {
@@ -422,12 +422,5 @@
       "label": "assessment plans using step-type at all",
       "derivation": "count of Easy Dynamics assessment plan files whose text contains the key \"step-type\""
     }
-  ],
-  "cited_from_position_paper": {
-    "note": "These three figures are NOT computed from the corpora. They come from Technology_Specific_Hardening_Guidance_in_OSCAL.docx, an Easy Dynamics position paper, and must be attributed as such at every appearance per editorial rule 10.",
-    "regulatory_controls": 304,
-    "benchmark_requirements": 563,
-    "combined": 867,
-    "source": "Technology_Specific_Hardening_Guidance_in_OSCAL.docx, Easy Dynamics position paper"
-  }
+  ]
 }

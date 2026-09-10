@@ -1,7 +1,39 @@
 {
-  "generated_at": "2026-08-22T18:46:12+00:00",
-  "corpora_root": "../../tfg-automated-assessments",
-  "snippet_count": 34,
+  "generated_at": "2026-09-10T14:51:40+00:00",
+  "source_lock": "tools/source-lock.json",
+  "source_inputs": {
+    "version": 1,
+    "sources": [
+      {
+        "key": "ibm",
+        "approach": "component-first",
+        "prefix": "IBM",
+        "directory": "examples/component-first",
+        "expected_files": 6
+      },
+      {
+        "key": "easy-dynamics",
+        "approach": "assessment-first",
+        "prefix": "Easy Dynamics",
+        "directory": "examples/assessment-first",
+        "expected_files": 19
+      },
+      {
+        "key": "aws",
+        "approach": "catalog-first",
+        "prefix": "AWS/oscal-content-for-aws-services-main",
+        "directory": ".cache/oscal-sources/aws/4a1779ffb556c4ab8fb3dad94a19d4d198116803",
+        "repository": "awslabs/oscal-content-for-aws-services",
+        "revision": "4a1779ffb556c4ab8fb3dad94a19d4d198116803",
+        "url": "https://codeload.github.com/awslabs/oscal-content-for-aws-services/tar.gz/4a1779ffb556c4ab8fb3dad94a19d4d198116803",
+        "archive_sha256": "f309b59344560b88a699c5908fbc70c51c7a0e8e0339d901b1285b9c8d804a18",
+        "archive_bytes": 379596,
+        "json_files": 231,
+        "file_base": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/"
+      }
+    ]
+  },
+  "snippet_count": 32,
   "snippets": [
     {
       "id": "ez-stig-activity-v259312",
@@ -64,9 +96,9 @@
       "pointer": "/assessment-plan/local-definitions/activities/0/props",
       "language": "json",
       "bytes": 270,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "c3298e80edbf681c6da3e2965d161f81804db9d940539e41f77a19cf21e544e0",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-cisa-assessment-assets",
@@ -77,9 +109,9 @@
       "pointer": "/assessment-plan/assessment-assets",
       "language": "json",
       "bytes": 928,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "60c8183fb14d09b5f27513b84f394bf8a48670eadaf2f73fd834bc7300011240",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-cisa-context-step",
@@ -90,9 +122,9 @@
       "pointer": "/assessment-plan/local-definitions/activities/0/steps/10",
       "language": "json",
       "bytes": 1828,
-      "sha256_of_source_file": "49d218b196333445dd67178dd58aba441fc596a28d2221c1c724d8eba460ee57",
+      "sha256_of_source_file": "0dac47d1c7ba18908c0bd48a8c4676e3c862a8b99dcbb14dc5eb73123b753653",
       "sha256_of_content": "ec5873d16ce6100d9be8cce518945b3aee95c50d2ae1ace4e298b860f8433b8f",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-stig-related-controls",
@@ -116,9 +148,9 @@
       "pointer": "/assessment-plan/local-definitions/activities/0/steps/0/reviewed-controls",
       "language": "json",
       "bytes": 197,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "52c2919dc4f34fd2fbc5907450582b436e7e929a031c2bdb5a9c83d4ae18b30d",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-subjects-includeall",
@@ -142,9 +174,9 @@
       "pointer": "/assessment-plan/assessment-subjects",
       "language": "json",
       "bytes": 277,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
       "sha256_of_content": "01c9afa2b4ee716f8534f4a2f12777d7202d741c06a7d5182619ca8f3afbc3fe",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-cisa-task-timing",
@@ -154,10 +186,10 @@
       "source": "Easy Dynamics/CISA BOD 25-01/ap-cisa-scuba-scubagear.json",
       "pointer": "/assessment-plan/tasks/0",
       "language": "json",
-      "bytes": 1084,
-      "sha256_of_source_file": "b7457f9e8af8f4237f805930d2c51bd783c262de4912f5d6d68bc54e5d382c4d",
-      "sha256_of_content": "c07765f9cca980bb8a30cfec768b885b607686df348a53618ab6099994e9a6e7",
-      "extracted_at": "2026-08-22T17:17:36+00:00"
+      "bytes": 2946,
+      "sha256_of_source_file": "f6e67d58433922c3e6eef8253904ae7b127964f6919d8d74fa38d613947e971e",
+      "sha256_of_content": "e5939a58c062351efa21b423729e40beeb72d3e13dd32757af065e4709dfbd60",
+      "extracted_at": "2026-09-10T14:51:40+00:00"
     },
     {
       "id": "ez-stig-import-ssp",
@@ -340,32 +372,6 @@
       "sha256_of_source_file": "d5049e46d7a1251932be3e74c1f9bace606ac9b5f5542249ccb884171394a6e7",
       "sha256_of_content": "3b3b0c533e8fe9ebc892b5cdf0003bb265591ae3486e5d6317aa847480d88541",
       "extracted_at": "2026-08-20T22:38:41+00:00"
-    },
-    {
-      "id": "ibm-rules-md",
-      "slot": "meta",
-      "approach": "component-first",
-      "title": "IBM's proposed rule and check assemblies",
-      "source": "IBM/Automated-assessment.md",
-      "pointer": "$",
-      "language": "markdown",
-      "bytes": 14934,
-      "sha256_of_source_file": "630c45450f3cea476cd9a7df7da1f49e22f854832907521656191714eb9bd57c",
-      "sha256_of_content": "799c42a95dae88268f20e09566342953a98c580bdda0cadf5197ebf4026d5e31",
-      "extracted_at": "2026-08-22T16:15:34+00:00"
-    },
-    {
-      "id": "ibm-open-questions",
-      "slot": "meta",
-      "approach": "component-first",
-      "title": "IBM's open questions",
-      "source": "IBM/Automated-assessment.md",
-      "pointer": "$",
-      "language": "markdown",
-      "bytes": 410,
-      "sha256_of_source_file": "630c45450f3cea476cd9a7df7da1f49e22f854832907521656191714eb9bd57c",
-      "sha256_of_content": "0a03c3d3f2910ae28141c1a2de1771455102cf284bfb78a790e88a82f3765eaa",
-      "extracted_at": "2026-08-22T16:15:34+00:00"
     },
     {
       "id": "ibm-cos-component",

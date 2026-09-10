@@ -2,7 +2,7 @@
   {
     "id": "2026-08-automating-technical-hardening-guidance",
     "title": "Automating Technical Hardening Guidance with OSCAL",
-    "question": "Where does technical hardening guidance live in OSCAL, and how does an automated check attach to it?",
+    "question": "Which OSCAL models represent technical hardening guidance, and how do automated checks reference the guidance?",
     "status": "active",
     "opened": "2026-08-12",
     "concluded": null,

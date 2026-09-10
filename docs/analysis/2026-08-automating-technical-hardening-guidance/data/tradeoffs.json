@@ -1,116 +1,116 @@
 {
-  "note": "Strengths and risks per approach. The counts are not held equal: they were, three a side on every page, so that the shape of the block could not itself be an argument, and that rule was dropped when it started deciding what could be said. An approach has the risks it has. What is still held is that no approach is argued at greater length than another, which tools/approach_pages.py enforces across the three pages. No figures: the site describes one scenario, on one page, and every count belongs there. What each entry rests on is recorded in BUILD-LOG.md and, where it is a claim about what a model can express, in the schema_evidence field here, which is checked but not rendered.",
+  "note": "Strengths and risks for each approach. Entry counts may differ; tools/approach_pages.py enforces prose budgets within and across approaches. Scenario figures remain on the scenario page. BUILD-LOG.md records the basis for each entry. Where present, schema_evidence identifies checked schema fragments and is not rendered.",
   "approaches": {
     "catalog-first": {
-      "intro": "Considerations when introducing technical hardening controls as a catalog have been captured",
+      "intro": "Publishing technical hardening guidance as a catalog has these strengths and risks.",
       "pros": [
         {
-          "title": "Requirements of any kind stay in one model",
-          "body": "Technical requirements are defined in the catalog and tracked through the remaining models exactly as regulatory controls are."
+          "title": "Technical and regulatory requirements use one model",
+          "body": "Technical requirements use catalog controls and follow the same references through the remaining OSCAL models as regulatory controls."
         },
         {
           "title": "Rules can be tailored",
-          "body": "A profile gives a hardening guide organizationally defined parameters and selects the part of it an organisation holds itself to."
+          "body": "A profile selects the hardening requirements an organisation adopts and sets organisationally defined parameters without changing the source catalog."
         },
         {
-          "title": "The catalog absorbs the shape of real guides",
-          "body": "Controls, parts and nested groups carry checks, remediation and prose at the scale of a thousand-page guide."
+          "title": "Catalog structures represent guide content",
+          "body": "Controls, parts and nested groups represent checks, remediation and explanatory prose, including the structure of a thousand-page guide."
         },
         {
-          "title": "The mapping is a document someone else can write",
-          "body": "The tie to a framework is its own <code>mapping-collection</code>, so a third party can publish it without owning either catalog."
+          "title": "Third parties can publish framework mappings",
+          "body": "A separate <code>mapping-collection</code> links guidance to a framework, allowing a third party to publish the mapping without owning either catalog."
         }
       ],
       "cons": [
         {
-          "title": "More models to keep",
-          "body": "Benchmark requirements join the regulatory controls the plan of record already answers, and whether each new catalog needs its own plan is unsettled."
+          "title": "Benchmark catalogs add maintenance work",
+          "body": "The system security plan must address benchmark requirements alongside regulatory controls; whether each additional catalog requires a separate plan remains unsettled."
         },
         {
-          "title": "More complexity to resolve",
-          "body": "Several frameworks and several benchmarks multiply catalogs, profiles and mappings, raising the entry cost for tools and producing hard profile resolution cases."
+          "title": "Combined baselines complicate profile resolution",
+          "body": "Multiple frameworks and benchmarks require catalogs, profiles and mappings to be maintained together, increasing tool integration work and profile resolution complexity."
         },
         {
-          "title": "The response cannot be made per instance",
-          "body": "A response is a <code>by-component</code>, so it names a component and never an instance, and one exception among a hundred hosts cannot be recorded."
+          "title": "Responses do not identify individual instances",
+          "body": "A <code>by-component</code> response identifies a component, not an instance, so one exception among a hundred hosts sharing that component cannot be distinguished."
         }
       ]
     },
     "component-first": {
-      "intro": "Considerations when introducing technical hardening rules into a component definition have been captured",
+      "intro": "Publishing technical hardening rules in a component definition has these strengths and risks.",
       "pros": [
         {
-          "title": "One artifact serves the reader and the tool",
-          "body": "A component definition says how a component can meet a control, the world of possibility for software, and rules inside it make that document drive automation."
+          "title": "One artifact describes capability and supports automation",
+          "body": "A component definition describes how a product can meet controls; the proposed rules provide configuration requirements for automation in the same document."
         },
         {
-          "title": "The rule and the check are separate things",
-          "body": "The rule sits on the product and the check on a second component, so a second engine is a second component."
+          "title": "Rules and checks remain separate",
+          "body": "The product component holds the rule and a validation component holds the check; a second engine uses a second validation component."
         },
         {
-          "title": "The claim can name the rule it rests on",
-          "body": "The proposed <code>implementing-rules</code> closes the distance between saying a control is implemented and saying which rule implements it."
+          "title": "Implementation claims can reference rules",
+          "body": "The proposed <code>implementing-rules</code> assembly links a control implementation claim to the rule used to satisfy the control."
         },
         {
-          "title": "Vendors already have advice for this model",
-          "body": "Vendors are told to describe how their product can meet requirements in a component definition, so the rules land in one model."
+          "title": "Technology providers can extend component descriptions",
+          "body": "Existing guidance directs technology providers to describe product capabilities in component definitions, where the proposal would also place hardening rules."
         }
       ],
       "cons": [
         {
-          "title": "Four models have to change",
-          "body": "The proposal changes the component definition, the plan of record, the assessment plan and the result, so today it is a proposal."
+          "title": "Four models require schema changes",
+          "body": "The proposal changes component definitions, system security plans, assessment plans and assessment results; existing schema support does not cover the proposed assemblies."
         },
         {
           "title": "Desired state enters the plan of record",
-          "body": "Rules describing how a component should be configured join a document whose job is to say how the system actually is today."
+          "body": "Rules describing the required component configuration enter the system security plan, which documents the system's implemented controls and current configuration."
         },
         {
-          "title": "The fidelity fields are proposed, not carried",
-          "body": "Rationale, audit procedure and remediation are most of a published guide, and the shipped rules carry none of them."
+          "title": "Published rules omit guide context",
+          "body": "Rationale, audit procedure and remediation provide guidance context, but the published rules omit these fields and support remains proposed."
         },
         {
-          "title": "The response is still not per instance",
-          "body": "An exception reaches a rule but still not an instance, because the response is a <code>by-component</code> here too."
+          "title": "Responses do not identify individual instances",
+          "body": "A <code>by-component</code> response can reference a rule but not an individual instance, so exceptions remain associated with the component."
         },
         {
-          "title": "Inventory items may need it too",
-          "body": "For a claim to reach a host rather than a class, <code>implementing-rules</code> would have to be carried by inventory items as well."
+          "title": "Host-level claims may require inventory support",
+          "body": "Inventory items would also need <code>implementing-rules</code> support for a claim to identify a host rather than a component class."
         }
       ]
     },
     "assessment-first": {
-      "intro": "Considerations when introducing technical hardening guidance as an assessment plan have been captured",
+      "intro": "Publishing technical hardening guidance as an assessment plan has these strengths and risks.",
       "pros": [
         {
-          "title": "The plan of record does not move",
-          "body": "The plan points at the document holding the claim rather than making one, so adding or retiring a guide touches the assessment plan alone."
+          "title": "Guidance stays outside the plan of record",
+          "body": "The assessment plan references implementation claims without adding claims, so adding or retiring a guide does not change the system security plan."
         },
         {
-          "title": "Plan to result is a lifecycle this layer has",
-          "body": "A result is a document of its own importing a plan, and the corpus ships one whose findings target objectives and rest on observations."
+          "title": "Assessment results reference an assessment plan",
+          "body": "A separate assessment results document imports a plan; the corpus includes findings that target objectives and reference supporting observations."
         },
         {
-          "title": "The subject is whatever was assessed",
-          "body": "A subject can be an inventory item, so two hosts of one operating system configured differently each carry their own finding."
+          "title": "Subjects can identify individual hosts",
+          "body": "An assessment subject can be an inventory item, allowing separate findings for two hosts running one operating system with different configurations."
         },
         {
-          "title": "Execution context travels with the plan",
-          "body": "A task carries a schedule and names the platform that runs it, which no other approach expresses."
+          "title": "The plan records execution context",
+          "body": "Tasks carry schedules and identify execution platforms, placing the timing and runtime context for checks in the assessment plan."
         }
       ],
       "cons": [
         {
-          "title": "No parameter to resolve",
-          "body": "A required value is written into the activity title, so selection means writing a plan rather than resolving a profile."
+          "title": "Required values lack resolvable parameters",
+          "body": "The activity title contains the required value, so changing the value requires editing the plan rather than resolving a profile."
         },
         {
-          "title": "Two tiers, where a guide is sometimes deeper",
-          "body": "The model runs activity to step, and guidance that nests four levels deep has two of them to land in."
+          "title": "Guide hierarchy is limited to two tiers",
+          "body": "The model provides activities and steps, so guidance nested four levels deep must be represented within those two structural tiers."
         },
         {
-          "title": "The published set does not join up",
-          "body": "The result names a plan no file here carries and gives an observation a subject type the model does not define."
+          "title": "Published references and types need correction",
+          "body": "The published result references a plan absent from the corpus and assigns an observation a subject type not defined by the model."
         }
       ]
     }

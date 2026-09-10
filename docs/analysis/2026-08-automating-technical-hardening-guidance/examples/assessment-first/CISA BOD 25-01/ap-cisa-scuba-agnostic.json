@@ -7404,19 +7404,11 @@
           "uuid": "080172e1-3306-4f73-99b6-c1facbc21077",
           "rlinks": [
             {
-              "href": "./ssp.xml",
-              "media-type": "application/xml"
-            },
-            {
-              "href": "./ssp.json",
-              "media-type": "application/json"
-            },
-            {
-              "href": "./ssp.yaml",
-              "media-type": "application/yaml"
+              "href": "./sample-ssp.json",
+              "media-type": "application/oscal+json"
             }
           ],
-          "title": "\\[System Name\\] SSP"
+          "title": "Sample ScubaGear System Security Plan"
         },
         {
           "props": [

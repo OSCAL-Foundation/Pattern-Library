@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-diagrams.py: emit every SVG in assets/diagrams/ from data/.
+diagrams.py: emit the eight published SVGs in assets/diagrams/ from data/.
 
-Why a generator rather than eighteen hand-authored files.
+Why a generator rather than hand-authored files.
 
   1. Plan section 6 forbids hand-typing anything that came out of a corpus. The
      join diagrams print literal identifier strings; typed, they can drift from
@@ -100,7 +100,6 @@ class Corpus:
         self.views = _load("views.json")
         self.statsdoc = _load("corpus-stats.json")
         self.scenario = _load("scenario.json")
-        self.quotes = {q["id"]: q for q in _load("quotes.json")["quotes"]}
         self.mapping_item = _load("schema-evidence/mapping-item.json")
         self.observation = _load("schema-evidence/observation.json")
         self.finding = _load("schema-evidence/finding.json")
@@ -269,9 +268,6 @@ class Corpus:
     def stat(self, key: str) -> int:
         return {s["key"]: s["value"] for s in self.statsdoc["stats"]}[key]
 
-    def cited(self, key: str):
-        return self.statsdoc["cited_from_position_paper"][key]
-
     def cell(self, slot: str, approach: str) -> dict:
         return [c for c in self.six_questions["matrix"]
                 if c["slot"] == slot and c["approach"] == approach][0]
@@ -285,15 +281,12 @@ class Corpus:
     def view(self, key: str) -> dict:
         return [v for v in self.views["views"] if v["key"] == key][0]
 
-    def quote(self, qid: str) -> dict:
-        return self.quotes[qid]
-
 
 # --------------------------------------------------------------------------- #
 # 2. svg primitives                                                            #
 # --------------------------------------------------------------------------- #
 
-#  The pre-read's option-letter order: A, B, C. Every three-approach loop uses
+#  The option-letter order: A, B, C. Every three-approach loop uses
 #  this list and only this list, so ordering can never become a choice made per
 #  diagram.
 #
@@ -873,8 +866,7 @@ def diagram_72(c: Corpus) -> dict[str, str]:
         "the corpus, and the assessment result contains no findings, so there is no "
         "objective status and control attribution has to be inferred. One question is "
         "empty. Question 6a, the implementation claim, is absent with no stated position: "
-        "the proposal extends the system security plan, but no system security plan is "
-        "shipped.",
+        "no system security plan is shipped.",
         body, slots=True)
     return files
 
@@ -1609,218 +1601,7 @@ def diagram_77(c: Corpus) -> dict[str, str]:
 
 
 # --------------------------------------------------------------------------- #
-# 10. diagram 7.8, three views of what a rule is                               #
-# --------------------------------------------------------------------------- #
-
-def diagram_78(c: Corpus) -> dict[str, str]:
-    did = "dg-78-three-views"
-    o = [txt(24, 34, "One hardening rule, three readings", "h")]
-    o.append(hexagon(24, 252, 236, 104, "model"))
-    o.append(txt(142, 298, "one hardening", "n", "middle"))
-    o.append(txt(142, 320, "rule", "n", "middle"))
-    #  The example sits under the hexagon, not inside it: the sloped sides cut
-    #  into the usable width exactly where a second line of text would fall.
-    #  It is written generically on purpose, so that no corpus supplies the
-    #  running example for a figure about whose corpus is right.
-    o.append(txt(24, 386, "for example: encrypt data at rest", "s mu"))
-
-    #  Identical geometry for all three: same x, same width, same height, same
-    #  vertical spacing. The order is the order in views.json, which that file
-    #  records as the order of the OSCAL layers and not a ranking.
-    NX, NW2, NH2 = 392, 544, 178
-    for i, v in enumerate(c.views["views"]):
-        y = 40 + i * 200
-        o.append(rect(NX, y, NW2, NH2, "box", 10))
-        o.append(txt(NX + 20, y + 34, v["label"], "n"))
-        ly = y + 60
-        for ln in wrap(v["definition"], 62):
-            o.append(txt(NX + 20, ly, ln, "s"))
-            ly += 21
-        o.append(txt(NX + 20, y + NH2 - 56,
-                     "implied layer: " + v["implies_layer"], "s mu"))
-        o.append(txt(NX + 20, y + NH2 - 34,
-                     "implied model: " + v["implies_model"], "s mu"))
-        o.append(txt(NX + 20, y + NH2 - 12, "on the record: " + v["advocate"], "s mu"))
-        o.append(path(f"M260,304 H{NX - 44} V{y + NH2 / 2} H{NX - 3}", "join",
-                      f"{did}-join"))
-
-    q = c.quote("preread-requirement-level-absent")
-    by = 656
-    o.append(rect(24, by, 912, 96, "hollow", 9))
-    o.append(txt(44, by + 30, "Criterion 3, requirement level: can shall, should "
-                              "and may be represented at all?", "n"))
-    o.append(txt(44, by + 56, f'"{q["text"]}"', "s"))
-    o.append(txt(44, by + 78, q["source_document"], "s mu"))
-    fy = by + 126
-    for ln in wrap("OSCAL has no field for normativity, so location has become the "
-                   "only channel for expressing it. That is why these three readings "
-                   "imply three different homes, and why no option can settle the "
-                   "question by construction.", 104):
-        o.append(txt(24, fy, ln, "s"))
-        fy += 22
-
-    items = (LI(G_HEX, "a control, and here the rule whose kind is in dispute")
-             + LI(G_BOX, "one reading of what that rule is")
-             + LI(G_JOIN, "a reading, not an OSCAL reference")
-             + LI(G_SOCKET, "a question OSCAL cannot express")
-             + LI("", "All three nodes are the same size, at the same x, evenly "
-                      "spaced. The order is the order of the OSCAL layers, from "
-                      "data/views.json, and it is not a ranking. Each reading is "
-                      "internally coherent, and the site declares a working "
-                      "definition rather than taking a position."))
-    body = "\n".join(o) + "\n" + legend(did, 24, fy + 14, items, cols=2)
-    return {"78-three-views.svg": svg(
-        did, fy + 14 + legend_h(items),
-        "One hardening rule, and the three incompatible readings of what it is",
-        "One hardening rule sits on the left, drawn as a control shape because whether "
-        "it is a control is exactly what is in dispute. Three readings lead out of it, "
-        "drawn at identical size, at the same horizontal position and evenly spaced, "
-        "because none is ranked above another. The order is the order of the OSCAL "
-        "layers, taken from data/views.json, and it is not a ranking. "
-        + " ".join(
-            f"Reading {i + 1}: {v['label']}. {v['definition']} Implied layer: "
-            f"{v['implies_layer']}. Implied model: {v['implies_model']}. On the record: "
-            f"{v['advocate']}."
-            for i, v in enumerate(c.views["views"]))
-        + " Beneath the three readings is a single bar carrying criterion 3 of the "
-        "pre-read, requirement level: can shall, should and may be represented at all? "
-        f"The pre-read answers for every option in one cell: {q['text']} OSCAL has no "
-        "field for normativity, so location has become the only channel available for "
-        "expressing it. Putting a rule in a catalog asserts requirement by placement, "
-        "putting it in a component definition asserts capability by placement, and "
-        "putting it in an assessment plan asserts procedure by placement. Nobody chose "
-        "location as a proxy for normativity; it is the only channel there is. Each of "
-        "the three readings is internally coherent, the site takes no position on which "
-        "is correct, and it declares a working definition instead: "
-        + c.views["working_definition"]["text"],
-        body)}
-
-
-# --------------------------------------------------------------------------- #
-# 11. diagram 7.8 scale figure                                                 #
-# --------------------------------------------------------------------------- #
-
-def diagram_79(c: Corpus) -> dict[str, str]:
-    did = "dg-79-scale"
-    reg = c.cited("regulatory_controls")
-    ben = c.cited("benchmark_requirements")
-    both = c.cited("combined")
-    source = c.statsdoc["cited_from_position_paper"]["source"]
-    U = 0.75                                   # user units per requirement
-    BAR_H = 46
-    RW, BW = round(reg * U, 1), round(ben * U, 1)
-    o = [txt(24, 34, "Two populations, and three places the second could go", "h")]
-
-    #  Three sockets, one per destination, and one bar that moves between them.
-    #  The sockets are positions on the page, so the choice is spatial rather
-    #  than described: destination B abuts the regulatory bar on the same row,
-    #  which is what "+563 controls in the SSP" means.
-    SOCKETS = {
-        "stay": (24, 190, "outside the SSP"),
-        "controls": (24 + RW, 84, "as controls, on the SSP control row"),
-        "rules": (48, 284, "as rules on SSP components"),
-    }
-
-    o.append(txt(24, 72, "the SSP control count", "n"))
-    o.append(rect(24, 84, RW, BAR_H, "box", 6))
-    o.append(txt(38, 114, str(reg), "m"))
-    for key, (sx, sy, slabel) in SOCKETS.items():
-        o.append(f'<g id="{did}-socket-{key}">')
-        o.append(socket(sx, sy, BW, BAR_H))
-        #  Above the socket, not inside it: the bar sits inside whichever
-        #  socket is chosen, and would cover a label placed there.
-        o.append(txt(sx, sy - 10, slabel, "s mu"))
-        o.append("</g>")
-
-    sx, sy, _ = SOCKETS["stay"]
-    o.append(f'<g id="{did}-mover" class="mover" '
-             f'data-home="{sx},{sy}" transform="translate(0,0)">')
-    o.append(rect(sx, sy, BW, BAR_H, "box", 6))
-    o.append(txt(sx + 14, sy + 30, f"about {ben} benchmark requirements", "m"))
-    o.append("</g>")
-
-    o.append(txt(24, 366, "resulting SSP control count:", "n"))
-    o.append(f'<text x="316" y="366" class="m" id="{did}-count">{reg}</text>')
-    ry = 392
-    for ln in wrap("Choose a destination below. Without scripting the bar does not "
-                   "move, and all three consequences are still printed.", 104):
-        o.append(txt(24, ry, ln, "s mu"))
-        ry += 22
-
-    dests = [
-        ("stay", "no change to SSP control count", reg,
-         "The benchmark stays outside the SSP. The SSP keeps its regulatory scope, and "
-         "adding or updating a benchmark does not touch it."),
-        ("controls", f"+{ben} controls in the SSP", both,
-         "Every benchmark requirement becomes a control the SSP must respond to. The "
-         "control count is the sum of the two populations."),
-        ("rules", f"+{ben} desired-state rules in SSP components", reg,
-         "The benchmark enters the SSP as rules on components rather than as controls, "
-         "so the control count does not change."),
-    ]
-    DX, DW = [24, 336, 648], 288
-    dy_end = 0
-    for i, (key, label, count, note) in enumerate(dests):
-        x = DX[i]
-        label_lines, note_lines = wrap(label, 26), wrap(note, 30)
-        dh = 44 + 24 * len(label_lines) + 50 + 20 * len(note_lines)
-        o.append(f'<g id="{did}-dest-{key}">')
-        #  A hairline rule, not a box. A hollow box would read as one of the
-        #  three empty states, and these are description panels, not questions.
-        o.append(path(f"M{x},420 H{x + DW}", "rule"))
-        ly = 452
-        for ln in label_lines:
-            o.append(txt(x + 16, ly, ln, "n"))
-            ly += 24
-        o.append(txt(x + 16, ly + 16, "resulting SSP control count:", "s mu"))
-        o.append(txt(x + 16, ly + 38, str(count), "m"))
-        ly += 62
-        for ln in note_lines:
-            o.append(txt(x + 16, ly, ln, "s mu"))
-            ly += 20
-        o.append("</g>")
-        dy_end = max(dy_end, 420 + dh)
-
-    cy = dy_end + 34
-    for ln in wrap(f"The figures {reg}, {ben} and {both} are cited from {source}. "
-                   f"They are not computed from the corpora, and per editorial rule "
-                   f"10 they are attributed as advocacy at every appearance.", 108):
-        o.append(txt(24, cy, ln, "s mu"))
-        cy += 22
-    items = (LI(G_BOX, "a population of requirements, drawn to scale")
-             + LI(G_SOCKET, "a destination the second population could take")
-             + LI("", "One requirement is 0.75 units wide in both bars, so the "
-                      "two are directly comparable. The three destinations are "
-                      "the three positions on the record, and the site does not "
-                      "choose between them."))
-    body = "\n".join(o) + "\n" + legend(did, 24, cy + 12, items, cols=2)
-    return {"79-scale.svg": svg(
-        did, cy + 12 + legend_h(items),
-        "Regulatory controls against benchmark requirements, and the three "
-        "destinations for the second population",
-        f"Two bars drawn to the same scale, at 0.75 units per requirement. The first "
-        f"bar is {reg} regulatory controls for one system, and it is fixed on the row "
-        f"labelled the SSP control count. The second is about {ben} benchmark "
-        f"requirements for that same system. It starts in the socket labelled outside "
-        f"the SSP and moves between three sockets when the reader chooses one: "
-        f"outside the SSP, on the SSP control row abutting the regulatory bar, or on "
-        f"the SSP components row. The three "
-        f"destinations are: no change to SSP control count, which leaves the resulting "
-        f"count at {reg}, because the benchmark stays outside the system security plan; "
-        f"plus {ben} controls in the SSP, which makes the resulting count {both}, "
-        "because every benchmark requirement becomes a control the plan must respond "
-        f"to; and plus {ben} desired-state rules in SSP components, which leaves the "
-        f"resulting count at {reg}, because the benchmark enters as rules on components "
-        f"rather than as controls. The figures {reg}, {ben} and {both} are cited from "
-        f"{source}. They are not computed from the corpora, and the site attributes "
-        "them as advocacy at every appearance. The figure does not choose between the "
-        "three destinations.",
-        body)}
-
-
-
-# --------------------------------------------------------------------------- #
-# 12. diagram 7.10, the scenario file set                                      #
+# 10. diagram 7.10, the scenario file set                                      #
 # --------------------------------------------------------------------------- #
 
 #  One tile is one file, and a tile is the same size in all three drawings. That
@@ -2010,22 +1791,12 @@ def diagram_710(c: Corpus) -> dict[str, str]:
 # --------------------------------------------------------------------------- #
 
 BUILDERS = (diagram_72, diagram_73, diagram_75,
-            diagram_76, diagram_77, diagram_78, diagram_79,
-            diagram_710)
+            diagram_76, diagram_77, diagram_710)
 
-#  The library builds more than the site shows. Diagrams 72, 77, 78 and 79 and
-#  the three stakeholder variants were only ever on a component gallery that has
-#  been removed, so they are built and dropped rather than written. Keeping the
-#  builders costs nothing and keeps the drawing code for them in one place;
-#  writing them would leave live files among dead ones with no way to tell which
-#  is which.
-#
-#  The layer map went further than that and is gone entirely. It was published,
-#  and then the section that showed it was replaced by the chain, and a figure
-#  nothing links to is worse than one that was never written: it is still built,
-#  still checked, still in the directory, and a reader never sees it. The check
-#  that would have caught it is below, in tools/verify.py: a published figure
-#  now has to be referenced by a page.
+#  Write only the eight figures referenced by the site. Diagrams 72 and 77 and
+#  the three stakeholder variants remain unpublished OSCAL-based builders;
+#  their outputs are filtered out rather than written. tools/verify.py requires
+#  every published figure to be referenced by a page.
 PUBLISHED = {
     "73-join-assessment.svg", "73-join-catalog.svg", "73-join-component.svg",
     "75-stakeholders.svg", "76-satisfaction-6a-6b.svg",

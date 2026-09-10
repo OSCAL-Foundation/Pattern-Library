@@ -55,7 +55,7 @@
   function failure(mount, detail) {
     var box = el("div", "empty");
     box.appendChild(el("p", null,
-      "This index could not read its registry, so nothing below is the list."));
+      "The registry could not be loaded. Index entries are unavailable."));
     box.appendChild(el("p", null, detail));
     mount.replaceChildren(box);
   }

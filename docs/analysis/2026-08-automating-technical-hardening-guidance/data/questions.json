@@ -1,6 +1,6 @@
 {
-  "note": "The open questions, in four sections: what is unsettled about OSCAL itself, then what is unsettled about each approach. Each is one line with the reasoning behind it. Questions reproduced from a source document keep that document's wording, including its errors, and are marked with where they came from, because rewriting someone else's question is a way of answering it.",
-  "intro": "Nothing here is a proposal. Where the site has a fact that bears on a question, the fact is stated and the question is left open. Most of what is unsettled is about OSCAL rather than about any one approach, which is why the first section is the longest.",
+  "note": "Editorial analysis questions maintained in this repository, grouped by issues shared across OSCAL and issues specific to each approach. Each question includes its reasoning; the OSCAL examples provide evidence without settling the design choices.",
+  "intro": "These questions identify unresolved design choices, not recommended changes. The analysis distinguishes what the OSCAL examples demonstrate from what remains open across models and approaches.",
   "sections": [
     {
       "key": "all",
@@ -10,17 +10,17 @@
         {
           "id": "xccdf",
           "q": "Should OSCAL carry this content at all, when XCCDF already does?",
-          "why": "Asked on 20 March and never closed. Two answers are on the record, that XCCDF is obsolete and that a checklist item is not a control, and neither settled it. If the answer is that OSCAL should reference XCCDF rather than restate it, every approach on this site changes shape."
+          "why": "XCCDF already represents benchmark checklists. OSCAL could carry equivalent content or connect checklist references to implementation and assessment records. These choices produce different artifacts, translation work and maintenance obligations. The OSCAL examples do not establish which boundary best supports interoperable hardening workflows."
         },
         {
           "id": "rule-metadata",
           "q": "Where does the metadata that describes a rule go?",
-          "why": "Every STIG rule carries a severity and a weight; every CIS recommendation carries a rationale and says whether its check is automated or manual. No released OSCAL model has a field for any of them, so AWS carries severity as a namespaced property on all 452 of its controls and the STIG conversion carries it in DISA's. Which of these belong to a rule, and whether the answer is a field, a shared namespace or a property per publisher, is unasked."
+          "why": "Rule metadata includes severity, weight, rationale and whether a check is automated or manual. The AWS and DISA OSCAL examples use namespaced properties for severity rather than a dedicated field. Consumers need shared conventions to interpret this content. Which metadata belongs on a rule, and whether shared namespaces or schema fields should carry it, remains open."
         },
         {
           "id": "remediation",
           "q": "Where does remediation land?",
-          "why": "194 of 194 STIG rules ship a fix and 312 of 312 CIS recommendations ship a remediation, and no approach has a field for it. Catalog-first links out to documentation on all 452 controls, assessment-first writes a second step marked remediate, component-first does not carry it. OSCAL's own remediation lives in the plan of action and milestones, which answers what to do about this finding rather than how anyone fixes this condition."
+          "why": "The AWS catalog uses remediation links, while the STIG and CIS assessment plans carry remediation steps. The component-first examples do not carry remediation. These conventions do not provide a dedicated rule-remediation field. OSCAL's plan of action and milestones addresses a particular finding, not a reusable fix for every instance of a condition. Which structure should carry reusable remediation instructions remains open."
         }
       ]
     },
@@ -32,108 +32,96 @@
         {
           "id": "one-ssp",
           "q": "Do many catalogs converge into one profile and one plan of record, or does each catalog need its own?",
-          "why": "The working assumption is that a system holds one plan of record answering a profile that merges every catalog it is held to. What is being seen in practice is one plan of record per catalog. The two are not a matter of taste: they produce different file counts, a different place for a response to live, and a different answer to whether a benchmark outcome sits beside a regulatory one. The worked scenario on this site assumes convergence, which is why its figure is 18 files."
+          "why": "A single plan of record could answer a profile merging the catalogs that apply to a system. Separate plans could instead answer each catalog. These structures produce different file counts and response locations, and change whether benchmark outcomes sit beside regulatory outcomes. The worked scenario assumes convergence and counts 18 files; the question is whether that structure meets implementation and assessment needs."
         },
         {
           "id": "requirement-level",
           "q": "If OSCAL gained a field for requirement level, how much of this disagreement would be left?",
-          "why": "The pre-read's criterion 3 records that shall, should and may cannot be expressed in OSCAL at all, so placement is the only channel left for asserting that something is required. This approach is placement: a benchmark's recommendations become controls beside a framework's controls in one merged profile, and nothing on either says which is a shall and which is a may. Nobody has been asked how much of the disagreement would survive the field."
+          "why": "OSCAL has no dedicated core field distinguishing shall, should and may. The examples can carry such labels in properties, but consumers need conventions to interpret them. Catalog-first puts benchmark and regulatory controls into the same profile. It remains unclear how much model-placement disagreement concerns binding force rather than document structure, and whether a shared requirement-level field would reduce it."
         },
         {
           "id": "control-type",
           "q": "Should a control declare its type, so a regulatory control and a technical hardening control can be told apart?",
-          "why": "Once hardening guidance is published as a catalog, both kinds sit in the same merged profile and are answered in the same plan of record. Nothing on a control says which of the two it is, so a plan cannot report its regulatory coverage separately from its hardening coverage, and a reader cannot tell whether a gap is a missed regulation or a missed setting. The question above asks the same thing about level rather than about kind."
+          "why": "The catalog/profile model can combine regulatory controls with technical hardening controls, but it has no dedicated core field distinguishing those kinds. Tools would need a shared property convention or schema support to report regulatory coverage separately from hardening coverage. This question concerns the kind of requirement, distinct from whether its requirement level is shall, should or may."
         },
         {
           "id": "paper-cat-1",
-          "q": "How should benchmark profiles compose with regulatory profiles when the combined control count approaches ~867+?",
-          "why": "Follows directly from the question above. If the merge happens, the profile it produces is large enough that resolution becomes the engineering problem.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "How should benchmark profiles compose with regulatory profiles as the number of controls grows?",
+          "why": "Combining benchmark and regulatory controls increases the work of resolving imports, selections, exclusions and parameter values. The question is how tools should compose and maintain those profiles at scale without obscuring which source supplied a requirement or how a tailoring decision changes downstream content."
         },
         {
           "id": "paper-cat-2",
-          "q": "Where do Benchmark results get captured: SSP Control implementations or ARs? How will tools manage this?",
-          "why": "The site's own answer is that a response is a by-component in the plan of record and a result is an assessment result, and that both exist. Which one a benchmark outcome belongs in is not settled.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "Where should benchmark outcomes be recorded, in SSP implementation claims or assessment results, and how should tools distinguish them?",
+          "why": "An SSP by-component response describes an implementation claim, while assessment results record evidence and outcomes. A benchmark workflow may need both, but they answer different questions. Tools need to distinguish intended configuration from observed satisfaction and preserve the relationship between the two records."
         }
       ]
     },
     {
       "key": "component-first",
       "label": "Component-first",
-      "intro": "The rule sits on the component it configures. Four of these are the proposal's own open questions, reproduced from it.",
+      "intro": "The rule sits on the component it configures. Open questions concern runner identification, importing component definitions and tailoring benchmark content.",
       "questions": [
         {
           "id": "which-cdef-maps",
           "q": "Which component definition carries the tie to the framework, the one holding the rules or the one holding the checks?",
-          "why": "There is no mapping collection in this approach: the tie is inline, so whoever holds it has their document edited by the mapping provider. Two documents could hold it and they belong to different parties. The software definition carries the rules and is the guidance author's; the validation definition carries the checks and is the engine provider's. The tie could sit on either, or on both, and nothing published settles it. The stakeholder table on the component-first page marks the type as unsettled for exactly this reason."
+          "why": "The control link is inline rather than held in a mapping collection. The software component definition holds rules, while the validation component definition holds checks; those artifacts may have different maintainers. A mapping provider could update either or both. The OSCAL examples do not establish which document should own that relationship or how duplicated mappings would stay consistent."
         },
         {
           "id": "proposal-1",
-          "q": "AP - Assessment Platform usage? make it optional?",
-          "why": "Reproduced from the proposal's own list of open questions, in its own words. All four are about what runs a check and how it is tied to what it ran, which is the same thing the NIST team was asked on 17 July.",
-          "verbatim": "the component-first proposal document"
+          "q": "Should assessment platform usage be optional in an assessment plan?",
+          "why": "An assessment plan may describe a runner as a component, a platform using components, or a tool identified through properties. These alternatives leave open when an explicit assessment platform adds necessary information and when a component reference is sufficient for a consumer to execute or interpret a check."
         },
         {
           "id": "proposal-2",
-          "q": "AP - Is assessment component sufficient or we need assessment platform also?",
-          "why": "The proposal asks this of itself, and the three corpora answer it three ways, which is what makes it a question about OSCAL rather than about this approach.",
-          "verbatim": "the component-first proposal document"
+          "q": "When is an assessment component sufficient, and when is an assessment platform also needed?",
+          "why": "The OSCAL examples use different combinations of assessment-assets, assessment-platforms and components. They do not establish a shared rule for deciding whether a component alone identifies the runner or a platform must also describe its execution context. A consistent distinction would help consumers interpret equivalent workflows."
         },
         {
           "id": "proposal-3",
-          "q": "AP - How is assessment asset associated to the tasks or activities? currently there seems to be no way.",
-          "why": "The join between what runs and what it was told to run. The proposal records that there is no way to write it.",
-          "verbatim": "the component-first proposal document"
+          "q": "How should an assessment asset be associated with tasks or activities?",
+          "why": "A task identifies work to perform, while an assessment asset describes resources available to perform it. The component-first examples do not establish a complete, interoperable association between these structures. The question is which references should identify the runner for a particular task or activity."
         },
         {
           "id": "proposal-4",
-          "q": "In AR there are multiple assessment assests defined. How is an obesrvation associated with an assessment asset?",
-          "why": "The same gap on the result side: several assets are declared and nothing ties an observation to the one that produced it.",
-          "verbatim": "the component-first proposal document"
+          "q": "How should an observation identify the assessment asset that produced it when several assets are declared?",
+          "why": "An assessment result may declare several assets, so naming an observation's producer requires an unambiguous relationship. The component-first result example does not establish a complete path from observation to producing asset. The open question is how consumers should recover that association without relying on tool-specific assumptions."
         },
         {
           "id": "paper-comp-1",
-          "q": "If Benchmarks are published as CDefs for software components and service providers publish CDefs for their software, can an SSP have multiple OSCAL components describing the system component?",
-          "why": "A system runs software from several vendors and is held to several benchmarks, so the plan of record would import definitions from both, and nothing says how they combine.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "How should an SSP combine benchmark and vendor component definitions that describe the same system component?",
+          "why": "A system may use vendor component definitions alongside benchmark component definitions for the same software. Importing both can produce overlapping descriptions, rules and control implementations. It remains open whether an SSP should retain multiple OSCAL components, merge them, or use another convention to represent the single system component consistently."
         },
         {
           "id": "paper-comp-2",
-          "q": "If Benchmark CDefs contain desired state, do the values get updated to actual state in the SSP?",
-          "why": "This is the desired-state risk the site records against this approach: rules describe how a component should be configured, and a plan of record describes how the system is.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "Should desired-state values from benchmark component definitions be replaced with actual-state values in the SSP?",
+          "why": "Rules describe prescribed configuration, while an SSP records the system owner's implementation claims. Replacing prescribed values with actual values could lose the benchmark baseline; retaining only prescribed values could misrepresent implementation. The question is how to keep the two meanings distinct while preserving the relationship between benchmark requirements and the system."
         },
         {
           "id": "paper-comp-3",
-          "q": "What portion of the benchmark context gets pulled into the SSP?  If not all, how will data get filtered out when importing a CDef into an SSP component?",
-          "why": "A thousand-page guide is mostly prose. What of it belongs in a plan of record, and what a tool should drop on import, is unanswered.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "Which benchmark context should enter an SSP, and how should tools filter component-definition content during import?",
+          "why": "Benchmark content can include rules, parameters, rationale and procedural detail, not all of which serves the same purpose in an SSP. Import tooling needs a policy for retaining or omitting that context. The open issue is how to reduce duplication without losing information needed to interpret an implementation claim."
         },
         {
           "id": "paper-comp-4",
-          "q": "How could CDefs support the tailoring needs of benchmarks?",
-          "why": "The tailoring question, asked of this approach. It has a param on the rule and set-parameters on the control implementation, which is more than the assessment approach has and less than a profile.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "How should component definitions support benchmark selection, exclusions and parameter tailoring?",
+          "why": "The component-first examples place parameters on proposed rules and set-parameters on control implementations. Those structures address parameter values but do not provide a profile's selection and exclusion workflow. How component definitions should support benchmark tailoring, including the scope and persistence of tailoring decisions, remains open."
         },
         {
           "id": "paper-comp-5",
-          "q": "Should ARs or APs support import of CDef with Benchmark context?",
-          "why": "The site's own encoding says yes for the assessment plan: the definition is carried in as an asset and the checks travel with it. Whether that is the intended route is the question.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "Should assessment plans or assessment results support importing component definitions with benchmark context?",
+          "why": "The component-first examples carry check content into an assessment plan through assessment assets. That demonstrates one encoding, not a dedicated import mechanism for all benchmark context. The question is whether plans or results should support such imports directly and which rules, parameters and provenance would need to survive."
         }
       ]
     },
     {
       "key": "assessment-first",
       "label": "Assessment-first",
-      "intro": "The rule is an activity in an assessment plan. One question is on the record against this approach, and it is about tailoring.",
+      "intro": "The rule is an activity in an assessment plan. The open question concerns tailoring requirements without losing their assessment context.",
       "questions": [
         {
           "id": "paper-ap-1",
-          "q": "How should AP-based benchmarks handle tailoring needs that only the catalog/profile model natively supports?",
-          "why": "The same question as where a parameter goes, asked of this approach by name. An activity and a step have no parameter, so a value lives in the requirement text and tailoring means editing the sentence.",
-          "verbatim": "the position paper submitted to the working group"
+          "q": "How should assessment-plan benchmarks support tailoring available through catalogs and profiles?",
+          "why": "Activities and steps have no parameter assembly, so the assessment-first examples place required values in text. Tailoring can therefore require editing procedural content rather than selecting controls or setting parameter values through a profile. The question is how to support reusable, auditable tailoring without losing the assessment workflow."
         }
       ]
     }

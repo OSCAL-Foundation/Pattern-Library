@@ -6850,25 +6850,102 @@
         },
         "associated-activities": [
           {
-            "activity-uuid": "760fe3fc-45af-4c62-b095-265a56a1dedf"
+            "activity-uuid": "760fe3fc-45af-4c62-b095-265a56a1dedf",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "4e391cf6-5549-46f3-b3d7-aad12cd5a226"
+            "activity-uuid": "4e391cf6-5549-46f3-b3d7-aad12cd5a226",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "2c69fb5c-056f-4788-be36-723b939a4766"
+            "activity-uuid": "2c69fb5c-056f-4788-be36-723b939a4766",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "04319877-e72d-4967-b968-4852e6738113"
+            "activity-uuid": "04319877-e72d-4967-b968-4852e6738113",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "53852402-8cd6-4e1c-a559-f31bb004a66e"
+            "activity-uuid": "53852402-8cd6-4e1c-a559-f31bb004a66e",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "c98b996e-8dae-40ef-8b40-100ffbe9e5e3"
+            "activity-uuid": "c98b996e-8dae-40ef-8b40-100ffbe9e5e3",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "activity-uuid": "5f62a033-3847-43ec-bafd-3dc1a7621029"
+            "activity-uuid": "5f62a033-3847-43ec-bafd-3dc1a7621029",
+            "subjects": [
+              {
+                "type": "inventory-item",
+                "include-subjects": [
+                  {
+                    "subject-uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+                    "type": "inventory-item"
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
@@ -6886,19 +6963,11 @@
           "uuid": "080172e1-3306-4f73-99b6-c1facbc21077",
           "rlinks": [
             {
-              "href": "./ssp.xml",
-              "media-type": "application/xml"
-            },
-            {
-              "href": "./ssp.json",
-              "media-type": "application/json"
-            },
-            {
-              "href": "./ssp.yaml",
-              "media-type": "application/yaml"
+              "href": "./sample-ssp.json",
+              "media-type": "application/oscal+json"
             }
           ],
-          "title": "\\[System Name\\] SSP"
+          "title": "Sample ScubaGear System Security Plan"
         },
         {
           "props": [

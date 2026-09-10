@@ -1,16 +1,16 @@
 {
-  "note": "Seven parties touch a hardening rule between the body that writes it and the auditor who reads the outcome, and each one works in an OSCAL model. Which model is the whole of what an approach asks of a party, so this is a mapping rather than an argument. Two entries need their component type named, because the same model does two jobs for two different parties. Two sets of the seven are grouped. The bodies that author hardening guidance are one role played by two kinds of organisation. The automation is a policy engine and the two parties that run it: a provider builds the tool and runs nothing, which is why its flows name whoever executes them, and the system owner and the auditor are those parties. The mapping provider is a party of its own because a hardening guide does not always carry the tie to a framework: a STIG carries CCIs and it is DISA's separate CCI list that names the 800-53 controls, and third parties publish mappings of their own through NIST's OLIR programme. Whoever writes the guide is often not whoever ties it to the framework.",
-  "intro": "Seven parties touch a hardening rule between a published guide and an audited system, and each works in an OSCAL model. Two sets of them are grouped: the bodies that author guidance, and the automation.",
+  "note": "The mapping identifies the OSCAL models used by seven parties from guidance publication through audit. Component types distinguish guidance from checks where both use component definitions. Two groups identify guidance authors and automation providers and operators. Policy engine providers build tools; system owners and auditors execute the flows shown. Mapping providers are separate because guidance authors do not always publish framework mappings: STIGs carry CCIs, DISA's CCI list names the 800-53 controls, and third parties publish mappings through NIST's OLIR programme.",
+  "intro": "Seven parties publish, implement or assess hardening guidance. The table maps each party to OSCAL models and groups guidance authors separately from automation providers and operators.",
   "parties": [
     {
       "key": "regulatory",
       "name": "Regulatory control providers",
-      "who": "NIST with SP 800-53, and bodies like it"
+      "who": "NIST and other bodies publishing regulatory controls, such as SP 800-53"
     },
     {
       "key": "mapper",
       "name": "Mapping providers",
-      "who": "DISA's CCI list, NIST's OLIR programme, the Secure Controls Framework and bodies like them, tying a guide to a framework"
+      "who": "Organisations linking guidance to frameworks through DISA's CCI list, NIST's OLIR programme or the Secure Controls Framework"
     },
     {
       "key": "benchmark",
@@ -20,26 +20,26 @@
     },
     {
       "key": "software",
-      "name": "Software providers",
-      "who": "Vendors publishing secure configuration guidance for their own product, alone or with a body such as CIS",
+      "name": "Technology providers",
+      "who": "Vendors publishing configuration guidance for hardware, software and services, independently or with benchmark publishers such as CIS",
       "group": "guidance"
     },
     {
       "key": "engine",
       "name": "Policy engine providers",
-      "who": "OPA, Kyverno, ScubaGear, OpenSCAP and the like, assessing, auditing and checking",
+      "who": "Providers of assessment and checking tools such as OPA, Kyverno, ScubaGear and OpenSCAP",
       "group": "automation"
     },
     {
       "key": "owner",
       "name": "System owners",
-      "who": "Implementing these concepts on a real system",
+      "who": "Organisations implementing and documenting controls on a system",
       "group": "automation"
     },
     {
       "key": "auditor",
       "name": "Independent auditors",
-      "who": "Running the same checks independently of the system owner, and reading the outcome",
+      "who": "Assessors running checks and reviewing results independently of system owners",
       "group": "automation"
     }
   ],
@@ -58,7 +58,7 @@
             "model": "mapping-collection"
           }
         ],
-        "note": "The one approach where the tie is a document of its own, and the mapping provider's to write. No publisher has shipped one for hardening guidance yet."
+        "note": "The mapping provider writes a separate framework mapping. The published corpus contains no mapping collection for hardening guidance."
       },
       "benchmark": {
         "writes": [
@@ -81,7 +81,7 @@
             "kind": "software"
           }
         ],
-        "note": "Builds the tool and runs nothing. What it ships is the check, as a component of type software. The catalog it points at is the guidance authors'."
+        "note": "The provider publishes checks as components of type software, referencing the guidance authors' catalog. System owners and auditors run the checks."
       },
       "owner": {
         "writes": [
@@ -92,7 +92,7 @@
             "model": "system-security-plan"
           }
         ],
-        "note": "The profile is always the owner's: the selection of what this system is held to, and the merge of the catalogs a plan can import.",
+        "note": "The system owner selects requirements and merges catalogs through a profile imported by the system security plan.",
         "flows": [
           {
             "runtime": true,
@@ -129,7 +129,7 @@
             "makes": "the findings"
           }
         ],
-        "note": "The same checks, a different party running them. What comes out is a result, and its finding targets the statement the owner wrote."
+        "note": "The auditor runs the checks independently. The resulting finding targets the system owner's implementation statement."
       }
     },
     "component-first": {
@@ -147,7 +147,7 @@
             "kind": "software or validation"
           }
         ],
-        "note": "Edits a definition rather than writing one. Which of the two carries the tie, the rules or the checks, is an open question."
+        "note": "The mapping provider edits a component definition. Whether the rules or the checks carry the framework mapping remains open."
       },
       "benchmark": {
         "writes": [
@@ -172,7 +172,7 @@
             "kind": "validation"
           }
         ],
-        "note": "A component of type validation rather than software, holding the checks. Builds it, runs nothing."
+        "note": "The provider publishes checks in a component of type validation. System owners and auditors run the checks."
       },
       "owner": {
         "writes": [
@@ -218,7 +218,7 @@
             "makes": "the observations"
           }
         ],
-        "note": "The run goes through the assessment plan, which is what lets the result name the host rather than the component."
+        "note": "The auditor runs checks through an assessment plan, allowing the result to identify a host rather than a component."
       }
     },
     "assessment-first": {
@@ -235,7 +235,7 @@
             "model": "assessment-plan"
           }
         ],
-        "note": "Edits the plan rather than writing one. Reviewed-controls on the activity names the framework controls the check covers."
+        "note": "The mapping provider edits the assessment plan, naming the framework controls covered by the activity."
       },
       "benchmark": {
         "writes": [
@@ -243,7 +243,7 @@
             "model": "assessment-plan"
           }
         ],
-        "note": "Writes the activity and its steps. The check that runs them is the engine's."
+        "note": "The guidance provider writes activities and steps. The policy engine provider supplies executable checks."
       },
       "software": {
         "writes": [
@@ -251,7 +251,7 @@
             "model": "assessment-plan"
           }
         ],
-        "note": "Writes the activity and its steps. The check that runs them is the engine's."
+        "note": "The technology provider writes activities and steps. The policy engine provider supplies executable checks."
       },
       "engine": {
         "writes": [
@@ -259,7 +259,7 @@
             "model": "assessment-plan"
           }
         ],
-        "note": "The plan is the engine's, and the checks in it are what it adds. It is named inside the plan too, in assessment-assets."
+        "note": "The policy engine provider adds checks to the assessment plan. The plan identifies the engine in assessment-assets."
       },
       "owner": {
         "writes": [
@@ -270,7 +270,7 @@
             "model": "system-security-plan"
           }
         ],
-        "note": "The selection and the plan of record, and nothing beyond them. An assessor's run takes no dependency on what the owner automates, and cannot see it."
+        "note": "The system owner supplies the profile and system security plan. The assessor's workflow does not depend on the owner's automation."
       },
       "auditor": {
         "flows": [
@@ -289,7 +289,7 @@
             "makes": "the observations"
           }
         ],
-        "note": "The only run here. There is no path from a check to a claim, so what comes out is a result and never the plan of record."
+        "note": "The auditor's run produces assessment results, not implementation claims. The workflow does not update the system security plan."
       }
     }
   },
@@ -297,13 +297,13 @@
     {
       "key": "guidance",
       "label": "Hardening guidance authors",
-      "note": "One role, two kinds of organisation, the same model. Nothing downstream can tell which of them wrote a rule."
+      "note": "Benchmark publishers and technology providers author guidance in the same OSCAL model for each approach."
     },
     {
       "key": "automation",
-      "label": "Automation tools and who runs them",
-      "note": "The policy engine and the automation tool are the same thing. A provider builds it, and whoever runs it decides what comes out."
+      "label": "Automation providers and operators",
+      "note": "Providers build policy engines. System owners and auditors run checks to produce implementation responses or assessment results."
     }
   ],
-  "runtime": "A tool reads OSCAL, executes, and writes OSCAL. The party in this row builds it; the party on each flow runs it."
+  "runtime": "A policy engine reads OSCAL, executes checks and writes OSCAL. Providers publish the checks; each flow identifies the party executing the checks."
 }

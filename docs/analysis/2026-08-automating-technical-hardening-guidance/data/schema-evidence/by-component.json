@@ -2,10 +2,10 @@
   "note": "The oscal-ssp-oscal-ssp:by-component definition, which is the only way a system security plan responds to a control. It is keyed by component-uuid and has no subject of any kind: no inventory-item, no location, no party, no user. A plan can describe inventory items elsewhere, in system-implementation, but a control response cannot be made against one, so two hosts of the same component share a single response.",
   "model": "system-security-plan",
   "definition": "oscal-ssp-oscal-ssp:by-component",
-  "schema_id": "http://csrc.nist.gov/ns/oscal/1.1.3/oscal-ssp-schema.json",
-  "oscal_version": "1.1.3",
-  "fetched_at": "2026-08-21",
-  "provenance": "Taken from the offline OSCAL reference copy of the 1.1.3 schemas rather than from the published 1.2.1 set the other fragments here record, because 1.2.1 could not be fetched. The CI re-fetch compares it against 1.2.1.",
+  "schema_id": "http://csrc.nist.gov/ns/oscal/1.2.1/oscal-ssp-schema.json",
+  "oscal_version": "1.2.1",
+  "fetched_at": "2026-09-09",
+  "provenance": "Extracted from https://github.com/usnistgov/OSCAL/releases/download/v1.2.1/oscal_ssp_schema.json at definitions/oscal-ssp-oscal-ssp:by-component.",
   "constraints": [
     "required == [\"component-uuid\",\"uuid\",\"description\"]",
     "has property \"component-uuid\"",
@@ -19,7 +19,7 @@
     "properties": {
       "component-uuid": {
         "title": "Component Universally Unique Identifier Reference",
-        "description": "A machine-oriented identifier reference to the component that is implemeting a given control.",
+        "description": "A machine-oriented identifier reference to the component that is implementing a given control.",
         "$ref": "#/definitions/UUIDDatatype"
       },
       "uuid": {
@@ -30,7 +30,7 @@
       "description": {
         "title": "Control Implementation Description",
         "description": "An implementation statement that describes how a control or a control statement is implemented within the referenced system component.",
-        "type": "string"
+        "$ref": "#/definitions/MarkupMultilineDatatype"
       },
       "props": {
         "type": "array",
@@ -64,7 +64,7 @@
           "description": {
             "title": "Control Implementation Export Description",
             "description": "An implementation statement that describes the aspects of the control or control statement implementation that can be available to another system leveraging this system.",
-            "type": "string"
+            "$ref": "#/definitions/MarkupMultilineDatatype"
           },
           "props": {
             "type": "array",
@@ -96,7 +96,7 @@
                 "description": {
                   "title": "Provided Control Implementation Description",
                   "description": "An implementation statement that describes the aspects of the control or control statement implementation that can be provided to another system leveraging this system.",
-                  "type": "string"
+                  "$ref": "#/definitions/MarkupMultilineDatatype"
                 },
                 "props": {
                   "type": "array",
@@ -151,7 +151,7 @@
                 "description": {
                   "title": "Control Implementation Responsibility Description",
                   "description": "An implementation statement that describes the aspects of the control or control statement implementation that a leveraging system must implement to satisfy the control provided by a leveraged system.",
-                  "type": "string"
+                  "$ref": "#/definitions/MarkupMultilineDatatype"
                 },
                 "props": {
                   "type": "array",
@@ -212,7 +212,7 @@
             "description": {
               "title": "Inherited Control Implementation Description",
               "description": "An implementation statement that describes the aspects of a control or control statement implementation that a leveraging system is inheriting from a leveraged system.",
-              "type": "string"
+              "$ref": "#/definitions/MarkupMultilineDatatype"
             },
             "props": {
               "type": "array",
@@ -264,7 +264,7 @@
             "description": {
               "title": "Satisfied Control Implementation Responsibility Description",
               "description": "An implementation statement that describes the aspects of a control or control statement implementation that a leveraging system is implementing based on a requirement from a leveraged system.",
-              "type": "string"
+              "$ref": "#/definitions/MarkupMultilineDatatype"
             },
             "props": {
               "type": "array",

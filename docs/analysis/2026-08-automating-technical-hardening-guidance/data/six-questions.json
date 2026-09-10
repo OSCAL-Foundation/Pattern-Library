@@ -1,5 +1,5 @@
 {
-  "note": "The six questions and the answer matrix. This is the site's central claim set. Every cell is asserted against the shipped files and is re-checked by tools/verify.py --matrix. Personal names and proponent organizations are not rendered anywhere on the site; where a cell state depends on a reason someone stated, the note cites the source document rather than the speaker.",
+  "note": "The six questions and answer matrix compare OSCAL JSON examples, including content using proposed assemblies. tools/verify.py --matrix checks each cell against the example files. Notes describe supported capabilities and unresolved questions.",
   "approaches": [
     {
       "key": "catalog-first",
@@ -10,7 +10,7 @@
       "serves_stakeholder_first": "publisher",
       "repo": "https://github.com/awslabs/oscal-content-for-aws-services",
       "status_annotation": "experimental, per publisher",
-      "one_line": "The rule is a catalog control, the check is in a software component defined as a component definition"
+      "one_line": "The rule is a catalog control; the check is a software component in a component definition."
     },
     {
       "key": "component-first",
@@ -21,7 +21,7 @@
       "serves_stakeholder_first": "implementer",
       "status_annotation": "proposed schema",
       "repo": null,
-      "one_line": "The rule is a new assembly in a component definition, the check sits in a validation component definition."
+      "one_line": "The rule uses a proposed assembly on the product component; the check uses a proposed assembly on a validation component."
     },
     {
       "key": "assessment-first",
@@ -32,7 +32,7 @@
       "serves_stakeholder_first": "assessor",
       "repo": null,
       "status_annotation": "placeholder and synthetic identifiers",
-      "one_line": "The rule is an assessment plan activity or step, the check is a new assembly beneath it."
+      "one_line": "The rule is an assessment plan activity or step; a property identifies the check."
     }
   ],
   "empty_states": [
@@ -40,16 +40,16 @@
       "key": "empty-absent",
       "label": "Unanswered, no stated position",
       "rendering": "hollow with a light dotted fill",
-      "meaning": "Nothing in the published content answers this question and no reason is on the record."
+      "meaning": "The published content does not answer the question or state a reason for the omission."
     }
   ],
   "slots": [
     {
       "number": "1",
       "key": "rule",
-      "name": "The rule itself",
-      "question": "What must be true, and where is that written down?",
-      "why_separate": "The requirement itself, technology-specific, one per testable condition. Pre-read settled item 7 puts its parameters here: the definition declares the options and a default.",
+      "name": "What the rule requires",
+      "question": "What condition must hold, and where is the requirement defined?",
+      "why_separate": "A technology-specific requirement defines one testable condition. Parameter options and defaults belong with that definition where the selected model supports them.",
       "optional": false,
       "short": "Rule"
     },
@@ -58,38 +58,38 @@
       "key": "control-tie",
       "name": "How the rule links to a control",
       "question": "Does this rule help satisfy a regulatory control, and which one?",
-      "why_separate": "Optional by design. A rule is finer than a control and may serve several, one, or none. The mechanism must exist and must not be mandatory.",
+      "why_separate": "A rule is finer-grained than a control and may serve several controls, one, or none. A control-linking mechanism is required, but using the mechanism is optional.",
       "optional": true,
       "binding_times": [
         {
           "key": "inline",
           "label": "Author-time, inline",
           "mechanism": "The rule declares its control directly",
-          "authored_by": "Whoever wrote the rule"
+          "authored_by": "Rule author"
         },
         {
           "key": "pointer",
           "label": "Author-time, by pointer",
           "mechanism": "A prop carries an external framework identifier that a consumer must resolve",
-          "authored_by": "Whoever wrote the rule"
+          "authored_by": "Rule author"
         },
         {
           "key": "late",
           "label": "Late, external",
-          "mechanism": "A separate artifact ties rule to control after publication",
-          "authored_by": "Anyone, including a third party",
+          "mechanism": "A separate artifact links a rule to a control after publication",
+          "authored_by": "Rule author or third party",
           "available_to": {
             "catalog-first": true,
             "component-first": false,
             "assessment-first": false
           },
-          "why": "mapping-item.type is closed by allOf to control and statement, and mapping-item carries no uuid and no href, so this binding time reaches a rule only where the rule is already modelled as a control or a control statement. The gap is in OSCAL rather than in any approach, and it is not an argument for the one approach it happens to suit: it rewards whichever view of a rule already matches the schema's assumption."
+          "why": "mapping-item.type is restricted by allOf to control and statement, and mapping-item has neither uuid nor href. External mappings therefore reach rules modelled as controls or control statements, not component rules or activities. This OSCAL schema constraint does not establish a preferred approach."
         }
       ],
       "cost_of_leaving_empty": {
-        "observation": "Available. AR observation requires only uuid, description, methods and collected, and carries no control reference of any kind.",
-        "finding": "Not available. finding requires target; finding-target requires type, closed by allOf to statement-id or objective-id, both control-derived.",
-        "summary": "Without a link to a control you can record what you saw, but not whether it complied.",
+        "observation": "Available. AR observation requires only uuid, description, methods and collected, with no control reference.",
+        "finding": "Not available. finding requires target; finding-target requires type, restricted by allOf to statement-id or objective-id, both control-derived.",
+        "summary": "Without a control link, an assessor can record an observation but not a finding against a control statement or objective.",
         "evidence": [
           "observation.json",
           "finding.json",
@@ -102,8 +102,8 @@
       "number": "3",
       "key": "check",
       "name": "How the rule is tested",
-      "question": "What check executes the rule within a runtime environment?",
-      "why_separate": "One rule, many checks, one per tool. Pre-read settled item 4 keeps the executable itself outside OSCAL, referenced. The warrant for separating this from question 1 is settled item 5.",
+      "question": "Which executable or procedure tests the rule?",
+      "why_separate": "A rule may have several checks, one per tool. The examples separate rule definitions from checks and reference external executables rather than embedding code in OSCAL.",
       "optional": false,
       "short": "Check"
     },
@@ -111,43 +111,43 @@
       "number": "4",
       "key": "subject",
       "name": "What the check runs against",
-      "question": "What exactly is being tested: a host, a component, an account?",
-      "why_separate": "A host, an inventory item, a component, an account. This is criterion 8, response fidelity.",
+      "question": "Is the subject a host, component, account or another resource?",
+      "why_separate": "The subject identifies the assessed host, inventory item, component or account. Criterion 8 addresses response fidelity.",
       "optional": false,
       "not_established": true,
-      "not_established_note": "Evidence register item 8: authoritative semantics for assessment platform versus asset versus component were to be posted to the NIST OSCAL team on 17 July. No response is in the record.",
+      "not_established_note": "The examples use assessment platforms, assets and components differently. A consistent distinction between the subject being assessed and the resources performing the assessment is not established here.",
       "short": "Subject"
     },
     {
       "number": "5",
       "key": "actor",
       "name": "What performs the check",
-      "question": "What or who runs the test, and how is that named?",
-      "why_separate": "A validation component, an assessment platform, a tool, a person. Includes the method prop: examine, interview, or test.",
+      "question": "Which tool or person performs the check, and how is the runner identified?",
+      "why_separate": "The runner may be a validation component, assessment platform, tool or person. The method prop identifies examine, interview or test.",
       "optional": false,
       "not_established": true,
-      "not_established_note": "Same as question 4. Three approaches use six different subsets of assessment-assets, assessment-platforms, uses-components, validation components, origin actors, task-level props and the method prop.",
+      "not_established_note": "The same distinction remains open in question 4. The approaches use different combinations of assessment-assets, assessment-platforms, uses-components, validation components, origin actors, task-level props and the method prop.",
       "short": "Runner"
     },
     {
       "number": "6a",
       "key": "implementation-claim",
       "name": "How the system claims it meets the rule",
-      "question": "How does a system say it satisfies this, in its own words?",
-      "why_separate": "Asserted by the system owner. Standing design intent, narrative, arguable, per component. Lives in the SSP as implemented-requirement, statement and by-component.",
+      "question": "How does the system owner describe implementation of the rule?",
+      "why_separate": "The system owner provides a narrative claim of implementation and design intent per component. The SSP represents claims through implemented-requirement, statement and by-component.",
       "optional": false,
       "short": "Claim",
-      "group_name": "Whether the rule was met, claimed and recorded"
+      "group_name": "Implementation claims and assessment outcomes"
     },
     {
       "number": "6b",
       "key": "assessment-result",
       "name": "How an assessment records the outcome",
-      "question": "Was it satisfied, when, and on what?",
-      "why_separate": "Asserted by the assessor. A point in time, evidenced, binary or graded, per subject. Lives in the AR as observation, finding and status. A rule carrying desired state has a binary satisfaction condition; the SSP's implementation statement expects a narrative one.",
+      "question": "Was the rule satisfied, when, and for which subject?",
+      "why_separate": "The assessor records evidence and a binary or graded outcome per subject at a point in time. The AR uses observation, finding and status. A desired-state rule has a binary satisfaction condition; the SSP implementation claim is narrative.",
       "optional": false,
       "short": "Result",
-      "group_name": "Whether the rule was met, claimed and recorded"
+      "group_name": "Implementation claims and assessment outcomes"
     }
   ],
   "matrix": [
@@ -180,10 +180,9 @@
       "approach": "component-first",
       "state": "filled",
       "snippet_ids": [
-        "ibm-cos-component",
-        "ibm-rules-md"
+        "ibm-cos-component"
       ],
-      "note": "Rules sits on the component as a sibling of control-implementations.",
+      "note": "The proposed rules assembly sits on the component alongside control-implementations.",
       "mechanisms": [
         "proposed"
       ],
@@ -201,7 +200,7 @@
         "ez-stig-activity-v259312",
         "ez-stig-sc28-v270747"
       ],
-      "note": "The activity is the rule and its step is the check. No parameter field, so a value goes in the text.",
+      "note": "The activity defines the rule and the step describes the check. Without a parameter field, required values are recorded in text.",
       "mechanisms": [
         "assembly",
         "prop"
@@ -226,7 +225,7 @@
         "aws-acm-backmatter-source",
         "aws-acm-service-rollup"
       ],
-      "note": "Made by the mapping model in its own document, not inline. No publisher has shipped one yet.",
+      "note": "A separate mapping collection links rules to framework controls. The published corpus contains no such mapping document.",
       "mechanisms": [
         "assembly"
       ],
@@ -244,7 +243,7 @@
         "ibm-statement-rules",
         "ibm-cos-component"
       ],
-      "note": "The component ties to the control today. Tying the rule to it needs the proposed assembly.",
+      "note": "Existing assemblies link the component to the control. Linking an individual rule requires the proposed assembly.",
       "mechanisms": [
         "assembly",
         "proposed"
@@ -264,7 +263,7 @@
         "ez-stig-related-controls",
         "ez-cisa-step-reviewed"
       ],
-      "note": "Two levels. reviewed-controls scopes the plan, related-controls names what an activity is for. The scope is required, the tie is not.",
+      "note": "Two levels: reviewed-controls defines the required plan scope; related-controls optionally links an activity to controls.",
       "mechanisms": [
         "assembly"
       ],
@@ -283,7 +282,7 @@
         "aws-acm2-control",
         "aws-acm-rsa-check-component"
       ],
-      "note": "The identifier is the bridge to the runtime. It executes a machine check.",
+      "note": "The check identifier resolves within the runtime to an executable machine check.",
       "mechanisms": [
         "assembly",
         "prop"
@@ -307,7 +306,7 @@
       "snippet_ids": [
         "ibm-validation-ansible"
       ],
-      "note": "Proposed schema. A composite key, both halves on the check side. The rule holds no pointer back.",
+      "note": "The proposed schema places both composite-key fields on the check. The rule has no reference back to the check.",
       "mechanisms": [
         "proposed"
       ],
@@ -326,7 +325,7 @@
         "ez-cis-remediation-step",
         "ez-cisa-context-step"
       ],
-      "note": "Three conventions. Only the CISA one reaches an executable, through a JSON string in a prop. STIG and CIS describe the check in prose.",
+      "note": "Three conventions: CISA references an executable through a JSON string in a prop; STIG and CIS describe checks in prose.",
       "mechanisms": [
         "assembly",
         "prop"
@@ -348,7 +347,7 @@
       "approach": "catalog-first",
       "state": "empty-absent",
       "snippet_ids": [],
-      "note": "A by-component is the only shape available, and it names a component, not an instance. An assessor cannot introduce a catalog.",
+      "note": "The by-component response identifies a component, not an instance. An assessment plan cannot import a catalog directly.",
       "mechanisms": [
         "assembly"
       ],
@@ -365,7 +364,7 @@
       "snippet_ids": [
         "ibm-validation-ansible"
       ],
-      "note": "The same by-component, plus the rule. An assessor can carry the definition into their own plan, and the checks travel with it.",
+      "note": "The proposed rule reference extends by-component. An assessor can include the component definition and associated checks in an assessment plan.",
       "mechanisms": [
         "assembly",
         "proposed"
@@ -385,7 +384,7 @@
         "ez-subjects-includeall",
         "ez-subjects-explicit"
       ],
-      "note": "Scope, then target. The plan names the subjects, each activity aims at some of them. Both name an inventory item, an instance rather than a class.",
+      "note": "The plan defines subject scope; activity-associated tasks select targets. Both can identify inventory items, representing instances rather than classes.",
       "mechanisms": [
         "assembly"
       ],
@@ -403,7 +402,7 @@
       "snippet_ids": [
         "aws-config-service-bare"
       ],
-      "note": "Partly. The input and the output are written down; the machine between them is not. ConfigRuleId resolves inside the engine. No assessor's path: a catalog cannot be introduced into an assessment.",
+      "note": "The content records inputs and outputs but not the engine. ConfigRuleId resolves within the engine. No assessor workflow is shown; an assessment plan cannot import a catalog directly.",
       "mechanisms": [
         "assembly",
         "prop"
@@ -444,7 +443,7 @@
         "ibm-ap-task-subjects",
         "ibm-ar-observation"
       ],
-      "note": "Proposed schema. The proposal records four open questions about this, including how an asset is tied to a task.",
+      "note": "The examples leave runner associations unresolved, including how an assessment asset links to a task or an observation.",
       "mechanisms": [
         "assembly",
         "proposed"
@@ -502,7 +501,7 @@
         "ez-cisa-assessment-assets",
         "ez-cisa-task-timing"
       ],
-      "note": "A chain. The platform runs, the component beneath it is the plugin, and a prop on the task says which platform.",
+      "note": "The platform executes the check, a referenced component represents the plugin, and a task property identifies the platform.",
       "mechanisms": [
         "assembly",
         "prop"
@@ -548,7 +547,7 @@
         "aws-acm-rsa-check-component",
         "aws-acm-service-rollup"
       ],
-      "note": "Template level, not system level: a definition says how a component would satisfy a control. Only a plan of record says a system does, and none is published.",
+      "note": "The component definition describes how a component could satisfy a control, not a system's implementation. The corpus contains no system security plan.",
       "mechanisms": [
         "assembly"
       ],
@@ -563,7 +562,7 @@
       "approach": "component-first",
       "state": "empty-absent",
       "snippet_ids": [],
-      "note": "The claim is a by-component response today. Naming the rule it rests on needs the proposed assembly.",
+      "note": "The claim uses a by-component response. Identifying the supporting rule requires the proposed implementing-rules assembly.",
       "mechanisms": [
         "assembly",
         "proposed"
@@ -585,7 +584,7 @@
         "ez-cisa-no-ssp-resource",
         "ez-stig-import-ssp"
       ],
-      "note": "No claim of its own. It names the document holding one, and a resource for where no plan of record exists.",
+      "note": "The assessment plan references the document containing the implementation claim. A back-matter resource supports cases without a plan of record.",
       "mechanisms": [
         "assembly",
         "prop"
@@ -602,7 +601,7 @@
       "approach": "catalog-first",
       "state": "empty-absent",
       "snippet_ids": [],
-      "note": "The repository's own documentation lists compliance validation automation as a future consideration rather than shipping it.",
+      "note": "No assessment results are published in the catalog-first OSCAL corpus.",
       "mechanisms": [
         "assembly"
       ],
@@ -618,7 +617,7 @@
       "snippet_ids": [
         "ibm-ar-observation"
       ],
-      "note": "Observations and no findings, so no objective status. The control is recovered through the plan rather than stated.",
+      "note": "The result contains observations but no findings or objective status. The control reference must be recovered through the assessment plan.",
       "mechanisms": [
         "assembly",
         "proposed"
@@ -636,7 +635,7 @@
         "ez-cisa-ar-finding",
         "ez-cisa-ar-observation"
       ],
-      "note": "A result of its own, importing the plan. Findings carry a target and a status; an observation's subject is the activity that ran.",
+      "note": "A separate results document imports the plan. Findings have targets and status; observations identify the executed activity as the subject.",
       "mechanisms": [
         "assembly"
       ],
@@ -647,7 +646,7 @@
       ]
     }
   ],
-  "finding": "Questions 1 and 2 are answered by all three. Questions 6a and 6b are answered in full by none of them, and no column is complete from top to bottom.",
+  "finding": "Questions 1 and 2 are answered by all three approaches. No approach fully answers both 6a and 6b, and no approach answers every question.",
   "answer_states": [
     {
       "key": "filled",
@@ -662,7 +661,7 @@
     {
       "key": "empty-absent",
       "label": "Not answered",
-      "meaning": "Nothing in the published content answers this and no reason is on the record."
+      "meaning": "The published content does not answer the question or state a reason for the omission."
     }
   ],
   "mechanism_states": [
@@ -670,21 +669,21 @@
       "key": "assembly",
       "label": "Released OSCAL assembly",
       "short": "OSCAL assembly",
-      "meaning": "The capability is carried by an OSCAL assembly that exists today. Adopting it changes no schema.",
+      "meaning": "A released OSCAL assembly provides the capability without a schema change.",
       "rendering": "a solid badge"
     },
     {
       "key": "proposed",
       "label": "Proposed assembly",
       "short": "Proposed",
-      "meaning": "The capability is carried by an assembly that does not exist yet. Adopting it means a schema change, and until that lands no tool can read it.",
+      "meaning": "The capability requires a proposed assembly. Interoperable use requires schema adoption and tool support for the new structure.",
       "rendering": "a dashed badge"
     },
     {
       "key": "prop",
       "label": "Namespaced property",
       "short": "Prop",
-      "meaning": "The capability is carried by a prop in the publisher's own namespace. The schema does not model it, so a tool that does not know that namespace cannot read it, and no two publishers have to agree.",
+      "meaning": "A property in the publisher's namespace provides the capability. Tools need a shared convention to interpret the property; the OSCAL schema does not define the meaning.",
       "rendering": "a dotted badge"
     }
   ],
@@ -692,11 +691,11 @@
     "label": "How to read an answer",
     "answers_title": "Is the question answered?",
     "mechanism_title": "How the capability is enabled",
-    "why_one_block": "Two legends sitting apart read as two subjects, and they are two axes of one reading: every answer on this page carries a mark from the first group and, where it is answered at all, one or more badges from the second. They are one block for the same reason the two axes belong on one cell.",
-    "why_uneven": "The answer states are three words and the mechanisms carry a sentence each. That is deliberate rather than an oversight. Answered, partly answered and not answered mean what they say; Proposed does not tell a reader that no tool can read the content until the schema lands, and that is the sentence the page turns on."
+    "why_one_block": "Each cell combines an answer state with mechanism badges. A shared legend explains both dimensions together.",
+    "why_uneven": "Answer states describe evidence coverage. Mechanism descriptions also explain schema and tool-support requirements, so the descriptions need additional detail."
   },
-  "mechanism_note": "How a capability is enabled is a different question from whether it is answered. The answer states describe the published corpus. These describe the model: what an approach would have to rely on to carry the answer at all. An approach can answer everything and still rest on properties no other tool reads, and it can answer nothing while the mechanism it would use is already released.",
-  "carrier_note": "Every answer names the OSCAL model it lives in and the assemblies inside it that carry the answer. The model is the first thing that differs between the three: the same requirement is a control in one, a component in another and an activity in the third, and everything downstream follows from that.",
+  "mechanism_note": "Answer states describe coverage in the published corpus. Mechanism badges identify the OSCAL structures needed to represent an answer. Evidence coverage does not establish schema adoption or tool interoperability.",
+  "carrier_note": "Each answer identifies the OSCAL model and assemblies representing the capability. Rules use catalog controls, component rules or assessment activities; the choice affects references to checks, claims and results.",
   "proposed_assemblies": [
     "assessment-check-id",
     "associated-checks",
@@ -706,5 +705,5 @@
     "rule-groups",
     "rules"
   ],
-  "paths_note": "A runner is the thing between an input and an output, and which documents those are depends on who runs it. Each path below is one file in, one file out."
+  "paths_note": "Each runner path shows one input document and one output document. The documents depend on whether the system owner or assessor runs the check."
 }

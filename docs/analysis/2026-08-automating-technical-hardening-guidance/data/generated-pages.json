@@ -2,8 +2,8 @@
   "note": "The hash of each approach page as this tool last wrote it. tools/approach_pages.py compares the page on disk against this before overwriting, so a hand edit to a generated page stops the build instead of disappearing into it.",
   "written_by": "tools/approach_pages.py",
   "sha256": {
-    "assessment-first": "69754a8b9eaca4d372faed1e23d33fc89b524d09b3569e5fbe06110c9d749696",
-    "catalog-first": "f2381215aa6af548dca3cb5c59fc8d985964db349332454ffdab843069c38e56",
-    "component-first": "fd739ade4dd4568f7cac3dec242a5630a67feeef85ba13d70429ce8e6618df24"
+    "assessment-first": "78f38c7ef742a486d4860d618df1a78e4487fef226e77317a5621f5501bab18b",
+    "catalog-first": "3319bcf155cdc7881b1dd1bfd42bdf9e679b2ed2ec5ec3b16576b04c15ed4ee8",
+    "component-first": "e169a9ca2c71028b41e0b0641dbba2a5086f6d453df2cf2eceefaf23df1d7827"
   }
 }

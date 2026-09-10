@@ -26,8 +26,8 @@
   ],
 
   "corpora": {
-    "repository": "OSCAL-Foundation/tfg-automated-assessments",
-    "note": "Read by the build through TFG_CORPORA. Not vendored here: every extract on the site is re-derived from it and diffed on each run."
+    "source_lock": "tools/source-lock.json",
+    "note": "Repository-defined inputs: 6 committed IBM and 18 committed Easy Dynamics JSON files, checked against data/examples.json fingerprints, plus 231 public AWS JSON files from the pinned archive and verified cache declared in the lock. Prepare explicitly with python tools/source_inputs.py --fetch; python tools/source_inputs.py --check verifies inputs offline. Missing or corrupt inputs fail rather than being skipped or counted as empty."
   },
 
   "verification": {

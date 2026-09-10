@@ -1,10 +1,10 @@
 {
-  "note": "The site's vocabulary. Every OSCAL term used anywhere on the site is defined here once, and every first use links back. The 'rule' entry exists because the word carries three incompatible meanings in this working group and nobody has fixed them in writing.",
+  "note": "Definitions used by this analysis, with links from first uses. Alternative meanings and unresolved distinctions are identified without selecting an approach.",
   "terms": [
     {
       "term": "rule",
       "status": "contested",
-      "site_usage": "One technical requirement or recommendation, at a granularity finer than a control, without any claim about whether it is binding. This is a working definition adopted so that three comparable pages can be written. It is not a position on which view is correct.",
+      "site_usage": "One technical requirement or recommendation, finer-grained than a control, without any claim about whether it is binding. A working definition for comparing approaches, not selecting an interpretation.",
       "other_usages": [
         {
           "usage": "A normative requirement, a shall, equivalent to a control",
@@ -12,14 +12,14 @@
         },
         {
           "usage": "A statement of how a component may be configured, descriptive rather than binding",
-          "who": "Component-first, Option B, and a position paper"
+          "who": "Component-first, Option B"
         },
         {
           "usage": "Colloquially, the check code itself",
-          "who": "Used loosely across the working group, and flagged in the record by its own author"
+          "who": "Ambiguous usage; this analysis distinguishes rule from check"
         },
         {
-          "usage": "An AWS Config rule: a deployable resource with its own parameters",
+          "usage": "An AWS Config rule: a deployable resource with parameters",
           "who": "AWS Config, the product"
         }
       ],
@@ -39,17 +39,16 @@
         "rule",
         "validation component",
         "assessment platform"
-      ],
-      "settled_note": "The separation of rule from check is recorded as settled item 5 in the pre-read. The stated reason is schema flexibility rather than semantics."
+      ]
     },
     {
       "term": "desired state",
       "status": "contested",
-      "site_usage": "The configuration a rule prescribes. Distinct from actual state, which is what the system currently has.",
+      "site_usage": "The configuration prescribed by a rule, distinct from the system's observed configuration, or actual state.",
       "other_usages": [
         {
-          "usage": "Possible state, on the grounds that a vendor describes what can be configured rather than what must be",
-          "who": "Catalog-first, Option A"
+          "usage": "Possible state: a technology provider describes available configurations rather than required configurations",
+          "who": "Alternative interpretation of component configuration"
         }
       ],
       "see_also": [
@@ -61,7 +60,7 @@
     {
       "term": "actual state",
       "status": "settled",
-      "site_usage": "The configuration a system currently has, as observed. Distinct from desired state, which is what a rule prescribes.",
+      "site_usage": "The system's observed configuration, distinct from the configuration prescribed by a rule, or desired state.",
       "other_usages": [],
       "see_also": [
         "desired state",
@@ -82,7 +81,7 @@
     {
       "term": "link to a control",
       "status": "settled",
-      "site_usage": "The link from a rule to the regulatory control it serves. Optional by design: a rule may serve several controls, one, or none. Without it you can record an observation but not a finding.",
+      "site_usage": "An optional relationship from a rule to regulatory controls. A rule may serve several controls, one, or none. A rule without a control link can have observations but no control-targeted finding.",
       "other_usages": [],
       "see_also": [
         "control",
@@ -94,11 +93,11 @@
     {
       "term": "benchmark",
       "status": "settled",
-      "site_usage": "A published set of technology-specific hardening guidance. CIS Benchmarks, DISA STIGs, CISA SCuBA baselines, and vendor hardening guides.",
+      "site_usage": "A published set of technology-specific hardening guidance, including CIS Benchmarks, DISA STIGs, CISA SCuBA baselines and technology provider guides.",
       "other_usages": [
         {
           "usage": "Hardening guidance, used interchangeably",
-          "who": "General usage in the group"
+          "who": "This analysis"
         }
       ],
       "see_also": [
@@ -109,7 +108,7 @@
     {
       "term": "hardening guidance",
       "status": "settled",
-      "site_usage": "Synonym for benchmark as used on this site. Technology-specific guidance on how to configure a product securely.",
+      "site_usage": "Technology-specific guidance for configuring hardware, software or services securely. Used as a synonym for benchmark in this analysis.",
       "other_usages": [],
       "see_also": [
         "benchmark",
@@ -119,7 +118,7 @@
     {
       "term": "requirement level",
       "status": "not-established",
-      "site_usage": "Whether a statement is a shall, a should, or a may. OSCAL has no field for it. The pre-read's criterion 3 records it as absent from OSCAL entirely, an orthogonal gap affecting every option. Because there is no direct channel, location has become the proxy for expressing it.",
+      "site_usage": "Whether a statement is a shall, should or may. OSCAL has no dedicated core requirement-level field across these approaches. Properties can carry such labels, but consumers need shared conventions to interpret them; model placement alone does not establish requirement level.",
       "other_usages": [],
       "see_also": [
         "rule",
@@ -129,7 +128,7 @@
     {
       "term": "normativity",
       "status": "contested",
-      "site_usage": "Whether an artifact expresses something binding that an auditor can hold a system to. The question underneath the location debate.",
+      "site_usage": "Whether an artifact expresses binding requirements against which an auditor can assess a system. Normativity is part of the debate over model placement.",
       "other_usages": [],
       "see_also": [
         "requirement level",
@@ -139,24 +138,23 @@
     {
       "term": "capability",
       "status": "contested",
-      "site_usage": "A Component Definition construct that groups components and carries its own control-implementations, expressing joint satisfaction. Whether it should also exist in the SSP, or be removed, is an open question in the Component Definition Focus Group. The site notes it and takes no position.",
+      "site_usage": "A Component Definition construct grouping components and control-implementations to express joint satisfaction. Whether capabilities should be added to the SSP or removed from Component Definition remains an open design question in this analysis. No position is selected.",
       "other_usages": [],
       "see_also": [],
-      "external_link": "https://github.com/OSCAL-Foundation/Component-Definition-Focus-Group/discussions/2",
       "set_aside": true
     },
     {
       "term": "validation component",
       "status": "contested",
-      "site_usage": "Two incompatible senses are in use and the site always says which one it means.",
+      "site_usage": "Two distinct meanings are used: a component running checks, or a component describing validation against frameworks. This analysis identifies the intended meaning.",
       "other_usages": [
         {
           "usage": "A component whose purpose is to run checks rather than to be checked. Type validation, carrying a checks array.",
-          "who": "Component-first, Option B, component-rules.md"
+          "who": "Component-first examples using proposed assemblies"
         },
         {
           "usage": "A component enumerating the compliance frameworks a service has been validated against.",
-          "who": "Catalog-first, Option A, docs/COMPONENTS.md, under Future Considerations and not shipped"
+          "who": "Alternative interpretation, not demonstrated by the OSCAL examples"
         }
       ],
       "see_also": [
@@ -167,43 +165,43 @@
     {
       "term": "assessment platform",
       "status": "not-established",
-      "site_usage": "In OSCAL, an element of assessment-assets that may reference components via uses-components. The authoritative distinction between an assessment platform, an assessment asset and a component has never been established.",
+      "site_usage": "An OSCAL assessment-assets element that may reference components through uses-components. The examples do not establish a consistent convention for distinguishing assessment platforms, assessment assets and components in runner descriptions.",
       "other_usages": [],
       "see_also": [
         "assessment asset",
         "component",
         "actor"
       ],
-      "not_established_note": "Evidence register item 8: agreed on 17 July to be posted to the NIST OSCAL team. Not established whether posted; no response in the record."
+      "not_established_note": "The open question is when a component alone identifies a runner and when an assessment platform adds necessary execution context."
     },
     {
       "term": "assessment asset",
       "status": "not-established",
-      "site_usage": "In OSCAL, the assessment-assets container holding components and assessment-platforms. Its relationship to the two is not authoritatively defined.",
+      "site_usage": "The OSCAL assessment-assets container holds components and assessment-platforms. The examples do not establish a consistent convention for identifying runners across these structures.",
       "other_usages": [],
       "see_also": [
         "assessment platform",
         "component",
         "actor"
       ],
-      "not_established_note": "Evidence register item 8."
+      "not_established_note": "A consumer still needs to associate each task or observation with the asset used."
     },
     {
       "term": "component",
       "status": "not-established",
-      "site_usage": "A part of a system. Used across the Component Definition, SSP, Assessment Plan and Assessment Results models with related but not identical meanings. Its boundary against assessment platform and assessment asset is not established, and neither is its granularity: whether a single config rule is a component, or the policy engine is.",
+      "site_usage": "A part of a system, with related meanings across Component Definition, SSP, Assessment Plan and Assessment Results models. The distinction from assessment platforms and assets remains unresolved, as does granularity: a component may represent a configuration rule or a policy engine.",
       "other_usages": [],
       "see_also": [
         "assessment platform",
         "assessment asset",
         "validation component"
       ],
-      "not_established_note": "Evidence register item 8, plus the unresolved component granularity question recorded against Option B."
+      "not_established_note": "The examples leave open whether components should represent individual rules, products or policy engines and how consumers reconcile those levels."
     },
     {
       "term": "actor",
       "status": "not-established",
-      "site_usage": "The site's name for question 5, what performs the check: whatever or whoever performs a check. OSCAL has no single construct for it. The word is the site's own label, adopted because naming the question after any one of the available constructs would have picked a side in the question below.",
+      "site_usage": "The tool or person performing a check, addressed by question 5. Actor is a neutral label in this analysis because no single OSCAL construct covers all uses.",
       "other_usages": [
         {
           "usage": "An assessment platform, optionally reaching components through uses-components",
@@ -228,12 +226,12 @@
         "component",
         "check"
       ],
-      "not_established_note": "Evidence register item 8: which of these constructs names the thing that runs a check has never been authoritatively established. The site inventories what each approach uses and does not resolve it."
+      "not_established_note": "The examples use different runner-identification conventions. No single convention is established here for associating a task or observation with its producer."
     },
     {
       "term": "implementation claim",
       "status": "settled",
-      "site_usage": "An assertion by the system owner of how a control is satisfied. Standing design intent, narrative, arguable, made per component. Lives in the SSP as implemented-requirement, statement and by-component. Question 6a, how the system claims it meets the rule.",
+      "site_usage": "The system owner's narrative assertion of control implementation and design intent per component. The SSP represents claims through implemented-requirement, statement and by-component. Addressed by question 6a.",
       "other_usages": [],
       "see_also": [
         "assessment result",
@@ -243,7 +241,7 @@
     {
       "term": "assessment result",
       "status": "settled",
-      "site_usage": "An assertion by the assessor of whether a control was satisfied, when, and on what. A point in time, evidenced, binary or graded, made per subject. Lives in the AR as observation, finding and status. Question 6b, how an assessment records the outcome.",
+      "site_usage": "The assessor's evidence-based record of whether a control was satisfied for a subject at a point in time. The AR uses observation, finding and status for binary or graded outcomes. Addressed by question 6b.",
       "other_usages": [],
       "see_also": [
         "implementation claim",
@@ -254,7 +252,7 @@
     {
       "term": "observation",
       "status": "settled",
-      "site_usage": "An AR element recording something that was seen. Requires only uuid, description, methods and collected, and carries no reference to a control. Available whether or not a rule has a link to a control.",
+      "site_usage": "An AR element recording observed evidence. Requires uuid, description, methods and collected, with no control reference. Observations are available for rules with or without control links.",
       "other_usages": [],
       "see_also": [
         "finding",
@@ -265,7 +263,7 @@
     {
       "term": "finding",
       "status": "settled",
-      "site_usage": "An AR element recording a conclusion about whether an objective is satisfied. Requires a target whose type is closed to statement-id or objective-id, both control-derived. Unavailable to a rule with no link to a control.",
+      "site_usage": "An AR element recording whether an objective is satisfied. The required target type is restricted to statement-id or objective-id, both control-derived. A rule without a control link cannot have a finding.",
       "other_usages": [],
       "see_also": [
         "observation",
@@ -276,7 +274,7 @@
     {
       "term": "mapping collection",
       "status": "settled",
-      "site_usage": "An OSCAL model, GA since 1.2, describing how one collection of controls relates to another. The only native mechanism for a third party to add a link to a control after publication. Its mapping-item type is closed to control and statement, so it reaches only rules that are modelled as controls.",
+      "site_usage": "An OSCAL model, GA since 1.2, relating collections of controls. Third parties can publish mappings after the source catalogs. The mapping-item type permits control and statement targets, not component rules or activities.",
       "other_usages": [],
       "see_also": [
         "link to a control",
@@ -336,7 +334,7 @@
     {
       "term": "activity",
       "status": "not-established",
-      "site_usage": "An element of an assessment plan's local-definitions, containing steps. The group has never defined what distinguishes an activity from a step; the question was asked three separate times on 19 June and not answered.",
+      "site_usage": "An assessment plan local-definitions element containing steps. How to divide a benchmark procedure between activities and steps remains an analysis question.",
       "other_usages": [],
       "see_also": [
         "step",
@@ -346,7 +344,7 @@
     {
       "term": "step",
       "status": "not-established",
-      "site_usage": "A child of an activity in an assessment plan. See the activity entry: the boundary between the two is not established.",
+      "site_usage": "A child of an assessment plan activity. The examples do not establish one consistent boundary between the work represented by an activity and its steps.",
       "other_usages": [],
       "see_also": [
         "activity",
@@ -376,7 +374,7 @@
     {
       "term": "publisher",
       "status": "settled",
-      "site_usage": "One of the three stakeholders. Writes a requirement or recommendation once so many organizations can version, tailor and cite it, knowing nothing about any particular system.",
+      "site_usage": "One of three stakeholder roles. Publishes requirements or recommendations for organisations to version, tailor and cite without depending on a specific system.",
       "other_usages": [],
       "see_also": [
         "implementer",
@@ -386,7 +384,7 @@
     {
       "term": "implementer",
       "status": "settled",
-      "site_usage": "One of the three stakeholders. Wants that statement as desired state, in a form a configuration engine can apply.",
+      "site_usage": "One of three stakeholder roles. Uses requirements as desired-state configuration that a configuration engine can apply.",
       "other_usages": [],
       "see_also": [
         "publisher",
@@ -397,7 +395,7 @@
     {
       "term": "assessor",
       "status": "settled",
-      "site_usage": "One of the three stakeholders. Wants a check they can run, or evidence dense enough to reach the same conclusion by reading.",
+      "site_usage": "One of three stakeholder roles. Runs checks or reviews sufficient evidence to determine whether requirements are satisfied.",
       "other_usages": [],
       "see_also": [
         "publisher",

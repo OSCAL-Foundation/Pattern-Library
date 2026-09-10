@@ -23,7 +23,7 @@
             "controls": 452
           },
           "bytes": 924964,
-          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/catalogs/aws_security-hub.oscal.json",
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/catalogs/aws_security-hub.oscal.json",
           "href_external": true
         },
         {
@@ -38,7 +38,7 @@
             "implemented requirements": 4
           },
           "bytes": 16118,
-          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/acm.oscal.json",
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/component-definitions/acm.oscal.json",
           "href_external": true
         },
         {
@@ -53,7 +53,7 @@
             "implemented requirements": 12
           },
           "bytes": 27913,
-          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/cloudtrail.oscal.json",
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/component-definitions/cloudtrail.oscal.json",
           "href_external": true
         },
         {
@@ -66,7 +66,7 @@
             "service": 1
           },
           "bytes": 12332,
-          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/config.oscal.json",
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/component-definitions/config.oscal.json",
           "href_external": true
         },
         {
@@ -81,7 +81,7 @@
             "implemented requirements": 43
           },
           "bytes": 43914,
-          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/component-definitions/iam.oscal.json",
+          "href": "https://github.com/awslabs/oscal-content-for-aws-services/blob/4a1779ffb556c4ab8fb3dad94a19d4d198116803/component-definitions/iam.oscal.json",
           "href_external": true
         }
       ],
@@ -201,7 +201,8 @@
       "root": "Easy Dynamics",
       "totals": {
         "Assessment plan": 15,
-        "Assessment results": 1
+        "Assessment results": 1,
+        "System security plan": 1
       },
       "files": [
         {
@@ -214,7 +215,7 @@
             "tasks": 0,
             "steps": 128
           },
-          "bytes": 309023,
+          "bytes": 308830,
           "href": "examples/assessment-first/CISA%20BOD%2025-01/ap-cisa-scuba-agnostic.json",
           "href_external": false
         },
@@ -228,7 +229,7 @@
             "tasks": 1,
             "steps": 128
           },
-          "bytes": 314033,
+          "bytes": 325728,
           "href": "examples/assessment-first/CISA%20BOD%2025-01/ap-cisa-scuba-maester.json",
           "href_external": false
         },
@@ -242,7 +243,7 @@
             "tasks": 1,
             "steps": 128
           },
-          "bytes": 291731,
+          "bytes": 293862,
           "href": "examples/assessment-first/CISA%20BOD%2025-01/ap-cisa-scuba-scubagear.json",
           "href_external": false
         },
@@ -272,6 +273,16 @@
           },
           "bytes": 19829,
           "href": "examples/assessment-first/CISA%20BOD%2025-01/assessment-plan.json",
+          "href_external": false
+        },
+        {
+          "file": "CISA BOD 25-01/sample-ssp.json",
+          "model": "system-security-plan",
+          "model_label": "System security plan",
+          "title": "Sample ScubaGear System Security Plan",
+          "counts": {},
+          "bytes": 39652,
+          "href": "examples/assessment-first/CISA%20BOD%2025-01/sample-ssp.json",
           "href_external": false
         },
         {
@@ -396,7 +407,7 @@
             "tasks": 3,
             "steps": 564
           },
-          "bytes": 1940350,
+          "bytes": 1940344,
           "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/win2019.json",
           "href_external": false
         },
@@ -410,7 +421,7 @@
             "tasks": 3,
             "steps": 564
           },
-          "bytes": 1858871,
+          "bytes": 1858865,
           "href": "examples/assessment-first/DISA/STIG_XCCDF%20to%20OSCAL%20Assessment%20Plans/win2022.json",
           "href_external": false
         },

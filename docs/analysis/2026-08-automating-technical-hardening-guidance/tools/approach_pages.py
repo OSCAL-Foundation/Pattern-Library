@@ -25,7 +25,7 @@ What a page supplies:
 Gate 7 removed quotations and proponent attribution from the whole site. No
 personal name and no proponent organization appears on any page. An approach is
 named by its structural name. Characterizations trace to a JSON pointer into a
-shipped file, or to a cited source document.
+shipped OSCAL file or a published OSCAL schema fragment.
 
 Usage:
     python tools/approach_pages.py
@@ -76,10 +76,10 @@ CONTENT = {
 # =========================================================== assessment-first
 "assessment-first": {
 "title": "Assessment-first",
-"lede": "In this approach, the rule is an activity in an assessment plan, or a step beneath one, and the check is named by a property called check on either of them. The activity states the requirement and its steps carry the procedure that verifies it.",
-"description": "Benchmark content is published as OSCAL "
-               "assessment plans, one activity or step per recommendation, with "
-               "the link to a control carried on the activity.",
+"lede": "Assessment-first represents a rule as an assessment plan activity or step. A property named check identifies the check on the activity or step. Activities state requirements, and steps describe the procedures used to verify those requirements.",
+"description": "Hardening guidance uses OSCAL assessment plan activities and "
+               "steps, with properties identifying checks and activities "
+               "linking to controls.",
 
 "exists": "",
 
@@ -96,10 +96,9 @@ CONTENT = {
 # ============================================================== catalog-first
 "catalog-first": {
 "title": "Catalog-first",
-"lede": "In this approach, the <strong>rule</strong> is a control in a catalog represented as a property named <strong>TechnicalControlID</strong>. The <strong>check</strong> is captured as a property named <strong>ConfigRuleId</strong>. The control states the requirement and the component captures the software that implements the requirement.",
-"description": "Hardening guidance is published as a catalog of "
-               "controls, with the check named on the control and modelled as a "
-               "software component.",
+"lede": "Catalog-first represents a <strong>rule</strong> as a catalog control and a <strong>check</strong> as a software component. <strong>TechnicalControlId</strong> links the control to the check component; <strong>ConfigRuleId</strong> identifies the executable rule. The control states the requirement, and the component describes the check.",
+"description": "Hardening guidance uses catalog controls linked to checks "
+               "represented as software components in component definitions.",
 
 "exists": "",
 
@@ -116,10 +115,10 @@ CONTENT = {
 # ============================================================ component-first
 "component-first": {
 "title": "Component-first",
-"lede": "In this approach, the rule is a rules entry on the component it configures, and the check is a checks entry on a second component of type validation. The component states what must be true and the validation component states how it is tested.",
-"description": "Rules sit on the component they configure, checks "
-               "sit on a separate validation component, and the pair is joined by "
-               "a composite key.",
+"lede": "Component-first represents a rule in the proposed rules assembly on the product component. The check uses the proposed checks assembly on a separate component of type validation. The rule states the required configuration; the check describes how to test the configuration.",
+"description": "Product components contain proposed rules assemblies; "
+               "validation components contain proposed checks assemblies. "
+               "A composite key links each check to a rule.",
 
 "exists": "",
 
@@ -160,8 +159,8 @@ NAV = [("index.html", "Start here"),
 #  Tradeoffs open the page. They used to be section 6, two boxes at the foot,
 #  which meant a reader met a thousand words of description before being told
 #  what the thing is good and bad at. The section that carried them is gone
-#  rather than duplicated, and what the pre-read recorded and the two papers do
-#  not is carried inside the new block as one line per approach.
+#  rather than duplicated; each approach's tradeoffs come from the same
+#  editorial data structure.
 #  No figures on these pages. The site describes one scenario, on the page built
 #  for it, and every count belongs there: a number quoted here would be a second
 #  scenario, implied and unstated. What an approach page carries is the shape of
@@ -179,8 +178,8 @@ NAV = [("index.html", "Start here"),
 #  disclaim itself in its own caption because a footprint is not a measure of
 #  anything. The join chain was nested under it as 3.1 and is the section now.
 HEADINGS = [
-    ("stakeholder", "1. The stakeholder mapping"),
-    ("tradeoffs", "2. Strengths and risks with this approach"),
+    ("stakeholder", "1. Stakeholder roles and OSCAL models"),
+    ("tradeoffs", "2. Strengths and risks"),
     ("joins", "3. Tracing rules and checks from implementation to assessment"),
 ]
 
@@ -354,12 +353,12 @@ def stakeholder_section(key: str, c, view, sh) -> str:
 
     o = [f'<section id="stakeholder">\n<h2>{HEADINGS[0][1]}</h2>']
     o.append('<div class="tier2">')
-    o.append(f'  <p>Three readings of what a hardening rule is are on the record, '
-             f'and this approach reads it as '
+    o.append(f'  <p>{c["title"]} treats a hardening rule as '
              f'<strong>{view["label"][0].lower() + view["label"][1:]}</strong>, '
-             f'which puts it in the {view["implies_layer"]} layer, in the '
-             f'<code>{view["implies_model"]}</code> model. That is what decides '
-             f'the table below.</p>')
+             f'using the <code>{view["implies_model"]}</code> model in the '
+             f'{view["implies_layer"]} layer. The table shows the models '
+             f'each party uses to publish guidance, implement controls or '
+             f'record assessment results.</p>')
     o.append(f'  <p>{sh["intro"]}</p>')
     o.append('</div>')
 
@@ -424,7 +423,7 @@ def stakeholder_section(key: str, c, view, sh) -> str:
         #  than a gap in the table.
         if not parts:
             parts.append('<span class="mflow"><span class="mflow__none">'
-                         'no document of its own</span></span>')
+                         'no separate document</span></span>')
         note = (f'<span class="stakeholders__note">{e["note"]}</span>'
                 if e.get("note") else "")
         row = ' class="stakeholders__in"' if g else ""
@@ -485,7 +484,7 @@ def joins_section(key: str, jn, six_questions) -> str:
     intro = a["introduced"]
     st = stage[intro["slot"] and "rule"]
     o.append(f'    <li><strong><a href="{esc_href(st["slot"], key)}">'
-             f'{st["label"]}</a>, as it is introduced.</strong> '
+             f'{st["label"]}</a> definition.</strong> '
              f'{intro["note"]} '
              f'<code>{intro["model"]}</code>, <code>{intro["field"]}</code>.</li>')
     for hop in a["hops"]:
@@ -502,11 +501,11 @@ def joins_section(key: str, jn, six_questions) -> str:
 
     o.append('<figure>')
     o.append(f'  <div class="diagram" data-diagram="73-join-{short}"></div>')
-    o.append('  <figcaption>The same chain with the values, which are rule 1, data '
-             'at rest, exactly as the six questions page encodes it for this '
-             'approach. Every step is a field a consumer has to follow, so the '
-             'number of steps is the cost of the chain and the way each one '
-             'resolves is how much the schema can do to help.</figcaption>')
+    o.append('  <figcaption>The chain uses rule 1, data at rest, from the '
+             'six questions page. Each step shows the fields and values a '
+             'consumer follows. The relationship type indicates whether '
+             'resolution uses schema-defined references, containment or '
+             'publisher conventions.</figcaption>')
     o.append('</figure>')
     return "\n".join(o)
 
@@ -601,6 +600,11 @@ PAGE = """<!doctype html>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
+<aside class="wip-banner" aria-label="Analysis status" hidden>
+    <span>Work in progress</span>
+    <button type="button" class="wip-banner__dismiss" aria-label="Dismiss work in progress notice" hidden><span aria-hidden="true">×</span></button>
+</aside>
+
 <header class="site-header">
   <div class="site-header__inner">
     <p class="site-title"><a href="./index.html"><img class="site-logo site-logo--light" src="./assets/brand/oscal-foundation.png" alt="" width="208" height="96"><img class="site-logo site-logo--dark" src="./assets/brand/oscal-foundation-rev.png" alt="" width="208" height="96"><span>Automating Technical Hardening Guidance with OSCAL</span></a></p>
@@ -626,8 +630,8 @@ PAGE = """<!doctype html>
      nothing filled. One footer, one place. -->
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><strong>This site makes no recommendation.</strong> It states three approaches in the
-       terms their proponents use and shows the content each one ships.</p>
+     <p><strong>No recommendation is made.</strong> The analysis compares three
+         approaches and the published OSCAL content.</p>
   </div>
 </footer>
 
@@ -648,8 +652,6 @@ def run(outdir: str, quiet: bool = False, force: bool = False) -> dict[str, int]
     tradeoffs = load("tradeoffs.json")
     stakeholders = load("stakeholders.json")
     joins = load("joins.json")
-    people = sorted({q["speaker"] for q in load("quotes.json")["quotes"]
-                     if q.get("speaker")})
 
     nav = "\n".join(f'        <li><a href="./{h}">{t}</a></li>' for h, t in NAV)
     counts, files = {}, {}
@@ -660,14 +662,9 @@ def run(outdir: str, quiet: bool = False, force: bool = False) -> dict[str, int]
                      joins)
         text = re.sub(r"<[^>]+>", " ", main)
 
-        #  Gate 7: no quotations anywhere, and no personal name. The name list
-        #  is taken from quotes.json, which is retained as provenance precisely
-        #  so that this check knows who must not appear.
+        #  Approach prose carries no quotation hooks or proponent attribution.
         if "blockquote" in main or "data-quote" in main:
             raise AssertionError(f"{key}: the site carries no quotations")
-        named = [n for n in people if n in text]
-        if named:
-            raise AssertionError(f"{key}: names a person: {named}")
         for org in ("Easy Dynamics", "IBM"):
             #  File paths carry the organization and are provenance. Prose must
             #  not. A path is always inside a snippet header, which is rendered

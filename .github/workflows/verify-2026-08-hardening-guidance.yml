@@ -6,19 +6,22 @@ name: verify 2026-08 hardening guidance analysis
 #
 # It runs in two passes, and the split is the point:
 #
-#   1. offline    exactly what a contributor can run on a laptop with no
-#                 network. If this fails, the failure is reproducible locally.
-#   2. strict     the same harness with --strict, which turns every skipped
-#                 check into a failure. The runner has network and can install
-#                 an OSCAL validator and a headless browser, so the four checks
-#                 that skip locally have to pass here.
+#   1. offline    the harness uses --offline: after dependencies and sources
+#                 are acquired, verification does not access the network.
+#   2. strict     --all --strict counts every skipped check as a failure,
+#                 including schema, external-link and browser checks.
+#
+# Both passes run corpus-independent regression checks before preparing the
+# repository-defined sources in tools/source-lock.json. Explicit preparation
+# fetches only the pinned public AWS archive; --check verifies its cache and
+# the committed IBM/Easy Dynamics examples without network access. Missing or
+# corrupt inputs fail the job; source checks never skip or count empty inputs.
 #
 # Without the second pass a skipped check stays skipped forever, and the harness
 # quietly stops covering the thing it was written to cover.
 #
-# The repository is checked out under site/ so the corpora can sit beside it
-# rather than inside it: the byte-identical check below runs `git diff`, and a
-# 231-file corpus inside the working tree would be untracked noise in it.
+# The repository stays under site/. The public source cache is ignored by Git;
+# no second checkout or source-repository Actions variables are required.
 
 on:
   push:
@@ -41,7 +44,6 @@ permissions:
 
 env:
   SITE: site/docs/analysis/2026-08-automating-technical-hardening-guidance
-  TFG_CORPORA: ${{ github.workspace }}/tfg-automated-assessments
 
 jobs:
   offline:
@@ -51,14 +53,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: site
-
-      - name: Check out the source corpora
-        uses: actions/checkout@v4
-        with:
-          repository: OSCAL-Foundation/tfg-automated-assessments
-          path: tfg-automated-assessments
-        continue-on-error: true
-        id: corpora
 
       - uses: actions/setup-python@v5
         with:
@@ -71,51 +65,73 @@ jobs:
       # Pillow is not optional: verify.py imports svgrender, which imports PIL
       # at module scope, so the harness will not start without it.
       - name: Install the harness dependencies
-        run: pip install pyyaml pillow
+        run: pip install pyyaml pillow 'jsonschema[format]' regex
 
       # svgrender loads DejaVu by absolute path rather than through fontconfig.
       - name: Install the fonts the rasteriser names
         run: sudo apt-get install -y --no-install-recommends fonts-dejavu-core
 
-      - name: Report whether the corpora are present
+      - name: Run banner regression checks
+        working-directory: ${{ env.SITE }}
+        run: node tools/bannercheck.js
+
+      - name: Run verifier, source-resolver and workflow unit tests
+        working-directory: ${{ env.SITE }}
         run: |
-          if [ -d "$TFG_CORPORA" ]; then
-            echo "corpora present, every check can run"
-          else
-            echo "::warning::the corpora are not available to this runner, so"\
-                 "--snippets, --stats and --conformance cannot read them"
-          fi
+          for suite in tools/test_verify.py tools/test_source_inputs.py tools/test_workflow.py; do
+            [[ -f "$suite" ]] || { echo "::error::Missing $suite regression tests"; exit 1; }
+          done
+          python -m unittest discover -s tools -p 'test_*.py' -v
+
+      - name: Run corpus-independent structural checks without network
+        working-directory: ${{ env.SITE }}
+        # --example invokes the corpus-backed artifact generator. Keep it in
+        # the full --all pass below, not in this independent subset.
+        run: python tools/verify.py --data --css --quotes --bundle --source --pages --offline
+
+      - name: Prepare the locked sources (explicit public download)
+        working-directory: ${{ env.SITE }}
+        run: python tools/source_inputs.py --fetch
+
+      - name: Check the locked sources without network
+        working-directory: ${{ env.SITE }}
+        run: python tools/source_inputs.py --check
 
       - name: Re-extract every snippet and diff
         working-directory: ${{ env.SITE }}
-        run: python tools/verify.py --snippets
+        run: python tools/verify.py --snippets --offline
 
       - name: Run every offline check
         working-directory: ${{ env.SITE }}
-        run: python tools/verify.py --all
-
-      - name: Render each page and inspect the result
-        working-directory: ${{ env.SITE }}
-        run: node tools/pagecheck.js
+        run: python tools/verify.py --all --offline
 
       - name: Confirm the generated files are byte-identical to their generators
         working-directory: ${{ env.SITE }}
+        shell: bash
         run: |
+          set -euo pipefail
           # A generated file that has been hand-edited is the one failure this
           # repository cannot detect by reading. Regenerate and diff.
+          python tools/source_inputs.py --check
           python tools/extract.py
           python tools/pattern_examples.py
+          python tools/copy_examples.py
           python tools/oscal_artifacts.py
           python tools/sources_files.py
           python tools/diagrams.py
           python tools/approach_pages.py
           python tools/scenario_page.py
           python tools/bundle.py
-          git diff --exit-code -- data assets/diagrams \
-            assessment-first.html catalog-first.html component-first.html \
-            scenario.html \
-            || { echo "::error::a generated file differs from its generator."\
-                 "Run the generators and commit the result."; exit 1; }
+          outputs=(data assets/diagrams assets/bundle.js
+            assessment-first.html catalog-first.html component-first.html scenario.html)
+          # git diff alone misses newly generated, untracked files.
+          changes=$(git status --porcelain --untracked-files=all -- "${outputs[@]}")
+          if [[ -n "$changes" ]]; then
+            printf '%s\n' "$changes"
+            git diff --stat -- "${outputs[@]}"
+            echo "::error::Generated files differ. Run the generators and commit the results, including additions and deletions."
+            exit 1
+          fi
 
   strict:
     name: strict, the checks that need network
@@ -124,12 +140,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: site
-
-      - uses: actions/checkout@v4
-        with:
-          repository: OSCAL-Foundation/tfg-automated-assessments
-          path: tfg-automated-assessments
-        continue-on-error: true
 
       - uses: actions/setup-python@v5
         with:
@@ -140,29 +150,49 @@ jobs:
           node-version: "20"
 
       - name: Install the harness dependencies
-        run: pip install pyyaml pillow
+        # regex supports the Unicode patterns used by the NIST schemas.
+        run: pip install pyyaml pillow 'jsonschema[format]' regex
 
       - name: Install the fonts the rasteriser names
         run: sudo apt-get install -y --no-install-recommends fonts-dejavu-core
 
-      - name: Install an OSCAL validator
-        # compliance-trestle carries its own copy of the OSCAL schemas and
-        # validates a file against the model its root element names, which is
-        # what --conformance needs.
-        run: pip install compliance-trestle
+      - name: Run banner regression checks
+        working-directory: ${{ env.SITE }}
+        run: node tools/bannercheck.js
+
+      - name: Run verifier, source-resolver and workflow unit tests
+        working-directory: ${{ env.SITE }}
+        run: |
+          for suite in tools/test_verify.py tools/test_source_inputs.py tools/test_workflow.py; do
+            [[ -f "$suite" ]] || { echo "::error::Missing $suite regression tests"; exit 1; }
+          done
+          python -m unittest discover -s tools -p 'test_*.py' -v
+
+      - name: Run corpus-independent structural checks without network
+        working-directory: ${{ env.SITE }}
+        run: python tools/verify.py --data --css --quotes --bundle --source --pages --offline
+
+      - name: Prepare the locked sources (explicit public download)
+        working-directory: ${{ env.SITE }}
+        run: python tools/source_inputs.py --fetch
+
+      - name: Check the locked sources without network
+        working-directory: ${{ env.SITE }}
+        run: python tools/source_inputs.py --check
 
       - name: Install axe-core and a headless browser
+        id: browser_deps
         working-directory: ${{ env.SITE }}
-        run: npm install --no-save axe-core puppeteer
+        run: npm install --no-save --package-lock=false axe-core puppeteer
 
       - name: Every check, with a skip counted as a failure
         working-directory: ${{ env.SITE }}
         run: python tools/verify.py --all --strict
 
-      - name: Publish the accessibility report
-        if: always()
+      - name: Run accessibility audit even after other check failures
+        if: ${{ !cancelled() && steps.browser_deps.outcome == 'success' }}
         working-directory: ${{ env.SITE }}
-        run: node tools/axe_run.mjs || true
+        run: python tools/verify.py --a11y --strict
 
   pages-build:
     name: the site serves and opens from a folder

@@ -30,10 +30,9 @@
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance/tools/verify.py",
-      "args": ["--all"],
+      "args": ["--all", "--offline"],
       "cwd": "${workspaceFolder}/docs/analysis/2026-08-automating-technical-hardening-guidance",
       "console": "integratedTerminal",
-      "env": { "TFG_CORPORA": "${env:HOME}/pagesource/tfg-automated-assessments" },
       "justMyCode": false
     }
   ]

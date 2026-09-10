@@ -13,11 +13,10 @@ Nothing here is authored. Every number is read off disk.
 
 import json, os, sys, glob, collections, urllib.parse
 
-import extract as ex        # same directory
+import source_inputs        # same directory
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
-CORPORA = ex.corpora_root()
 OUT = os.path.join(ROOT, "data", "oscal-artifacts.json")
 
 #  Labelled by approach, not by publisher.
@@ -96,31 +95,33 @@ def title_of(body):
     return ((body.get("metadata") or {}).get("title") or "").strip()
 
 
-#  Where a reader can open the document a row names. Two corpora are copied
-#  into examples/ by tools/copy_examples.py and link to the copy; the third is
-#  published in a public repository and links there, which is the rule that an
-#  online document gets an online link.
+#  Where a reader can open the document a row names. Two source sets are already
+#  committed in examples/ and validated by tools/copy_examples.py; the third is
+#  published in a public repository and links to its locked revision, which is
+#  the rule that an online document gets an online link.
 #
 #  Built here rather than in the renderer so the inventory carries the address
 #  of every file it counts, and so a link that stops resolving is a data
 #  difference the build can see rather than a click a reader has to try.
 LINK_BASE = {
-    "catalog-first":
-        "https://github.com/awslabs/oscal-content-for-aws-services/blob/main/",
+    "catalog-first": source_inputs.public_file_base("catalog-first"),
     "component-first": "examples/component-first/",
     "assessment-first": "examples/assessment-first/",
 }
 
 
 def scan(rel_root):
-    base = os.path.join(CORPORA, rel_root)
+    base = source_inputs.source_path(rel_root)
+    paths = sorted(glob.glob(os.path.join(base, "**", "*.json"), recursive=True))
+    if not paths:
+        raise source_inputs.SourceInputError(f"No JSON source files found for {rel_root}: {base}")
     out = []
-    for path in sorted(glob.glob(os.path.join(base, "**", "*.json"), recursive=True)):
+    for path in paths:
         try:
             with open(path, encoding="utf-8") as fh:
                 doc = json.load(fh)
-        except Exception:
-            continue
+        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            raise source_inputs.SourceInputError(f"Cannot read JSON source {path}: {error}") from error
         if not isinstance(doc, dict) or not doc:
             continue
         model = next(iter(doc))
@@ -187,7 +188,10 @@ def build():
 
 
 def main():
-    doc = build()
+    try:
+        doc = build()
+    except source_inputs.SourceInputError as error:
+        sys.exit(f"OSCAL inventory: {error}")
     text = json.dumps(doc, ensure_ascii=False, indent=2) + "\n"
     if "--check" in sys.argv:
         if not os.path.exists(OUT):

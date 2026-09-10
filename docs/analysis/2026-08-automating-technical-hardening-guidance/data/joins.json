@@ -1,7 +1,7 @@
 {
-  "note": "The six questions are answered one at a time, which hides the thing that decides whether the set works: what joins one answer to the next. This is the chain from the moment the rule is introduced to the moment something records that it was met, with every foreign key and the primary key it resolves to. Every literal is one of the two running rules as the six questions page encodes it, so the three chains can be read against each other; tools/verify.py fails the build if a value here is not in that encoding.",
-  "title": "What joins one answer to the next",
-  "intro": "The chain starts where the rule is introduced and runs to the claim and the result. What a step costs is how many relationships it is made of and how each one resolves.",
+  "note": "The join chain connects rule definitions, checks, implementation claims and assessment results. Each relationship identifies a foreign key and the corresponding primary key. Values match the two example rules on the six questions page; tools/verify.py checks each value against those encodings.",
+  "title": "How the answers connect",
+  "intro": "The chain connects a rule to checks, implementation claims and assessment results. Each step identifies the relationships a consumer must resolve and the fields used to resolve those relationships.",
   "stages": [
     {
       "key": "rule",
@@ -13,13 +13,13 @@
       "key": "control",
       "label": "Control",
       "slot": "2",
-      "meaning": "the regulation it serves"
+      "meaning": "the framework control served by the rule"
     },
     {
       "key": "check",
       "label": "Check",
       "slot": "3",
-      "meaning": "how it is tested"
+      "meaning": "the test of the rule"
     },
     {
       "key": "runtime",
@@ -31,7 +31,7 @@
       "key": "claim",
       "label": "Claim",
       "slot": "6a",
-      "meaning": "the system's statement that it holds"
+      "meaning": "the system owner's statement of implementation"
     },
     {
       "key": "result",
@@ -74,27 +74,27 @@
     {
       "key": "containment",
       "label": "Containment",
-      "meaning": "One is inside the other, so there is no key to match and nothing to dereference."
+      "meaning": "A parent contains the child directly; no key matching or dereferencing is needed."
     },
     {
       "key": "reference",
       "label": "Reference",
-      "meaning": "A field holds an identifier the schema knows is an identifier, and it resolves."
+      "meaning": "A schema-defined identifier reference resolves to a target identifier."
     },
     {
       "key": "name-match",
       "label": "Name match",
-      "meaning": "Two strings are equal by convention. It holds where the two agree and breaks silently where they do not, and no schema can check it."
+      "meaning": "Two strings match by convention. The schema does not enforce the relationship, so a mismatch may go undetected."
     },
     {
       "key": "composite",
       "label": "Composite key",
-      "meaning": "Two fields have to match together. Either one alone resolves to the wrong thing or to nothing."
+      "meaning": "Two fields jointly identify a target. Either field alone may identify the wrong target or no target."
     },
     {
       "key": "none",
       "label": "No join",
-      "meaning": "There is no field on either side. The relation has to be recovered by walking through something else, or it is simply not there."
+      "meaning": "No field directly connects the entries. A consumer must follow other relationships, or the connection is absent."
     }
   ],
   "approaches": {
@@ -104,14 +104,14 @@
         "field": "controls[].id",
         "value": "UBTU-24-600090",
         "slot": "1",
-        "note": "The rule is a control in a product catalog, in the same model and the same shape a regulatory control has. Every step below starts from that id."
+        "note": "The product catalog defines the rule as a control, using the same OSCAL structure as a regulatory control. The chain starts from the control id."
       },
       "hops": [
         {
           "from": "rule",
           "to": "check",
           "how": "name-match",
-          "note": "Two ties, opposite ways. The control names its check by title, which no schema can check; the check names its control by id, which resolves.",
+          "note": "The control references the check by title, a match not enforced by the schema. The check references the control by a resolvable id.",
           "pairs": [
             {
               "foreign": {
@@ -149,7 +149,7 @@
           "from": "rule",
           "to": "control",
           "how": "reference",
-          "note": "A document of its own, written after both catalogs and by someone who owns neither.",
+          "note": "A separate mapping collection links the catalogs. A third party can publish the mapping after both catalogs are published without owning either source.",
           "pairs": [
             {
               "foreign": {
@@ -188,7 +188,7 @@
           "from": "check",
           "to": "runtime",
           "how": "none",
-          "note": "The prop names the rule the engine runs. The engine itself is nowhere in the content.",
+          "note": "ConfigRuleId identifies the executable rule, but the content does not identify the engine that executes the check.",
           "pairs": [
             {
               "foreign": {
@@ -210,7 +210,7 @@
           "from": "runtime",
           "to": "claim",
           "how": "reference",
-          "note": "The claim is against a component, not a host. A by-component takes no subject.",
+          "note": "The claim references a component, not a host. The by-component assembly has no assessment subject field for an individual instance.",
           "pairs": [
             {
               "foreign": {
@@ -247,7 +247,7 @@
           "from": "claim",
           "to": "result",
           "how": "reference",
-          "note": "The finding targets the statement in the plan of record, which is what makes it an answer to the claim.",
+          "note": "The finding targets the implementation statement in the system security plan and references supporting observations, connecting the assessment outcome to the claim.",
           "pairs": [
             {
               "foreign": {
@@ -288,14 +288,14 @@
         "field": "components[].rules[].id",
         "value": "ubtu24_data_at_rest_encrypted",
         "slot": "1",
-        "note": "The rule is a first-class entry on the component it configures, so it is introduced inside the document that describes the thing being hardened. Every step below starts from that id."
+        "note": "The proposed rules assembly defines the rule on the product component. The chain starts from the rule id within that component definition."
       },
       "hops": [
         {
           "from": "rule",
           "to": "check",
           "how": "composite",
-          "note": "Both halves of the key sit on the check side. A rule id is unique only inside the component that declares it.",
+          "note": "The check references both a rule id and a target component uuid. A rule id is unique only within the declaring component.",
           "pairs": [
             {
               "foreign": {
@@ -333,7 +333,7 @@
           "from": "rule",
           "to": "control",
           "how": "reference",
-          "note": "Both sides in one document. The control implementation already ties component to control; naming the rule inside it is the proposal.",
+          "note": "The component definition contains both references. Control implementations already link components to controls; the proposed implementing-rules assembly adds references to individual rules.",
           "pairs": [
             {
               "foreign": {
@@ -372,7 +372,7 @@
           "from": "check",
           "to": "runtime",
           "how": "containment",
-          "note": "The checks are inside the component that runs them. A second engine is a second component.",
+          "note": "The validation component contains the checks executed by the engine. Each additional engine is represented by a separate validation component.",
           "pairs": [
             {
               "foreign": {
@@ -395,7 +395,7 @@
           "from": "runtime",
           "to": "claim",
           "how": "reference",
-          "note": "The claim names the rule it rests on, so a reader gets from claim to check without leaving OSCAL.",
+          "note": "The proposed implementing-rules assembly references the rule supporting the claim, allowing a consumer to trace the claim to the check through OSCAL references.",
           "pairs": [
             {
               "foreign": {
@@ -432,7 +432,7 @@
           "from": "runtime",
           "to": "result",
           "how": "reference",
-          "note": "The observation names the check and the host, so two machines in one boundary can disagree and both be recorded.",
+          "note": "The observation identifies the check and host, allowing different outcomes for two machines within the same system boundary to be recorded separately.",
           "pairs": [
             {
               "foreign": {
@@ -469,7 +469,7 @@
           "from": "result",
           "to": "control",
           "how": "none",
-          "note": "The result never states the control. It carries observations and no findings, so there is no status to hold one.",
+          "note": "The example result contains observations but no findings. No finding target identifies the control, and no finding status records whether the objective was satisfied.",
           "pairs": [
             {
               "foreign": {
@@ -494,14 +494,14 @@
         "field": "activities[].uuid",
         "value": "61b3ec99-dfbe-4997-8a66-6f2279edb84b",
         "slot": "1",
-        "note": "The rule is an activity in the plan that assesses it, so it is introduced in the assessment layer and does not enter the implementation layer at all. Every step below starts from that uuid."
+        "note": "The assessment plan defines the rule as an activity in the assessment layer, outside the implementation claim. The chain starts from the activity uuid."
       },
       "hops": [
         {
           "from": "rule",
           "to": "check",
           "how": "containment",
-          "note": "The check is the first step, so nothing has to match. The step then names a check that resolves outside OSCAL.",
+          "note": "The activity contains the check as the first step. A property on the step identifies an executable check resolved outside OSCAL.",
           "pairs": [
             {
               "foreign": {
@@ -537,7 +537,7 @@
           "from": "rule",
           "to": "control",
           "how": "reference",
-          "note": "The tie sits on the activity, so there is no second document and no second identifier to keep in step.",
+          "note": "The activity references the framework control through related-controls, without a separate mapping document or an additional mapping identifier to maintain.",
           "pairs": [
             {
               "foreign": {
@@ -561,7 +561,7 @@
           "from": "check",
           "to": "runtime",
           "how": "reference",
-          "note": "The plan names its platforms once, for every activity, so it cannot say which engine ran which check.",
+          "note": "The example plan identifies platforms for the assessment as a whole. The platform reference does not identify the engine used for each check.",
           "pairs": [
             {
               "foreign": {
@@ -583,7 +583,7 @@
           "from": "runtime",
           "to": "claim",
           "how": "reference",
-          "note": "One pointer for the whole plan. Where no plan of record exists the same resource can describe the system in prose.",
+          "note": "The plan references one system security plan through a back-matter resource. Where no plan of record exists, the resource can describe the system in prose.",
           "pairs": [
             {
               "foreign": {
@@ -606,7 +606,7 @@
           "from": "runtime",
           "to": "result",
           "how": "reference",
-          "note": "The observation points back at the activity that ran. The thing observed is the thing planned.",
+          "note": "The example observation references the planned activity as the subject. The reference identifies the activity, not an inventory item assessed by the check.",
           "pairs": [
             {
               "foreign": {
@@ -629,7 +629,7 @@
           "from": "result",
           "to": "control",
           "how": "reference",
-          "note": "The finding targets the control objective, so a result reads against the framework with no plan of record.",
+          "note": "The finding targets a framework control objective. The target links the result to the framework without depending on an implementation statement in a plan of record.",
           "pairs": [
             {
               "foreign": {

@@ -1,0 +1,1071 @@
+{
+  "system-security-plan": {
+    "uuid": "abf7bed4-a773-4120-82d0-d08ec94a9ade",
+    "metadata": {
+      "title": "Sample ScubaGear System Security Plan",
+      "version": "DRAFT-01",
+      "published": "2026-03-13T12:00:00-04:00",
+      "document-ids": [
+        {
+          "scheme": "http://oscal.io/oscal/identifier/content-uuid",
+          "identifier": "573153c6-065b-436c-80c2-4d906eaf3d2e"
+        }
+      ],
+      "last-modified": "2026-03-13T12:00:00-04:00",
+      "oscal-version": "1.1.2"
+    },
+    "import-profile": {
+      "href": "#9f8a2ce9-0c06-4e01-98d8-fcc1405c7291"
+    },
+    "system-characteristics": {
+      "status": {
+        "state": "operational"
+      },
+      "system-ids": [
+        {
+          "id": "fb8c67f9-6479-4d27-9711-b3f2eac8cd75",
+          "identifier-type": "http://ietf.org/rfc/rfc4122"
+        }
+      ],
+      "description": "Microsoft 365 environment managed for the organization.",
+      "system-name": "Example M365 Environment",
+      "system-information": {
+        "information-types": [
+          {
+            "uuid": "bab1b7f9-9487-45dd-b3e7-f297eb05f186",
+            "title": "Information Type #1",
+            "description": "A description of this information type."
+          }
+        ]
+      },
+      "authorization-boundary": {
+        "description": "The description of the authorization boundary belongs here."
+      }
+    },
+    "system-implementation": {
+      "users": [
+        {
+          "uuid": "35d3f3f7-197d-431f-b8e8-eab196bacb03"
+        }
+      ],
+      "components": [
+        {
+          "type": "service",
+          "uuid": "c1111111-1111-4aaa-8888-111111111111",
+          "title": "Azure Active Directory (AAD)",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft Entra ID (formerly Azure Active Directory) - Identity and access management service"
+        },
+        {
+          "type": "service",
+          "uuid": "c2222222-2222-4bbb-8888-222222222222",
+          "title": "Microsoft Teams",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft Teams - Collaboration and communication platform"
+        },
+        {
+          "type": "service",
+          "uuid": "c3333333-3333-4ccc-8888-333333333333",
+          "title": "SharePoint Online",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft SharePoint Online - Document management and collaboration platform"
+        },
+        {
+          "type": "service",
+          "uuid": "c4444444-4444-4ddd-8888-444444444444",
+          "title": "Power Platform",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft Power Platform - Low-code application development platform"
+        },
+        {
+          "type": "service",
+          "uuid": "c5555555-5555-4eee-8888-555555555555",
+          "title": "Power BI",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft Power BI - Business intelligence and data visualization service"
+        },
+        {
+          "type": "service",
+          "uuid": "c6666666-6666-4fff-8888-666666666666",
+          "title": "Exchange Online",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft Exchange Online - Email and calendar service"
+        },
+        {
+          "type": "service",
+          "uuid": "c7777777-7777-4aaa-8888-777777777777",
+          "title": "Microsoft Defender",
+          "status": {
+            "state": "operational"
+          },
+          "description": "Microsoft Defender for Office 365 - Threat protection and security service"
+        }
+      ],
+      "inventory-items": [
+        {
+          "uuid": "791778c1-234b-4e30-8490-07ad2e6fec92",
+          "props": [
+            {
+              "ns": "http://comply0.com/ns/oscal",
+              "name": "machine-context",
+              "value": "{\"TenantId\":\"d932f00c-7213-49f2-b10d-1d73bf7d4619\"}"
+            },
+            {
+              "ns": "https://fedramp.gov/ns/oscal",
+              "name": "vendor-name",
+              "value": "Microsoft"
+            },
+            {
+              "ns": "http://csrc.nist.gov/ns/oscal",
+              "name": "asset-type",
+              "value": "appliance"
+            },
+            {
+              "ns": "http://csrc.nist.gov/ns/oscal",
+              "name": "allows-authenticated-scan",
+              "value": "yes"
+            }
+          ],
+          "description": "Configured M365 instance",
+          "implemented-components": [
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-ENTRAID"
+                }
+              ],
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111"
+            },
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-TEAMS"
+                }
+              ],
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222"
+            },
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-SHAREPOINTONLINE"
+                }
+              ],
+              "component-uuid": "c3333333-3333-4ccc-8888-333333333333"
+            },
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-POWERPLATFORM"
+                }
+              ],
+              "component-uuid": "c4444444-4444-4ddd-8888-444444444444"
+            },
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-POWERBI"
+                }
+              ],
+              "component-uuid": "c5555555-5555-4eee-8888-555555555555"
+            },
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-EXCHANGEONLINE"
+                }
+              ],
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666"
+            },
+            {
+              "props": [
+                {
+                  "ns": "http://csrc.nist.gov/ns/oscal",
+                  "name": "asset-id",
+                  "value": "ASSET-MICROSOFTDEFENDER"
+                }
+              ],
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777"
+            }
+          ]
+        }
+      ]
+    },
+    "control-implementation": {
+      "description": "This is the control implementation for the system.",
+      "implemented-requirements": [
+        {
+          "uuid": "a0010001-0001-4001-8001-000000000001",
+          "control-id": "ac-2",
+          "by-components": [
+            {
+              "uuid": "b0010001-1111-4001-8001-000000000001",
+              "description": "Azure AD manages user accounts with appropriate lifecycle management.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0010001-3333-4001-8001-000000000001",
+              "description": "SharePoint Online is configured with proper access controls and sharing policies.",
+              "component-uuid": "c3333333-3333-4ccc-8888-333333333333",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0010001-6666-4001-8001-000000000001",
+              "description": "Exchange Online manages mailbox permissions and shared mailbox configurations.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0020001-0001-4001-8001-000000000001",
+          "control-id": "ac-2.1",
+          "by-components": [
+            {
+              "uuid": "b0020001-1111-4001-8001-000000000001",
+              "description": "Azure AD provides automated account management mechanisms.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0030001-0001-4001-8001-000000000001",
+          "control-id": "ac-2.12",
+          "by-components": [
+            {
+              "uuid": "b0030001-1111-4001-8001-000000000001",
+              "description": "Azure AD monitors accounts for atypical usage patterns.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0040001-0001-4001-8001-000000000001",
+          "control-id": "ac-2.13",
+          "by-components": [
+            {
+              "uuid": "b0040001-1111-4001-8001-000000000001",
+              "description": "Azure AD disables accounts for users posing significant risk.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0050001-0001-4001-8001-000000000001",
+          "control-id": "ac-3",
+          "by-components": [
+            {
+              "uuid": "b0050001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces access control through conditional access policies.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0050001-2222-4001-8001-000000000001",
+              "description": "Teams enforces access controls for meetings and external sharing.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0050001-3333-4001-8001-000000000001",
+              "description": "SharePoint enforces access controls through sharing policies.",
+              "component-uuid": "c3333333-3333-4ccc-8888-333333333333",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0050001-4444-4001-8001-000000000001",
+              "description": "Power Platform enforces data loss prevention policies.",
+              "component-uuid": "c4444444-4444-4ddd-8888-444444444444",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0050001-6666-4001-8001-000000000001",
+              "description": "Exchange Online enforces mail flow rules and transport policies.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0050001-7777-4001-8001-000000000001",
+              "description": "Defender enforces Safe Links and Safe Attachments policies.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0060001-0001-4001-8001-000000000001",
+          "control-id": "ac-4",
+          "by-components": [
+            {
+              "uuid": "b0060001-6666-4001-8001-000000000001",
+              "description": "Exchange Online enforces information flow policies through transport rules.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0060001-4444-4001-8001-000000000001",
+              "description": "Power Platform DLP policies control information flow between connectors.",
+              "component-uuid": "c4444444-4444-4ddd-8888-444444444444",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0070001-0001-4001-8001-000000000001",
+          "control-id": "ac-5",
+          "by-components": [
+            {
+              "uuid": "b0070001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces separation of duties through role-based access control.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0080001-0001-4001-8001-000000000001",
+          "control-id": "ac-6",
+          "by-components": [
+            {
+              "uuid": "b0080001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces least privilege through role-based access control.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0080001-3333-4001-8001-000000000001",
+              "description": "SharePoint enforces least privilege for document access.",
+              "component-uuid": "c3333333-3333-4ccc-8888-333333333333",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0080001-5555-4001-8001-000000000001",
+              "description": "Power BI enforces least privilege for workspace access.",
+              "component-uuid": "c5555555-5555-4eee-8888-555555555555",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0090001-0001-4001-8001-000000000001",
+          "control-id": "ac-6.1",
+          "by-components": [
+            {
+              "uuid": "b0090001-1111-4001-8001-000000000001",
+              "description": "Azure AD authorizes access to security functions through Privileged Identity Management.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0100001-0001-4001-8001-000000000001",
+          "control-id": "ac-6.5",
+          "by-components": [
+            {
+              "uuid": "b0100001-1111-4001-8001-000000000001",
+              "description": "Azure AD restricts privileged accounts to designated personnel.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0110001-0001-4001-8001-000000000001",
+          "control-id": "ac-6.9",
+          "by-components": [
+            {
+              "uuid": "b0110001-1111-4001-8001-000000000001",
+              "description": "Azure AD logs and audits the execution of privileged functions.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0120001-0001-4001-8001-000000000001",
+          "control-id": "ac-6.10",
+          "by-components": [
+            {
+              "uuid": "b0120001-1111-4001-8001-000000000001",
+              "description": "Azure AD prevents non-privileged users from executing privileged functions.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0130001-0001-4001-8001-000000000001",
+          "control-id": "ac-17",
+          "by-components": [
+            {
+              "uuid": "b0130001-1111-4001-8001-000000000001",
+              "description": "Azure AD manages remote access through conditional access policies.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0140001-0001-4001-8001-000000000001",
+          "control-id": "ac-19",
+          "by-components": [
+            {
+              "uuid": "b0140001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces mobile device access control through Intune integration.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0150001-0001-4001-8001-000000000001",
+          "control-id": "ac-20",
+          "by-components": [
+            {
+              "uuid": "b0150001-1111-4001-8001-000000000001",
+              "description": "Azure AD manages use of external information systems through B2B and conditional access.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0150001-2222-4001-8001-000000000001",
+              "description": "Teams manages external access and guest policies.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0160001-0001-4001-8001-000000000001",
+          "control-id": "ac-21",
+          "by-components": [
+            {
+              "uuid": "b0160001-3333-4001-8001-000000000001",
+              "description": "SharePoint enables information sharing through controlled sharing policies.",
+              "component-uuid": "c3333333-3333-4ccc-8888-333333333333",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0160001-2222-4001-8001-000000000001",
+              "description": "Teams enables collaborative information sharing with external users.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0170001-0001-4001-8001-000000000001",
+          "control-id": "at-2",
+          "by-components": [
+            {
+              "uuid": "b0170001-7777-4001-8001-000000000001",
+              "description": "Defender provides attack simulation training for security awareness.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0180001-0001-4001-8001-000000000001",
+          "control-id": "au-4",
+          "by-components": [
+            {
+              "uuid": "b0180001-1111-4001-8001-000000000001",
+              "description": "Azure AD provides sufficient audit log storage capacity.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0180001-6666-4001-8001-000000000001",
+              "description": "Exchange Online unified audit log provides adequate storage capacity.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0190001-0001-4001-8001-000000000001",
+          "control-id": "au-11",
+          "by-components": [
+            {
+              "uuid": "b0190001-6666-4001-8001-000000000001",
+              "description": "Exchange Online retains audit records according to retention policies.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0200001-0001-4001-8001-000000000001",
+          "control-id": "au-12",
+          "by-components": [
+            {
+              "uuid": "b0200001-2222-4001-8001-000000000001",
+              "description": "Teams audit logging is enabled.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0200001-6666-4001-8001-000000000001",
+              "description": "Exchange Online unified audit logging is enabled.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0200001-7777-4001-8001-000000000001",
+              "description": "Defender audit logging is enabled.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0210001-0001-4001-8001-000000000001",
+          "control-id": "cm-4",
+          "by-components": [
+            {
+              "uuid": "b0210001-1111-4001-8001-000000000001",
+              "description": "Azure AD configuration changes are analyzed for security impact.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0220001-0001-4001-8001-000000000001",
+          "control-id": "cm-5",
+          "by-components": [
+            {
+              "uuid": "b0220001-1111-4001-8001-000000000001",
+              "description": "Azure AD restricts configuration changes to authorized administrators.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0230001-0001-4001-8001-000000000001",
+          "control-id": "cm-6",
+          "by-components": [
+            {
+              "uuid": "b0230001-1111-4001-8001-000000000001",
+              "description": "Azure AD is configured according to security baselines.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0230001-6666-4001-8001-000000000001",
+              "description": "Exchange Online is configured according to security baselines.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0230001-7777-4001-8001-000000000001",
+              "description": "Defender is configured according to security baselines.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0240001-0001-4001-8001-000000000001",
+          "control-id": "cm-7",
+          "by-components": [
+            {
+              "uuid": "b0240001-1111-4001-8001-000000000001",
+              "description": "Azure AD is configured to block legacy authentication and limit unnecessary functions.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0250001-0001-4001-8001-000000000001",
+          "control-id": "cm-11",
+          "by-components": [
+            {
+              "uuid": "b0250001-4444-4001-8001-000000000001",
+              "description": "Power Platform controls user-installed software through environment policies.",
+              "component-uuid": "c4444444-4444-4ddd-8888-444444444444",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0260001-0001-4001-8001-000000000001",
+          "control-id": "ia-2.1",
+          "by-components": [
+            {
+              "uuid": "b0260001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces multi-factor authentication for network access to privileged accounts.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0270001-0001-4001-8001-000000000001",
+          "control-id": "ia-2.2",
+          "by-components": [
+            {
+              "uuid": "b0270001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces multi-factor authentication for network access to non-privileged accounts.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0280001-0001-4001-8001-000000000001",
+          "control-id": "ia-2.8",
+          "by-components": [
+            {
+              "uuid": "b0280001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces phishing-resistant MFA for privileged accounts.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0290001-0001-4001-8001-000000000001",
+          "control-id": "ia-2.13",
+          "by-components": [
+            {
+              "uuid": "b0290001-1111-4001-8001-000000000001",
+              "description": "Azure AD implements out-of-band authentication mechanisms.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0300001-0001-4001-8001-000000000001",
+          "control-id": "ia-3",
+          "by-components": [
+            {
+              "uuid": "b0300001-1111-4001-8001-000000000001",
+              "description": "Azure AD authenticates and identifies devices before establishing connections.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0310001-0001-4001-8001-000000000001",
+          "control-id": "ia-5",
+          "by-components": [
+            {
+              "uuid": "b0310001-1111-4001-8001-000000000001",
+              "description": "Azure AD manages authenticators through password policies and authentication methods.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0320001-0001-4001-8001-000000000001",
+          "control-id": "ia-5.1",
+          "by-components": [
+            {
+              "uuid": "b0320001-1111-4001-8001-000000000001",
+              "description": "Azure AD enforces password-based authentication requirements.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0330001-0001-4001-8001-000000000001",
+          "control-id": "ia-8",
+          "by-components": [
+            {
+              "uuid": "b0330001-1111-4001-8001-000000000001",
+              "description": "Azure AD identifies and authenticates non-organizational users.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0340001-0001-4001-8001-000000000001",
+          "control-id": "ia-11",
+          "by-components": [
+            {
+              "uuid": "b0340001-1111-4001-8001-000000000001",
+              "description": "Azure AD re-authenticates users based on session policies.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0350001-0001-4001-8001-000000000001",
+          "control-id": "sc-7.5",
+          "by-components": [
+            {
+              "uuid": "b0350001-6666-4001-8001-000000000001",
+              "description": "Exchange Online denies network traffic by default through transport rules.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0350001-7777-4001-8001-000000000001",
+              "description": "Defender blocks malicious traffic by default.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0360001-0001-4001-8001-000000000001",
+          "control-id": "sc-7.10",
+          "by-components": [
+            {
+              "uuid": "b0360001-2222-4001-8001-000000000001",
+              "description": "Teams is configured with boundary protections for external sharing.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0360001-4444-4001-8001-000000000001",
+              "description": "Power Platform is configured with tenant isolation.",
+              "component-uuid": "c4444444-4444-4ddd-8888-444444444444",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0360001-5555-4001-8001-000000000001",
+              "description": "Power BI is configured with external sharing controls.",
+              "component-uuid": "c5555555-5555-4eee-8888-555555555555",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0360001-6666-4001-8001-000000000001",
+              "description": "Exchange Online is configured with external email controls.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0360001-7777-4001-8001-000000000001",
+              "description": "Defender provides Safe Links for boundary protection.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0370001-0001-4001-8001-000000000001",
+          "control-id": "sc-8",
+          "by-components": [
+            {
+              "uuid": "b0370001-6666-4001-8001-000000000001",
+              "description": "Exchange Online protects transmission confidentiality and integrity via TLS.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0370001-2222-4001-8001-000000000001",
+              "description": "Teams protects communication confidentiality and integrity.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0380001-0001-4001-8001-000000000001",
+          "control-id": "sc-15",
+          "by-components": [
+            {
+              "uuid": "b0380001-2222-4001-8001-000000000001",
+              "description": "Teams controls collaborative computing devices and applications.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0390001-0001-4001-8001-000000000001",
+          "control-id": "si-3",
+          "by-components": [
+            {
+              "uuid": "b0390001-2222-4001-8001-000000000001",
+              "description": "Teams is protected by malicious code protections.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0390001-5555-4001-8001-000000000001",
+              "description": "Power BI is configured with malware scanning.",
+              "component-uuid": "c5555555-5555-4eee-8888-555555555555",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0390001-6666-4001-8001-000000000001",
+              "description": "Exchange Online provides malware filtering for email attachments.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0390001-7777-4001-8001-000000000001",
+              "description": "Defender provides Safe Attachments for malware protection.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0400001-0001-4001-8001-000000000001",
+          "control-id": "si-4.5",
+          "by-components": [
+            {
+              "uuid": "b0400001-7777-4001-8001-000000000001",
+              "description": "Defender alerts on indicators of compromise.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0400001-1111-4001-8001-000000000001",
+              "description": "Azure AD Identity Protection alerts on risk indicators.",
+              "component-uuid": "c1111111-1111-4aaa-8888-111111111111",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0410001-0001-4001-8001-000000000001",
+          "control-id": "si-4.12",
+          "by-components": [
+            {
+              "uuid": "b0410001-7777-4001-8001-000000000001",
+              "description": "Defender provides automated security alerts.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0420001-0001-4001-8001-000000000001",
+          "control-id": "si-8",
+          "by-components": [
+            {
+              "uuid": "b0420001-2222-4001-8001-000000000001",
+              "description": "Teams is configured with anti-spam protections.",
+              "component-uuid": "c2222222-2222-4bbb-8888-222222222222",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0420001-6666-4001-8001-000000000001",
+              "description": "Exchange Online is configured with anti-spam and anti-phishing policies.",
+              "component-uuid": "c6666666-6666-4fff-8888-666666666666",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            },
+            {
+              "uuid": "b0420001-7777-4001-8001-000000000001",
+              "description": "Defender provides advanced spam filtering and protection.",
+              "component-uuid": "c7777777-7777-4aaa-8888-777777777777",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        },
+        {
+          "uuid": "a0430001-0001-4001-8001-000000000001",
+          "control-id": "si-10",
+          "by-components": [
+            {
+              "uuid": "b0430001-4444-4001-8001-000000000001",
+              "description": "Power Platform validates information inputs through Power Apps validation rules.",
+              "component-uuid": "c4444444-4444-4ddd-8888-444444444444",
+              "implementation-status": {
+                "state": "implemented"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "back-matter": {
+      "resources": [
+        {
+          "uuid": "9f8a2ce9-0c06-4e01-98d8-fcc1405c7291",
+          "title": "NIST SP 800-53 Rev 5 catalog, used directly as the baseline",
+          "rlinks": [
+            {
+              "href": "../../NIST_SP-800-53_rev5_catalog.json",
+              "media-type": "application/oscal+json"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
